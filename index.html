@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta name="theme-color" content="#1b3a1f"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ilha Verde"><link rel="manifest" id="mf">
+<meta name="theme-color" content="#1b3a1f"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ilha Verde"><link rel="manifest" id="mf" href="manifest.webmanifest">
 
 <title>Ilha Verde</title>
 <style>
@@ -3481,7 +3481,7 @@ const Title = (() => {
     g.fillStyle='#e8d9a0';g.fillRect(70,300,372,70);g.fillStyle='#fff';g.font='bold 120px sans-serif';g.textAlign='center';g.fillText('IV',256,230);
     const icon=c.toDataURL('image/png');
     const m={name:'Ilha Verde',short_name:'Ilha Verde',start_url:location.href.split('#')[0],scope:'./',display:'fullscreen',orientation:'landscape',background_color:'#1b3a1f',theme_color:'#1b3a1f',icons:[{src:icon,sizes:'512x512',type:'image/png',purpose:'any maskable'}]};
-    document.getElementById('mf').href=URL.createObjectURL(new Blob([JSON.stringify(m)],{type:'application/manifest+json'}));
+    if (!/^https?:/.test(location.protocol)) document.getElementById('mf').href=URL.createObjectURL(new Blob([JSON.stringify(m)],{type:'application/manifest+json'}));
   }catch(e){}
   if('serviceWorker' in navigator && /^https?:/.test(location.protocol)) navigator.serviceWorker.register('sw.js').catch(()=>{});
   let ev=null;const b=document.createElement('button');
