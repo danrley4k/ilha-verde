@@ -101,7 +101,7 @@ body.title #sta,body.crafting #sta,body.building #sta{display:none!important}
 <div id="title"><div id="tlogo"><h1>ILHA VERDE</h1><p>SOBREVIVÊNCIA</p></div>
 <div id="tmenu"><button id="tcont" style="display:none">▶ Continuar<small>retomar a aventura salva</small></button><button id="tsolo">✦ Nova aventura</button><button id="tmulti" class="dim">🌐 Multiplayer<i>EM BREVE</i></button><button id="tset">⚙ Configurações</button></div>
 <div id="tver">v0.9</div>
-<div id="tpanel"><h3>⚙ Configurações</h3><div class="r">Música<button id="tmus">Ligada</button></div><div class="r">Efeitos sonoros<button id="tsnd">Ligado</button></div><div class="r">Gráficos<button id="tq">HD</button></div><div class="r">Tamanho dos controles<button id="tcs2">Médio</button></div><div class="r">Mostrar FPS<button id="tfps">Ligado</button></div><pre id="tperf">…</pre><div class="r">Ver visão dos animais<button id="tvis">Desligado</button></div><div id="tvisopts" style="display:none;gap:6px;margin:-2px 0 8px"><button id="tvis1" style="flex:1;font-size:13px;padding:7px 4px;margin:0">Em pé</button><button id="tvis2" style="flex:1;font-size:13px;padding:7px 4px;margin:0">Agachado</button></div><div class="r">Nuvem<button id="tcl">☁ Entrar</button></div><div id="tcmsg"></div>
+<div id="tpanel"><h3>⚙ Configurações</h3><div class="r">Música<button id="tmus">Ligada</button></div><div class="r">Efeitos sonoros<button id="tsnd">Ligado</button></div><div class="r">Gráficos<button id="tq">HD</button></div><div class="r">Tela cheia<button id="tfs">Desligada</button></div><div class="r">Tamanho dos controles<button id="tcs2">Médio</button></div><div class="r">Mostrar FPS<button id="tfps">Ligado</button></div><pre id="tperf">…</pre><div class="r">Ver visão dos animais<button id="tvis">Desligado</button></div><div id="tvisopts" style="display:none;gap:6px;margin:-2px 0 8px"><button id="tvis1" style="flex:1;font-size:13px;padding:7px 4px;margin:0">Em pé</button><button id="tvis2" style="flex:1;font-size:13px;padding:7px 4px;margin:0">Agachado</button></div><div class="r">Nuvem<button id="tcl">☁ Entrar</button></div><div id="tcmsg"></div>
 <div id="tcbox"><input id="tce" type="email" placeholder="e-mail" autocomplete="username"><input id="tcp" type="password" placeholder="senha (mín. 6)" autocomplete="current-password"><div class="r2"><button id="tcin">Entrar</button><button id="tcup">Criar conta</button></div><div id="tcst"></div>
 <details><summary>Servidor (avançado)</summary><input id="tcu" placeholder="URL do projeto Supabase"><input id="tck" placeholder="chave anon public"><button id="tcs" class="g">Salvar servidor</button></details></div>
 <button id="twipe" class="red">Apagar progresso</button><button id="tclose" class="g">Voltar</button></div></div>
@@ -3367,6 +3367,7 @@ const Title = (() => {
     const go = (id, fn) => { const b = el(id); let t = 0; const h = e => { e.preventDefault(); e.stopPropagation(); if (performance.now() - t < 350) return; t = performance.now(); fn(); }; b.addEventListener('touchstart', h, { passive: false }); b.addEventListener('click', h); };
     go('tcont', play);
     let armN = 0; go('tsolo', () => { if (!has) return play(); if (armN && performance.now() - armN < 3000) { try { sessionStorage.setItem('iv_autoplay', '1'); } catch (e) {} const r = el('reset'); r.dispatchEvent(new MouseEvent('mousedown')); r.dispatchEvent(new MouseEvent('mousedown')); } else { armN = performance.now(); el('tsolo').textContent = 'Apagar o salvo? Toque de novo'; setTimeout(() => { armN = 0; el('tsolo').textContent = '✦ Nova aventura'; }, 3000); } });
+    go('tfs', () => { const on = !document.fullscreenElement; try { localStorage.setItem('iv_fs', on ? '1' : '0'); } catch (e) {} goFull(on); setTimeout(fsShow, 400); }); fsShow();
     go('tcs2', () => { const i = csApply(); try { localStorage.setItem('iv_cs', String((i + 1) % 3)); } catch (e) {} csApply(); });
     setInterval(() => { if (el('tpanel').classList.contains('on')) { const f = el('fps'); el('tperf').textContent = 'Desempenho\n' + (f ? f.textContent : ''); } }, 500);
     try { if (sessionStorage.getItem('iv_autoplay')) { sessionStorage.removeItem('iv_autoplay'); setTimeout(() => { if (T.active) play(); }, 600); } } catch (e) {}
@@ -3400,10 +3401,19 @@ const Title = (() => {
     setFps(true, true); sync();
   }
   function setFps(on, init) { try { if (!init) localStorage.setItem('iv_fps', on ? '1' : '0'); else on = localStorage.getItem('iv_fps') !== '0'; } catch (e) {} document.body.classList.toggle('nofps', !on); el('tfps').textContent = on ? 'Ligado' : 'Desligado'; }
+  function goFull(on) {
+    try {
+      const d = document.documentElement, so = screen.orientation;
+      if (on) { const p = (d.requestFullscreen ? d.requestFullscreen({ navigationUI: 'hide' }) : d.webkitRequestFullscreen ? d.webkitRequestFullscreen() : null); Promise.resolve(p).then(() => { if (so && so.lock) so.lock('landscape').catch(() => {}); }).catch(() => { if (so && so.lock) so.lock('landscape').catch(() => {}); }); }
+      else if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen();
+    } catch (e) {}
+  }
+  function fsShow() { const b = el('tfs'); if (b) b.textContent = document.fullscreenElement ? 'Ligada' : 'Desligada'; }
+  document.addEventListener('fullscreenchange', fsShow);
   function sync() { el('tq').textContent = el('qual').textContent; }
   let tt = 0; function toast(m) { const t = el('ttoast'); t.textContent = m; t.style.opacity = 1; clearTimeout(tt); tt = setTimeout(() => t.style.opacity = 0, 1800); }
   function play() {
-    try { const so = screen.orientation; if (so && so.lock) so.lock('landscape').catch(() => { const d = document.documentElement; if (d.requestFullscreen && !document.fullscreenElement) d.requestFullscreen().then(() => so.lock('landscape')).catch(() => {}); }); } catch (e) {}   // tenta travar na horizontal
+    try { if (localStorage.getItem('iv_fs') !== '0') goFull(true); } catch (e) {}   // tela cheia (+ trava na horizontal)
     if (!T.active) return; T.active = false; endScene(); document.body.classList.remove('title'); el('tpanel').classList.remove('on');
     const P = Player.p; P.x = home.x; P.y = home.y; P.dir = home.dir; Weather.setTod(tod0);
     try { const f = World.falls[0]; if (f && !localStorage.getItem('iv_tp_falls')) { localStorage.setItem('iv_tp_falls', '1'); P.x = (f.vx + 2.5) * 64; P.y = (f.vy + 2.5) * 64; P.dir = 'west'; P.swim = false; } } catch (e) {}   // uma única vez: começa ao lado da cachoeira
