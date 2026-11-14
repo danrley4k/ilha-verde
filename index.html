@@ -92,6 +92,18 @@ body{--cs:1}#atk,#use,#dropbtn,#sneak,#bagbtn,#buildbtn{zoom:var(--cs)}#stick{tr
 #tpanel .r button{padding:7px 14px;font-size:14px;min-width:92px}
 #tpanel button.red{background:linear-gradient(#d9604f,#a63326);color:#fff;width:100%;margin-top:6px}
 #tpanel button.g{background:#6b4a24;color:#fff;width:100%;margin-top:12px;box-shadow:0 3px 0 #3a2410}
+#tchar{display:none;position:fixed;inset:0;z-index:9000;background:#000b;align-items:center;justify-content:center;font-family:system-ui;color:#fff}
+#tchar.on{display:flex}
+#tchar .bx{display:flex;gap:16px;align-items:center;background:#3b2614f7;border:3px solid #c58a3c;border-radius:16px;padding:14px 16px;box-shadow:0 10px 30px #000a;max-width:94vw;max-height:94vh;box-sizing:border-box}
+#tchar .pv{width:150px;height:150px;border-radius:50%;background:radial-gradient(#5d8a3c,#2e4a22 70%);border:3px solid #6b4a24;flex:none;image-rendering:pixelated}
+#tchar .cl{display:flex;flex-direction:column;gap:9px;min-width:210px}
+#tchar h3{margin:0;font-size:18px;color:#ffd98a}
+#tchar input{width:100%;box-sizing:border-box;padding:9px 10px;border-radius:9px;border:2px solid #6b4a24;background:#1d120a;color:#fff;font:15px system-ui}
+#tchar .sx{display:flex;gap:8px}#tchar .sx button{flex:1;padding:9px 6px;border-radius:10px;border:2px solid #6b4a24;background:#5a3c1c;color:#fff;font:700 14px system-ui}
+#tchar .sx button.on{background:linear-gradient(#e0a64a,#a8701f);border-color:#ffd98a;color:#2a1708}
+#tchar .go{padding:10px;border-radius:10px;border:0;background:linear-gradient(#7fbf4a,#4f8a2a);color:#fff;font:800 15px system-ui;box-shadow:0 3px 0 #2e5a18}
+@media (max-height:420px){#tchar .pv{width:118px;height:118px}#tchar .bx{padding:10px 12px}}
+@media (orientation:portrait){#tchar .bx{flex-direction:column}}
 #tfade{position:fixed;inset:0;z-index:40;background:#000;opacity:0;pointer-events:none;transition:opacity .7s}
 #ttoast{position:fixed;left:50%;bottom:18vh;transform:translateX(-50%);z-index:60;background:#000b;color:#fff;font:700 14px system-ui;padding:6px 14px;border-radius:12px;opacity:0;transition:opacity .3s;pointer-events:none}
 body.title #hud,body.title #tools,body.title #wx,body.title #clk,body.title #bat,body.title #fire,body.title #band,body.title #bagbtn,body.title #buildbtn,body.title #atk,body.title #use,body.title #qual,body.title #reset,body.title #sneak,body.title #dropbtn,body.title #stick,body.title #toast{display:none!important}
@@ -191,16 +203,17 @@ body.crafting #craftbtn,body.building #craftbtn,body.title #craftbtn,body.crafti
 <script>/* tela de carregamento: aparece já no começo de todo carregamento (abrir o jogo ou chegar de viagem); a barra anda conforme as imagens chegam */
 try { var h = location.hash, tv = /viagem=|skip/.test(h) || sessionStorage.getItem('iv_skip'), b = document.getElementById('tlbar');
   if (tv) { var to = null; try { to = localStorage.getItem('iv_loc'); } catch (e) {} var m = h.match(/viagem=([^&]+)/); if (m) try { to = JSON.parse(decodeURIComponent(m[1])).to; } catch (e) {}
-    document.getElementById('tlic').textContent = '⛵'; document.getElementById('tltx').textContent = 'Chegando em ' + (to === 'home' ? 'Casa' : 'Floresta dos Sussurros') + '...'; }
-  var TIPS = ['Agachado e por trás, os bichos não te veem.', 'Água de poça pode te deixar doente: ferva antes de beber.', 'Na Casa não aparecem lobos nem ursos.', 'Guarde o couro dos bichos: vai servir para armaduras.', 'Barulho de machado e picareta chama a atenção dos animais.', 'Uma fogueira acesa ajuda a passar o frio da noite.', 'O cervo te olha com "?" antes de fugir: chegue agachado.', 'Pela jangada você viaja para outros lugares da ilha.', 'Na chuva as poças enchem; no sol elas secam.', 'Com a picareta dá para quebrar até o rochedo grande.'];
+    document.getElementById('tlic').textContent = '⛵'; document.getElementById('tltx').textContent = 'Chegando em ' + (to === 'home' ? 'Casa' : 'Floresta') + '...'; }
+  var TIPS = ['Agachado e por trás, os bichos não te veem.', 'Água de poça pode te deixar doente: ferva antes de beber.', 'Na Casa os lobos são mansos e nada nasce de novo: cuide bem do que tem lá.', 'Guarde o couro dos bichos: vai servir para armaduras.', 'Barulho de machado e picareta chama a atenção dos animais.', 'Uma fogueira acesa ajuda a passar o frio da noite.', 'O cervo te olha com "?" antes de fugir: chegue agachado.', 'Pela jangada você viaja para outros lugares da ilha.', 'Na chuva as poças enchem; no sol elas secam.', 'Com a picareta dá para quebrar até o rochedo grande.'];
   document.getElementById('tltip').textContent = '💡 ' + TIPS[Math.floor(Math.random() * TIPS.length)];
   b.style.transition = 'width 10s cubic-bezier(.1,.8,.3,1)'; setTimeout(function () { if (!window.__ld) b.style.width = '35%'; }, 30); } catch (e) {}
 </script>
 <div id="rot">↻</div><canvas id="game"></canvas><div id="tfade"></div><div id="ttoast"></div>
 <div id="title"><div id="tlogo"><h1>ILHA VERDE</h1><p>SOBREVIVÊNCIA</p></div>
-<div id="tmenu"><button id="tcont" style="display:none">▶ Continuar<small>retomar a aventura salva</small></button><button id="tsolo">✦ Nova aventura</button><button id="tmulti">🌐 Multiplayer<i>TESTE</i></button><button id="tset">⚙ Configurações</button></div>
+<div id="tmenu"><button id="tcont" style="display:none">▶ Continuar<small>retomar a aventura salva</small></button><button id="tsolo">✦ Nova aventura</button><button id="tmulti" class="dim">🌐 Multiplayer<i>EM BREVE</i></button><button id="tset">⚙ Configurações</button></div>
 <div id="tver">v0.9</div>
-<div id="tpanel"><h3>⚙ Configurações</h3><div class="r">Música<button id="tmus">Ligada</button></div><div class="r">Efeitos sonoros<button id="tsnd">Ligado</button></div><div class="r">Gráficos<button id="tq">HD</button></div><div class="r">Multiplayer (teste)<button id="tmp">Desligado</button></div><div class="r">FPS<button id="tfps">60</button></div><div class="r">Clima (teste)<button id="twx">Chuva agora</button></div><div class="r">Tela horizontal<button id="trot">Girar</button></div><div class="r">Tela cheia<button id="tfs">Desligada</button></div><div class="r">Tamanho dos controles<button id="tcs2">Médio</button></div><div class="r">Mostrar FPS<button id="tfps">Ligado</button></div><pre id="tperf">…</pre><div class="r">Ver visão dos animais<button id="tvis">Desligado</button></div><div id="tvisopts" style="display:none;gap:6px;margin:-2px 0 8px"><button id="tvis1" style="flex:1;font-size:13px;padding:7px 4px;margin:0">Em pé</button><button id="tvis2" style="flex:1;font-size:13px;padding:7px 4px;margin:0">Agachado</button></div><div class="r">Nuvem<button id="tcl">☁ Entrar</button></div><div id="tcmsg"></div>
+<div id="tchar"><div class="bx"><canvas class="pv" id="tcpv" width="150" height="150"></canvas><div class="cl"><h3>Seu personagem</h3><input id="tcname" maxlength="14" placeholder="Nome" autocomplete="off"><div class="sx"><button id="tcm" class="on">♂ Masculino</button><button id="tcf">♀ Feminino</button></div><button class="go" id="tcgo">Começar ▶</button></div></div></div>
+<div id="tpanel"><h3>⚙ Configurações</h3><div class="r">Música<button id="tmus">Ligada</button></div><div class="r">Efeitos sonoros<button id="tsnd">Ligado</button></div><div class="r">Gráficos<button id="tq">HD</button></div><div class="r" id="tmpr" style="display:none">Multiplayer (teste)<button id="tmp">Desligado</button></div><div class="r">FPS<button id="tfps">60</button></div><div class="r">Clima (teste)<button id="twx">Chuva agora</button></div><div class="r">Tela horizontal<button id="trot">Girar</button></div><div class="r">Tela cheia<button id="tfs">Desligada</button></div><div class="r">Tamanho dos controles<button id="tcs2">Médio</button></div><div class="r">Mostrar FPS<button id="tfps">Ligado</button></div><pre id="tperf">…</pre><div class="r">Ver visão dos animais<button id="tvis">Desligado</button></div><div id="tvisopts" style="display:none;gap:6px;margin:-2px 0 8px"><button id="tvis1" style="flex:1;font-size:13px;padding:7px 4px;margin:0">Em pé</button><button id="tvis2" style="flex:1;font-size:13px;padding:7px 4px;margin:0">Agachado</button></div><div class="r">Nuvem<button id="tcl">☁ Entrar</button></div><div id="tcmsg"></div>
 <div id="tcbox"><input id="tce" type="email" placeholder="e-mail" autocomplete="username"><input id="tcp" type="password" placeholder="senha (mín. 6)" autocomplete="current-password"><div class="r2"><button id="tcin">Entrar</button><button id="tcup">Criar conta</button></div><div id="tcst"></div>
 <details><summary>Servidor (avançado)</summary><input id="tcu" placeholder="URL do projeto Supabase"><input id="tck" placeholder="chave anon public"><button id="tcs" class="g">Salvar servidor</button></details></div>
 <button id="twipe" class="red">Apagar progresso</button><button id="tclose" class="g">Voltar</button></div></div>
@@ -218,7 +231,7 @@ const CONFIG = {
 };
 /* Locais: cada um é um mapa próprio, com save próprio, ligados por uma trilha na borda do mapa.
    Floresta = o mapa original. Home = floresta rala para construir a casa: segura (só bichos mansos) e fixa (nada renasce). */
-const LOCS = { floresta: { name: 'Floresta dos Sussurros', to: 'home' }, home: { name: 'Casa', to: 'floresta', seed: 51123, w: 48, h: 34, dens: .1, safe: true, fixed: true } };
+const LOCS = { floresta: { name: 'Floresta', to: 'home' }, home: { name: 'Casa', to: 'floresta', seed: 51123, w: 50, h: 32, dens: .1, safe: true, fixed: true, ring: 3 } };   /* Casa: menor que a floresta (50x32 contra 80x50), pouca árvore e pedra, água em volta com 1 faixa de areia; base segura: nada nasce de novo nem muda sozinho */
 let LOC = 'floresta'; try { const v = localStorage.getItem('iv_loc'); if (v && LOCS[v]) LOC = v; } catch (e) {}
 { const hm = location.hash.match(/viagem=([^&]+)/); if (hm) try { const tv = JSON.parse(decodeURIComponent(hm[1])); if (tv && LOCS[tv.to]) { LOC = tv.to; window.__tv = tv; } } catch (e) {} }   /* viagem pelo endereço (quando o armazenamento do aparelho falha) */
 { const L = LOCS[LOC]; if (L.seed) CONFIG.SEED = L.seed; if (L.w) { CONFIG.WORLD_W = L.w; CONFIG.WORLD_H = L.h; } if (L.dens) for (const k of ['TREES', 'OAKS', 'APPLETREES', 'PALMS', 'DEADS', 'BUSHES', 'TUFTS', 'ROCKS']) CONFIG[k] = Math.round(CONFIG[k] * L.dens); }
@@ -388,7 +401,7 @@ class GL2D {
 }
 
 /* imagens do jogo ficam na pasta assets (ao lado deste index.html); ASSET_V muda a cada atualização de arte para o navegador baixar a versão nova */
-const ASSET_V = '2026111301';
+const ASSET_V = '2026111402';
 async function getJSON(u) { const r = await fetch(u + '?v=' + ASSET_V); if (!r.ok) throw new Error('Não achei ' + u + ' — suba a pasta assets junto com o index.html'); return r.json(); }
 const Assets = {
   meta: null, tiles: {}, tilesets: null, pg: [], grp: {}, sg: {}, now: 0, TTL: 90000,
@@ -558,6 +571,8 @@ const World = (() => {
       }
     // regiões: pedra só no alto do mapa (limite irregular); do meio para baixo é só grama
     { const nr = noise(CONFIG.SEED + 1313); for (let y = 0; y <= H; y++) for (let x = 0; x <= W; x++) { const i = y * VW + x; if (lvl[i] >= 4 && y > 15 + nr(x / 10, 3) * 8) lvl[i] = 2; } }
+    if (LOCS[LOC].ring) { const RW = LOCS[LOC].ring;   /* Casa: mar em volta do mapa todo, com uma faixa só de areia (a praia do oeste, onde fica a jangada, continua igual) */
+      for (let y = 0; y <= H; y++) for (let x = 0; x <= W; x++) { const i = y * VW + x, d = Math.min(x, y, W - x, H - y); if (d < RW) lvl[i] = 0; else if (d === RW) { if (lvl[i] >= 1) lvl[i] = 1; } else if (lvl[i] === 1 && x > W * .42) lvl[i] = 2; } }
     for (let x = 0; x <= W; x++) { if (lvl[x] < 4) lvl[x] = 0; if (lvl[H * VW + x] < 4) lvl[H * VW + x] = 0; } for (let y = 0; y <= H; y++) { lvl[y * VW] = 0; lvl[y * VW + W] = 0; }   // borda: água, menos onde é montanha
     // arruma de vez as vizinhanças (rochedo só encosta em grama, montanha só em pedra; areia/água nunca encostam em pedra)
     for (let it = 0; it < 60; it++) { let ch = false;
@@ -857,6 +872,7 @@ const World = (() => {
     { const n0 = objs.length; put('rock', 28, 1, { solid: true, hp: 3 }, 1); objs.length = n0; }   // sem pedras mineráveis na praia (gera e descarta, para o resto do mapa não mudar)
     put('rock', Math.round(CONFIG.ROCKS * .6), 4, { solid: true, hp: 3 }, 4);   // pedras soltas nas áreas de pedra
     put('bush' + 1, CONFIG.BUSHES / 2, 2, {}); put('bush' + 2, CONFIG.BUSHES / 2, 2, {});
+    if (LOCS[LOC].fixed) put('log', 12, 2, {});   /* Casa: toras soltas no chão para começar a construir (pedrinhas soltas já existem) */
     objs.push({ kind: 'bench', x: spawnPt.x + 90, y: spawnPt.y - 40, solid: true, ph: 0 });
     decor();
     { const inR = (x, y) => { const vx = Math.floor(x / T), vy = Math.floor(y / T); for (const [p, q] of [[0, 0], [1, 0], [0, 1], [1, 1]]) if (midRiver.has((vy + q) * VW + vx + p)) return true; return false; }; for (let i = objs.length - 1; i >= 0; i--) { const o = objs[i]; if (inR(o.x, o.y) || inR(o.x - 20, o.y) || inR(o.x + 20, o.y)) objs.splice(i, 1); } }   /* nada de árvore/pedra/enfeite dentro do rio do meio */
@@ -1121,6 +1137,16 @@ const Death = (() => {
   $('dres').addEventListener('click', api.respawn);
   return api;
 })();
+/* personagem do jogador: 'hm' (homem) ou 'hf' (mulher), escolhido na tela de personagem ao começar um jogo novo; cada animação cai para a antiga se ainda não existir na arte nova */
+window.SKIN = (() => { try { const c = JSON.parse(localStorage.getItem('iv_char') || 'null'); return c && c.sexo === 'f' ? 'hf' : 'hm'; } catch (e) { return 'hm'; } })();
+window.SKS = 1.2;   /* escala do personagem novo (arte de ~51 px de altura -> ~61 px, a altura do antigo e proporcional aos bichos) */
+const SKMAP = { player: '', player_c: '_c', player_axe: '_axe', player_axe_c: '_axe_c' }, SKALT = { fight: 'idle', swim: 'walk', drinkc: 'drink' };
+function skinSet(set, anim) {   /* devolve [conjunto, animação, escala] */
+  const suf = SKMAP[set]; if (suf === undefined || !Assets.has(window.SKIN + suf)) return [set === 'player_axe_c' ? 'player_axe' : set, SKALT[anim] && !Assets.hasAnim(set, anim) ? SKALT[anim] : anim, 1];
+  const s = window.SKIN + suf; if (Assets.hasAnim(s, anim)) return [s, anim, window.SKS];
+  const alt = SKALT[anim]; if (alt && Assets.hasAnim(s, alt)) return [s, alt, window.SKS];
+  return [set, anim, 1];
+}
 const Player = (() => {
   const p = { carry: false, x: 0, y: 0, dir: 'south', moving: false, run: false, t: 0, act: null, battle: 0, hp: 100, maxhp: 100, thirst: 100, food: 100, warm: 100, hurtT: 0 };
   const DIRS = ['south', 'south-west', 'west', 'north-west', 'north', 'north-east', 'east', 'south-east'];
@@ -1176,9 +1202,9 @@ const Player = (() => {
     } else { p.t += dt; if (p.battle > 0) { const e = Entities.nearestAnimal(p, 220); if (e) p.dir = dirName(e.x - p.x, e.y - p.y); } }
   }
   function drawSwim(ctx, camX, camY) {
-    const sx = Math.round(p.x - camX), sy = Math.round(p.y - camY), an = p.moving && Assets.hasAnim('player', 'swim') ? 'swim' : p.moving ? 'walk' : 'idle', set = 'player', n = Assets.frames(set, an, p.dir), f = Math.floor(p.t * Assets.fps(set, an) * (an === 'walk' ? .9 : .6)) % n, bob = Math.round(Math.sin(p.t * 3) * 1);
+    const sx = Math.round(p.x - camX), sy = Math.round(p.y - camY), an0 = p.moving && Assets.hasAnim('player', 'swim') ? 'swim' : p.moving ? 'walk' : 'idle', SK = skinSet('player', an0), set = SK[0], an = SK[1], n = Assets.frames(set, an, p.dir), f = Math.floor(p.t * Assets.fps(set, an) * (an === 'walk' ? .9 : .6)) % n, bob = Math.round(Math.sin(p.t * 3) * 1);
     ctx.save(); ctx.beginPath(); ctx.rect(sx - 60, sy - 130, 120, 118); ctx.clip();   // some o tronco inferior: só a parte de cima fica fora da água
-    Assets.draw(ctx, set, an, p.dir, f, sx, sy + 6 + bob); ctx.restore();
+    Assets.draw(ctx, set, an, p.dir, f, sx, sy + 6 + bob, SK[2]); ctx.restore();
     const w = (p.t * 1.6) % 1;
     ctx.fillStyle = 'rgba(40,130,185,.55)'; ctx.beginPath(); ctx.ellipse(sx, sy - 5, 17, 6, 0, 0, 6.283); ctx.fill();
     ctx.strokeStyle = 'rgba(255,255,255,' + (.7 - w * .6) + ')'; ctx.lineWidth = 1; ctx.beginPath(); ctx.ellipse(sx, sy - 5, 14 + w * 14, 5 + w * 5, 0, 0, 6.283); ctx.stroke();
@@ -1187,14 +1213,15 @@ const Player = (() => {
   function draw(ctx, camX, camY) {
     if (p.swim && !p.act) { drawSwim(ctx, camX, camY); return; }
     if (p.wade) { const tt = performance.now() / 1000, mv = p.moving ? 1 : .35; ctx.save(); ctx.strokeStyle = 'rgba(235,252,255,.75)'; ctx.lineWidth = 2; for (let k = 0; k < 2; k++) { const ph = (tt * (p.moving ? 1.6 : .8) + k * .5) % 1; ctx.globalAlpha = (1 - ph) * .8 * mv; ctx.beginPath(); ctx.ellipse(p.x - camX, p.y - camY + 4, 8 + ph * 14, 3 + ph * 6, 0, 0, 6.2832); ctx.stroke(); } ctx.restore(); }
-    if (p.act) { const set = p.act.set, n = Assets.frames(set, p.act.anim, p.dir), fi = Math.min(n - 1, Math.floor(p.act.t / p.act.dur * n)); Assets.draw(ctx, set, p.act.anim, p.dir, fi, p.x - camX, p.y - camY); return; }
+    if (p.act) { const [set, an, ss] = skinSet(p.act.set, p.act.anim), n = Assets.frames(set, an, p.dir), fi = Math.min(n - 1, Math.floor(p.act.t / p.act.dur * n)); Assets.draw(ctx, set, an, p.dir, fi, p.x - camX, p.y - camY, ss); return; }
     const set0 = Entities.eqSet(); let set = set0, sc = 1, dy = 0, an = p.run ? 'run' : p.moving ? 'walk' : (p.battle > 0 && set === 'player') ? 'fight' : 'idle';
     if (p.raft && !p.raftDeck) an = (p.battle > 0 && set === 'player') ? 'fight' : 'idle';   // navegando: de pé na jangada, sem correr
     if (p.carry) { set = p.carry === 'leaves' ? 'player_leaves' : p.carry === 'palm' ? 'player_palm' : 'player_log'; an = p.moving ? 'walk' : 'idle'; }
     else if (p.sneak) {
       an = p.moving ? 'walk' : 'idle';
-      if (set0 === 'player') set = 'player_c'; else if (set0 === 'player_spear') { if (p.moving) set = 'player_spear_c'; } else { sc = .9; dy = 2; }
+      if (set0 === 'player') set = 'player_c'; else if (set0 === 'player_axe' && Assets.has(window.SKIN + '_axe_c')) set = 'player_axe_c'; else if (set0 === 'player_spear') { if (p.moving) set = 'player_spear_c'; } else { sc = .9; dy = 2; }
     }
+    { const k = skinSet(set, an); set = k[0]; an = k[1]; sc *= k[2]; }
     const n = Assets.frames(set, an, p.dir), f = Math.floor(p.t * Assets.fps(set, an) * (an === 'walk' ? 1.45 : an === 'run' ? 1.15 : 1)) % n;
     Assets.draw(ctx, set, an, p.dir, f, p.x - camX, p.y - camY + dy, sc);
   }
@@ -1324,7 +1351,7 @@ const Entities = (() => {
   let animals = [], respawnT = 0;
   const dirOf = (vx, vy) => DIRS[((Math.round(Math.atan2(vy, vx) / (Math.PI / 4)) + 8) % 8 + 6) % 8];
   function spawnAnimal(kind, far) {
-    if (LOCS[LOC].safe && (kind === 'wolf' || kind === 'boar' || kind === 'fox' || kind === 'bear')) return;   /* Home: só bichos mansos */
+    if (LOCS[LOC].safe && (kind === 'boar' || kind === 'fox' || kind === 'bear')) return;   /* Casa: sem javali, raposa e urso; lobos mansos */
     const sp = Player.p;
     /* habitat: bichos de floresta nascem no chão de mato/floresta (nunca na praia); javali perto de água doce/brejo; coelho em qualquer grama. Depois de 150 tentativas aceita qualquer lugar firme, para nunca falhar */
     const hab = (x, y) => { if (kind === 'rabbit') return World.okL(x, y, 2, 3); if (kind === 'boar') return World.okL(x, y, 2, 3) && World.waterNear(x, y, 700) && !World.waterNear(x, y, 90); return World.okL(x, y, 2, 3) && !World.waterNear(x, y, 160); };
@@ -1379,7 +1406,9 @@ const Entities = (() => {
       for (let i = 0; i < 6; i++) dens.push({ kind: 'pegada', x: d.x - 4 + (i % 2 ? 8 : -8) + Math.sin(i) * 5, y: d.y + 52 + i * 12, ph: 0, a: (i % 2 ? .12 : -.12) });   // pegadas de urso saindo da entrada
     }   // caverna do urso visível, com clareira em volta
     if (LOCS[LOC].safe) for (let i = dens.length - 1; i >= 0; i--) if (dens[i].kind === 'cave_bear') dens.splice(i, 1);   /* Home: sem caverna de urso */
-    if (LOCS[LOC].safe) { const CAP = { deer: 6, rabbit: 12, fawn: 2, woodpecker: 4, urubu: 1, crab: 8, gull: 4 }, cnt = {}; for (let i = 0; i < animals.length; i++) { const a = animals[i], c = CAP[a.kind]; if (c === undefined) continue; cnt[a.kind] = (cnt[a.kind] || 0) + 1; if (cnt[a.kind] > c) { animals.splice(i, 1); i--; } } }   /* Home é menor: menos bichos */
+    if (LOCS[LOC].safe) { const CAP = { deer: 5, rabbit: 8, fawn: 2, woodpecker: 3, urubu: 1, crab: 6, gull: 4, wolf: 3 }, cnt = {}; for (let i = 0; i < animals.length; i++) { const a = animals[i], c = CAP[a.kind]; if (c === undefined) continue; cnt[a.kind] = (cnt[a.kind] || 0) + 1; if (cnt[a.kind] > c) { animals.splice(i, 1); i--; } } }   /* Home é menor: menos bichos */
+    if (LOCS[LOC].fixed && window.__homeAC) { const AC = window.__homeAC, cnt = {}; for (let i = 0; i < animals.length; i++) { const k = animals[i].kind; cnt[k] = (cnt[k] || 0) + 1; if (cnt[k] > (AC[k] | 0)) { animals.splice(i, 1); i--; } } }   /* Casa: quem morreu não volta */
+    { const live = new Set(); for (const a of animals) if (a.kind === 'crab' && a.den) live.add(a.den); for (let i = dens.length - 1; i >= 0; i--) if (dens[i].kind === 'buraco' && !live.has(dens[i])) dens.splice(i, 1); }   /* buraco sem dono some */
     for (let _i8 = 0, d; _i8 < dens.length && (d = dens[_i8], true); _i8++) if (d.kind === 'cave_bear') animals.push({ kind: 'bear', x: d.x + 10, y: d.y + 50, dir: 'south', vx: 0, vy: 0, wait: 2, t: Math.random() * 9, moving: false, running: false, hp: KINDS.bear.hp, hunger: 0, eat: 0, cd: 0, angry: 0, home: { x: d.x + 10, y: d.y + 70 } });
   }
   let breedT = 0;
@@ -1549,7 +1578,7 @@ const Entities = (() => {
   function killAnimal(a, cause) {
     if (window.Sfx) Sfx.death(a);
     if (!cause) emitNoise(a.x, a.y, 330);   /* morte por você: os bichos por perto ficam alertas */
-    a.dead = true; const K = KINDS[a.kind];
+    a.dead = true; const K = KINDS[a.kind]; if (a.kind === 'crab' && a.den) { const di = dens.indexOf(a.den); if (di >= 0) dens.splice(di, 1); }   /* caranguejo morto: o buraco dele some */
     corpses.push({ kind: a.kind, x: a.x, y: a.y, dir: a.dir, age: 0, meat: a.kind === 'wolf' ? 2 : K.meat, left: ({ rabbit: 1, woodpecker: 1, crab: 1, gull: 1, fawn: 2, fox: 2, deer: 3, boar: 3, wolf: 3, bear: 4 })[a.kind] || 2,   /* left: quanto de carcaça os urubus comem até o corpo sumir */ cause: cause || 'ataque', side: a.dir.indexOf('west') >= 0 ? -1 : 1 });
     return corpses[corpses.length - 1];
   }
@@ -2097,8 +2126,8 @@ const Entities = (() => {
     Assets.touch(K.sprite, Math.abs(a.x - Player.p.x) < 600 && Math.abs(a.y - Player.p.y) < 600);
     const set = m => { a.mode = m; a.mt = 0; }, night = Weather.night(), dp = Math.hypot(P.x - a.x, P.y - a.y);
     if (!a.mode) set('idle');
-    if (a.mode !== 'hide' && a.mode !== 'flap' && a.mode !== 'fly') {
-      let th = !P.swim && noticed(a, dp, P.sneak ? 80 : 140) ? P : null;
+    if (a.mode !== 'hide' && a.mode !== 'flap' && a.mode !== 'fly' && a.mode !== 'land') {
+      let th = !P.swim && noticed(a, dp, a.calmT > World.clock ? 70 : P.sneak ? 80 : 140) ? P : null;
       if (!th) for (let _i31 = 0, o; _i31 < animals.length && (o = animals[_i31], true); _i31++) if (!o.dead && !o.sleeping && !o.hid && (o.kind === 'wolf' || o.kind === 'boar' || o.kind === 'bear') && Math.abs(o.x - a.x) < 140 && Math.hypot(o.x - a.x, o.y - a.y) < 140) { th = o; break; }
       if (th) { const d = Math.hypot(a.x - th.x, a.y - th.y) || 1; a.fx = (a.x - th.x) / d; a.fy = (a.y - th.y) / d; a.dir = dirOf(a.fx, a.fy); set('flap'); }
     }
@@ -2131,14 +2160,20 @@ const Entities = (() => {
         }
         break; }
       case 'flap': a.alt = Math.min(8, a.mt * 10); if (a.mt > .9) set('fly'); break;
-      case 'fly': {
-        a.alt = Math.min(34, a.alt + 55 * dt); a.x += a.fx * 165 * dt; a.y += a.fy * 165 * dt;
-        if (a.mt > 2.4) {   // some de vista e reaparece em outra árvore, longe de você
-          const ts = World.objs.filter(o => (o.kind === 'pine' || o.kind === 'oak' || o.kind === 'appletree')); let best = null;
-          for (let i = 0; i < 12 && ts.length; i++) { const t = ts[Math.floor(Math.random() * ts.length)]; if (Math.hypot(t.x - P.x, t.y - P.y) > 450) { best = t; break; } }
-          if (best) { a.x = best.x + (Math.random() < .5 ? -14 : 14); a.y = best.y + 8; }
-          a.hid = true; a.nightHide = false; a.hideT = 12 + Math.random() * 18; set('hide');
-        }
+      case 'fly': {   /* foge voando até outra árvore à vista (longe da ameaça) e pousa lá; antes sumia e reaparecia longe */
+        if (!a.ld) { const ts = World.act; let best = null;
+          for (let pass = 0; pass < 3 && !best; pass++) { let bs = 1e9;   /* 1ª: árvore à frente da fuga; 2ª: qualquer árvore longe da ameaça; 3ª: a árvore mais perto */
+            for (let k = 0; k < ts.length; k++) { const t = ts[k]; if (t.dead || (t.kind !== 'pine' && t.kind !== 'oak' && t.kind !== 'appletree' && t.kind !== 'fir')) continue; const dx = t.x - a.x, dy = t.y - a.y, d = Math.hypot(dx, dy) || 1;
+              if (pass === 0 && (d < 200 || d > 520 || (dx * a.fx + dy * a.fy) / d < .25 || Math.hypot(t.x - P.x, t.y - P.y) < 260)) continue;
+              if (pass === 1 && (d < 120 || d > 800 || Math.hypot(t.x - P.x, t.y - P.y) < 200)) continue;
+              const s = pass === 2 ? d : Math.abs(d - 330); if (s < bs) { bs = s; best = t; } } }
+          a.ld = best ? { x: best.x + (Math.random() < .5 ? -14 : 14), y: best.y + 8 } : { x: a.x, y: a.y }; }
+        a.alt = Math.min(34, a.alt + 55 * dt); const dx = a.ld.x - a.x, dy = a.ld.y - a.y, d = Math.hypot(dx, dy) || 1, sp = Math.min(165, 70 + d * 1.2);
+        a.x += dx / d * sp * dt; a.y += dy / d * sp * dt; a.dir = dirOf(dx, dy);
+        if (d < 14 || a.mt > 8) { a.ld = null; a.la = a.alt; set('land'); }
+        break; }
+      case 'land': {   /* pousa: desce batendo as asas (a animação de levantar voo ao contrário) */
+        a.alt = Math.max(0, (a.la || 20) * (1 - a.mt / .7)); if (a.mt > .7) { a.alt = 0; a.wait = 2 + Math.random() * 3; a.calmT = World.clock + 4; set('idle'); }
         break; }
       case 'hide':
         a.hid = true; a.alt = 0;
@@ -2403,6 +2438,7 @@ const Entities = (() => {
     if (m === 'peck') return [S, 'peck', Math.floor(e * 12) % FR(S, 'peck', d)];
     if (m === 'flap') return [S, 'flap', Math.min(FR(S, 'flap', d) - 1, Math.floor(e * 9))];
     if (m === 'fly') { const n = FR(S, 'fly', d); return [S, 'fly', Math.min(n - 1, 4 + Math.floor(e * 14) % Math.max(1, n - 4))]; }
+    if (m === 'land') { const n = FR(S, 'flap', d); return [S, 'flap', Math.max(0, n - 1 - Math.floor(e / .7 * n))]; }
     if (w.moving) return [S, 'walk', Math.floor(w.t * 12) % FR(S, 'walk', d)];
     return [S, 'idle', Math.floor(w.t * 6) % FR(S, 'idle', d)];
   }
@@ -2538,7 +2574,8 @@ const Entities = (() => {
       const K = KINDS[a.kind]; const hidA = hid && !(a.aware > World.clock); PR.hidden = hidA;   /* barulho recente revela você no mato para quem ouviu */
       if (!a.far && !a.dead && (a.kind === 'wolf' || a.kind === 'boar' || a.kind === 'deer' || a.kind === 'bear' || a.kind === 'rabbit') && !World.swimmable(a.x, a.y)) { if (placeNear(a, a.x, a.y)) { a.detT = 0; a.stuck = 0; } }   // parede/construção colocada em cima do bicho: empurra para fora em vez de ficar preso
       let P = PR;   // no mato alto os bichos não te veem, a menos que estejam perto (ou já irritados/perseguindo)
-      if (window.SAFE_UNTIL > World.clock && (a.kind === 'wolf' || a.kind === 'bear' || a.kind === 'boar' || a.kind === 'fox') && !a.script) { a.angry = a.pursue = a.rage = 0; a.zAlarm = false; a.zInv = false; a.alertT = 0; a.zGrowl = a.zBark = a.growl = a.windup = a.lunge = 0; if (!GHOST) GHOST = Object.create(PR); GHOST.x = a.x + 6000; GHOST.y = a.y + 6000; P = GHOST; }   /* recém-chegado de viagem: uns segundos sem predador vir atrás de você */
+      if (LOCS[LOC].safe && a.kind === 'wolf') { a.hunger = 0; a.angry = a.pursue = 0; a.foeT = 0; }   /* Casa: lobo manso (não caça nem ataca) */
+      if ((window.SAFE_UNTIL > World.clock || LOCS[LOC].safe) && (a.kind === 'wolf' || a.kind === 'bear' || a.kind === 'boar' || a.kind === 'fox') && !a.script) { a.angry = a.pursue = a.rage = 0; a.zAlarm = false; a.zInv = false; a.alertT = 0; a.zGrowl = a.zBark = a.growl = a.windup = a.lunge = 0; if (!GHOST) GHOST = Object.create(PR); GHOST.x = a.x + 6000; GHOST.y = a.y + 6000; P = GHOST; }   /* recém-chegado de viagem: uns segundos sem predador vir atrás de você */
       else if (hidA && !(a.angry > 0 || a.rage > 0 || a.pursue > 0 || a.zAlarm || a.tgt || a.script) && Math.hypot(PR.x - a.x, PR.y - a.y) > (PR.sneak ? 55 : 90)) { if (!GHOST) GHOST = Object.create(PR); GHOST.x = a.x + 6000; GHOST.y = a.y + 6000; P = GHOST; a.look = 0; a.wsee = 0; if (!a.zAlarm) { a.zInv = false; a.alertT = 0; } }   // escondido no mato alto: larga a desconfiança ('?')
       if (a.foeT > 0 && !a.foeSent && a.foe && !a.foe.dead) { a.foeSent = true; const fo0 = a.foe; for (let _i45 = 0, o; _i45 < animals.length && (o = animals[_i45], true); _i45++) if (o !== a && o.kind === 'wolf' && !o.dead && !o.baby && !o.weak && o.hp > K.hp * .3 && Math.hypot(o.x - a.x, o.y - a.y) < 700) { if (o.sleeping) wakeUp(o); o.foe = fo0; o.foeT = Math.max(o.foeT || 0, 12); o.foeSent = true; o.eat = 0; o.drink = 0; o.invest = 0; o.zInv = false; o.zq = false; o.far = false; } }   // lobo atacado marca o agressor: a matilha toda ataca o alvo
       if (!(a.foeT > 0)) a.foeSent = false;
@@ -2767,21 +2804,21 @@ const Entities = (() => {
     }
     PR.hidden = hid;
     if (animals.some(a => a.dead)) animals = animals.filter(a => !a.dead);
-    respawnT += DT; if (respawnT > 12) { respawnT = 0; if (animals.filter(o => o.kind === 'urubu' && !o.dead).length < 3) spawnUrubu(); if (animals.filter(o => o.kind === 'gull' && !o.dead).length < 6) spawnGull(true); for (const k in TARGET) { const need = k === 'wolf' ? TARGET.wolf + Math.round(3 * Weather.night()) : BREED[k].floor; if (animals.filter(a => a.kind === k && !a.baby).length < need) spawnAnimal(k, true); } if (animals.filter(a => a.kind === 'boar').length < 4) spawnAnimal('boar', true); if (animals.filter(a => a.kind === 'fox' && !a.dead).length < 5) spawnAnimal('fox', true); if (animals.filter(a => a.kind === 'woodpecker').length < 6) spawnWoodpecker(); }
+    respawnT += LOCS[LOC].fixed ? 0 : DT; if (respawnT > 12) { respawnT = 0; if (animals.filter(o => o.kind === 'urubu' && !o.dead).length < 3) spawnUrubu(); if (animals.filter(o => o.kind === 'gull' && !o.dead).length < 6) spawnGull(true); for (const k in TARGET) { const need = k === 'wolf' ? TARGET.wolf + Math.round(3 * Weather.night()) : BREED[k].floor; if (animals.filter(a => a.kind === k && !a.baby).length < need) spawnAnimal(k, true); } if (animals.filter(a => a.kind === 'boar').length < 4) spawnAnimal('boar', true); if (animals.filter(a => a.kind === 'fox' && !a.dead).length < 5) spawnAnimal('fox', true); if (animals.filter(a => a.kind === 'woodpecker').length < 6) spawnWoodpecker(); }
   }
   function update(dt) {
-    t += dt; noiseTick(dt); if (!window.NET_GUEST) breedTick(dt);
+    t += dt; noiseTick(dt); if (!window.NET_GUEST && !LOCS[LOC].fixed) breedTick(dt);
     { const pp = Player.p; if (pp.lx !== undefined && !pp.swim && !pp.raft) { const dx = pp.x - pp.lx, dy = pp.y - pp.ly, d = Math.hypot(dx, dy);
         if (d > .15 && d < 80) { if (pp.still) { pp.tk = 99; pp.still = false; }   // ao começar a andar já deixa uma pegada
           const n = Math.max(1, Math.ceil(d / 8)); for (let q = 1; q <= n; q++) trackStep({ x: pp.lx + dx * q / n, y: pp.ly + dy * q / n + 8, vx: dx, vy: dy, kind: 'player', get tk() { return pp.tk; }, set tk(v) { pp.tk = v; }, get side() { return pp.tside; }, set side(v) { pp.tside = v; } }, d / n); }
         else if (d <= .15) pp.still = true; } pp.lx = pp.x; pp.ly = pp.y; }
-    for (let _i46 = 0, a; _i46 < animals.length && (a = animals[_i46], true); _i46++) if (a.moving && !a.dead && !a.inDen && a.kind !== 'shark' && a.kind !== 'fish' && a.kind !== 'woodpecker' && a.kind !== 'urubu' && a.kind !== 'gull' && a.kind !== 'crab') World.trample(a.x, a.y + 6, dt); { const pp = Player.p; if (pp.moving && !pp.raft && !pp.swim) World.trample(pp.x, pp.y + 6, dt * .4); } World.wearTick(dt, Weather.state === 'rain');
+    if (!LOCS[LOC].fixed) for (let _i46 = 0, a; _i46 < animals.length && (a = animals[_i46], true); _i46++) if (a.moving && !a.dead && !a.inDen && a.kind !== 'shark' && a.kind !== 'fish' && a.kind !== 'woodpecker' && a.kind !== 'urubu' && a.kind !== 'gull' && a.kind !== 'crab') World.trample(a.x, a.y + 6, dt); { const pp = Player.p; if (pp.moving && !pp.raft && !pp.swim) World.trample(pp.x, pp.y + 6, dt * .4); } World.wearTick(dt, Weather.state === 'rain');
     { const wet = Weather.state === 'rain' ? 4 : 1; for (let i = tracks.length - 1; i >= 0; i--) { tracks[i].t += dt * wet; if (tracks[i].t > (tracks[i].life || TRACK_LIFE)) tracks.splice(i, 1); } }
     for (let _i47 = 0, o; _i47 < World.act.length && (o = World.act[_i47], true); _i47++) {
       if (o.fall !== undefined) { o.fall += dt; if (o.fall > 1.3) { o.dead = true; o.becomeStump = true; } }
       if (o.kind === 'fire' && !o.out && !o.broken) { if (o.cook) for (let i = 0; i < 3; i++) if (o.cook[i] > 0) { o.cook[i] = Math.max(0, o.cook[i] - dt); o.smell = 45; } if (o.boilT > 0) { o.boilT -= dt; o.smell = Math.max(o.smell || 0, 20); if (o.boilT <= 0) { o.boilT = 0; o.waterReady = (o.waterReady || 0) + (o.boilN || 1); o.boilN = 0; } } }
       if (o.kind === 'fire') { if (o.smell > 0) o.smell -= dt; if (o.broken) { o.life -= dt; if (o.life <= 0) o.dead = true; } else if (!o.out) { o.hp -= dt; if (o.hp <= 0) { o.hp = 0; o.out = true; o.outT = 0; o.smell = 0; } } else o.outT = (o.outT || 0) + dt; }
-      if (o.ap) for (let i = 0; i < 4; i++) if (!o.ap[i]) { o.apT[i] -= dt; if (o.apT[i] <= 0) o.ap[i] = 1; }
+      if (o.ap && !LOCS[LOC].fixed) for (let i = 0; i < 4; i++) if (!o.ap[i]) { o.apT[i] -= dt; if (o.apT[i] <= 0) o.ap[i] = 1; }
       if (o.kind === 'tuft' && o.hp > 0) o.hp -= dt;
       if (o.kind === 'palm' && !o.fall && !o.becomeStump) { o.cgT = (o.cgT === undefined ? Math.random() * COCO_REGROW : o.cgT) - dt; if (o.cgT <= 0) { o.cgT = COCO_REGROW * (.8 + Math.random() * .4); cocoGrow(o); } }
     }
@@ -2843,7 +2880,7 @@ const Entities = (() => {
       inv[k]--; P.hp = Math.min(P.maxhp, P.hp + heal); P.food = Math.min(100, (P.food || 0) + ({ cooked: 40, meat: 25, apple: 12, coconut: 8 }[k] || 0)); if (k === 'apple') P.thirst = Math.min(100, P.thirst + 8); if (k === 'coconut') P.thirst = Math.min(100, P.thirst + 22); showHud();
     };
     if (P.swim || P.act || !Assets.hasAnim('player', k === 'water' ? 'drink' : 'eat')) { apply(); return; }
-    Player.startAct(k === 'water' ? 'drink' : 'eat', null, apply, 'player', k === 'water' ? .8 : 1.1);
+    Player.startAct(k === 'water' ? 'drinkc' : 'eat', null, apply, 'player', k === 'water' ? .9 : 1.1);   /* água do cantil: animação do cantil */
   }
   const bandBtn = document.getElementById('band');
   function useBandage() {
@@ -2922,8 +2959,8 @@ const Entities = (() => {
     if (best.kind === 'corpse') { Player.startAct('pickup', best.c, () => { const c = best.c; if (c.hide === undefined) c.hide = ({ deer: 2, boar: 2, wolf: 1, bear: 3, fox: 1, fawn: 1 })[c.kind] || 0; const got = Math.min(c.meat, MAX.meat - inv.meat), gh = Math.max(0, Math.min(c.hide, MAX.leather - inv.leather)); if (got <= 0 && gh <= 0) { Save.flash('Mochila cheia'); return; } inv.meat += got; c.meat -= got; inv.leather += gh; c.hide -= gh; showHud(); Save.flash((got > 0 ? '+' + got + ' Carne crua' : '') + (gh > 0 ? (got > 0 ? '  ' : '') + '+' + gh + ' Couro' : '')); }, 'player', .55); return; }
     if (best.kind === 'trilha') { Travel.go(best.to); return; }
     if (best.kind === 'poca') { const pz = best.p;
-      if (canFill()) { Player.startAct('pickup', null, () => { inv.dirty = 3 - inv.water; pz.w = Math.max(0, pz.w - .25); showHud(); Save.flash('Cantil cheio (água de poça, suja: ferva antes de beber)'); }, 'player', .55); return; }
-      Player.startAct('drink', null, () => { p.thirst = Math.min(100, p.thirst + 30); pz.w = Math.max(0, pz.w - .2); if (!(p.sick > 0) && Math.random() < .55) { p.sick = 60; Save.flash('🤢 Água de poça: você ficou doente. Beba água fervida'); } showHud(); }, 'player', .8); return; }
+      if (canFill()) { Player.startAct('pickup', null, () => { inv.dirty = 3 - inv.water; pz.w = Math.max(0, pz.w - .35); showHud(); Save.flash('Cantil cheio (água de poça, suja: ferva antes de beber)'); }, 'player', .55); return; }
+      Player.startAct('drink', null, () => { p.thirst = Math.min(100, p.thirst + 30); pz.w = Math.max(0, pz.w - .3); if (!(p.sick > 0) && Math.random() < .55) { p.sick = 60; Save.flash('🤢 Água de poça: você ficou doente. Beba água fervida'); } showHud(); }, 'player', .8); return; }
     if (best.kind === 'water' && canFill()) { Player.startAct('pickup', null, () => { inv.dirty = 3 - inv.water; showHud(); Save.flash('Cantil cheio (água suja, ferva antes de beber)'); }, 'player', .55); return; }
     if (best.kind === 'water') { Player.startAct('drink', null, () => { p.thirst = Math.min(100, p.thirst + 45); if (!(p.sick > 0) && Math.random() < .3) { p.sick = 60; Save.flash('🤢 Água suja: você ficou doente. Beba água fervida'); } showHud(); }, 'player', .8); return; }
     if (best.kind === 'appletree') { Player.startAct('pickup', best, () => { if (inv.apple >= MAX.apple) { Save.flash('Mochila cheia'); return; } const i = best.ap.indexOf(1); if (i >= 0) { best.ap[i] = 0; best.apT[i] = 45; inv.apple++; p.thirst = Math.min(100, p.thirst + 8); showHud(); } }, 'player', .55); return; }
@@ -3329,7 +3366,7 @@ const Entities = (() => {
     if (!P.swim && Math.hypot(P.x - x, P.y - y) < 60) { P.hp -= 40; P.hurtT = .4; Save.flash('⚡ Você foi atingido por um raio!'); if (P.hp <= 0) Player.hurt(0); }
     else if (Math.hypot(P.x - x, P.y - y) < 160) Save.flash('⚡ Raio muito perto!');
   }
-  return { snap: snapAnimals, strike, bearMem: () => animals.filter(o => o.kind === 'bear').map((b, i) => (b.mem || bearMemSaved[i] || []).slice(-4).map(q => [Math.round(q.x), Math.round(q.y), q.s])), setBearMem: arr => { arr = Array.isArray(arr) ? arr : []; if (arr.length && Array.isArray(arr[0]) && typeof arr[0][0] === 'number') arr = [arr];   // save antigo: lista só do primeiro urso
+  return { snap: snapAnimals, counts: () => { const c = {}; for (const a of animals) if (!a.dead && !a.script) c[a.kind] = (c[a.kind] || 0) + 1; return c; }, strike, bearMem: () => animals.filter(o => o.kind === 'bear').map((b, i) => (b.mem || bearMemSaved[i] || []).slice(-4).map(q => [Math.round(q.x), Math.round(q.y), q.s])), setBearMem: arr => { arr = Array.isArray(arr) ? arr : []; if (arr.length && Array.isArray(arr[0]) && typeof arr[0][0] === 'number') arr = [arr];   // save antigo: lista só do primeiro urso
       bearMemSaved = arr.map(l => (Array.isArray(l) ? l : []).slice(-4).map(q => ({ x: q[0], y: q[1], s: q[2] || 3 }))); let i = 0; for (let _i71 = 0, b; _i71 < animals.length && (b = animals[_i71], true); _i71++) if (b.kind === 'bear') { b.mem = (bearMemSaved[i++] || []).map(q => ({ x: q.x, y: q.y, s: q.s })); } }, _dens: () => dens, _deerKick: deerKick, setVis: (st, sn) => { visStand = !!st; visSneak = !!sn; }, _tracks: () => tracks, _HAB: HAB, _noise: emitNoise, _dirOf: dirOf, _drops: () => drops, drawBridge, dropLog, useBandage, init, update, draw, bleed, icon, eat, drop, placeItem, toggleHand: () => { if (craftEl.style.display === 'block') closeCraft(); else openCraft('hand'); },  MAX, cam, drawPiece, _corpses: () => corpses, attack, use, placeFire, nearestAnimal, inv, eqSet: () => eqInfo().set, refresh: (force) => { if (force) toolsEl.dataset.sig = ''; showHud(); }, _animals: () => animals, regrow: () => regrow, setRegrow: a => { regrow = Array.isArray(a) ? a : []; },
     tracksList: () => tracks.slice(-500).map(q => [Math.round(q.x), Math.round(q.y), q.k, +q.ang.toFixed(2), Math.round(q.t), q.g, q.life]),
     setTracks: l => { tracks = (Array.isArray(l) ? l : []).map(q => ({ x: q[0], y: q[1], k: q[2], ang: q[3], t: q[4], g: q[5], life: q[6] })); } };
@@ -3754,7 +3791,7 @@ const Save = (() => {
     const P = Player.p, inv = Entities.inv;
     return { v: VER, seed: CONFIG.SEED, w: CONFIG.WORLD_W, h: CONFIG.WORLD_H, at: Date.now(), tod: Weather.tod(), day: Weather.day(),
       p: { x: Math.round(P.x), y: Math.round(P.y), hp: P.hp, thirst: P.thirst, dir: P.dir, bleed: !!P.bleeding, carry: P.carry || false, sick: Math.round(P.sick || 0), food: Math.round(P.food ?? 100), warm: Math.round(P.warm ?? 100) }, inv: Object.assign({}, inv), bm: Entities.bearMem(),
-      wn: World.wornList(), tk: Entities.tracksList(),
+      wn: World.wornList(), tk: Entities.tracksList(), ac: LOCS[LOC].fixed ? Entities.counts() : undefined,
       objs: World.objs.filter(o => o.fall === undefined && !o.dead && !o.broken).map(o => [o.kind, Math.round(o.x), Math.round(o.y), o.kind === 'mato' ? Math.round(o.cutT || 0) : o.kind.startsWith('sap') ? Math.round(o.g || 0) : o.kind === 'bridge' ? (o.nat ? 1 : 0) : (o.kind === 'fence' || o.kind === 'wall') ? (o.vert ? 1 : 0) : o.palmStump || o.palm ? 1 : (o.hp === undefined ? null : o.hp), o.kind === 'fence' ? o.stage : o.kind === 'palm' ? o.co : o.kind === 'fire' ? { d: o.dmg || 0, c: o.cook || null, b: o.boilT || 0, n: o.boilN || 0, w: o.waterReady || 0 } : (o.ap || o.items || null), o.coT ? o.coT.map(v => Math.round(v)) : o.apT ? o.apT.map(v => Math.round(v)) : null]), rg: Entities.regrow().map(g => [Math.round(g.x), Math.round(g.y), Math.round(g.t)]) };
   }
   let wiped = false, saveWarned = false;
@@ -3767,7 +3804,7 @@ const Save = (() => {
     if (!d || d.v !== VER || d.seed !== CONFIG.SEED || d.w !== CONFIG.WORLD_W || d.h !== CONFIG.WORLD_H) return false;
     const P = Player.p; Object.assign(Entities.inv, d.inv); if (typeof d.tod === 'number') Weather.setTod(d.tod); if (typeof d.day === 'number') Weather.setDay(d.day);
     if (World.swimmable(d.p.x, d.p.y)) { P.x = d.p.x; P.y = d.p.y; } P.hp = Math.max(1, d.p.hp); P.bleeding = !!d.p.bleed; P.carry = d.p.carry || false; P.sick = d.p.sick || 0; P.thirst = d.p.thirst; P.food = d.p.food ?? 100; P.warm = d.p.warm ?? 100; P.dir = d.p.dir || 'south';
-    World.setWorn(d.wn); Entities.setTracks(d.tk);
+    World.setWorn(d.wn); Entities.setTracks(d.tk); if (LOCS[LOC].fixed && d.ac) window.__homeAC = d.ac;
     World.loadObjs(d.objs.filter(a => a[0] !== 'mato' || World.okL(a[1], a[2], 2, 2)).map(a => { const o = { kind: a[0], x: a[1], y: a[2], hp: a[3] === null ? undefined : a[3], ap: a[4] || undefined, apT: a[5] || undefined, solid: !!SOLID[a[0]], ph: Math.random() * 9 };
       if (a[0] === 'fire') { const fd = a[4] && typeof a[4] === 'object' ? a[4] : { d: typeof a[4] === 'number' ? a[4] : 0 }; o.dmg = fd.d || 0; o.cook = fd.c || undefined; o.boilT = fd.b || 0; o.boilN = fd.n || 0; o.waterReady = fd.w || 0; o.ap = undefined; o.out = !(o.hp > 0); o.outT = 99; }
       if (a[0] === 'fence') { o.vert = a[3] === 1; o.hp = undefined; o.bw = o.vert ? 6 : 24; o.bh = o.vert ? 24 : 6; o.stage = typeof a[4] === 'number' ? a[4] : 3; o.ap = undefined; o.solid = o.stage >= 3; }
@@ -3815,7 +3852,7 @@ const Travel = (() => {
   const MAPA = {"map":"assets/mapa.jpg?v=2026111301","prev":{"floresta":"assets/mapa_floresta.jpg?v=2026111301","home":"assets/mapa_home.jpg?v=2026111301","acamp":"assets/mapa_acamp.jpg?v=2026111301","alvorada":"assets/mapa_alvorada.jpg?v=2026111301","montanha":"assets/mapa_montanha.jpg?v=2026111301","fendas":"assets/mapa_fendas.jpg?v=2026111301"},"ic":["assets/mapa_ic0.png?v=2026111301","assets/mapa_ic1.png?v=2026111301","assets/mapa_ic2.png?v=2026111301","assets/mapa_ic3.png?v=2026111301","assets/mapa_ic4.png?v=2026111301"]};
   const SPOTS = [
     { id: 'floresta', ic: '🌲', box: [200, 272, 210, 180], desc: 'Floresta fechada e cheia de vida. Lobos, ursos e javalis rondam a mata: cuidado à noite.', res: [0, 1, 2, 3, 4], dg: 2, dgT: 'Perigo: médio' },
-    { id: 'home', ic: '🏠', box: [672, 465, 190, 240], desc: 'Floresta tranquila para construir a sua casa. Só bichos mansos, e o que você muda aqui fica para sempre.', res: [0, 2, 1], dg: 0, dgT: 'Zona segura' },
+    { id: 'home', ic: '🏠', box: [672, 465, 190, 240], desc: 'Base segura para construir a sua casa. Poucas árvores e pedras, madeira e pedras soltas no chão. Lobos mansos. Nada nasce de novo e o que você muda fica para sempre.', res: [0, 2, 1], dg: 0, dgT: 'Zona segura' },
     { id: 'acamp', name: 'Acampamento', ic: '⛺', box: [612, 190, 225, 250], lock: 1 },
     { id: 'alvorada', name: 'Alvorada', ic: '🌅', box: [690, 0, 175, 118], lock: 1 },
     { id: 'montanha', name: 'Montanha Cinzenta', ic: '⛰️', box: [40, 158, 255, 88], lock: 1 },
@@ -3939,7 +3976,8 @@ const Net = (() => {
   const NAME_KEY = 'iv_nome', ID = (() => { try { let v = sessionStorage.getItem('iv_mpid'); if (!v) { v = Math.random().toString(36).slice(2, 10); sessionStorage.setItem('iv_mpid', v); } return v; } catch (e) { return Math.random().toString(36).slice(2, 10); } })();
   let ws = null, on = false, want = null, ref = 1, topic = '', hbT = 0, sendT = 0, lastS = '', status = '', tries = 0, retryT = 0, useTok = false, badge = null, since = 0, hostId = '', wT = 0, lastW = 0;
   const peers = new Map(), rA = new Map();   /* rA: bichos recebidos do dono do mundo */
-  try { want = sessionStorage.getItem('iv_mp'); } catch (e) {}
+  const MP_ON = false;   /* multiplayer pausado (botão 'em breve'); o código fica pronto para religar: mude para true */
+  try { want = MP_ON ? sessionStorage.getItem('iv_mp') : null; if (!MP_ON) sessionStorage.removeItem('iv_mp'); } catch (e) {}
   const setBadge = () => { if (!badge) { badge = document.createElement('div'); badge.id = 'mpb'; badge.style.cssText = 'position:fixed;left:calc(env(safe-area-inset-left,0px) + 6px);top:calc(env(safe-area-inset-top,0px) + 66px);z-index:60;background:#0008;color:#fff;font:600 11px/1.2 sans-serif;padding:3px 9px;border-radius:9px;pointer-events:none;white-space:nowrap'; document.body.appendChild(badge); } badge.style.display = want ? 'block' : 'none'; badge.textContent = on ? '🌐 ' + (peers.size + 1) + ' online' + (peers.size ? (hostId === ID ? ' · você é o dono do mundo' : ' · mundo de ' + ((peers.get(hostId) || {}).n || '…')) : '') + (peers.size && hostId === ID ? ': ' + [...peers.values()].map(p => p.n).join(', ') : '') : '🌐 ' + (status || 'conectando…'); };
   const send = (event, payload) => { if (ws && ws.readyState === 1) try { ws.send(JSON.stringify({ topic, event, payload, ref: String(ref++), join_ref: '1' })); } catch (e) {} };
   function url() { let o = ''; try { o = localStorage.getItem('iv_mp_ws') || ''; } catch (e) {} if (o) return o; const c = Cloud.cfg(); if (!c.url || !c.key) return ''; return c.url.replace(/^http/, 'ws') + '/realtime/v1/websocket?apikey=' + encodeURIComponent(c.key) + '&vsn=1.0.0'; }
@@ -4014,7 +4052,7 @@ const Net = (() => {
   }
   function stop() { if (on) send('broadcast', { type: 'broadcast', event: 'bye', payload: { i: ID } }); want = null; window.NET_GUEST = false; window.NET_PTS = null; rA.clear(); hostId = ''; try { sessionStorage.removeItem('iv_mp'); } catch (e) {} try { ws && ws.close(); } catch (e) {} ws = null; on = false; peers.clear(); setBadge(); }
   addEventListener('pagehide', () => { if (on) send('broadcast', { type: 'broadcast', event: 'bye', payload: { i: ID } }); });
-  return { update, start, stop, list: () => peers, remoteAnimals: () => rA, get host() { return hostId === ID; }, get on() { return on; }, get active() { return !!want; } };
+  return { enabled: MP_ON, update, start, stop, list: () => peers, remoteAnimals: () => rA, get host() { return hostId === ID; }, get on() { return on; }, get active() { return !!want; } };
 })();
 window.Net = Net;
 
@@ -4379,13 +4417,13 @@ const Title = (() => {
     csApply();
     const go = (id, fn) => { const b = el(id); let t = 0; const h = e => { e.preventDefault(); e.stopPropagation(); if (performance.now() - t < 350) return; t = performance.now(); fn(); }; b.addEventListener('touchend', h, { passive: false }); b.addEventListener('click', h); };   // touchend (não touchstart): só ele conta como toque do usuário para o navegador liberar tela cheia/girar
     go('tcont', play);
-    let armN = 0; go('tsolo', () => { if (!has) return play(); if (armN && performance.now() - armN < 3000) { try { sessionStorage.setItem('iv_autoplay', '1'); } catch (e) {} const r = el('reset'); r.dispatchEvent(new MouseEvent('mousedown')); r.dispatchEvent(new MouseEvent('mousedown')); } else { armN = performance.now(); el('tsolo').textContent = 'Apagar o salvo? Toque de novo'; setTimeout(() => { armN = 0; el('tsolo').textContent = '✦ Nova aventura'; }, 3000); } });
+    let armN = 0; go('tsolo', () => { if (!has) return openChar(play); if (armN && performance.now() - armN < 3000) { try { sessionStorage.setItem('iv_autoplay', '1'); } catch (e) {} const r = el('reset'); r.dispatchEvent(new MouseEvent('mousedown')); r.dispatchEvent(new MouseEvent('mousedown')); } else { armN = performance.now(); el('tsolo').textContent = 'Apagar o salvo? Toque de novo'; setTimeout(() => { armN = 0; el('tsolo').textContent = '✦ Nova aventura'; }, 3000); } });
     { const rot = () => { goFull(true); setTimeout(() => { if (innerHeight > innerWidth) toast('Se não girou: ative a rotação automática do celular e deite o aparelho'); }, 900); }; go('trot', rot); const rb = el('rot'); let rt = 0; const rh = e => { e.preventDefault(); e.stopPropagation(); if (performance.now() - rt < 500) return; rt = performance.now(); rot(); }; rb.addEventListener('touchend', rh, { passive: false }); rb.addEventListener('click', rh); }
     go('tfs', () => { const on = !document.fullscreenElement; try { localStorage.setItem('iv_fs', on ? '1' : '0'); } catch (e) {} goFull(on); setTimeout(fsShow, 400); }); fsShow();
     go('tcs2', () => { const i = csApply(); try { localStorage.setItem('iv_cs', String((i + 1) % 3)); } catch (e) {} csApply(); });
     setInterval(() => { if (el('tpanel').classList.contains('on')) { const f = el('fps'); el('tperf').textContent = 'Desempenho\n' + (f ? f.textContent : ''); } }, 500);
-    try { if (sessionStorage.getItem('iv_autoplay')) { sessionStorage.removeItem('iv_autoplay'); setTimeout(() => { if (T.active) play(); }, 600); } } catch (e) {}
- go('tmulti', () => { if (Net.start()) play(); }); go('tmp', () => { if (Net.active) Net.stop(); else Net.start(); sync(); }); go('tset', () => el('tpanel').classList.add('on')); go('tclose', () => { el('tpanel').classList.remove('on'); document.body.classList.remove('inset'); });
+    try { if (sessionStorage.getItem('iv_autoplay')) { sessionStorage.removeItem('iv_autoplay'); setTimeout(() => { if (T.active) openChar(play); }, 600); } } catch (e) {}
+ go('tmulti', () => { if (Net.enabled && Net.start()) play(); else toast('🌐 Multiplayer em breve!'); }); go('tmp', () => { if (Net.active) Net.stop(); else Net.start(); sync(); }); go('tset', () => el('tpanel').classList.add('on')); go('tclose', () => { el('tpanel').classList.remove('on'); document.body.classList.remove('inset'); });
     { const g = el('gear'); let gt = 0; const gh = e => { e.preventDefault(); e.stopPropagation(); if (performance.now() - gt < 350) return; gt = performance.now(); if (T.active) return; document.body.classList.add('inset'); el('tpanel').classList.add('on'); fsShow(); }; g.addEventListener('touchstart', gh, { passive: false }); g.addEventListener('click', gh); }
     go('tfps', () => { window.FPS30 = !window.FPS30; try { localStorage.setItem('iv_fps30', window.FPS30 ? '1' : '0'); } catch (e) {} sync(); });   /* 60 <-> 30 FPS, na hora */
     go('tq', () => { try { localStorage.setItem('iv_gl2', window.GLMODE ? 'off' : 'on'); } catch (e) {} try { Save.save(true); } catch (e) {} el('tq').textContent = '...'; setTimeout(() => location.reload(), 150); });   /* troca o motor de desenho e recarrega */
@@ -4429,6 +4467,22 @@ const Title = (() => {
   document.addEventListener('fullscreenchange', fsShow);
   function sync() { el('tmp').textContent = Net.active ? 'Ligado · sair' : 'Desligado'; el('tq').textContent = window.GLMODE ? 'WebGL' : (() => { try { return localStorage.getItem('iv_gl2') === 'auto' ? 'Normal (auto)' : 'Normal'; } catch (e) { return 'Normal'; } })(); el('tfps').textContent = window.FPS30 ? '30 (estável)' : '60'; }
   let tt = 0; function toast(m) { const t = el('ttoast'); t.textContent = m; t.style.opacity = 1; clearTimeout(tt); tt = setTimeout(() => t.style.opacity = 0, 1800); }
+  /* tela do personagem (jogo novo): nome + masculino/feminino, com o boneco girando nas 8 direções */
+  function openChar(done) {
+    const box = el('tchar'), cv = el('tcpv'), g = cv.getContext('2d'), DIRS = ['south', 'south-east', 'east', 'north-east', 'north', 'north-west', 'west', 'south-west'];
+    let c = { nome: '', sexo: 'm' }; try { c = Object.assign(c, JSON.parse(localStorage.getItem('iv_char') || '{}')); } catch (e) {}
+    el('tcname').value = c.nome || ''; let sx = c.sexo === 'f' ? 'f' : 'm', di = 0, tm = 0;
+    const sync = () => { el('tcm').classList.toggle('on', sx === 'm'); el('tcf').classList.toggle('on', sx === 'f'); };
+    const paint = () => { g.setTransform(1, 0, 0, 1, 0, 0); g.clearRect(0, 0, cv.width, cv.height); g.imageSmoothingEnabled = false; const sp = sx === 'f' ? 'hf' : 'hm';
+      if (!Assets.hasAnim(sp, 'stand')) return; const M = Assets.meta, an = M.sprites[sp].anchor, f = M.frames[sp + '/stand/' + DIRS[di] + '/0'], f0 = M.frames[sp + '/stand/south/0']; if (!f || !f0) return;
+      const s = Math.max(1, Math.floor(cv.height * .72 / f0[3])), x = cv.width / 2 - (f[4] - an[0] + f[2] / 2) * s, y = cv.height / 2 - (f0[5] - an[1] + f0[3] / 2) * s;   /* boneco no meio do círculo, em escala inteira (pixel nítido) */
+      Assets.draw(g, sp, 'stand', DIRS[di], 0, Math.round(x), Math.round(y), s); };
+    sync(); paint(); box.classList.add('on'); tm = setInterval(() => { di = (di + 1) % 8; paint(); }, 450);
+    el('tcm').onclick = () => { sx = 'm'; di = 0; sync(); paint(); }; el('tcf').onclick = () => { sx = 'f'; di = 0; sync(); paint(); };
+    el('tcgo').onclick = () => { const nome = (el('tcname').value || '').trim().slice(0, 14) || (sx === 'f' ? 'Sobrevivente' : 'Sobrevivente');
+      try { localStorage.setItem('iv_char', JSON.stringify({ nome, sexo: sx })); localStorage.setItem('iv_nome', nome); } catch (e) {}
+      window.SKIN = sx === 'f' ? 'hf' : 'hm'; clearInterval(tm); box.classList.remove('on'); done(); };
+  }
   function play() {
     try { if (localStorage.getItem('iv_fs') === '1') goFull(true); } catch (e) {}   // tela cheia (+ trava na horizontal)
     if (!T.active) return; T.active = false; endScene(); document.body.classList.remove('title'); el('tpanel').classList.remove('on');
