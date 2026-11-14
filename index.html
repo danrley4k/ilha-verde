@@ -309,7 +309,7 @@ const World = (() => {
   const bridges = new Set();
   // Conjunto ativo: só os objetos perto do jogador entram nos laços por quadro (colisão, desenho, fogueiras, sombra...).
   // O resto do mapa fica "dormindo" e, ao acordar, recebe o tempo que passou (World.onWake) — assim o custo não cresce com o tamanho do mapa.
-  const ACT = 1600; let near = [], nearR = 900, act = [], actVer = 0, lastVer = -1, lastLen = -1, lastCx = -9, lastCy = -9, actT = 0, clock = 0, onWake = null;
+  const ACT = 1150; let near = [],   /* área de objetos ativos em volta do jogador (antes 1600) */ nearR = 900, act = [], actVer = 0, lastVer = -1, lastLen = -1, lastCx = -9, lastCy = -9, actT = 0, clock = 0, onWake = null;
   function rebuildAct(px, py) {
     act = []; near = []; lastVer = actVer; lastLen = objs.length; actT = .5;
     for (let i = 0; i < objs.length; i++) { const o = objs[i];
@@ -809,7 +809,7 @@ const World = (() => {
         Assets.draw(ctx, (h >> 5) % 3 ? 'lily1' : 'lily2', 'rot', '_', 0, Math.round(tx * T + T / 2 + ox - camX), Math.round(ty * T + T / 2 + oy - camY + bob), 1); } }
     }
     /* mar calmo: brilhos animados (arte do tile de mar calmo) por cima da água. Tudo pré-desenhado em canvases 64x64 (1 por quadro e por formato de margem): no quadro é só drawImage (rápido no celular) */
-    if (Assets.hasAnim('seacalm', 'rot')) { try {
+    if (Assets.hasAnim('seacalm', 'rot') && !window.LOWFX && !(typeof Weather !== 'undefined' && Weather.state === 'rain')) { try {   /* chovendo: sem brilho de sol no mar (e menos desenho na praia) */
       const nf = Assets.frames('seacalm', 'rot', '_'), fi = Math.floor(performance.now() / 1000 * 5) % nf; SEAP = SEAP || [];
       const F = SEAP[fi] || (SEAP[fi] = { src: null, m: [] });
       if (!F.src) { const c = document.createElement('canvas'); c.width = 46; c.height = 45; Assets.draw(c.getContext('2d'), 'seacalm', 'rot', '_', fi, 0, 0, 1); F.src = c; }
@@ -1370,7 +1370,7 @@ const Entities = (() => {
     if (c.kind === 'wolf') { const n = Assets.frames('wolf_d', 'die', c.dir); Assets.draw(ctx, 'wolf_d', 'die', c.dir, Math.min(n - 1, Math.floor(c.age * 12)), x, y, K.scale); ctx.globalAlpha = 1; return; }
     if (c.kind !== 'wolf' && Assets.hasAnim(K.sprite, 'die')) { const n = Assets.frames(K.sprite, 'die', c.dir); Assets.draw(ctx, K.sprite, 'die', c.dir, Math.min(n - 1, Math.floor(c.age * Assets.fps(K.sprite, 'die'))), x, y, K.scale, K.tint); ctx.globalAlpha = 1; return; }
     ctx.translate(Math.round(x), Math.round(y)); ctx.rotate(c.side * ease * 1.5708); ctx.translate(0, -ease * 5);
-    Assets.draw(ctx, K.sprite, 'idle', c.dir, 0, 0, 0, K.scale); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1;
+    Assets.draw(ctx, K.sprite, 'idle', c.dir, 0, 0, 0, K.scale); ctx.setTransform(window.RS || 1, 0, 0, window.RS || 1, 0, 0); ctx.globalAlpha = 1;
   }
   const P0 = () => Player.p;
   const DANG = { east: 0, 'south-east': .785, south: 1.571, 'south-west': 2.356, west: 3.1416, 'north-west': -2.356, north: -1.571, 'north-east': -.785 };
@@ -1386,7 +1386,7 @@ const Entities = (() => {
   // ---------- animais longe do jogador ----------
   // Além de FAR px do jogador o animal não roda a IA completa (nem colisão): a cada ~1 s ele só anda um trecho, fica com fome e, se for lobo, pode caçar
   // outro bicho que esteja pertinho. Ao chegar perto de novo, "acorda" e vira um bicho de verdade (saindo de dentro de árvore, se for o caso).
-  const FAR = 1250;
+  const FAR = 1000;   /* bichos além disso ficam 'dormindo' (antes 1250); fica dentro da área de objetos ativos (1150) */
   function sleepAnimal(a) { a.far = true; a.ft = 0; a.moving = a.running = false; a.growl = a.windup = a.lunge = a.rest = a.bite = a.eat = 0; a.shelter = null; a.nap = 0; a.fleeing = false; a.hab = null; a.hide = 0; a.fl = 0; a.bsh = undefined; }
   function wakeAnimal(a) {
     a.far = false; a.wait = 0; a.moving = false;
@@ -2765,6 +2765,25 @@ const Entities = (() => {
       if (!vert) { ctx.fillRect(x - 17, y, 34, 5); ctx.fillStyle = '#6b4220'; ctx.fillRect(x - 17, y - 36, 34, 38); ctx.fillStyle = '#a9733a'; ctx.fillRect(x - 17, y - 36, 34, 5); ctx.fillStyle = '#4a2c12'; for (let i = -12; i < 17; i += 8) ctx.fillRect(x + i, y - 31, 1, 33); ctx.fillStyle = '#8a5a2c'; ctx.fillRect(x - 17, y - 14, 34, 1); }
       else { ctx.fillRect(x - 6, y - 14, 12, 34); ctx.fillStyle = '#6b4220'; ctx.fillRect(x - 5, y - 52, 10, 70); ctx.fillStyle = '#a9733a'; ctx.fillRect(x - 5, y - 52, 10, 36); ctx.fillStyle = '#4a2c12'; ctx.fillRect(x - 1, y - 16, 1, 34); ctx.fillStyle = '#c9965a'; ctx.fillRect(x - 5, y - 52, 10, 2); }  }
   function roofRaw(ctx, x, y) { const a = ctx.globalAlpha; ctx.fillStyle = '#c9a23c'; ctx.fillRect(x - 16, y - 56, 32, 32); ctx.fillStyle = '#e0bf55'; for (let r = 0; r < 4; r++) ctx.fillRect(x - 16, y - 56 + r * 8, 32, 1); ctx.fillStyle = '#7a5f18'; for (let c = -14; c < 16; c += 7) ctx.fillRect(x + c, y - 52, 2, 22); ctx.fillStyle = '#5c4510'; ctx.fillRect(x - 16, y - 27, 32, 3);  }
+  /* piso e telhado das construções: em vez de desenhar peça por peça a cada quadro, junta tudo numa imagem pronta e só refaz quando alguma peça muda */
+  const BAK = { floor: { src: null, sig: '', c: null, x: 0, y: 0, L: [] }, roof: { src: null, sig: '', c: null, x: 0, y: 0, L: [] } };
+  function bakeOf(kind) {
+    const B = BAK[kind], N = World.near; if (B.src === N) return B; B.src = N;
+    const L = []; let s = 0; for (let i = 0; i < N.length; i++) { const o = N[i]; if (o.kind === kind && !o.dead) { L.push(o); s = (s + o.x * 7 + o.y * 13) % 1e9; } }
+    const sig = L.length + ':' + s; B.L = L; if (sig === B.sig) return B; B.sig = sig; B.c = null; if (!L.length) return B;
+    let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9; for (const o of L) { x0 = Math.min(x0, o.x); y0 = Math.min(y0, o.y); x1 = Math.max(x1, o.x); y1 = Math.max(y1, o.y); }
+    const top = kind === 'roof' ? 56 : 16; x0 = Math.round(x0) - 16; y0 = Math.round(y0) - top; const w = Math.round(x1) + 16 - x0, h = Math.round(y1) + 16 - y0 + (kind === 'roof' ? 0 : 0);
+    if (w * h > 4e6 || w <= 0 || h <= 0) return B;   /* área enorme: desenha peça por peça mesmo */
+    const c = document.createElement('canvas'); c.width = w; c.height = h + (kind === 'roof' ? 0 : 0); const g = c.getContext('2d'); g.imageSmoothingEnabled = false;
+    for (const o of L) drawPiece(g, kind, o.x - x0, o.y - y0 + (kind === 'roof' ? 0 : 0)); B.c = c; B.x = x0; B.y = y0; return B;
+  }
+  function drawFloors(ctx, camX, camY, vw, vh) { const B = bakeOf('floor'); if (B.c) { ctx.drawImage(B.c, Math.round(B.x - camX), Math.round(B.y - camY)); return; } for (const o of B.L) if (o.x > camX - 20 && o.x < camX + vw + 20 && o.y > camY - 20 && o.y < camY + vh + 20) drawPiece(ctx, 'floor', o.x - camX, o.y - camY); }
+  function drawRoofs(ctx, camX, camY, vw, vh, player) {
+    const B = bakeOf('roof'), pl = player.p, near = B.L.filter(o => Math.abs(o.x - pl.x) < 40 && Math.abs(o.y - pl.y) < 40);   /* telhado em cima de você fica transparente */
+    if (B.c) { if (near.length) { ctx.save(); ctx.beginPath(); ctx.rect(0, 0, vw, vh); for (const o of near) ctx.rect(Math.round(o.x - camX) - 16, Math.round(o.y - camY) - 56, 32, 32); ctx.clip('evenodd'); }
+      ctx.drawImage(B.c, Math.round(B.x - camX), Math.round(B.y - camY)); if (near.length) ctx.restore(); ctx.globalAlpha = .3; for (const o of near) drawPiece(ctx, 'roof', o.x - camX, o.y - camY); ctx.globalAlpha = 1; return; }
+    for (const o of B.L) if (o.x > camX - 20 && o.x < camX + vw + 20 && o.y > camY - 20 && o.y < camY + vh + 100) { ctx.globalAlpha = Math.abs(o.x - pl.x) < 40 && Math.abs(o.y - pl.y) < 40 ? .3 : 1; drawPiece(ctx, 'roof', o.x - camX, o.y - camY); ctx.globalAlpha = 1; }
+  }
   function drawPiece(ctx, k, x, y, vert, ghost) {
     x = Math.round(x); y = Math.round(y);
     if (k === 'floor') Assets.draw(ctx, 'b_floor', 'rot', '_', 0, x - 16, y - 16, 1);
@@ -3046,7 +3065,8 @@ const Entities = (() => {
       else if (w.kind === 'wolf' ? (w.zInv || w.alertT > 0 || w.alert > 0) && !(w.eat > 0) : (w.alert > 0 || w.hear > 0 || w.invest > 0 || w.look > 0 || w.wsee > 0 || w.inv > 0 || w.alertT > 0 || w.zInv)) txt(ctx, '?', 'bold 20px sans-serif', '#ffd24a', w.x - camX, w.y - camY - 62); }   // escutando / indo ver o barulho
   function draw(ctx, camX, camY, vw, vh, player) {
     dn = 0; const m = 130; cam.x = camX; cam.y = camY; cam.vw = vw; cam.vh = vh;
-    for (const o of World.near) if (o.kind === 'floor') { if (o.x > camX - 20 && o.x < camX + vw + 20 && o.y > camY - 20 && o.y < camY + vh + 20) drawPiece(ctx, 'floor', o.x - camX, o.y - camY); }
+    drawFloors(ctx, camX, camY, vw, vh);
+    for (const o of World.near) if (false) { }
       else if (o.kind === 'bridge' && !World.isRope(Math.round(o.x / CONFIG.TILE), Math.round(o.y / CONFIG.TILE)) && o.x > camX - 40 && o.x < camX + vw + 40 && o.y > camY - 40 && o.y < camY + vh + 40) drawBridge(ctx, o.x - camX, o.y - camY, o.x, o.y, o.nat);
     drawTracks(ctx, camX, camY, vw, vh);
     { const OA = World.near; for (let i = 0; i < OA.length; i++) { const o = OA[i], Tr = TREES[o.kind]; if (!Tr || o.dead || (o.fall !== undefined && o.fall > .5) || !inView(o, camX, camY, vw, vh, m)) continue; addF(-1e9 + 2, () => treeShadow(ctx, o, camX, camY)); } }   // sombra no chão, como no jogo de referência
@@ -3068,20 +3088,20 @@ const Entities = (() => {
         const seen = dp < full;
         ctx.beginPath(); ctx.arc(0, 0, full, 0, 6.283); ctx.fillStyle = seen ? 'rgba(255,60,50,.09)' : 'rgba(255,225,70,.05)'; ctx.fill(); ctx.strokeStyle = seen ? 'rgba(255,90,70,.45)' : 'rgba(255,225,70,.3)'; ctx.lineWidth = 1; ctx.stroke();
       }
-      ctx.setTransform(1, 0, 0, 1, 0, 0); });
+      ctx.setTransform(window.RS || 1, 0, 0, window.RS || 1, 0, 0); });
     for (const w of animals) if ((w.growl > 0 || w.windup > 0) && !w.script && !(typeof Title !== 'undefined' && Title.active) && w.x > camX - m && w.x < camX + vw + m && w.y > camY - m && w.y < camY + vh + m) addF(-1e9, () => {
       let dx = w.lx, dy = w.ly; if (w.growl > 0) { const d = Math.hypot(P0().x - w.x, P0().y - w.y) || 1; dx = (P0().x - w.x) / d; dy = (P0().y - w.y) / d; }
       const L = 135 * 2.6 * .35 + 30, W = 46, pulse = w.windup > 0 ? .38 + .22 * Math.sin(w.t * 30) : .2;
       ctx.translate(w.x - camX, w.y - camY + 4); ctx.rotate(Math.atan2(dy, dx)); ctx.scale(1, .62);
       ctx.fillStyle = 'rgba(220,40,30,' + pulse + ')'; ctx.fillRect(0, -W, L, W * 2);
-      ctx.strokeStyle = 'rgba(255,90,70,' + Math.min(.9, pulse + .3) + ')'; ctx.lineWidth = 2; ctx.strokeRect(0, -W, L, W * 2); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.lineWidth = 1; });
+      ctx.strokeStyle = 'rgba(255,90,70,' + Math.min(.9, pulse + .3) + ')'; ctx.lineWidth = 2; ctx.strokeRect(0, -W, L, W * 2); ctx.setTransform(window.RS || 1, 0, 0, window.RS || 1, 0, 0); ctx.lineWidth = 1; });
     for (const w of animals) if (w.x > camX - m && w.x < camX + vw + m && w.y > camY - 30 && w.y < camY + vh + m) if (!(w.inDen > 0)) add(w.y + (w.alt > 8 ? 400 : 0), 3, w);
     if (!(typeof Title !== "undefined" && Title.active)) add(player.p.y, 4, player);   /* tela inicial: jogador-fantasma não aparece */
     ord.length = dn; for (let i = 0; i < dn; i++) ord[i] = dl[i]; ord.sort(byY);
     for (let i = 0; i < dn; i++) { const e = ord[i]; switch (e.t) { case 0: drawObj(ctx, e.a, camX, camY); break; case 1: drawDrop(ctx, e.a, camX, camY); break; case 2: drawCorpse(ctx, e.a, camX, camY); break; case 3: drawAnimal(ctx, e.a, camX, camY); break; case 4: e.a.draw(ctx, camX, camY); break; default: e.f(); } e.a = null; e.f = null; }
     if (!(typeof Title !== "undefined" && Title.active)) { const pp = player.p; let cov = false; for (const o of World.near) { if (o.y > pp.y && o.y - pp.y < 130 && Math.abs(o.x - pp.x) < 80 && (TREES[o.kind] || o.kind === 'rock') && !o.dead) { cov = true; break; } }
       if (cov) { ctx.globalAlpha = .55; player.draw(ctx, camX, camY); ctx.globalAlpha = 1; } }   // atrás de árvore ou pedra: aparece a silhueta do personagem por cima
-    for (const o of World.near) if (o.kind === 'roof' && o.x > camX - 20 && o.x < camX + vw + 20 && o.y > camY - 20 && o.y < camY + vh + 100) { const pl = player.p; ctx.globalAlpha = Math.abs(o.x - pl.x) < 40 && Math.abs(o.y - pl.y) < 40 ? .3 : 1; drawPiece(ctx, 'roof', o.x - camX, o.y - camY); ctx.globalAlpha = 1; }
+    drawRoofs(ctx, camX, camY, vw, vh, player);
     for (const o of World.near) if (o.kind === 'shelter' && o.x > camX - 80 && o.x < camX + vw + 80 && o.y > camY - 20 && o.y < camY + vh + 100) { const pl = player.p, inside = Math.abs(o.x - pl.x) < 52 && Math.abs(o.y - pl.y) < 38; drawShelterRoof(ctx, o.x - camX, o.y - camY, inside ? .35 : 1); }
     if (typeof Build !== 'undefined') Build.draw(ctx, camX, camY);
     for (let i = fx.length - 1; i >= 0; i--) { const f = fx[i]; f.t += .016; if (f.t > .45) { fx.splice(i, 1); continue; } ctx.globalAlpha = 1 - f.t / .45; Assets.draw(ctx, f.k, 'rot', '_', 0, f.x - camX, f.y - camY + 16, (f.small ? .8 : .55) * (.6 + f.t * 1.6)); } ctx.globalAlpha = 1;
@@ -3456,7 +3476,8 @@ const Weather = (() => {
   }
   // Efeitos de tela cheia (noite, tinta de chuva/calor, gotas) ficam em camadas do navegador por cima do jogo: o GPU compõe de graça e o canvas do jogo não paga o preenchimento da tela inteira.
   const darkEl = document.getElementById('dark');
-  let dFr = 0, lightC = null, sized = '', tintKey = '', tintStyle = '', rainT = null;
+  let dFr = 0, lightC = null, sized = '', tintKey = '', tintStyle = '', rainT = null, dropC = null; const drops = [];
+  function newDrop(vw, vh, any) { const near = Math.random() < .45, v = near ? 370 : 300; return { x: Math.random() * (vw + vh * .4), y: any ? Math.random() * vh : -10 - Math.random() * 60, vx: -v * .34, vy: v, k: (Math.random() * 3) | 0 }; }
   function lightSprite() {
     if (lightC) return lightC; lightC = document.createElement('canvas'); lightC.width = lightC.height = 128; const g = lightC.getContext('2d'), gr = g.createRadialGradient(64, 64, 0, 64, 64, 64);
     gr.addColorStop(0, 'rgba(0,0,0,1)'); gr.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = gr; g.fillRect(0, 0, 128, 128); return lightC;
@@ -3497,12 +3518,13 @@ const Weather = (() => {
     for (const sc of scorch) { sc.a = Math.max(0, sc.a - .0004); if (sc.a > 0) { ctx.fillStyle = `rgba(20,16,14,${(.45 * sc.a).toFixed(3)})`; ctx.beginPath(); ctx.ellipse(Math.round(sc.x - camX), Math.round(sc.y - camY), 16, 8, 0, 0, 6.283); ctx.fill(); } }
     if (bolt && flash > .02) { const vis = flashT < .12 ? 1 : flashT < .2 ? .3 : flashT < .3 ? 1 : 0; if (vis) { ctx.globalAlpha = vis; ctx.lineJoin = 'round'; for (const [w, c] of [[7, 'rgba(150,190,255,.35)'], [3, '#dbe8ff'], [1.5, '#fff']]) { ctx.strokeStyle = c; ctx.lineWidth = w; ctx.beginPath(); bolt.pts.forEach((q, i) => { const X = Math.round(q[0] - camX), Y = Math.round(q[1] - camY); i ? ctx.lineTo(X, Y) : ctx.moveTo(X, Y); }); ctx.stroke(); } ctx.fillStyle = 'rgba(255,255,255,.6)'; ctx.beginPath(); ctx.arc(Math.round(bolt.x - camX), Math.round(bolt.y - camY), 14, 0, 6.283); ctx.fill(); ctx.globalAlpha = 1; } }
     if (flash > .02) { ctx.fillStyle = `rgba(235,240,255,${(.55 * flash).toFixed(3)})`; ctx.fillRect(0, 0, vw, vh); }
-    if (rain > .02) {
-      if (!rainT) rainT = [{ c: makeRainTile(192, 9), s: 192, v: 370 }, { c: makeRainTile(256, 11), s: 256, v: 300 }];   /* gotas: azulejos prontos desenhados com drawImage (preencher com padrão a cada quadro engasgava o celular) */
-      ctx.globalAlpha = Math.min(1, rain * 1.1);
-      for (let i = 0; i < 2; i++) { const L = rainT[i], s = L.s, ox = -Math.round((t * L.v * .34) % s), oy = Math.round((t * L.v) % s), x0 = ((ox % s) + s) % s - s, y0 = ((oy % s) + s) % s - s; for (let y = y0; y < vh; y += s) for (let x = x0; x < vw; x += s) ctx.drawImage(L.c, x, y); }
-      ctx.globalAlpha = 1;
-    }
+    if (rain > .02) {   /* gotas uma a uma (mesma arte das gotas): o celular só pinta os pixels das gotas; as 2 camadas de tela inteira de antes pesavam muito em celular fraco */
+      const nowR = performance.now(), dtR = Math.min(.05, (nowR - (rainT || nowR)) / 1000); rainT = nowR;
+      const want = Math.round(vw * vh / 4200 * Math.min(1, rain * 1.1) * (window.LOWFX ? .6 : 1));
+      while (drops.length < want) drops.push(newDrop(vw, vh, true)); if (drops.length > want) drops.length = want;
+      if (!dropC) dropC = KEYS.map(k => { const fm = Assets.meta.frames[k + '/rot/_/0'], a = Assets.meta.sprites[k].anchor, c = document.createElement('canvas'); c.width = fm[2]; c.height = fm[3]; c.getContext('2d').drawImage(Assets.pg[fm[6]].img, fm[0], fm[1], fm[2], fm[3], 0, 0, fm[2], fm[3]); c.ox = fm[4] - a[0]; c.oy = fm[5] - a[1]; return c; });   /* as 3 gotas recortadas uma vez: cada gota vira um drawImage simples */
+      for (let i = 0; i < drops.length; i++) { const d = drops[i]; d.x += d.vx * dtR; d.y += d.vy * dtR; if (d.y > vh + 24 || d.x < -24) { const n = newDrop(vw, vh, false); d.x = n.x; d.y = n.y; d.vx = n.vx; d.vy = n.vy; d.k = n.k; } const c = dropC[d.k]; ctx.drawImage(c, (d.x + c.ox) | 0, (d.y + c.oy) | 0); }
+    } else if (drops.length) { drops.length = 0; rainT = null; }
     if (rain > .02 && splashes.length) { ctx.strokeStyle = '#d2e6ff'; ctx.lineWidth = 1; ctx.beginPath(); for (const s of splashes) { const r = 2 + s.t * 16, x = Math.round(s.x), y = Math.round(s.y); ctx.moveTo(x + r, y); ctx.ellipse(x, y, r, r * .4, 0, 0, 6.283); } ctx.globalAlpha = .6; ctx.stroke(); } ctx.globalAlpha = 1;
     if (heat > .3 && !shelteredNow) { const P = Player.p, x = P.x - camX, y = P.y - camY; for (let i = 0; i < 2; i++) { const ph = (t * .9 + i * .5) % 1; ctx.globalAlpha = (1 - ph) * Math.min(1, heat); Assets.draw(ctx, 'drop', 'rot', '_', 0, x + (i ? 11 : -12), y - 66 + ph * 14, .2); } ctx.globalAlpha = 1; }
   }
@@ -4144,11 +4166,12 @@ const Title = (() => {
     let dpr = window.devicePixelRatio || 1, ph = innerHeight * dpr, pw = innerWidth * dpr, VZ = window.VZ || 1, S = Math.max(.6, Math.round(Math.max(1, Math.round(ph / CONFIG.VIEW_H * 10) / 10 + (window.QUAL === 1 ? 1 : window.QUAL === 2 ? -1 : 0)) / VZ * 10) / 10); // QUAL 1=SD (mais zoom), 2=HD+ (menos zoom, mais mapa)
     const PC = window.PIXCAP || (window.QUAL !== 2 ? 450000 : 700000); if (pw * ph / (S * S) > PC) S = Math.round(Math.sqrt(pw * ph / PC) * 100) / 100;   // tela horizontal: limita os pixels desenhados por quadro (senão o celular engasga); mostra um pouco menos de mapa
     vh = Math.ceil(ph / S); vw = Math.ceil(pw / S); window.VK = S / dpr;
-    canvas.width = vw; canvas.height = vh; canvas.style.width = vw * window.VK + 'px'; canvas.style.height = vh * window.VK + 'px'; ctx.imageSmoothingEnabled = false;
+    const RS = window.RS || 1; canvas.width = Math.round(vw * RS); canvas.height = Math.round(vh * RS); canvas.style.width = vw * window.VK + 'px';   /* RS < 1: desenha com menos pixels e o navegador estica (mesmo zoom, menos peso) */ canvas.style.height = vh * window.VK + 'px'; ctx.imageSmoothingEnabled = false;
   }
-  try { const sq = localStorage.getItem('iv_q2'); window.QUAL = sq === null ? 2 : (+sq | 0); if (window.QUAL < 0 || window.QUAL > 2) window.QUAL = 2; } catch (e) { window.QUAL = 2; }   // começa em HD+ (iv_q2: escolha nova, ignora a antiga)
+  window.QUAL = 2;   /* zoom único: HD+ (o mais longe) */   // começa em HD+ (iv_q2: escolha nova, ignora a antiga)
   const qb = document.getElementById('qual'), qshow = () => { if (qb) qb.textContent = ['HD', 'SD', 'HD+'][window.QUAL]; };
-  if (qb) { qshow(); const tg = e => { e.preventDefault(); e.stopPropagation(); window.QUAL = (window.QUAL + 1) % 3; window.PIXCAP = 0; window.MATOTHIN = 0; try { localStorage.setItem('iv_q2', String(window.QUAL)); } catch (_) {} qshow(); resize(); }; /* escolha manual: tira o limite automático de FPS */ qb.addEventListener('touchstart', tg, { passive: false }); qb.addEventListener('click', tg); }
+  if (qb) qb.style.display = 'none';
+  if (false) { qshow(); const tg = e => { e.preventDefault(); e.stopPropagation(); window.QUAL = (window.QUAL + 1) % 3; window.PIXCAP = 0; window.MATOTHIN = 0; window.LOWFX = 0; try { localStorage.setItem('iv_q2', String(window.QUAL)); } catch (_) {} qshow(); resize(); }; /* escolha manual: tira o limite automático de FPS */ qb.addEventListener('touchstart', tg, { passive: false }); qb.addEventListener('click', tg); }
   addEventListener('resize', resize); resize();
   // a nuvem e as imagens carregam juntas
   const cloudP = Cloud.boot();   // se a nuvem tem um save mais novo, grava no aparelho e recarrega (1x)
@@ -4161,7 +4184,7 @@ const Title = (() => {
   let last = performance.now(), acc = 0, frames = 0, worst = 0, fpsT = 0, tU = 0, tW = 0, tE = 0, tC = 0, spikes = 0; const pn = () => performance.now();
   // Telas de 90/120 Hz: o jogo mede a taxa de atualização e, se for ≥ ~100 Hz, desenha 1 a cada 2 quadros (60 FPS estáveis, menos calor).
   let VZc = 1; window.VZ = 1;
-  let lowFps = 0, cap = -1, hz = 0, prevT = 0; const ivs = [];
+  let lowFps = 0, goodT = 0, restAt = -1e9, noRest = false, cap = -1, hz = 0, prevT = 0; const ivs = [];
   // um erro em qualquer sistema não pode derrubar o loop (o jogo travava inteiro): mostra o erro na tela e segue
   let errT = 0; window.__errs = [];
   let errBox = null, errHide = 0; const errSeen = {};
@@ -4182,13 +4205,13 @@ const Title = (() => {
     { const tz = (!TT && World.onPlat(Player.p.x, Player.p.y)) ? 1.35 : 1; if (VZc !== tz) { VZc += (tz - VZc) * Math.min(1, dt * 2.5); if (Math.abs(tz - VZc) < .01) VZc = tz; if (Math.abs(VZc - (window.VZ || 1)) >= .02 || VZc === tz) { window.VZ = VZc; resize(); } } }   // vista: sobe no planalto → a tela abre
     const cx0 = TT ? Title.cam.x - (vw > vh ? vw * .24 : 0) : Player.p.x, cy0 = TT ? Title.cam.y + (vw > vh ? 0 : vh * .1) : Player.p.y;   // na tela inicial o bicho fica fora do menu
     const camX = Math.min(Math.max(Math.round(cx0) - (vw >> 1), 0), World.size.w - vw), camY = Math.min(Math.max(Math.round(cy0) - (vh >> 1), 0), World.size.h - vh);
-    ctx.fillStyle = '#1d5a7a'; ctx.fillRect(0, 0, vw, vh);
+    ctx.setTransform(window.RS || 1, 0, 0, window.RS || 1, 0, 0); ctx.fillStyle = '#1d5a7a'; ctx.fillRect(0, 0, vw, vh);
     const b0 = pn(); World.draw(ctx, camX, camY, vw, vh); const b1 = pn();
     Sea.draw(ctx, camX, camY, vw, vh); Entities.draw(ctx, camX, camY, vw, vh, Player); const b2 = pn();
     Weather.draw(ctx, vw, vh, camX, camY); const b3 = pn();
     tU += a1 - a0; tW += b1 - b0; tE += b2 - b1; tC += b3 - b2; if (dtRaw > .026) spikes++;
     frames++; fpsT += dtRaw; worst = Math.max(worst, dtRaw * 1000);
-    if (fpsT >= .5) { const f1 = x => (x / frames).toFixed(1); fpsEl.textContent = `${Math.round(frames / fpsT)} FPS · pior ${Math.round(worst)}\nlag ${spikes}${hz ? ' · ' + hz + 'Hz' + (cap ? '→60' : '') : ''}\nJS ${f1(tU)}+${f1(tW)}+${f1(tE)}+${f1(tC)} ms`; const fp = frames / fpsT; if (!TT && fp < 40 && !window.TRAVEL_LOCK && performance.now() > 15000) { if (++lowFps >= 2) { lowFps = 0; const cur = window.PIXCAP || (vw * vh); if (fp < 28 && (window.MATOTHIN | 0) < 2) { window.MATOTHIN = (window.MATOTHIN | 0) + 1; Save.flash('🌿 Menos mato na tela para ganhar FPS'); } else if (cur > 110000) { window.PIXCAP = Math.max(110000, Math.round(Math.min(cur, vw * vh) * .75)); resize(); Save.flash('⚙️ Qualidade reduzida para ganhar FPS'); } } } else lowFps = 0;
+    if (fpsT >= .5) { const f1 = x => (x / frames).toFixed(1); fpsEl.textContent = `${Math.round(frames / fpsT)} FPS · pior ${Math.round(worst)}\nlag ${spikes}${hz ? ' · ' + hz + 'Hz' + (cap ? '→60' : '') : ''}\nJS ${f1(tU)}+${f1(tW)}+${f1(tE)}+${f1(tC)} ms`; const fp = frames / fpsT; if (!TT && fp < 40 && !window.TRAVEL_LOCK && performance.now() > 15000) { goodT = 0; if (++lowFps >= 2) { lowFps = 0; if (performance.now() - restAt < 45000) noRest = true; const cur = window.PIXCAP || (vw * vh); if (!window.LOWFX) { window.LOWFX = 1; Save.flash('🌊 Menos efeitos para ganhar FPS'); } else if (fp < 28 && (window.MATOTHIN | 0) < 2) { window.MATOTHIN = (window.MATOTHIN | 0) + 1; Save.flash('🌿 Menos mato na tela para ganhar FPS'); } else if ((window.RS || 1) > .67) { window.RS = (window.RS || 1) > .8 ? .8 : .67; resize(); Save.flash('⚙️ Resolução reduzida para ganhar FPS (mesmo zoom)'); } else if (false && cur > 110000) { window.PIXCAP = Math.max(110000, Math.round(Math.min(cur, vw * vh) * .75)); resize(); Save.flash('⚙️ Qualidade reduzida para ganhar FPS'); } } } else { lowFps = 0; if (!TT && !noRest && fp >= 56 && (window.LOWFX || window.PIXCAP || window.MATOTHIN || (window.RS || 1) < 1)) { goodT += fpsT; if (goodT >= 20) { goodT = 0; restAt = performance.now(); if ((window.RS || 1) < 1) { window.RS = window.RS < .8 ? .8 : 1; resize(); if (window.RS === 1) Save.flash('✨ Qualidade de volta'); } else if (window.PIXCAP) { window.PIXCAP = 0; resize(); } else if (window.MATOTHIN) window.MATOTHIN--; else window.LOWFX = 0; } } else goodT = 0; }   /* FPS bom por 20 s: desfaz um passo; se cair de novo logo depois, para de alternar */
       tU = tW = tE = tC = 0; spikes = 0; frames = 0; fpsT = 0; worst = 0; }
     requestAnimationFrame(frame);
   }
