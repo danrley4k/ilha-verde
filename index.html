@@ -187,10 +187,14 @@ body.crafting #craftbtn,body.building #craftbtn,body.title #craftbtn,body.crafti
 #craft .cnote{font-size:12px;opacity:.8;margin:2px 0 6px}
 @media (orientation:landscape) and (max-height:520px){#craftbtn{left:max(10px,env(safe-area-inset-left))!important;bottom:70px!important}}
 </style></head><body>
-<div id="tload" style="display:none;position:fixed;inset:0;z-index:100000;background:linear-gradient(#0b2a3a,#145a74);color:#fff;font-family:sans-serif;flex-direction:column;align-items:center;justify-content:center;gap:14px;transition:opacity .4s"><div id="tlic" style="font-size:44px">⛵</div><div id="tltx" style="font:bold 20px sans-serif;text-align:center;padding:0 16px">Navegando...</div><div style="width:min(70vw,320px);height:12px;border:2px solid #e8d29a;border-radius:8px;overflow:hidden;background:#0006"><div id="tlbar" style="height:100%;width:0;background:#e8d29a"></div></div></div>
-<script>/* tela de carregamento da viagem: aparece já no começo do carregamento da página quando você está chegando de viagem */
-try { var h = location.hash, tv = /viagem=|skip/.test(h) || sessionStorage.getItem('iv_skip'); if (tv) { var to = null; try { to = localStorage.getItem('iv_loc'); } catch (e) {} var m = h.match(/viagem=([^&]+)/); if (m) try { to = JSON.parse(decodeURIComponent(m[1])).to; } catch (e) {}
-  document.getElementById('tload').style.display = 'flex'; document.getElementById('tltx').textContent = 'Chegando em ' + (to === 'home' ? 'Casa' : 'Floresta dos Sussurros') + '...'; var b = document.getElementById('tlbar'); b.style.transition = 'width 8s cubic-bezier(.1,.8,.3,1)'; setTimeout(function () { b.style.width = '90%'; }, 30); } } catch (e) {}
+<div id="tload" style="display:flex;position:fixed;inset:0;z-index:100000;background:linear-gradient(#0b2a3a,#145a74);color:#fff;font-family:sans-serif;flex-direction:column;align-items:center;justify-content:center;gap:14px;transition:opacity .4s"><div id="tlic" style="font-size:44px">🌴</div><div id="tltx" style="font:bold 20px sans-serif;text-align:center;padding:0 16px">Carregando a ilha...</div><div style="width:min(70vw,320px);height:12px;border:2px solid #e8d29a;border-radius:8px;overflow:hidden;background:#0006"><div id="tlbar" style="height:100%;width:0;background:#e8d29a"></div></div><div id="tlpc" style="font:bold 13px sans-serif;opacity:.85">0%</div><div id="tltip" style="max-width:min(86vw,420px);text-align:center;font:14px sans-serif;opacity:.9;padding:0 16px;margin-top:6px"></div></div>
+<script>/* tela de carregamento: aparece já no começo de todo carregamento (abrir o jogo ou chegar de viagem); a barra anda conforme as imagens chegam */
+try { var h = location.hash, tv = /viagem=|skip/.test(h) || sessionStorage.getItem('iv_skip'), b = document.getElementById('tlbar');
+  if (tv) { var to = null; try { to = localStorage.getItem('iv_loc'); } catch (e) {} var m = h.match(/viagem=([^&]+)/); if (m) try { to = JSON.parse(decodeURIComponent(m[1])).to; } catch (e) {}
+    document.getElementById('tlic').textContent = '⛵'; document.getElementById('tltx').textContent = 'Chegando em ' + (to === 'home' ? 'Casa' : 'Floresta dos Sussurros') + '...'; }
+  var TIPS = ['Agachado e por trás, os bichos não te veem.', 'Água de poça pode te deixar doente: ferva antes de beber.', 'Na Casa não aparecem lobos nem ursos.', 'Guarde o couro dos bichos: vai servir para armaduras.', 'Barulho de machado e picareta chama a atenção dos animais.', 'Uma fogueira acesa ajuda a passar o frio da noite.', 'O cervo te olha com "?" antes de fugir: chegue agachado.', 'Pela jangada você viaja para outros lugares da ilha.', 'Na chuva as poças enchem; no sol elas secam.', 'Com a picareta dá para quebrar até o rochedo grande.'];
+  document.getElementById('tltip').textContent = '💡 ' + TIPS[Math.floor(Math.random() * TIPS.length)];
+  b.style.transition = 'width 10s cubic-bezier(.1,.8,.3,1)'; setTimeout(function () { if (!window.__ld) b.style.width = '35%'; }, 30); } catch (e) {}
 </script>
 <div id="rot">↻</div><canvas id="game"></canvas><div id="tfade"></div><div id="ttoast"></div>
 <div id="title"><div id="tlogo"><h1>ILHA VERDE</h1><p>SOBREVIVÊNCIA</p></div>
@@ -228,7 +232,7 @@ const ASSET_V = '2026111301';
 async function getJSON(u) { const r = await fetch(u + '?v=' + ASSET_V); if (!r.ok) throw new Error('Não achei ' + u + ' — suba a pasta assets junto com o index.html'); return r.json(); }
 const Assets = {
   meta: null, tiles: {}, tilesets: null, pg: [], grp: {}, sg: {}, now: 0, TTL: 90000,
-  loadImg(src) { return new Promise((res, rej) => { const im = new Image(); im.onload = () => res(im); im.onerror = () => rej(new Error('falhou ' + src)); im.src = src; }); },
+  loadImg(src) { return new Promise((res, rej) => { const im = new Image(); im.onload = () => { const L = window.__ld; if (L && !L.done) { L.n++; const k = Math.min(1, L.n / L.t), b = document.getElementById('tlbar'), pc = document.getElementById('tlpc'); if (b) { b.style.transition = 'width .2s'; b.style.width = Math.round(8 + 87 * k) + '%'; } if (pc) pc.textContent = Math.round(8 + 87 * k) + '%'; } res(im); }; im.onerror = () => rej(new Error('falhou ' + src)); im.src = src; }); },
   async load() {
     const E = typeof EMBED !== 'undefined' ? EMBED : null; this.E = E;
     this.meta = E ? E.atlasJson : await getJSON('assets/atlas.json');
@@ -237,6 +241,7 @@ const Assets = {
     for (const n in this.meta.groups) { const G = this.meta.groups[n], g = this.grp[n] = { name: n, eager: G.eager, pages: G.pages.map(i => this.pg[i]), st: 0, use: 0, p: null }; for (const p of g.pages) p.g = g; }
     for (const n in this.meta.sprites) this.sg[n] = this.grp[this.meta.sprites[n].group];
     this.now = performance.now();
+    window.__ld = { n: 0, t: Object.values(this.grp).filter(g => g.eager).reduce((s, g) => s + g.pages.length, 0) + CONFIG.TILESETS.length + 9 };   /* total de imagens do começo: páginas que carregam já + tilesets */
     await Promise.all(Object.values(this.grp).filter(g => g.eager).map(g => this.need(g)));
     for (const [n] of CONFIG.TILESETS) this.tiles[n] = await this.loadImg(E ? E.tiles[n] : `assets/tile_${n}.png?v=${ASSET_V}`);
     for (const n of ['sand_shallow', 'shallow_deep', 'sandg_water', 'sandg_grass', 'mud_water', 'mud_grass', 'grass_plat', 'dirt_grass2', 'dirt_grass3']) this.tiles[n] = await this.loadImg(E ? E.tiles[n] : `assets/tile_${n}.png?v=${ASSET_V}`);
@@ -3566,7 +3571,7 @@ const Save = (() => {
 const Travel = (() => {
   /* tela de carregamento (a mesma usada na chegada) */
   let lgen = 0;   /* cada carregamento novo cancela o esconder pendente do anterior */
-  function load(txt, ms, ic) { lgen++; const d = document.getElementById('tload'), b = document.getElementById('tlbar'); document.getElementById('tltx').textContent = txt; document.getElementById('tlic').textContent = ic || '⛵'; d.style.opacity = 1; d.style.display = 'flex'; b.style.transition = 'none'; b.style.width = '0'; void b.offsetWidth; b.style.transition = 'width ' + ms + 'ms ease'; b.style.width = '100%'; return new Promise(r => setTimeout(r, ms + 80)); }
+  function load(txt, ms, ic) { lgen++; { const pc = document.getElementById('tlpc'), tp = document.getElementById('tltip'); if (pc) pc.textContent = ''; if (tp) tp.textContent = ''; } const d = document.getElementById('tload'), b = document.getElementById('tlbar'); document.getElementById('tltx').textContent = txt; document.getElementById('tlic').textContent = ic || '⛵'; d.style.opacity = 1; d.style.display = 'flex'; b.style.transition = 'none'; b.style.width = '0'; void b.offsetWidth; b.style.transition = 'width ' + ms + 'ms ease'; b.style.width = '100%'; return new Promise(r => setTimeout(r, ms + 80)); }
   function hideLoad() { const d = document.getElementById('tload'), b = document.getElementById('tlbar'), g = lgen; if (d.style.display === 'none') return; b.style.transition = 'width .25s'; b.style.width = '100%'; setTimeout(() => { if (g !== lgen) return; d.style.opacity = 0; setTimeout(() => { if (g !== lgen) return; d.style.display = 'none'; d.style.opacity = 1; }, 420); }, 280); }
   /* "Ir embora" na jangada: o jogo pausa, carrega e abre o mapa com os destinos */
   function leave(raft) { window.TRAVEL_LOCK = true; Sfx.pause(true); Save.save(true); load('Saindo de ' + LOCS[LOC].name + '...', 1300).then(() => { openMap(raft); hideLoad(); }); }
@@ -4147,10 +4152,11 @@ const Title = (() => {
   addEventListener('resize', resize); resize();
   // a nuvem e as imagens carregam juntas
   const cloudP = Cloud.boot();   // se a nuvem tem um save mais novo, grava no aparelho e recarrega (1x)
-  await Assets.load(); World.init(); Player.init(World.spawn());
+  try { await Assets.load(); } catch (e) { const tx = document.getElementById('tltx'), ic = document.getElementById('tlic'); if (ic) ic.textContent = '⚠️'; if (tx) { tx.style.fontSize = '16px'; tx.textContent = 'Não deu para carregar as imagens do jogo. Confira se a pasta assets está ao lado do index.html. (' + (e && e.message || e) + ')'; } throw e; }
+  World.init(); Player.init(World.spawn());
   await cloudP; Save.load(); Save.init(); Entities.init(); Sea.init();
   const skipT = /skip|viagem=/.test(location.hash) || (() => { try { const v = sessionStorage.getItem('iv_skip'); sessionStorage.removeItem('iv_skip'); return !!v; } catch (e) { return false; } })(); const arrived = Travel.arrive();
-  Title.start(); if (skipT || arrived) Title.play(); Travel.hideLoad();
+  Title.start(); if (skipT || arrived) Title.play(); if (window.__ld) window.__ld.done = true; { const pc = document.getElementById('tlpc'); if (pc) pc.textContent = '100%'; } Travel.hideLoad();
   if (arrived) { window.SAFE_UNTIL = World.clock + 25; const P = Player.p; for (const o of Entities._animals()) if (!o.dead && (o.kind === 'wolf' || o.kind === 'bear' || o.kind === 'boar' || o.kind === 'fox') && Math.hypot(o.x - P.x, o.y - P.y) < 900) { const an = Math.atan2(o.y - P.y, o.x - P.x); for (let k = 0; k < 16; k++) { const a2 = an + (k % 2 ? 1 : -1) * Math.ceil(k / 2) * .4, nx = P.x + Math.cos(a2) * 1000, ny = P.y + Math.sin(a2) * 1000; if (World.walkable(nx, ny) && World.firm(nx, ny)) { o.x = nx; o.y = ny; break; } } } }   /* chegando de viagem: predadores longe e 25 s de calma */   /* chegando de viagem: pula a tela inicial */
   let last = performance.now(), acc = 0, frames = 0, worst = 0, fpsT = 0, tU = 0, tW = 0, tE = 0, tC = 0, spikes = 0; const pn = () => performance.now();
   // Telas de 90/120 Hz: o jogo mede a taxa de atualização e, se for ≥ ~100 Hz, desenha 1 a cada 2 quadros (60 FPS estáveis, menos calor).
