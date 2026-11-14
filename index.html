@@ -228,7 +228,7 @@ const LOCKEY = l => l === 'floresta' ? 'ilhaverde_save_v1' : 'ilhaverde_save_v1_
 // Grupos 'eager' (jogador, objetos) carregam na abertura. Grupos sob demanda (lobo, cervo, coelho, e as espécies futuras) carregam quando um bicho do grupo
 // chega perto (Assets.touch) e são descarregados depois de TTL sem uso, para a memória de vídeo não crescer com o número de animações.
 window.FPS30 = (() => { try { return localStorage.getItem('iv_fps30') === '1'; } catch (e) { return false; } })();   /* 30 FPS travado: mais estável e frio em celular fraco */
-window.GLMODE = (() => { try { return localStorage.getItem('iv_gl') === '1' || /[?&#]gl=1/.test(location.href); } catch (e) { return false; } })();   /* motor de desenho WebGL (teste): liga em Configurações > Gráficos */
+window.GLMODE = (() => { try { if (/[?&#]gl=1/.test(location.href)) return true; if (/[?&#]gl=0/.test(location.href)) return false; const v = localStorage.getItem('iv_gl2'); return v !== 'off' && v !== 'auto'; } catch (e) { return true; } })();   /* motor de desenho: WebGL por padrão; volta ao Normal se o jogador escolher ou se ficar lento no aparelho */
 // Motor de desenho WebGL compatível com o pedaço do Canvas 2D que o jogo usa (drawImage, retângulos, elipses, linhas, texto, transformações, recorte retangular).
 // Junta os desenhos em lotes (até 8 texturas por lote) e manda para a placa de vídeo de uma vez no fim do quadro.
 class GL2D {
@@ -291,7 +291,10 @@ class GL2D {
   }
   slot(t) { let i = this.slots.indexOf(t); if (i >= 0) return i; if (this.slots.length >= this.NT) this.flush(); i = this.slots.length; this.slots.push(t); return i; }
   // ---- recorte retangular (scissor)
-  applyClip() { this.flush(); const gl = this.gl, c = this.s.clip; if (!c) { gl.disable(gl.SCISSOR_TEST); return; } gl.enable(gl.SCISSOR_TEST); const H = this.canvas.height; gl.scissor(Math.max(0, c[0]), Math.max(0, H - (c[1] + c[3])), Math.max(0, c[2]), Math.max(0, c[3])); }
+  applyClip() {}   /* o recorte vale a partir do próximo desenho (veja sci) */
+  sci(want) {   /* garante que o scissor aplicado no lote atual é 'want' (null = sem scissor) */
+    const a = this.sciR; if (a === want || (a && want && a[0] === want[0] && a[1] === want[1] && a[2] === want[2] && a[3] === want[3])) return;
+    this.flush(); const gl = this.gl; this.sciR = want; if (!want) { gl.disable(gl.SCISSOR_TEST); return; } gl.enable(gl.SCISSOR_TEST); const H = this.canvas.height; gl.scissor(Math.max(0, want[0]), Math.max(0, H - (want[1] + want[3])), Math.max(0, want[2]), Math.max(0, want[3])); }
   // ---- vértices
   v(x, y, u, w, r, g, b, a, ti) { if (this.nv >= this.MAXV) this.flush(); const o = this.nv++ * 9, B = this.vb; B[o] = x; B[o + 1] = y; B[o + 2] = u; B[o + 3] = w; B[o + 4] = r; B[o + 5] = g; B[o + 6] = b; B[o + 7] = a; B[o + 8] = ti; }
   quad(x0, y0, x1, y1, x2, y2, x3, y3, u0, v0, u1, v1, r, g, b, a, ti) {
@@ -300,8 +303,14 @@ class GL2D {
     this.v(x0, y0, u0, v0, r, g, b, a, ti); this.v(x2, y2, u1, v1, r, g, b, a, ti); this.v(x3, y3, u0, v1, r, g, b, a, ti);
   }
   rectQ(x, y, w, h, r, g, b, a, ti, u0, v0, u1, v1) { const m = this.s.m;
-    if (m[1] === 0 && m[2] === 0) { const X0 = m[0] * x + m[4], Y0 = m[3] * y + m[5], X1 = X0 + m[0] * w, Y1 = Y0 + m[3] * h; this.quad(X0, Y0, X1, Y0, X1, Y1, X0, Y1, u0, v0, u1, v1, r, g, b, a, ti); return; }
-    const P = (px, py) => [m[0] * px + m[2] * py + m[4], m[1] * px + m[3] * py + m[5]], A = P(x, y), Bq = P(x + w, y), C = P(x + w, y + h), D = P(x, y + h);
+    if (m[1] === 0 && m[2] === 0) { let X0 = m[0] * x + m[4], Y0 = m[3] * y + m[5], X1 = X0 + m[0] * w, Y1 = Y0 + m[3] * h; const c = this.s.clip;
+      if (c) { if (this.sciR) this.sci(null); const dX = X1 - X0, dY = Y1 - Y0; if (!dX || !dY) return;   /* corta o retângulo e as coordenadas da imagem juntos */
+        let ta = (c[0] - X0) / dX, tb = (c[0] + c[2] - X0) / dX, lo = Math.max(0, Math.min(ta, tb)), hi = Math.min(1, Math.max(ta, tb)); if (lo >= hi) return;
+        let sa = (c[1] - Y0) / dY, sb = (c[1] + c[3] - Y0) / dY, lo2 = Math.max(0, Math.min(sa, sb)), hi2 = Math.min(1, Math.max(sa, sb)); if (lo2 >= hi2) return;
+        const du = u1 - u0, dv = v1 - v0; X1 = X0 + dX * hi; X0 = X0 + dX * lo; u1 = u0 + du * hi; u0 = u0 + du * lo; Y1 = Y0 + dY * hi2; Y0 = Y0 + dY * lo2; v1 = v0 + dv * hi2; v0 = v0 + dv * lo2; }
+      else if (this.sciR) this.sci(null);
+      this.quad(X0, Y0, X1, Y0, X1, Y1, X0, Y1, u0, v0, u1, v1, r, g, b, a, ti); return; }
+    this.sci(this.s.clip); const P = (px, py) => [m[0] * px + m[2] * py + m[4], m[1] * px + m[3] * py + m[5]], A = P(x, y), Bq = P(x + w, y), C = P(x + w, y + h), D = P(x, y + h);
     this.quad(A[0], A[1], Bq[0], Bq[1], C[0], C[1], D[0], D[1], u0, v0, u1, v1, r, g, b, a, ti); }
   // ---- API de desenho
   drawImage(src, a1, a2, a3, a4, a5, a6, a7, a8) {
@@ -327,9 +336,9 @@ class GL2D {
     if (Math.abs(sweep) >= Math.PI * 2 - 1e-6) this.cur.closed = true;
   }
   arc(x, y, r, a0, a1, ccw) { this.ellipse(x, y, r, r, 0, a0, a1, ccw); }
-  fill() { const c = this.col(this.s.fs), a = c[3] * this.s.ga; if (a <= 0) return; const r = c[0] * a, g = c[1] * a, b = c[2] * a;
+  fill() { const c = this.col(this.s.fs), a = c[3] * this.s.ga; if (a <= 0) return; this.sci(this.s.clip); const r = c[0] * a, g = c[1] * a, b = c[2] * a;
     for (const p of this.sp) { if (p.length < 3) continue; const x0 = p[0][0], y0 = p[0][1]; for (let i = 1; i < p.length - 1; i++) { if (this.nv + 3 > this.MAXV) this.flush(); this.v(x0, y0, 0, 0, r, g, b, a, -1); this.v(p[i][0], p[i][1], 0, 0, r, g, b, a, -1); this.v(p[i + 1][0], p[i + 1][1], 0, 0, r, g, b, a, -1); } } }
-  stroke() { const c = this.col(this.s.ss), a = c[3] * this.s.ga; if (a <= 0) return; const r = c[0] * a, g = c[1] * a, b = c[2] * a, m = this.s.m, hw = Math.max(.5, this.s.lw * (Math.sqrt(Math.abs(m[0] * m[3] - m[1] * m[2])) || 1) / 2), dash = this.s.dash;
+  stroke() { const c = this.col(this.s.ss), a = c[3] * this.s.ga; if (a <= 0) return; this.sci(this.s.clip); const r = c[0] * a, g = c[1] * a, b = c[2] * a, m = this.s.m, hw = Math.max(.5, this.s.lw * (Math.sqrt(Math.abs(m[0] * m[3] - m[1] * m[2])) || 1) / 2), dash = this.s.dash;
     const seg = (x0, y0, x1, y1) => { const dx = x1 - x0, dy = y1 - y0, L = Math.hypot(dx, dy); if (L < 1e-6) return; const nx = -dy / L * hw, ny = dx / L * hw;
       if (!dash) { this.quad(x0 + nx, y0 + ny, x1 + nx, y1 + ny, x1 - nx, y1 - ny, x0 - nx, y0 - ny, 0, 0, 0, 0, r, g, b, a, -1); return; }
       const ds = dash.map(d => d * (Math.sqrt(Math.abs(m[0] * m[3] - m[1] * m[2])) || 1)); let pos = 0, k = 0, on = true; while (pos < L) { const e = Math.min(L, pos + ds[k % ds.length]); if (on) { const ax = x0 + dx * pos / L, ay = y0 + dy * pos / L, bx = x0 + dx * e / L, by = y0 + dy * e / L; this.quad(ax + nx, ay + ny, bx + nx, by + ny, bx - nx, by - ny, ax - nx, ay - ny, 0, 0, 0, 0, r, g, b, a, -1); } pos = e; k++; on = !on; } };
@@ -344,7 +353,7 @@ class GL2D {
     const ga = S.ga; S.ga = ga; this.drawImage(c, dx, dy); }
   strokeText() {}
   // ---- quadro
-  begin() { const gl = this.gl, cv = this.canvas; this.frame++; window.__glc = this.calls; this.calls = 0; gl.viewport(0, 0, cv.width, cv.height); gl.useProgram(this.pr); gl.uniform2f(this.uRes, cv.width, cv.height); this.s.clip = null; this.st.length = 0; gl.disable(gl.SCISSOR_TEST); gl.clearColor(0, 0, 0, 1); gl.clear(gl.COLOR_BUFFER_BIT); }
+  begin() { const gl = this.gl, cv = this.canvas; this.frame++; window.__glc = this.calls; this.calls = 0; gl.viewport(0, 0, cv.width, cv.height); gl.useProgram(this.pr); gl.uniform2f(this.uRes, cv.width, cv.height); this.s.clip = null; this.sciR = null; this.st.length = 0; gl.disable(gl.SCISSOR_TEST); gl.clearColor(0, 0, 0, 1); gl.clear(gl.COLOR_BUFFER_BIT); }
   flush() { if (!this.nv) { this.slots = []; return; } const gl = this.gl; for (let i = 0; i < this.slots.length; i++) { gl.activeTexture(gl.TEXTURE0 + i); gl.bindTexture(gl.TEXTURE_2D, this.slots[i].t); }
     gl.bindBuffer(gl.ARRAY_BUFFER, this.buf); gl.bufferData(gl.ARRAY_BUFFER, this.vb.subarray(0, this.nv * 9), gl.STREAM_DRAW); gl.drawArrays(gl.TRIANGLES, 0, this.nv);   /* cada lote ganha memória nova (bufferData): a placa não precisa esperar o desenho anterior terminar (no Adreno o bufferSubData no mesmo lugar travava) */ this.nv = 0; this.slots = []; this.calls++; }
   end() { this.flush(); if (this.frame % 120 === 0) for (const [src, t] of this.texs) if (!t.img && this.frame - t.u > 300) { this.gl.deleteTexture(t.t); this.texs.delete(src); } }
@@ -936,12 +945,13 @@ const World = (() => {
       const nf = Assets.frames('seacalm', 'rot', '_'), fi = Math.floor(performance.now() / 1000 * 5) % nf; SEAP = SEAP || [];
       const F = SEAP[fi] || (SEAP[fi] = { src: null, m: [] });
       if (!F.src) { const c = document.createElement('canvas'); c.width = 46; c.height = 45; Assets.draw(c.getContext('2d'), 'seacalm', 'rot', '_', fi, 0, 0, 1); F.src = c; }
-      const tile = (mk, v) => { let c = F.m[mk + v * 16]; if (c) return c; c = F.m[mk + v * 16] = document.createElement('canvas'); c.width = c.height = T; const g = c.getContext('2d'); g.imageSmoothingEnabled = false; g.globalAlpha = .42;
+      if (!F.A) { const A = F.A = document.createElement('canvas'); A.width = A.height = T * 8; const g = A.getContext('2d'); g.imageSmoothingEnabled = false;   /* as 64 formas (16 margens x 4 espelhos) numa folha só: 1 textura no WebGL */
+        for (let v = 0; v < 4; v++) for (let mk = 1; mk < 16; mk++) { const k = mk + v * 16; g.save(); g.translate((k & 7) * T, (k >> 3) * T); g.beginPath(); g.rect(0, 0, T, T); g.clip(); g.globalAlpha = .42;
         if (mk !== 15) { const cw = [mk & 1, mk & 2, mk & 4, mk & 8], cp = [[0, 0], [1, 0], [1, 1], [0, 1]]; g.beginPath(); let first = true; const pt = (x, y) => { if (first) { g.moveTo(x * T, y * T); first = false; } else g.lineTo(x * T, y * T); };
           for (let k = 0; k < 4; k++) { const k2 = (k + 1) & 3; if (cw[k]) pt(cp[k][0], cp[k][1]); if (!cw[k] !== !cw[k2]) pt((cp[k][0] + cp[k2][0]) / 2, (cp[k][1] + cp[k2][1]) / 2); } g.closePath(); g.clip(); }
-        g.translate(v & 1 ? T : 0, v & 2 ? T : 0); g.scale(v & 1 ? -1 : 1, v & 2 ? -1 : 1); g.drawImage(F.src, 0, 0, 46, 45, 0, 0, T, T); return c; };   /* v: espelhado por tile, para não formar faixas */
+        g.translate(v & 1 ? T : 0, v & 2 ? T : 0); g.scale(v & 1 ? -1 : 1, v & 2 ? -1 : 1); g.drawImage(F.src, 0, 0, 46, 45, 0, 0, T, T); g.restore(); } }   /* v: espelhado por tile, para não formar faixas */
       const tx0 = Math.max(0, Math.floor(camX / T)), tx1 = Math.min(W - 1, Math.floor((camX + vw) / T)), ty0 = Math.max(0, Math.floor(camY / T)), ty1 = Math.min(H - 1, Math.floor((camY + vh) / T)), ox = -Math.round(camX), oy = -Math.round(camY);
-      for (let ty = ty0; ty <= ty1; ty++) for (let tx = tx0; tx <= tx1; tx++) { const i = ty * VW + tx, mk = (lvl[i] === 0 ? 1 : 0) | (lvl[i + 1] === 0 ? 2 : 0) | (lvl[i + VW + 1] === 0 ? 4 : 0) | (lvl[i + VW] === 0 ? 8 : 0); if (mk) ctx.drawImage(tile(mk, ((Math.imul(tx, 374761393) ^ Math.imul(ty, 668265263)) >>> 7) & 3), tx * T + ox, ty * T + oy); }
+      for (let ty = ty0; ty <= ty1; ty++) for (let tx = tx0; tx <= tx1; tx++) { const i = ty * VW + tx, mk = (lvl[i] === 0 ? 1 : 0) | (lvl[i + 1] === 0 ? 2 : 0) | (lvl[i + VW + 1] === 0 ? 4 : 0) | (lvl[i + VW] === 0 ? 8 : 0); if (mk) { const k = mk + (((Math.imul(tx, 374761393) ^ Math.imul(ty, 668265263)) >>> 7) & 3) * 16; ctx.drawImage(F.A, (k & 7) * T, (k >> 3) * T, T, T, tx * T + ox, ty * T + oy, T, T); } }
     } catch (e) { window.reportErr && window.reportErr('mar calmo', e); } }
     /* espuma animada nas margens de areia dourada: lado com 2 cantos de água = faixa inteira; canto isolado = duas meias faixas */
     if (shoreV && Assets.hasAnim('shorefoam', 'f0r0')) { try {
@@ -4231,7 +4241,7 @@ const Title = (() => {
  go('tmulti', () => toast('🌐 Multiplayer em breve!')); go('tset', () => el('tpanel').classList.add('on')); go('tclose', () => { el('tpanel').classList.remove('on'); document.body.classList.remove('inset'); });
     { const g = el('gear'); let gt = 0; const gh = e => { e.preventDefault(); e.stopPropagation(); if (performance.now() - gt < 350) return; gt = performance.now(); if (T.active) return; document.body.classList.add('inset'); el('tpanel').classList.add('on'); fsShow(); }; g.addEventListener('touchstart', gh, { passive: false }); g.addEventListener('click', gh); }
     go('tfps', () => { window.FPS30 = !window.FPS30; try { localStorage.setItem('iv_fps30', window.FPS30 ? '1' : '0'); } catch (e) {} sync(); });   /* 60 <-> 30 FPS, na hora */
-    go('tq', () => { try { localStorage.setItem('iv_gl', window.GLMODE ? '0' : '1'); } catch (e) {} el('tq').textContent = '...'; setTimeout(() => location.reload(), 150); });   /* troca o motor de desenho e recarrega */
+    go('tq', () => { try { localStorage.setItem('iv_gl2', window.GLMODE ? 'off' : 'on'); } catch (e) {} try { Save.save(true); } catch (e) {} el('tq').textContent = '...'; setTimeout(() => location.reload(), 150); });   /* troca o motor de desenho e recarrega */
     go('twx', () => { const st = Weather.state; Weather.set(st === 'rain' ? 'clear' : 'rain'); if (st !== 'rain') Weather.thunder(); el('twx').textContent = st === 'rain' ? 'Chuva agora' : 'Parar chuva'; });
     go('tfps', () => { setFps(!(localStorage.getItem('iv_fps') === '0')); });
     // duas opções independentes: em pé e/ou agachado
@@ -4270,7 +4280,7 @@ const Title = (() => {
   }
   function fsShow() { const b = el('tfs'); if (b) b.textContent = document.fullscreenElement ? 'Ligada' : 'Desligada'; }
   document.addEventListener('fullscreenchange', fsShow);
-  function sync() { el('tq').textContent = window.GLMODE ? 'WebGL (teste)' : 'Normal'; el('tfps').textContent = window.FPS30 ? '30 (estável)' : '60'; }
+  function sync() { el('tq').textContent = window.GLMODE ? 'WebGL' : (() => { try { return localStorage.getItem('iv_gl2') === 'auto' ? 'Normal (auto)' : 'Normal'; } catch (e) { return 'Normal'; } })(); el('tfps').textContent = window.FPS30 ? '30 (estável)' : '60'; }
   let tt = 0; function toast(m) { const t = el('ttoast'); t.textContent = m; t.style.opacity = 1; clearTimeout(tt); tt = setTimeout(() => t.style.opacity = 0, 1800); }
   function play() {
     try { if (localStorage.getItem('iv_fs') === '1') goFull(true); } catch (e) {}   // tela cheia (+ trava na horizontal)
@@ -4328,7 +4338,7 @@ const Title = (() => {
   let last = performance.now(), acc = 0, frames = 0, worst = 0, fpsT = 0, tU = 0, tW = 0, tE = 0, tC = 0, spikes = 0; const pn = () => performance.now();
   // Telas de 90/120 Hz: o jogo mede a taxa de atualização e, se for ≥ ~100 Hz, desenha 1 a cada 2 quadros (60 FPS estáveis, menos calor).
   let VZc = 1; window.VZ = 1;
-  let lowFps = 0, goodT = 0, restAt = -1e9, noRest = false, cap = -1, hz = 0, prevT = 0; const ivs = [];
+  let glBad = 0, lowFps = 0, goodT = 0, restAt = -1e9, noRest = false, cap = 0, hz = 0, prevT = 0, hzT = 0; const ivs = [];
   // um erro em qualquer sistema não pode derrubar o loop (o jogo travava inteiro): mostra o erro na tela e segue
   let errT = 0; window.__errs = [];
   let errBox = null, errHide = 0; const errSeen = {};
@@ -4340,8 +4350,10 @@ const Title = (() => {
   const sf = (where, f) => { try { f(); } catch (e) { reportErr(e, where); } };
   function frame(now) { try { frame0(now); } catch (e) { reportErr(e, 'frame'); requestAnimationFrame(frame); } }
   function frame0(now) {
-    if (cap < 0) { if (prevT) ivs.push(now - prevT); prevT = now; if (ivs.length >= 45) { ivs.sort((a, b) => a - b); const med = ivs[22]; hz = Math.round(1000 / med); cap = med < 10.5 ? 15 : 0; } }
-    else if ((window.FPS30 ? Math.max(cap, 30) : cap) && now - last < (window.FPS30 ? Math.max(cap, 30) : cap)) { requestAnimationFrame(frame); return; }
+    /* taxa da tela medida o tempo todo (antes era só nos primeiros quadros, durante o carregamento, e errava: celular de 120 Hz aparecia como 45 e ficava sem limite) */
+    if (prevT) { const d = now - prevT; if (d > 2 && d < 100) { ivs.push(d); if (ivs.length > 90) ivs.shift(); } } prevT = now;
+    if (ivs.length >= 30 && now - hzT > 500) { hzT = now; const s = ivs.slice().sort((a, b) => a - b), p = s[Math.floor(s.length * .2)]; hz = Math.round(1000 / p); cap = p < 10.5 ? 15 : 0; }   /* tela de 120 Hz: o jogo desenha 1 a cada 2 (60 FPS), economiza bateria e não esquenta */
+    if ((window.FPS30 ? Math.max(cap, 30) : cap) && now - last < (window.FPS30 ? Math.max(cap, 30) : cap)) { requestAnimationFrame(frame); return; }
     if (window.TRAVEL_LOCK) { last = now; requestAnimationFrame(frame); return; }   /* saiu do local (mapa de viagem / carregando): o mapa atual fica desligado, sem atualizar nem desenhar */
     const dtRaw = (now - last) / 1000; last = now; const dt = Math.min(dtRaw, .05); Assets.tick(now);
     const a0 = pn(); const TT = Title.active; if (TT) Title.update(dt);
@@ -4355,7 +4367,9 @@ const Title = (() => {
     Weather.draw(ctx, vw, vh, camX, camY); if (ctx.end) ctx.end(); const b3 = pn();
     tU += a1 - a0; tW += b1 - b0; tE += b2 - b1; tC += b3 - b2; if (dtRaw > (window.FPS30 ? .045 : .026)) spikes++;
     frames++; fpsT += dtRaw; worst = Math.max(worst, dtRaw * 1000);
-    if (fpsT >= .5) { const f1 = x => (x / frames).toFixed(1); fpsEl.textContent = `${ctx.isGL ? 'GL · ' : ''}${Math.round(frames / fpsT)} FPS · pior ${Math.round(worst)}\nlag ${spikes}${hz ? ' · ' + hz + 'Hz' + (cap ? '→60' : '') : ''}\nJS ${f1(tU)}+${f1(tW)}+${f1(tE)}+${f1(tC)} ms${ctx.isGL ? '\n' + ctx.gpu + ' · lotes ' + (window.__glc | 0) + ' · envios ' + ctx.up + (ctx.up ? ' (' + Math.round(ctx.upPx / 1000) + 'k px)' : '') : ''}`; if (ctx.isGL) { ctx.up = 0; ctx.upPx = 0; } const fp = frames / fpsT; if (!TT && fp < (window.FPS30 ? 25 : 40) && !window.TRAVEL_LOCK && performance.now() > 15000) { goodT = 0; if (++lowFps >= 2) { lowFps = 0; if (performance.now() - restAt < 45000) noRest = true; const cur = window.PIXCAP || (vw * vh); if (!window.LOWFX) { window.LOWFX = 1; Save.flash('🌊 Menos efeitos para ganhar FPS'); } else if (fp < 28 && (window.MATOTHIN | 0) < 2) { window.MATOTHIN = (window.MATOTHIN | 0) + 1; Save.flash('🌿 Menos mato na tela para ganhar FPS'); } else if ((window.RS || 1) > .67) { window.RS = (window.RS || 1) > .8 ? .8 : .67; resize(); Save.flash('⚙️ Resolução reduzida para ganhar FPS (mesmo zoom)'); } else if (false && cur > 110000) { window.PIXCAP = Math.max(110000, Math.round(Math.min(cur, vw * vh) * .75)); resize(); Save.flash('⚙️ Qualidade reduzida para ganhar FPS'); } } } else { lowFps = 0; if (!TT && !noRest && fp >= (window.FPS30 ? 29 : 56) && (window.LOWFX || window.PIXCAP || window.MATOTHIN || (window.RS || 1) < 1)) { goodT += fpsT; if (goodT >= 20) { goodT = 0; restAt = performance.now(); if ((window.RS || 1) < 1) { window.RS = window.RS < .8 ? .8 : 1; resize(); if (window.RS === 1) Save.flash('✨ Qualidade de volta'); } else if (window.PIXCAP) { window.PIXCAP = 0; resize(); } else if (window.MATOTHIN) window.MATOTHIN--; else window.LOWFX = 0; } } else goodT = 0; }   /* FPS bom por 20 s: desfaz um passo; se cair de novo logo depois, para de alternar */
+    if (fpsT >= .5) { const f1 = x => (x / frames).toFixed(1); fpsEl.textContent = `${ctx.isGL ? 'GL · ' : ''}${Math.round(frames / fpsT)} FPS · pior ${Math.round(worst)}\nlag ${spikes}${hz ? ' · ' + hz + 'Hz' + (cap ? '→60' : '') : ''}\nJS ${f1(tU)}+${f1(tW)}+${f1(tE)}+${f1(tC)} ms${ctx.isGL ? '\n' + ctx.gpu + ' · lotes ' + (window.__glc | 0) + ' · envios ' + ctx.up + (ctx.up ? ' (' + Math.round(ctx.upPx / 1000) + 'k px)' : '') : ''}`; if (ctx.isGL) { ctx.up = 0; ctx.upPx = 0; } const fp = frames / fpsT;
+      if (ctx.isGL && !window.TRAVEL_LOCK && !document.hidden && performance.now() > 20000) { const js = (tU + tW + tE + tC) / frames; if (fp < (window.FPS30 ? 18 : 25) && js < 6) glBad++; else glBad = Math.max(0, glBad - 2);   /* ~8 s seguidos assim -> o aparelho trava no WebGL */
+        if (glBad >= 16) { glBad = -1e9; try { localStorage.setItem('iv_gl2', 'auto'); } catch (e) {} Save.flash('⚙️ Este celular roda melhor no modo Normal: trocando...'); try { Save.save(true); } catch (e) {} setTimeout(() => location.reload(), 1200); } } if (!TT && fp < (window.FPS30 ? 25 : 40) && !window.TRAVEL_LOCK && performance.now() > 15000) { goodT = 0; if (++lowFps >= 2) { lowFps = 0; if (performance.now() - restAt < 45000) noRest = true; const cur = window.PIXCAP || (vw * vh); if (!window.LOWFX) { window.LOWFX = 1; Save.flash('🌊 Menos efeitos para ganhar FPS'); } else if (fp < 28 && (window.MATOTHIN | 0) < 2) { window.MATOTHIN = (window.MATOTHIN | 0) + 1; Save.flash('🌿 Menos mato na tela para ganhar FPS'); } else if ((window.RS || 1) > .67) { window.RS = (window.RS || 1) > .8 ? .8 : .67; resize(); Save.flash('⚙️ Resolução reduzida para ganhar FPS (mesmo zoom)'); } else if (false && cur > 110000) { window.PIXCAP = Math.max(110000, Math.round(Math.min(cur, vw * vh) * .75)); resize(); Save.flash('⚙️ Qualidade reduzida para ganhar FPS'); } } } else { lowFps = 0; if (!TT && !noRest && fp >= (window.FPS30 ? 29 : 56) && (window.LOWFX || window.PIXCAP || window.MATOTHIN || (window.RS || 1) < 1)) { goodT += fpsT; if (goodT >= 20) { goodT = 0; restAt = performance.now(); if ((window.RS || 1) < 1) { window.RS = window.RS < .8 ? .8 : 1; resize(); if (window.RS === 1) Save.flash('✨ Qualidade de volta'); } else if (window.PIXCAP) { window.PIXCAP = 0; resize(); } else if (window.MATOTHIN) window.MATOTHIN--; else window.LOWFX = 0; } } else goodT = 0; }   /* FPS bom por 20 s: desfaz um passo; se cair de novo logo depois, para de alternar */
       tU = tW = tE = tC = 0; spikes = 0; frames = 0; fpsT = 0; worst = 0; }
     requestAnimationFrame(frame);
   }
