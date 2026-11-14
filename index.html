@@ -197,6 +197,14 @@ body.crafting #raftbtn,body.building #raftbtn,body.title #raftbtn{display:none!i
 #craftbtn{position:fixed;left:10px;bottom:300px;width:48px;height:48px;border-radius:50%;background:#5a3a1acc;border:3px solid #e8b04a;font-size:22px;display:flex;align-items:center;justify-content:center;touch-action:none;zoom:var(--cs)}
 body.crafting #craftbtn,body.building #craftbtn,body.title #craftbtn,body.crafting #rot{display:none!important}
 #craft .cnote{font-size:12px;opacity:.8;margin:2px 0 6px}
+#craft{width:min(420px,92vw)}
+#craft .ctabs{display:flex;flex-wrap:wrap;gap:4px;margin:8px 0 2px}#craft .ctabs span{font:bold 12px system-ui;padding:5px 8px;border-radius:8px;background:#0005;cursor:pointer;white-space:nowrap}#craft .ctabs span.on{background:#e8b04a;color:#3a2410}
+#craft .rec.need{opacity:.78}#craft .rec.lock{opacity:.45}#craft .rec.done{opacity:.4}
+#craft .rec small.st{color:#ffcf6a}#craft .cc{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}#craft .cc span{display:inline-flex;align-items:center;gap:2px;font:bold 12px system-ui;background:#0005;border-radius:6px;padding:1px 5px 1px 1px}#craft .cc span.ok{color:#8ef08a}#craft .cc span.no{color:#ff8a7a}#craft .cc canvas{width:18px;height:18px;image-rendering:pixelated}
+#craft .rec .rb{display:flex;flex-direction:column;gap:4px;flex:none;width:74px}#craft .rec .cc{flex:none}#craft .rec .rb button{padding:6px 10px;font-size:13px}#craft .rec .rb button.g{background:#c9d0a0}
+#craft .cq{background:#0006;border-radius:10px;padding:6px 8px;margin-top:8px}#craft .cq .qi{display:flex;align-items:center;gap:6px;margin-top:4px}#craft .cq canvas{width:24px;height:24px;image-rendering:pixelated}#craft .cq .qb{flex:1;height:7px;background:#0007;border-radius:4px;overflow:hidden}#craft .cq .qb u{display:block;height:100%;background:#f0c040;width:0}#craft .cq .qx{cursor:pointer;padding:0 6px;font-weight:bold}
+#cqchip{display:none;position:fixed;left:50%;top:86px;transform:translateX(-50%);background:#2b1d10dd;border:2px solid #e8b04a;border-radius:10px;color:#fff;font:bold 12px system-ui;padding:3px 8px;align-items:center;gap:6px;z-index:5;pointer-events:none}#cqchip s{display:inline-block;width:46px;height:6px;background:#0007;border-radius:3px;overflow:hidden}#cqchip u{display:block;height:100%;background:#f0c040;width:0}
+body.crafting #cqchip,body.title #cqchip{display:none!important}
 @media (orientation:landscape) and (max-height:520px){#craftbtn{left:max(10px,env(safe-area-inset-left))!important;bottom:70px!important}}
 </style></head><body>
 <div id="tload" style="display:flex;position:fixed;inset:0;z-index:100000;background:linear-gradient(#0b2a3a,#145a74);color:#fff;font-family:sans-serif;flex-direction:column;align-items:center;justify-content:center;gap:14px;transition:opacity .4s"><div id="tlic" style="font-size:44px">🌴</div><div id="tltx" style="font:bold 20px sans-serif;text-align:center;padding:0 16px">Carregando a ilha...</div><div style="width:min(70vw,320px);height:12px;border:2px solid #e8d29a;border-radius:8px;overflow:hidden;background:#0006"><div id="tlbar" style="height:100%;width:0;background:#e8d29a"></div></div><div id="tlpc" style="font:bold 13px sans-serif;opacity:.85">0%</div><div id="tltip" style="max-width:min(86vw,420px);text-align:center;font:14px sans-serif;opacity:.9;padding:0 16px;margin-top:6px"></div></div>
@@ -217,7 +225,7 @@ try { var h = location.hash, tv = /viagem=|skip/.test(h) || sessionStorage.getIt
 <div id="tcbox"><input id="tce" type="email" placeholder="e-mail" autocomplete="username"><input id="tcp" type="password" placeholder="senha (mín. 6)" autocomplete="current-password"><div class="r2"><button id="tcin">Entrar</button><button id="tcup">Criar conta</button></div><div id="tcst"></div>
 <details><summary>Servidor (avançado)</summary><input id="tcu" placeholder="URL do projeto Supabase"><input id="tck" placeholder="chave anon public"><button id="tcs" class="g">Salvar servidor</button></details></div>
 <button id="twipe" class="red">Apagar progresso</button><button id="tclose" class="g">Voltar</button></div></div>
-<canvas id="dark"></canvas><div id="fps">…</div><div id="qual">HD</div><div id="hud"></div><div id="tools"></div><div id="craft"></div><div id="wx"></div><div id="clk"><span id="dayp">Dia 1</span><canvas id="dial" width="64" height="64"></canvas><span id="dialt"></span></div><div id="fire">🔥</div><div id="firemenu"></div><div id="dropbtn">⬇ Soltar</div><div id="sneak">🥷</div><div id="raftbtn">⚓</div><div id="craftbtn">🛠</div><div id="death"><div class="dbox"><div class="dt">💀 Você morreu</div><div class="dc" id="dcause"></div><div class="dchips" id="dchips"></div><div class="dtip"><b>💡 Dica</b><span id="dtip"></span><button id="dnext">Outra dica ›</button></div><div class="dh">Conheça os perigos da ilha</div><div class="dcards" id="dcards"></div><button id="dres">Renascer na praia</button></div></div><div id="band">🩸<b>0</b></div><div id="toast"></div><div id="bagbtn">🎒</div><div id="buildbtn">🔨</div><div id="build"></div><div id="bag"></div><div id="chest"></div><div id="gear">⚙</div><div id="reset">⟲</div><div id="bat">⚔ BATALHA</div><div id="use"></div><div id="atk">⚔</div><div id="stick"><div id="knob"></div></div>
+<canvas id="dark"></canvas><div id="fps">…</div><div id="qual">HD</div><div id="hud"></div><div id="tools"></div><div id="craft"></div><div id="cqchip"></div><div id="wx"></div><div id="clk"><span id="dayp">Dia 1</span><canvas id="dial" width="64" height="64"></canvas><span id="dialt"></span></div><div id="fire">🔥</div><div id="firemenu"></div><div id="dropbtn">⬇ Soltar</div><div id="sneak">🥷</div><div id="raftbtn">⚓</div><div id="craftbtn">🛠</div><div id="death"><div class="dbox"><div class="dt">💀 Você morreu</div><div class="dc" id="dcause"></div><div class="dchips" id="dchips"></div><div class="dtip"><b>💡 Dica</b><span id="dtip"></span><button id="dnext">Outra dica ›</button></div><div class="dh">Conheça os perigos da ilha</div><div class="dcards" id="dcards"></div><button id="dres">Renascer na praia</button></div></div><div id="band">🩸<b>0</b></div><div id="toast"></div><div id="bagbtn">🎒</div><div id="buildbtn">🔨</div><div id="build"></div><div id="bag"></div><div id="chest"></div><div id="gear">⚙</div><div id="reset">⟲</div><div id="bat">⚔ BATALHA</div><div id="use"></div><div id="atk">⚔</div><div id="stick"><div id="knob"></div></div>
 <script>
 // Ajustes gerais. Tudo em pixels do mundo (tile = 64px, igual ao tileset do PixelLab).
 const CONFIG = {
@@ -299,7 +307,7 @@ class GL2D {
      Assim o jogo não troca de imagem a cada mato/árvore na hora de desenhar. Montada sozinha a partir do atlas.json (arte nova entra sem mexer aqui). */
   packInit() {
     this.pk = {}; try { const gl = this.gl, M = Assets.meta; if (!M || !this.hp) return; const max = gl.getParameter(gl.MAX_TEXTURE_SIZE) || 4096, W = 1024;
-      const want = { core: 1, deco: 1, mato: 1, raft: 1, poca: 1, muda: 1, ossos: 1, camp: 1, dens: 1 };
+      const want = { core: 1, deco: 1, mato: 1, raft: 1, poca: 1, muda: 1, ossos: 1, camp: 1, dens: 1, build: 1 };
       const L = M.pages.filter(p => want[p.group] && p.kb > 0 && p.size[0] <= W).map(p => ({ f: p.file, w: p.size[0], h: p.size[1] })); if (!L.length) return;
       L.sort((a, b) => b.h - a.h || b.w - a.w); let x = 0, y = 0, rh = 0; for (const p of L) { if (x + p.w > W) { y += rh; x = 0; rh = 0; } p.x = x; p.y = y; x += p.w; rh = Math.max(rh, p.h); } const H = y + rh;
       if (H > max) return;   /* placa não aceita textura tão alta: fica do jeito antigo (uma textura por página) */
@@ -401,7 +409,7 @@ class GL2D {
 }
 
 /* imagens do jogo ficam na pasta assets (ao lado deste index.html); ASSET_V muda a cada atualização de arte para o navegador baixar a versão nova */
-const ASSET_V = '2026111402';
+const ASSET_V = '2026111412';
 async function getJSON(u) { const r = await fetch(u + '?v=' + ASSET_V); if (!r.ok) throw new Error('Não achei ' + u + ' — suba a pasta assets junto com o index.html'); return r.json(); }
 const Assets = {
   meta: null, tiles: {}, tilesets: null, pg: [], grp: {}, sg: {}, now: 0, TTL: 90000,
@@ -484,7 +492,7 @@ const Assets = {
 const World = (() => {
   const T = CONFIG.TILE, CH = CONFIG.CHUNK, W = CONFIG.WORLD_W, H = CONFIG.WORLD_H, VW = W + 1;
   const size = { w: W * T, h: H * T };
-  let SEAP = null; let midRiver = new Set(); let lvl, depth, rivers = [], objs = [], cache = new Map(), spawnPt = { x: 0, y: 0 }; let pocas = [], trail = null;
+  let SEAP = null; let midRiver = new Set(); let lvl, depth, rivers = [], objs = [], cache = new Map(), pend = null /* pedaço do chão montado aos poucos */, spawnPt = { x: 0, y: 0 }; let pocas = [], trail = null;
   const bridges = new Set();
   // Conjunto ativo: só os objetos perto do jogador entram nos laços por quadro (colisão, desenho, fogueiras, sombra...).
   // O resto do mapa fica "dormindo" e, ao acordar, recebe o tempo que passou (World.onWake) — assim o custo não cresce com o tamanho do mapa.
@@ -509,7 +517,7 @@ const World = (() => {
   function natural(px, py) { for (let i = 0; i < 14; i++) { const o = objs[Math.floor(Math.random() * objs.length)]; if (o.kind !== 'pine' && o.kind !== 'oak') continue; const x = o.x + (Math.random() - .5) * 260, y = o.y + (Math.random() - .5) * 200; if (Math.hypot(x - px, y - py) < 220) continue; if (plant(x, y, o.kind === 'pine' ? 'sappine' : 'sapoak')) return; } }
   let matoL = [], matoSrc = null, matoN = -1;   /* lista só do mato alto perto (refeita quando a lista de objetos ativos muda): era percorrida inteira para cada bicho, a cada quadro */
   function inMato(x, y, r) { if (matoSrc !== act || matoN !== act.length) { matoSrc = act; matoN = act.length; matoL = act.filter(o => o.kind === 'mato'); } for (let i = 0; i < matoL.length; i++) { const o = matoL[i]; if (!(o.cutT > 0) && Math.abs(o.x - x) < r && Math.abs(o.y - y) < r * .7) return true; } return false; }
-  function cutMato(x, y, r) { let n = 0; for (let i = 0; i < act.length; i++) { const o = act[i]; if (o.kind === 'mato' && !(o.cutT > 0) && Math.hypot(o.x - x, (o.y - y) * 1.3) < r) { o.cutT = 420; n++; } } return n; }
+  function cutMato(x, y, r, each) { let n = 0; for (let i = 0; i < act.length; i++) { const o = act[i]; if (o.kind === 'mato' && !(o.cutT > 0) && Math.hypot(o.x - x, (o.y - y) * 1.3) < r) { o.cutT = 420; n++; if (each) each(o); } } return n; }
   function tick(dt, px, py) {
     if ((natT -= dt) <= 0) { natT = 25 + Math.random() * 20; natural(px, py); }
     for (let i = 0; i < act.length; i++) { const o = act[i]; if (o.kind === 'mato' && o.cutT > 0) { if (!LOCS[LOC].fixed) o.cutT -= dt; if (o.cutT <= 0) o.cutT = 0; } else if (o.g !== undefined && o.kind.startsWith('sap')) { o.g += dt; if (o.g >= GROW && !o.dead && Math.hypot(o.x - px, o.y - py) > 50) { o.dead = true; const k = o.kind === 'sappine' ? 'pine' : o.kind === 'sapoak' ? 'oak' : 'appletree'; add(Object.assign({ kind: k, x: o.x, y: o.y, ph: Math.random() * 9, solid: true }, k === 'appletree' ? { ap: [0, 0, 0, 0], apT: [30, 40, 50, 60] } : {})); } } }
@@ -526,7 +534,7 @@ const World = (() => {
       return (h(xi, yi) * (1 - u) + h(xi + 1, yi) * u) * (1 - v) + (h(xi, yi + 1) * (1 - u) + h(xi + 1, yi + 1) * u) * v; };
   }
   function generate() {
-    const n1 = noise(CONFIG.SEED), n2 = noise(CONFIG.SEED + 7), n3 = noise(CONFIG.SEED + 99);
+    pend = null; const n1 = noise(CONFIG.SEED), n2 = noise(CONFIG.SEED + 7), n3 = noise(CONFIG.SEED + 99);
     lvl = new Uint8Array(VW * (H + 1)); const el = new Float32Array(VW * (H + 1));
     for (let y = 0; y <= H; y++) for (let x = 0; x <= W; x++) {
       const cx0 = 11 + (n1(y / 7, 5) - .5) * 5, left = (x - cx0) / 10, edge = Math.min(y, H - y, W - x) / 6;   // mar a oeste, praia, depois floresta
@@ -783,22 +791,26 @@ const World = (() => {
     if (!gnoise) gnoise = noise(CONFIG.SEED + 555);
     const n = gnoise(tx / 13, ty / 13) * .7 + gnoise(tx / 5.5 + 40, ty / 5.5) * .3; return Math.max(-2, Math.min(2, Math.round((n - .5) * 7))); }
   let chunkMade = false;
-  function chunkCanvas(cx, cy) {
-    const id = cy * 1000 + cx, hit = cache.get(id); if (hit) { cache.delete(id); cache.set(id, hit); return hit; } chunkMade = true;
-    const c = document.createElement('canvas'); c.width = c.height = CH * T; const g = c.getContext('2d');
-    for (let j = 0; j < CH; j++) for (let i = 0; i < CH; i++) { const tx = cx * CH + i, ty = cy * CH + j; if (tx >= W || ty >= H) continue;
+  function chunkRows(g, cx, cy, j0, j1) {
+    for (let j = j0; j < j1; j++) for (let i = 0; i < CH; i++) { const tx = cx * CH + i, ty = cy * CH + j; if (tx >= W || ty >= H) continue;
       const [im, col, row, vr, fp] = pickTile(tx, ty);
         if (vr) {   // topo da montanha: espelha/gira por quadro e varia o tom para não parecer azulejo repetido
           const h = (Math.imul(tx, 73856093) ^ Math.imul(ty, 19349663)) >>> 0, rot = h % 4, fl = (h >> 3) & 1; g.drawImage(im, col * 64, row * 64, 64, 64, i * T, j * T, T, T);
           const n = Math.sin(tx * .23 + ty * .17) * Math.sin(ty * .21 - tx * .13) * 1.4 + Math.sin(tx * .61 + ty * .07) * .35 + ((h >> 5) % 5 - 2) * .03; g.fillStyle = n > 0 ? 'rgba(255,255,255,' + Math.min(.22, n * .22) + ')' : 'rgba(30,45,80,' + Math.min(.24, -n * .24) + ')'; g.fillRect(i * T, j * T, T, T);
         } else { const gk = (L(tx, ty) === 2 || L(tx + 1, ty) === 2 || L(tx, ty + 1) === 2 || L(tx + 1, ty + 1) === 2) ? grassK(tx, ty) : 0; if (fp) { const hv = (Math.imul(tx, 73856093) ^ Math.imul(ty, 19349663)) >>> 0, fx = hv & 1, fy = (hv >> 1) & 1; g.save(); g.translate(i * T + (fx ? T : 0), j * T + (fy ? T : 0)); g.scale(fx ? -1 : 1, fy ? -1 : 1); g.drawImage(im, col * 64, row * 64, 64, 64, 0, 0, T, T); g.restore(); }
           else g.drawImage(gk ? grassVariant(im, gk) : im, col * 64, row * 64, 64, 64, i * T, j * T, T, T); } }
-    cache.set(id, c); if (cache.size > CONFIG.CACHE_CHUNKS) cache.delete(cache.keys().next().value);
+  }
+  function chunkPut(id, c) { cache.set(id, c); if (cache.size > CONFIG.CACHE_CHUNKS) cache.delete(cache.keys().next().value); }
+  function chunkCanvas(cx, cy) {
+    const id = cy * 1000 + cx, hit = cache.get(id); if (hit) { cache.delete(id); cache.set(id, hit); return hit; } chunkMade = true;
+    if (pend && pend.id === id) { const q = pend; pend = null; chunkRows(q.g, cx, cy, q.j, CH); chunkPut(id, q.c); return q.c; }
+    const c = document.createElement('canvas'); c.width = c.height = CH * T; const g = c.getContext('2d');
+    chunkRows(g, cx, cy, 0, CH); chunkPut(id, c);
     return c;
   }
   // Colisão: grade espacial só com os objetos sólidos, reconstruída 1x por quadro e reaproveitada (sem criar lixo).
   const GC = 64, GW = W + 3, GH = H + 3, grid = new Array(GW * GH), used = []; for (let i = 0; i < grid.length; i++) grid[i] = [];
-  const BOX = { rock: [31, 11], boulder: [43, 14], bench: [34, 9], palm: [13, 7, 22] };   // 3º valor = deslocamento do centro (coqueiro: o tronco fica à direita do ponto de base)   // colisão alinhada ao desenho (o padrão 14×8 só serve para tronco)
+  const BOX = { rock: [31, 11], boulder: [43, 14], bench: [34, 9], carp: [34, 9], palm: [13, 7, 22] };   // 3º valor = deslocamento do centro (coqueiro: o tronco fica à direita do ponto de base)   // colisão alinhada ao desenho (o padrão 14×8 só serve para tronco)
   function rebuildSolids() {
     for (let i = 0; i < used.length; i++) grid[used[i]].length = 0; used.length = 0; bridges.clear();
     for (let i = 0; i < act.length; i++) { const o = act[i]; if (o.kind === 'bridge') { if (!o.dead) bridges.add(Math.round(o.y / T) * VW + Math.round(o.x / T)); continue; } if (!o.solid) continue; if (o.bw === undefined && BOX[o.kind]) { o.bw = BOX[o.kind][0]; o.bh = BOX[o.kind][1]; o.ox = BOX[o.kind][2] || 0; } let cx = (o.x / GC) | 0, cy = (o.y / GC) | 0; if (cx < 0) cx = 0; else if (cx >= GW) cx = GW - 1; if (cy < 0) cy = 0; else if (cy >= GH) cy = GH - 1; const id = cy * GW + cx, b = grid[id]; if (b.length === 0) used.push(id); b.push(o); }
@@ -948,7 +960,7 @@ const World = (() => {
   }
   // Desgaste do chão: grama muito pisada vira barro; com chuva o barro desgastado volta a ser grama.
   const wear = new Map(), worn = new Map(); let wearAcc = 0;
-  const bust = (vx, vy) => { for (const cy of [vy - 1, vy]) for (const cx of [vx - 1, vx]) cache.delete(Math.floor(cy / CH) * 1000 + Math.floor(cx / CH)); };
+  const bust = (vx, vy) => { pend = null; for (const cy of [vy - 1, vy]) for (const cx of [vx - 1, vx]) cache.delete(Math.floor(cy / CH) * 1000 + Math.floor(cx / CH)); };
   function canMud(vx, vy) { if (vx < 3 || vy < 3 || vx > W - 3 || vy > H - 3 || L(vx, vy) !== 2) return false; for (let j = -1; j <= 1; j++) for (let k = -1; k <= 1; k++) { const l = L(vx + k, vy + j); if (l !== 2 && l !== 3) return false; } return true; }
   function trample(x, y, w) { const vx = Math.round(x / T), vy = Math.round(y / T); if (!canMud(vx, vy)) return; const i = vy * VW + vx, v = (wear.get(i) || 0) + w;
     if (v >= 30) { wear.delete(i); lvl[i] = 3; if (dv) dv[i] = 2; worn.set(i, 20 + Math.random() * 60); bust(vx, vy); } else wear.set(i, v); }
@@ -957,7 +969,7 @@ const World = (() => {
     if (raining && worn.size) for (const [i, tm] of worn) { const left = tm - dt; if (left > 0) { worn.set(i, left); continue; } worn.delete(i); if (lvl[i] === 3) { lvl[i] = 2; if (dv) dv[i] = 0; bust(i % VW, (i / VW) | 0); } }
   }
   const wornList = () => [...worn].map(([i, tm]) => [i, Math.round(tm)]);
-  function setWorn(list) { worn.clear(); wear.clear(); for (const [i, tm] of (list || [])) if (lvl[i] === 2) { lvl[i] = 3; if (dv) dv[i] = 2; worn.set(i, tm); } cache.clear(); }
+  function setWorn(list) { pend = null; worn.clear(); wear.clear(); for (const [i, tm] of (list || [])) if (lvl[i] === 2) { lvl[i] = 3; if (dv) dv[i] = 2; worn.set(i, tm); } cache.clear(); }
   function land(x, y) { const vx = Math.round(x / T), vy = Math.round(y / T); return vx >= 1 && vy >= 1 && vx <= W - 1 && vy <= H - 1 && L(vx, vy) >= 1; }
   function ensureRope() { for (const k of ropeCells) { const vx = Math.floor(k / 1000), vy = k % 1000; if (!objs.some(o => o.kind === 'bridge' && Math.round(o.x / T) === vx && Math.round(o.y / T) === vy)) objs.push({ kind: 'bridge', nat: true, x: vx * T, y: vy * T, ph: 0 }); } stale = true; }
   function clearArea(x, y, rx, ry) { const K = { pine: 1, oak: 1, fir: 1, appletree: 1, palm: 1, tuft: 1, rock: 1, bush1: 1, bush2: 1, flower: 1, boulder: 1, mato: 1, sapoak: 1, sappine: 1, sapapple: 1, dead: 1 }; const n0 = objs.length; for (let i = objs.length - 1; i >= 0; i--) { const o = objs[i]; if (K[o.kind] && ((o.x - x) / rx) ** 2 + ((o.y - y) / ry) ** 2 < 1) objs.splice(i, 1); } if (objs.length !== n0) { stale = true; actVer++; } }
@@ -980,7 +992,10 @@ const World = (() => {
     chunkMade = false; for (let cy = y0; cy <= y1; cy++) for (let cx = x0; cx <= x1; cx++) ctx.drawImage(chunkCanvas(cx, cy), Math.round(cx * cs - camX), Math.round(cy * cs - camY));
     if (!chunkMade) {   /* adianta 1 pedaço do chão que vai entrar na tela (até 256 px fora dela) por quadro: andando, o chão já está pronto e não engasga */
       const M = 256, ax0 = Math.max(0, Math.floor((camX - M) / cs)), ax1 = Math.min(Math.ceil(W / CH) - 1, Math.floor((camX + vw + M) / cs)), ay0 = Math.max(0, Math.floor((camY - M) / cs)), ay1 = Math.min(Math.ceil(H / CH) - 1, Math.floor((camY + vh + M) / cs));
-      outer: for (let cy = ay0; cy <= ay1; cy++) for (let cx = ax0; cx <= ax1; cx++) if (!cache.has(cy * 1000 + cx)) { const c = chunkCanvas(cx, cy); if (ctx.tex) ctx.tex(c); break outer; } }
+      if (pend) {   /* monta 2 linhas por quadro; no quadro seguinte só envia para a GPU: o custo fica espalhado e não dá queda */
+        if (pend.j < CH) { chunkRows(pend.g, pend.cx, pend.cy, pend.j, pend.j + 2); pend.j += 2; }
+        else { const q = pend; pend = null; if (!cache.has(q.id)) { chunkPut(q.id, q.c); if (ctx.tex) ctx.tex(q.c); } } }
+      else outer: for (let cy = ay0; cy <= ay1; cy++) for (let cx = ax0; cx <= ax1; cx++) if (!cache.has(cy * 1000 + cx)) { const c = document.createElement('canvas'); c.width = c.height = cs; pend = { id: cy * 1000 + cx, cx, cy, c, g: c.getContext('2d'), j: 0 }; break outer; } }
     // ondas animadas sobre a água aberta (só onde os 4 cantos são água): fase diferente por casa
     if (false && Assets.hasAnim('water_wave', 'wave')) { const tx0 = Math.max(0, Math.floor(camX / T)), tx1 = Math.min(W - 1, Math.floor((camX + vw) / T)), ty0 = Math.max(0, Math.floor(camY / T)), ty1 = Math.min(H - 1, Math.floor((camY + vh) / T)), nf = Assets.frames('water_wave', 'wave', '_'), tm = performance.now() / 1000;
       ctx.globalAlpha = .75; for (let ty = ty0; ty <= ty1; ty++) for (let tx = tx0; tx <= tx1; tx++) { if (lvl[ty * VW + tx] !== 0 || lvl[ty * VW + tx + 1] !== 0 || lvl[(ty + 1) * VW + tx] !== 0 || lvl[(ty + 1) * VW + tx + 1] !== 0) continue; const h = (Math.imul(tx, 73856093) ^ Math.imul(ty, 19349663)) >>> 0;
@@ -1051,7 +1066,8 @@ const Input = (() => {
       let x = (keys.has('d') || keys.has('arrowright') ? 1 : 0) - (keys.has('a') || keys.has('arrowleft') ? 1 : 0);
       let y = (keys.has('s') || keys.has('arrowdown') ? 1 : 0) - (keys.has('w') || keys.has('arrowup') ? 1 : 0);
       const now = performance.now(), dt = Math.min(.1, (now - (this.t || now)) / 1000); this.t = now;
-      if (stick.on && Math.hypot(stick.x, stick.y) > .12) { x = stick.x; y = stick.y; const l = Math.hypot(x, y); if (l < .45) { x *= .45 / l; y *= .45 / l; } }   // velocidade mínima: evita micro-passos que fazem a câmera tremer
+      { const sl = stick.on ? Math.hypot(stick.x, stick.y) : 0; this.eng = this.eng ? sl > .08 : sl > .16; }   /* zona morta com folga: o dedo na beirada não fica liga/desliga (andava e parava sem parar = tremor) */
+      if (stick.on && this.eng) { x = stick.x; y = stick.y; const l = Math.hypot(x, y); if (l < .75) { x *= .75 / l; y *= .75 / l; } }   // velocidade mínima de 1 pixel por quadro (60 px/s): mais devagar a câmera andava 'anda e para' e parecia tremer
       const sprint = keys.has('shift') || (stick.on && Math.hypot(stick.x, stick.y) > .85);
       // suaviza o dedo tremendo no joystick (~60 ms)
       const k = 1 - Math.exp(-dt / .06); this.sx = (this.sx || 0) + (x - (this.sx || 0)) * k; this.sy = (this.sy || 0) + (y - (this.sy || 0)) * k;
@@ -1130,7 +1146,7 @@ const Death = (() => {
   };
   api.respawn = () => {
     const p = Player.p; on = false; el.classList.remove('on');
-    p.bleeding = false; p.sick = 0; const s = World.spawn(); p.x = s.x; p.y = s.y; p.hp = p.maxhp; p.act = null; p.thirst = 100; p.swim = false; p.swimT = 0; p.raft = null; p.raftDeck = false; p.carry = false;
+    p.bleeding = false; p.sick = 0; const s = World.spawn(); p.x = s.x; p.y = s.y; p.hp = p.maxhp; p.act = null; p.thirst = 100; p.swim = false; p.swimT = 0; p.raft = null; p.raftDeck = false; p.carry = false; Player.getUp();
     Entities.refresh(); Save.flash('🏝 Você acordou na praia'); Save.save(true);
   };
   $('dnext').addEventListener('click', () => { ti = (ti + 1) % TIPS.length; tip(); });
@@ -1139,23 +1155,36 @@ const Death = (() => {
 })();
 /* personagem do jogador: 'hm' (homem) ou 'hf' (mulher), escolhido na tela de personagem ao começar um jogo novo; cada animação cai para a antiga se ainda não existir na arte nova */
 window.SKIN = (() => { try { const c = JSON.parse(localStorage.getItem('iv_char') || 'null'); return c && c.sexo === 'f' ? 'hf' : 'hm'; } catch (e) { return 'hm'; } })();
-window.SKS = 1.2;   /* escala do personagem novo (arte de ~51 px de altura -> ~61 px, a altura do antigo e proporcional aos bichos) */
-const SKMAP = { player: '', player_c: '_c', player_axe: '_axe', player_axe_c: '_axe_c' }, SKALT = { fight: 'idle', swim: 'walk', drinkc: 'drink' };
+window.SKS = 1;   /* a arte já vem aumentada 1,2x na própria imagem (mesma grade em todos os quadros): desenhar aumentando na hora fazia os pixels 'dançarem' a cada quadro */ //   /* escala do personagem novo (arte de ~51 px de altura -> ~61 px, a altura do antigo e proporcional aos bichos) */
+const SKMAP = { player: '', player_c: '_c', player_axe: '_axe', player_axe_c: '_axe_c', player_mach: '_mach', player_mach_c: '_mach_c', player_pick: '', player_spear: '', player_spear_c: '_c', player_log: '', player_leaves: '', player_palm: '' },
+  SKALT = { fight: 'idle', swim: 'walk', drinkc: 'drink', craft: 'workbench', workbench: 'idle', bandage: 'eat' }, SKACT = { mine: ['_axe', 'chop'], thrust: ['', 'punch'], slash: ['', 'punch'] };   /* o personagem antigo saiu do jogo: tudo usa a arte nova; o que ainda não tem animação própria usa a mais parecida */
+function skinOk() {   /* a imagem do personagem novo carregou? se não (arquivo faltando no site), usa o antigo em vez de ficar invisível */
+  const g = Assets.grp && Assets.grp[window.SKIN]; if (g && g.st === 2 && g.pages.every(p => p.img)) return true;
+  if (g && !g.st && !skinOk.warned && performance.now() > 8000) { skinOk.warned = true; try { Save.flash('⚠ Falta o arquivo assets/atlas_' + window.SKIN + '.png no site: usando o personagem antigo'); } catch (e) {} }
+  return false;
+}
 function skinSet(set, anim) {   /* devolve [conjunto, animação, escala] */
-  const suf = SKMAP[set]; if (suf === undefined || !Assets.has(window.SKIN + suf)) return [set === 'player_axe_c' ? 'player_axe' : set, SKALT[anim] && !Assets.hasAnim(set, anim) ? SKALT[anim] : anim, 1];
-  const s = window.SKIN + suf; if (Assets.hasAnim(s, anim)) return [s, anim, window.SKS];
-  const alt = SKALT[anim]; if (alt && Assets.hasAnim(s, alt)) return [s, alt, window.SKS];
-  return [set, anim, 1];
+  const suf = SKMAP[set]; if (suf === undefined || !skinOk()) return [set, anim, 1];
+  const K = window.SKIN, S = window.SKS; let s = K + suf; if (!Assets.has(s)) s = K;
+  if (Assets.hasAnim(s, anim)) return [s, anim, S];
+  const a2 = SKACT[anim]; if (a2 && Assets.hasAnim(K + a2[0], a2[1])) return [K + a2[0], a2[1], S];
+  const alt = SKALT[anim]; if (alt && Assets.hasAnim(s, alt)) return [s, alt, S];
+  if (Assets.hasAnim(K, anim)) return [K, anim, S];
+  return [s, 'idle', S];
 }
 const Player = (() => {
   const p = { carry: false, x: 0, y: 0, dir: 'south', moving: false, run: false, t: 0, act: null, battle: 0, hp: 100, maxhp: 100, thirst: 100, food: 100, warm: 100, hurtT: 0 };
   const DIRS = ['south', 'south-west', 'west', 'north-west', 'north', 'north-east', 'east', 'south-east'];
   function init(pos) { p.x = pos.x; p.y = pos.y; }
   function dirName(dx, dy) { const k = (Math.round(Math.atan2(dy, dx) / (Math.PI / 4)) + 8) % 8; return DIRS[(k + 6) % 8]; }
-  function startAct(anim, face, onHit, set, dur, mobile) { if (p.act) return false; if (face) p.dir = dirName(face.x - p.x, face.y - p.y); p.act = { anim, set: set || 'player', t: 0, dur: dur || .55, hit: false, onHit, mobile: !!mobile, face: !!face }; return true; }
+  function longAct(kind, col, reps) { if (!p.act) return; if (reps) p.act.reps = reps; else p.act.loop = true; p.act.hitK = .97; p.act.bar = col; p.lastBar = kind; }   /* comer/beber demora, mostra a barrinha e o efeito vem no fim */
+  function startAct(anim, face, onHit, set, dur, mobile) { if (p.act || p.dying !== undefined || p.getup !== undefined) return false; if (face) p.dir = dirName(face.x - p.x, face.y - p.y); p.act = { anim, set: set || 'player', t: 0, dur: dur || .55, hit: false, onHit, mobile: !!mobile, face: !!face }; return true; }
   function setSneak(v) { if (v && p.carry) return; p.sneak = v; const b = document.getElementById('sneak'); if (b) b.classList.toggle('on', v); }
   function hurt(n, scratch) { if (document.body.classList.contains('title') || window.TRAVEL_LOCK) return;   /* no menu inicial o mundo roda com o jogador parado: nada pode te ferir/sangrar ainda */
-    p.hp -= n; p.hurtT = .25; setSneak(false); if (scratch && !p.bleeding) { p.bleeding = true; Save.flash('🩸 Arranhado! Use bandagem'); } if (p.hp <= 0) { if (Death.active) return; Death.show(Death.cause()); p.hp = 1; } Entities.refresh(); }
+    p.hp -= n; p.hurtT = .25; setSneak(false); if (scratch && !p.bleeding) { p.bleeding = true; Save.flash('🩸 Arranhado! Use bandagem'); } if (p.hp <= 0) { if (Death.active || p.dying !== undefined) { p.hp = 1; return; } const cause = Death.cause(); p.hp = 1; if (bodyAnimLen('die') > 0 && !p.swim && !p.raft) { p.dying = 0; p.dyCause = cause; p.act = null; p.getup = undefined; p.moving = p.run = false; setSneak(false); } else { p.dead = true; Death.show(cause); } } Entities.refresh(); }
+  /* duração (s) de uma animação do corpo inteiro do personagem (morrer/levantar); 0 se a arte não tem */
+  function bodyAnimLen(an) { const K = window.SKIN; if (!skinOk() || !Assets.hasAnim(K, an)) return 0; return Assets.frames(K, an, p.dir) / (Assets.fps(K, an) || 8); }
+  function getUp() { p.dead = false; p.dying = undefined; p.getup = bodyAnimLen('getup') > 0 ? 0 : undefined; p.moving = p.run = false; }
   // Nadar: a água é gelada (dano que cresce com o tempo, pior à noite/na chuva) e, com a vida baixa, há chance de se afogar.
   // Carregando tronco/folhas não dá para entrar na água. Ponte e terra firme não contam como água.
   let cwT = 0;
@@ -1179,26 +1208,27 @@ const Player = (() => {
   }
   function drown() { Save.flash('🌊 Você se afogou!'); p.swim = false; p.swimT = 0; p.hp = 0; hurt(0); }
   function update(dt, input) {
+    if (p.dying !== undefined) { p.dying += dt; p.moving = p.run = false; p.hp = Math.max(p.hp, 1); if (p.dying >= bodyAnimLen('die') + .9) { const c = p.dyCause; p.dying = undefined; p.dead = true; Death.show(c); } return; }   /* caindo: mão no peito e cai; deitado um instante e só então a tela de morte */
+    if (p.getup !== undefined) { p.getup += dt; p.moving = p.run = false; if (p.getup >= bodyAnimLen('getup')) p.getup = undefined; else return; }   /* acordando: levanta devagar, sem controle até ficar de pé */
     if (p.slowT > 0) p.slowT -= dt;   // levou coice do cervo: lento por alguns segundos
     p.battle = Math.max(0, p.battle - dt); p.hurtT -= dt;
     if (p.sick > 0) { p.sick -= dt; p.hp -= dt * .5; if (p.hp <= 0) hurt(0); }
     if (p.bleeding) { p.hp -= dt * 1.2; p.bt = (p.bt || 0) - dt; if (p.bt <= 0) { p.bt = 1.1; Entities.bleed(p.x, p.y, true); Entities.refresh(); } if (p.hp <= 0) hurt(0); }
     else if (p.hp < p.maxhp && p.hurtT < -8) { p.hp = Math.min(p.maxhp, p.hp + dt * .8); }
-    if (p.act) { p.act.t += dt; if (!p.act.hit && p.act.t > p.act.dur * .6) { p.act.hit = true; p.act.onHit(); } if (p.act && p.act.t >= p.act.dur) p.act = null; if (p.act && !p.act.mobile) { p.moving = false; return; } }   // ataque deixa andar; cortar/minerar/pegar não
+    if (p.act && p.act.bar && !p.act.hit && input) { const mv = Math.hypot(input.x || 0, input.y || 0) > .5; if (!mv) p.act.free = true; else if (p.act.free) { p.act = null; Save.flash(p.lastBar === 'eat' ? 'Parou de comer' : p.lastBar === 'craft' ? 'Parou de criar' : p.lastBar === 'band' ? 'Parou de enfaixar' : 'Parou de beber'); } }   /* comendo/bebendo: mexer no analógico cancela (não gasta nada); se já estava segurando quando começou, só conta depois de soltar */
+    if (p.act) { p.act.t += dt; if (!p.act.hit && p.act.t > p.act.dur * (p.act.hitK || .6)) { p.act.hit = true; p.act.onHit(); } if (p.act && p.act.t >= p.act.dur) p.act = null; if (p.act && !p.act.mobile) { p.moving = false; return; } }   // ataque deixa andar; cortar/minerar/pegar não
     swimTick(dt);
-    const len = Math.hypot(input.x, input.y); p.moving = len > .05;
+    if (p.carry) { try { const I = Entities.inv; if (p.carry === 'leaves') I.fiber = (I.fiber | 0) + 6; else I.wood = (I.wood | 0) + (p.carry === 'palm' ? 3 : 4); Entities.refresh(true); } catch (e) {} p.carry = false; }   /* não existe mais carregar no ombro */
+    const len = Math.hypot(input.x, input.y); p.moving = len > (p.moving ? .04 : .1);   /* com folga: não alterna andar/parado a cada quadro */
     // fôlego: correr gasta (12 s), andar/parar recupera (parado 4 s, andando 8 s); zerado, só anda até recuperar 40%
-    if (p.sta === undefined) p.sta = 1; const wantRun = p.moving && input.sprint && !p.sneak && !p.carry && !p.swim && !p.wade && !p.act && !p.exh;
-    if (wantRun) p.sta = Math.max(0, p.sta - dt / 12); else p.sta = Math.min(1, p.sta + dt / (p.moving ? 8 : 4));
-    if (p.sta <= 0) p.exh = true; else if (p.exh && p.sta >= .4) p.exh = false;
-    { let b = Player._bar; if (!b) { b = Player._bar = document.createElement('div'); b.id = 'sta'; b.innerHTML = '<i></i>'; document.body.appendChild(b); } const show = p.sta < .999; if (show !== Player._barOn) { b.style.display = show ? 'block' : 'none'; Player._barOn = show; } if (show) { b.firstChild.style.width = p.sta * 100 + '%'; b.firstChild.style.background = p.exh ? '#e0442e' : '#7ad36a'; } }
+    p.sta = 1; p.exh = false;   /* sem cansaço: o personagem corre à vontade (barra de fôlego removida) */
     input = Object.assign({}, input, { sprint: input.sprint && !p.exh });
     p.run = p.moving && input.sprint && !p.sneak && !p.act && !p.carry && !p.swim && !p.wade;
     if (p.moving) {
       const sp = CONFIG.PLAYER_SPEED * (p.slowT > 0 ? .5 : 1) * (p.swim ? .55 : 1) * (p.wade ? .78 : 1) * (!p.swim && !p.raft && World.inMato(p.x, p.y, 26) ? .45 : 1) * (p.raft ? (p.raftDeck ? .5 : .85 + .15 * (p.raft.hp | 0)) : 1) * (input.sprint && !p.sneak && !p.carry && !p.swim && !p.wade ? CONFIG.SPRINT : 1) * Math.min(1, len) * (p.battle > 0 ? .88 : 1) * (p.sneak ? .5 : 1) * (p.act ? .75 : 1) * (p.carry ? (p.carry === 'leaves' ? .8 : .6) : 1), dx = input.x / len * sp * dt, dy = input.y / len * sp * dt;
       if (can(p.x + dx, p.y)) p.x += dx;
       if (can(p.x, p.y + dy)) p.y += dy;
-      if (!(p.act && p.act.face)) p.dir = dirName(input.x, input.y); p.t += dt * .8 * Math.min(1, len) * (p.battle > 0 ? .88 : 1) * (p.sneak ? .5 : 1) * (p.carry ? (p.carry === 'leaves' ? .8 : .6) : 1);
+      if (!(p.act && p.act.face)) { const nd = dirName(input.x, input.y); if (nd !== p.dir) { const ci = DIRS.indexOf(p.dir), ca = ((ci - 6 + 8) % 8) * Math.PI / 4, an = Math.atan2(input.y, input.x); let df = Math.abs(an - ca) % (Math.PI * 2); if (df > Math.PI) df = Math.PI * 2 - df; if (ci < 0 || df > Math.PI / 8 + (len < .8 ? .26 : .12)) p.dir = nd; } }   /* só vira quando o analógico sai bem da direção atual: devagarinho, o dedo tremendo não fica trocando a direção (parecia a tela tremendo) */ p.t += dt * .8 * Math.min(1, len) * (p.battle > 0 ? .88 : 1) * (p.sneak ? .5 : 1) * (p.carry ? (p.carry === 'leaves' ? .8 : .6) : 1);
     } else { p.t += dt; if (p.battle > 0) { const e = Entities.nearestAnimal(p, 220); if (e) p.dir = dirName(e.x - p.x, e.y - p.y); } }
   }
   function drawSwim(ctx, camX, camY) {
@@ -1211,21 +1241,34 @@ const Player = (() => {
     if (p.moving) { ctx.strokeStyle = 'rgba(255,255,255,.55)'; ctx.beginPath(); ctx.ellipse(sx, sy - 4, 20, 7, 0, 0, 6.283); ctx.stroke(); }
   }
   function draw(ctx, camX, camY) {
+    camX += p.x - Math.round(p.x); camY += p.y - Math.round(p.y);   /* desenha no mesmo pixel que a câmera segue: andando devagar o personagem não 'tremia' 1 px contra o cenário */
+    if (p.dying !== undefined || p.dead || p.getup !== undefined) { const an = p.getup !== undefined ? 'getup' : 'die', K = window.SKIN;   /* morrendo / caído (atrás da tela de morte) / levantando */
+      if (skinOk() && Assets.hasAnim(K, an)) { const n = Assets.frames(K, an, p.dir), t = p.getup !== undefined ? p.getup : p.dying !== undefined ? p.dying : 1e9; Assets.draw(ctx, K, an, p.dir, Math.min(n - 1, Math.floor(t * (Assets.fps(K, an) || 8))), p.x - camX, p.y - camY, window.SKS); return; } }
     if (p.swim && !p.act) { drawSwim(ctx, camX, camY); return; }
     if (p.wade) { const tt = performance.now() / 1000, mv = p.moving ? 1 : .35; ctx.save(); ctx.strokeStyle = 'rgba(235,252,255,.75)'; ctx.lineWidth = 2; for (let k = 0; k < 2; k++) { const ph = (tt * (p.moving ? 1.6 : .8) + k * .5) % 1; ctx.globalAlpha = (1 - ph) * .8 * mv; ctx.beginPath(); ctx.ellipse(p.x - camX, p.y - camY + 4, 8 + ph * 14, 3 + ph * 6, 0, 0, 6.2832); ctx.stroke(); } ctx.restore(); }
-    if (p.act) { const [set, an, ss] = skinSet(p.act.set, p.act.anim), n = Assets.frames(set, an, p.dir), fi = Math.min(n - 1, Math.floor(p.act.t / p.act.dur * n)); Assets.draw(ctx, set, an, p.dir, fi, p.x - camX, p.y - camY, ss); return; }
+    if (p.act) { const A = p.act, [set, an, ss] = skinSet(A.set, A.anim), n = Assets.frames(set, an, p.dir); let fi = A.reps ? Math.floor(A.t / A.dur * n * A.reps) % n : Math.min(n - 1, Math.floor(A.t / A.dur * n));   /* beber: a animação inteira repetida (reps vezes) */
+      if (A.loop && n >= 4) {   /* comer/beber: leva a mão à boca, repete o meio (mastigar/beber) até completar o tempo e depois abaixa */
+        const sp = Assets.meta.sprites[set], ft = 1 / ((sp && sp.anims[an] && sp.anims[an].fps) || 9), a = Math.round(n * .3), b = Math.round(n * .7), tOut = A.dur - (n - b) * ft;
+        if (A.t < a * ft) fi = Math.floor(A.t / ft); else if (A.t >= tOut) fi = Math.min(n - 1, b + Math.floor((A.t - tOut) / ft)); else { const L = b - a, k = Math.floor((A.t - a * ft) / ft) % (L > 1 ? 2 * L - 2 : 1); fi = a + (k < L ? k : 2 * L - 2 - k); } }
+      Assets.draw(ctx, set, an, p.dir, fi, p.x - camX, p.y - camY, ss);
+      if (A.bar && !A.hit) {   /* barrinha de carregamento em cima da cabeça */
+        const f = Assets.meta.frames[set + '/idle/south/0'] || Assets.meta.frames[set + '/' + an + '/' + p.dir + '/' + fi], sp = Assets.meta.sprites[set], top = f && sp ? (f[5] - sp.anchor[1]) * ss : -70, k = Math.min(1, A.t / (A.dur * A.hitK)), W = 34, x = Math.round(p.x - camX - W / 2), y = Math.round(p.y - camY + top - 10);
+        ctx.fillStyle = 'rgba(20,14,8,.85)'; ctx.fillRect(x - 1, y - 1, W + 2, 7); ctx.fillStyle = 'rgba(255,255,255,.18)'; ctx.fillRect(x, y, W, 5);
+        ctx.fillStyle = A.bar; ctx.fillRect(x, y, Math.round(W * k), 5); ctx.fillStyle = 'rgba(255,255,255,.35)'; ctx.fillRect(x, y, Math.round(W * k), 1); }
+      return; }
     const set0 = Entities.eqSet(); let set = set0, sc = 1, dy = 0, an = p.run ? 'run' : p.moving ? 'walk' : (p.battle > 0 && set === 'player') ? 'fight' : 'idle';
     if (p.raft && !p.raftDeck) an = (p.battle > 0 && set === 'player') ? 'fight' : 'idle';   // navegando: de pé na jangada, sem correr
     if (p.carry) { set = p.carry === 'leaves' ? 'player_leaves' : p.carry === 'palm' ? 'player_palm' : 'player_log'; an = p.moving ? 'walk' : 'idle'; }
     else if (p.sneak) {
       an = p.moving ? 'walk' : 'idle';
-      if (set0 === 'player') set = 'player_c'; else if (set0 === 'player_axe' && Assets.has(window.SKIN + '_axe_c')) set = 'player_axe_c'; else if (set0 === 'player_spear') { if (p.moving) set = 'player_spear_c'; } else { sc = .9; dy = 2; }
+      if (set0 === 'player') set = 'player_c'; else if ((set0 === 'player_axe' || set0 === 'player_mach') && Assets.has(window.SKIN + SKMAP[set0] + '_c') && skinOk()) set = set0 + '_c'; else if (set0 === 'player_mach') set = 'player_c'; else if (set0 === 'player_spear') { if (p.moving) set = 'player_spear_c'; } else { sc = .9; dy = 2; }
     }
+    if (window.CRAFT_WORK && an === 'idle' && !p.sneak && !p.carry) { const b = window.CRAFT_WORK; p.dir = Entities._dirOf(b.x - p.x, b.y - p.y); an = 'workbench'; }   /* perto da bancada com a fila andando: fica trabalhando nela (usa a animação 'workbench' quando existir) */
     { const k = skinSet(set, an); set = k[0]; an = k[1]; sc *= k[2]; }
     const n = Assets.frames(set, an, p.dir), f = Math.floor(p.t * Assets.fps(set, an) * (an === 'walk' ? 1.45 : an === 'run' ? 1.15 : 1)) % n;
     Assets.draw(ctx, set, an, p.dir, f, p.x - camX, p.y - camY + dy, sc);
   }
-  return { setSneak, p, init, update, draw, startAct, hurt };
+  return { setSneak, p, init, update, draw, startAct, longAct, hurt, getUp };
 })();
 
 // Árvores, arbustos, bancada e lobos: desenhados juntos com o jogador, ordenados por y.
@@ -1236,21 +1279,33 @@ const Entities = (() => {
   function cocoGrow(o) { const p = Player.p; if (Math.hypot(o.x - p.x, o.y - p.y) < 300) { o.cgT = 60; return; } let n = 0; for (let _i7 = 0, q; _i7 < World.objs.length && (q = World.objs[_i7], true); _i7++) if (q.kind === 'cocochao' && !q.dead && Math.abs(q.x - o.x - 22) < 90 && Math.abs(q.y - o.y) < 70) n++; if (n >= 3) return;
     for (let k = 0; k < 8; k++) { const an = Math.random() * 6.283, rd = 30 + Math.random() * 24, x = o.x + 22 + Math.cos(an) * rd, y = o.y + 8 + Math.sin(an) * rd * .55; if (World.walkable(x, y) && !World.inWater(x, y)) { World.add({ kind: 'cocochao', x, y, ph: Math.random() * 9 }); return; } } }; // coqueiro novo em ~3 dias de jogo (1 dia = 600 s); cocos caem no chão a cada ~0,7 dia // coqueiro novo em ~3 dias de jogo (1 dia = 600 s); cocos voltam em ~0,7 dia
   let regrow = [];
-  let burnT = 0, drops = [], t = 0, hudT = 0, useT = 0; const useEl = document.getElementById('use'), atkEl = document.getElementById('atk'), batEl = document.getElementById('bat'); const inv = { plank: 0, canteen: false, dirty: 0, twig: 0, coconut: 0, straw: 0, skewer: 0, water: 0, bandage: 0, wood: 0, fiber: 0, stone: 0, meat: 0, apple: 0, axe: false, pickaxe: false, spear: false, machete: false, leather: 0, eq: null, cooked: 0, campfire: 0, fence: 0, shelter: 0, chest: 0, bench: 0, floor: 0, wall: 0, roof: 0 };
-  const RECIPES = [['bench', 'Bancada', 'Mesa de trabalho: nela se faz as coisas mais difíceis (lança, piso, parede, telhado, abrigo, baú)', { wood: 10, fiber: 6, stone: 4 }], ['axe', 'Machado', 'Corta árvores 2x mais rápido', { wood: 5, fiber: 3 }], ['pickaxe', 'Picareta', 'Quebra pedras e dá pedra', { wood: 6, fiber: 4 }], ['spear', 'Lança', 'Ataque longo e forte', { wood: 4, fiber: 2, stone: 3 }], ['machete', 'Facão', 'Corta o mato alto e libera o caminho', { wood: 3, stone: 3 }], ['campfire', 'Fogueira', 'Afasta lobos, ilumina a noite e cozinha carne', { wood: 5, stone: 3 }], ['floor', 'Piso (x4)', 'Tábuas para o chão da casa', { plank: 2 }, 4], ['wall', 'Parede (x2)', 'Barra a passagem; monte onde quiser', { plank: 4 }, 2], ['roof', 'Telhado (x4)', 'Telhado de palha: protege da chuva e do calor', { plank: 2, straw: 2 }, 4], ['shelter', 'Abrigo', 'Telhado de palha que protege da chuva e do calor', { wood: 8, straw: 6 }], ['chest', 'Baú', 'Guarda recursos e comida', { wood: 8, stone: 2 }], ['skewer', 'Espeto (x2)', 'Graveto afiado: espete a carne para assar na fogueira', { twig: 2, fiber: 1 }, 2], ['canteen', 'Cantil de madeira', 'Guarda 3 goles. Ferva água na fogueira para não ficar doente', { wood: 3, fiber: 2 }], ['bandage', 'Bandagem (x2)', 'Estanca o sangramento dos arranhões', { fiber: 3 }, 2]];
+  let burnT = 0, drops = [], t = 0, hudT = 0, useT = 0; const useEl = document.getElementById('use'), atkEl = document.getElementById('atk'), batEl = document.getElementById('bat'); const invRaw = { plank: 0, canteen: false, dirty: 0, twig: 0, coconut: 0, straw: 0, skewer: 0, water: 0, bandage: 0, wood: 0, fiber: 0, stone: 0, meat: 0, apple: 0, axe: false, pickaxe: false, spear: false, machete: false, leather: 0, eq: null, cooked: 0, campfire: 0, fence: 0, shelter: 0, chest: 0, bench: 0, floor: 0, wall: 0, roof: 0, door: 0, carp: 0, rope: 0, bag: 0 };
+  /* MOCHILA EM ESPAÇOS: cada espaço guarda até 20 do mesmo item; ferramenta e cantil ocupam 1 espaço cada. Sem mochila 10 espaços, mochila nível 1 = 15, nível 2 = 20.
+     Tudo que entra no inventário passa por aqui (Proxy): o que não couber cai no chão aos seus pés. */
+  const STACK = 20, CAPS = [10, 15, 20], NOSLOT = { eq: 1, dirty: 1, water: 1, bag: 1 }; let invLoading = false, fullT = 0;
+  const slotsOf = (k, v) => NOSLOT[k] ? 0 : typeof v === 'boolean' ? (v ? 1 : 0) : typeof v === 'number' && v > 0 ? Math.ceil(v / STACK) : 0;
+  const bagCap = () => CAPS[invRaw.bag | 0] || 10;
+  function slotsUsed() { let n = 0; for (const k in invRaw) n += slotsOf(k, invRaw[k]); return n; }
+  function room(k) { if (NOSLOT[k]) return 1e9; const v = invRaw[k], free = bagCap() - slotsUsed(); if (typeof v === 'boolean') return v ? 0 : free > 0 ? 1 : 0; const n = v | 0, part = n > 0 && n % STACK ? STACK - n % STACK : 0; return part + Math.max(0, free) * STACK; }
+  const inv = new Proxy(invRaw, { set(o, k, v) { const old = o[k];
+    if (!invLoading && typeof v === 'number' && typeof old === 'number' && v > old && !NOSLOT[k]) { const r = room(k); if (v - old > r) { const ex = v - old - r; v = old + r; if (typeof spawnDrop === 'function' && Player.p) spawnDrop(k, Player.p.x, Player.p.y + 14, ex, 1.5); if (performance.now() - fullT > 1500) { fullT = performance.now(); if (typeof Save !== 'undefined') Save.flash('🎒 Mochila cheia: o resto caiu no chão'); } } }
+    o[k] = v; return true; } });
+  const RECIPES = [['bench', 'Bancada', 'Mesa de trabalho: nela se faz as coisas mais difíceis (lança, piso, parede, porta, telhado, bancada de carpinteiro, abrigo, baú)', { wood: 10, fiber: 6, stone: 4 }], ['axe', 'Machado', 'Corta árvores 2x mais rápido', { wood: 5, fiber: 3 }], ['pickaxe', 'Picareta', 'Quebra pedras e dá pedra', { wood: 6, fiber: 4 }], ['spear', 'Lança', 'Ataque longo e forte', { wood: 4, fiber: 2, stone: 3 }], ['machete', 'Facão', 'Corta o mato alto e libera o caminho', { wood: 3, stone: 3 }], ['campfire', 'Fogueira', 'Afasta lobos, ilumina a noite e cozinha carne', { wood: 5, stone: 3 }], ['carp', 'Bancada de carpinteiro', 'Serra a madeira em tábuas. As tábuas reforçam as paredes (nível 2)', { wood: 12 }], ['plank', 'Tábua', 'Madeira serrada: reforça parede e porta para o nível 2 (modo construção 🔨, botão Melhorar)', { wood: 1 }], ['floor', 'Piso (x4)', 'Chão da casa', { wood: 2 }, 4], ['wall', 'Parede (x2)', 'Barra a passagem; monte onde quiser', { wood: 4 }, 2], ['door', 'Porta', 'Abre e fecha pelo botão ✋; fechada, barra os bichos', { wood: 3 }], ['roof', 'Telhado (x4)', 'Protege da chuva e do calor', { wood: 3 }, 4], ['shelter', 'Abrigo', 'Telhado de palha que protege da chuva e do calor', { wood: 8, straw: 6 }], ['chest', 'Baú', 'Guarda recursos e comida', { wood: 8, stone: 2 }], ['skewer', 'Espeto (x2)', 'Graveto afiado: espete a carne para assar na fogueira', { twig: 2, fiber: 1 }, 2], ['canteen', 'Cantil de madeira', 'Guarda 3 goles. Ferva água na fogueira para não ficar doente', { wood: 3, fiber: 2 }], ['bandage', 'Bandagem (x2)', 'Estanca o sangramento dos arranhões', { fiber: 3 }, 2], ['bag1', 'Mochila', 'Nível 1: 15 espaços (sem mochila são 10)', { fiber: 10, leather: 3 }], ['rope', 'Corda', 'Fibra trançada: usada na mochila nível 2', { fiber: 3 }], ['bag2', 'Mochila reforçada', 'Nível 2: 20 espaços. Precisa da mochila nível 1', { leather: 5, rope: 4 }]];
   // ferramenta equipada: conjunto de animações, animação de ataque, duração, dano e alcance
   const EQ = {
     none:    { set: 'player',       atk: 'punch',  dur: .4,  dmg: 4,  reach: 44 },
     axe:     { set: 'player_axe',   atk: 'chop',   dur: .65, dmg: 22, reach: 72 },
     pickaxe: { set: 'player_pick',  atk: 'mine',   dur: .65, dmg: 14, reach: 72 },
     spear:   { set: 'player_spear', atk: 'thrust', dur: .6,  dmg: 28, reach: 100 },
-    machete: { set: 'player',       atk: 'punch',  dur: .5,  dmg: 8,  reach: 50 }
+    machete: { set: 'player_mach',  atk: 'slash',  dur: .5,  dmg: 8,  reach: 50 }
   };
   const eqInfo = () => EQ[inv.eq && inv[inv.eq] ? inv.eq : 'none'];
   const craftEl = document.getElementById('craft'), toolsEl = document.getElementById('tools');
-  const ICONSPR = { straw: 'palm_leaves', campfire: 'fire', meat: 'meat1', cooked: 'cooked1', coconut: 'coco1', plank: 'plank_stack', skewer: 'skewer1', fiber: 'fiber_icon', twig: 'twig1', spear: 'spear', machete: 'facao', apple: 'apple', axe: 'axe', pickaxe: 'pickaxe', bench: 'bench', fence: 'fence3', wood: 'log2', stone: 'rock2' };
+  const ICONSPR = { floor: 'b_floor', wall: 'b_wallh', roof: 'b_roof', door: 'b_door', straw: 'palm_leaves', campfire: 'fire', meat: 'meat1', cooked: 'cooked1', coconut: 'coco1', plank: 'plank_stack', skewer: 'skewer1', fiber: 'fiber_icon', twig: 'twig1', spear: 'spear', machete: 'facao', apple: 'apple', axe: 'axe', pickaxe: 'pickaxe', bench: 'bench', fence: 'fence3', wood: 'log2', stone: 'rock2' };
   function icon(name) { if (ICONSPR[name] && Assets.has(ICONSPR[name])) return Assets.icon(ICONSPR[name], 32); const c = document.createElement('canvas'); c.width = c.height = 32; const g = c.getContext('2d');
     if (name === 'leather') { g.fillStyle = '#3a2414'; g.fillRect(4, 8, 24, 18); g.fillRect(6, 6, 18, 22); g.fillStyle = '#9a6a3c'; g.fillRect(5, 9, 22, 16); g.fillRect(7, 7, 16, 20); g.fillStyle = '#c08a54'; g.fillRect(7, 9, 10, 6); g.fillStyle = '#7a4e2a'; g.fillRect(17, 18, 9, 6); g.fillStyle = '#e8d2a8'; for (let x = 8; x < 24; x += 3) g.fillRect(x, 24, 2, 1); }
+    else if (name === 'rope') { g.strokeStyle = '#6b4a22'; g.lineWidth = 3; g.beginPath(); g.ellipse(16, 16, 11, 9, 0, 0, 6.283); g.stroke(); g.strokeStyle = '#c9a26a'; g.lineWidth = 1; g.beginPath(); g.ellipse(16, 16, 11, 9, 0, 0, 6.283); g.stroke(); g.beginPath(); g.ellipse(16, 16, 7, 5, 0, 0, 6.283); g.stroke(); g.fillStyle = '#c9a26a'; g.fillRect(24, 20, 3, 8); }
+    else if (name === 'bag1' || name === 'bag2' || name === 'bag') { const L2 = name === 'bag2'; g.fillStyle = '#3a2414'; g.fillRect(7, 8, 18, 21); g.fillRect(9, 5, 14, 4); g.fillStyle = L2 ? '#8a5a30' : '#9a7a4a'; g.fillRect(8, 9, 16, 19); g.fillStyle = L2 ? '#6b4220' : '#7a6038'; g.fillRect(8, 9, 16, 6); g.fillStyle = '#c9a26a'; g.fillRect(10, 18, 12, 7); g.fillStyle = '#3a2414'; g.fillRect(15, 15, 2, 4); if (L2) { g.fillStyle = '#c9a26a'; g.fillRect(6, 4, 20, 3); } }
     else if (name === 'spear') { for (let i = 0; i < 20; i++) { g.fillStyle = '#7a4a22'; g.fillRect(6 + i, 26 - i, 2, 2); } g.fillStyle = '#c9ccd2'; g.fillRect(25, 5, 3, 3); g.fillRect(26, 3, 3, 3); g.fillRect(24, 7, 3, 3); g.fillStyle = '#8c8f96'; g.fillRect(27, 7, 2, 2); }
     else if (name === 'wood') { g.fillStyle = '#4a2c12'; g.fillRect(3, 18, 26, 8); g.fillRect(6, 10, 22, 8); g.fillStyle = '#7a4a22'; g.fillRect(3, 18, 26, 3); g.fillRect(6, 10, 22, 3); g.fillStyle = '#d9a566'; g.fillRect(25, 12, 3, 4); g.fillRect(26, 20, 3, 4); }
     else if (name === 'fiber') { for (let i = 0; i < 6; i++) { g.fillStyle = i % 2 ? '#6fd05a' : '#2e8f3a'; g.fillRect(6 + i * 4, 6 + (i % 3) * 3, 3, 22 - (i % 3) * 3); } }
@@ -1273,15 +1328,80 @@ const Entities = (() => {
     else if (name === 'water') { g.fillStyle = '#2b6fa8'; g.fillRect(12, 4, 8, 4); g.fillRect(8, 8, 16, 18); g.fillRect(10, 26, 12, 2); g.fillStyle = '#6fb6e8'; g.fillRect(10, 10, 5, 12); g.fillStyle = '#d8ecff'; g.fillRect(11, 11, 2, 6); g.fillStyle = '#c9a23c'; g.fillRect(12, 2, 8, 3); }
     else if (name === 'campfire') { g.fillStyle = '#4a2c12'; g.fillRect(4, 24, 24, 5); g.fillRect(8, 21, 16, 4); g.fillStyle = '#e0431c'; g.fillRect(10, 10, 12, 13); g.fillStyle = '#ff9a2a'; g.fillRect(12, 6, 8, 15); g.fillStyle = '#ffd860'; g.fillRect(14, 14, 4, 7); }
     else Assets.draw(g, name, 'rot', '_', 0, 16, 31); return c; }
-  const costText = c => (c.leather ? `🟤 ${c.leather} couro  ` : '') + (c.plank ? `🟫 ${c.plank}  ` : '') + (c.wood ? `🪵 ${c.wood}  ` : '') + (c.fiber ? `🌿 ${c.fiber}  ` : '') + (c.straw ? `🌴 ${c.straw}  ` : '') + (c.stone ? `🪨 ${c.stone}  ` : '') + (c.twig ? `🥢 ${c.twig} galhos` : '');
+  const costText = c => (c.leather ? `🟤 ${c.leather} couro  ` : '') + (c.rope ? `🪢 ${c.rope} corda  ` : '') + (c.plank ? `🟫 ${c.plank}  ` : '') + (c.wood ? `🪵 ${c.wood}  ` : '') + (c.fiber ? `🌿 ${c.fiber}  ` : '') + (c.straw ? `🌴 ${c.straw}  ` : '') + (c.stone ? `🪨 ${c.stone}  ` : '') + (c.twig ? `🥢 ${c.twig} galhos` : '');
   const fireBtn = document.getElementById('fire');
-  const EASY = ['bench', 'axe', 'pickaxe', 'machete', 'bandage', 'campfire', 'skewer', 'canteen'];   // à mão (botão 🛠); o resto só na bancada
+  const EASY = ['bench', 'axe', 'pickaxe', 'machete', 'bandage', 'campfire', 'skewer', 'canteen', 'bag1'];
+  /* CRIAÇÃO: [categoria, onde se faz, segundos por unidade]. hand = à mão (no chão, o personagem trabalha e mexer cancela); bench/carp = na bancada (vai para a fila e trabalha sozinha enquanto você estiver por perto) */
+  const RMETA = { bench: ['build', 'hand', 4], axe: ['tool', 'hand', 3], pickaxe: ['tool', 'hand', 3], spear: ['tool', 'bench', 3], machete: ['tool', 'hand', 3], campfire: ['surv', 'hand', 3], carp: ['build', 'bench', 4], plank: ['mat', 'carp', 1.2], floor: ['build', 'bench', 2], wall: ['build', 'bench', 2], door: ['build', 'bench', 2.5], roof: ['build', 'bench', 2], shelter: ['build', 'bench', 4], chest: ['build', 'bench', 4], skewer: ['surv', 'hand', 1.5], canteen: ['surv', 'hand', 3], bandage: ['surv', 'hand', 1.5], bag1: ['bag', 'hand', 4], rope: ['mat', 'bench', 1.5], bag2: ['bag', 'bench', 5] };
+  const CATS = [['all', 'Tudo'], ['tool', '🪓 Ferram.'], ['build', '🏠 Constr.'], ['surv', '❤ Sobrev.'], ['mat', '🪵 Mater.'], ['bag', '🎒 Mochila']];
+  const SINGLE = { axe: 1, pickaxe: 1, spear: 1, machete: 1, canteen: 1, bag1: 1, bag2: 1 }, STN = { bench: '🪑 bancada', carp: '🪚 bancada de carpinteiro' };
+  let craftTab = 'all', CQ = [], handQ = null; const RBY = {}; for (const r of RECIPES) RBY[r[0]] = r;
+  const icCache = {}; function ic(name, sz) { const src = icCache[name] || (icCache[name] = icon(name)), c = document.createElement('canvas'); c.width = c.height = 32; c.getContext('2d').drawImage(src, 0, 0); if (sz) c.style.width = c.style.height = sz + 'px'; return c; }
+  const bagLv = id => id === 'bag1' ? 1 : id === 'bag2' ? 2 : 0;
+  function rState(id) {   /* situação da receita aqui: ok / need (falta material) / lock (precisa de outra bancada) / done (já tem) */
+    const r = RBY[id], [cat, st] = RMETA[id] || ['surv', 'bench'], BL = bagLv(id), cost = r[3];
+    const here = craftMode === 'hand' ? st === 'hand' : craftMode === 'bench' ? (st === 'hand' || st === 'bench') : st === 'carp';
+    const done = BL ? (inv.bag | 0) >= BL : SINGLE[id] ? !!inv[id] : false, queued = SINGLE[id] && (CQ.some(q => q.id === id) || (handQ && handQ.id === id));
+    let max = 99; for (const [k, v] of Object.entries(cost)) max = Math.min(max, Math.floor((inv[k] | 0) / v)); if (SINGLE[id]) max = Math.min(max, 1);
+    const pre = BL === 2 && (inv.bag | 0) < 1;
+    return { cat, st, here, done: done || queued, queued, max, pre, cost, s: done || queued ? 'done' : !here ? 'lock' : (max >= 1 && !pre) ? 'ok' : 'need' };
+  }
+  function animLen(set, an) { const K = window.SKIN + set; return Assets.has(K) && Assets.hasAnim(K, an) ? Assets.frames(K, an, Player.p.dir) / (Assets.fps(K, an) || 9) : .9; }
+  function giveOut(id) { const r = RBY[id], BL = bagLv(id); if (BL) { inv.bag = BL; Save.flash('🎒 ' + r[1] + ': ' + CAPS[BL] + ' espaços'); return true; } if (SINGLE[id]) { if (!inv[id] && room(id) <= 0) return false; inv[id] = true; if (id !== 'canteen') inv.eq = id; Entities.refresh(true); return true; } inv[id] = (inv[id] | 0) + (r[4] || 1); return true; }
+  function payCost(id, n) { for (const [k, v] of Object.entries(RBY[id][3])) inv[k] -= v * n; }
+  function craftStart(id, n) {
+    const S = rState(id); n = Math.max(1, Math.min(n, S.max)); if (S.s !== 'ok') return;
+    if (craftMode === 'hand') { handQ = { id, n, run: false, hit: false }; closeCraft(); return; }
+    payCost(id, n); CQ.push({ id, n, t: 0, T: RMETA[id][2], st: craftMode === 'carp' ? 'carp' : 'bench' }); Save.save(true); renderCraft();
+    { const p = Player.p, st = craftMode; let sb = null, sd = 200; for (const o of World.act) if (o.kind === st && !o.dead) { const d = Math.hypot(o.x - p.x, o.y - p.y); if (d < sd) { sd = d; sb = o; } }   /* trabalha 2 vezes na bancada; o resto do tempo a bancada termina sozinha */
+      if (sb && !p.act && !p.sneak && Player.startAct('workbench', sb, () => {}, 'player', animLen('', 'workbench') * 2)) p.act.reps = 2; }
+  }
+  function cancelQ(i) { const q = CQ[i]; if (!q) return; payCost(q.id, -q.n); CQ.splice(i, 1); Save.save(true); renderCraft(); showHud(); }
+  function handTick() {   /* criar à mão: o personagem trabalha no chão com a barrinha; mexer no analógico cancela (nada é gasto) */
+    if (!handQ) return; const p = Player.p;
+    if (handQ.run) { if (p.act) return; if (!handQ.hit) { handQ = null; return; } }
+    if (handQ.n <= 0) { handQ = null; return; }
+    const id = handQ.id, S = rState(id); if (S.max < 1) { Save.flash('Faltou material'); handQ = null; return; }
+    if (SINGLE[id] && !bagLv(id) && room(id) <= 0) { Save.flash('🎒 Mochila cheia'); handQ = null; return; }
+    handQ.run = true; handQ.hit = false;
+    const lo = p.sneak, an = lo ? 'craft' : 'workbench', aL = animLen(lo ? '_c' : '', an), T2 = aL * 2;   /* agachado: cria no chão; em pé: mãos trabalhando na frente. Cada unidade = a animação 2 vezes */
+    if (Player.startAct(an, null, () => { payCost(id, 1); giveOut(id); handQ.hit = true; handQ.n--; showHud(); Save.save(true); if (handQ.n <= 0) Save.flash('✅ ' + RBY[id][1] + ' pronto'); }, lo ? 'player_c' : 'player', T2)) Player.longAct('craft', '#f0c040', 2);
+    else handQ = null;
+  }
+  let cqT = 0; const chip = document.getElementById('cqchip');
+  function queueTick(dt) {   /* fila da bancada: trabalha sozinha enquanto você estiver perto da bancada certa */
+    const p = Player.p; window.CRAFT_WORK = null; if (!CQ.length) { if (chip.style.display !== 'none') chip.style.display = 'none'; return; }
+    const q = CQ[0]; let sb = null, sd = 230; for (const o of World.act) if (o.kind === q.st && !o.dead) { const d = Math.hypot(o.x - p.x, o.y - p.y); if (d < sd) { sd = d; sb = o; } }
+    q.pause = !sb; q.sb = sb;
+    if (sb) { q.t += dt;
+      if (q.t >= q.T) { if (giveOut(q.id)) { q.t = 0; q.n--; q.full = false; if (q.n <= 0) { CQ.shift(); Save.flash('✅ ' + RBY[q.id][1] + ' pronto'); } Save.save(true); showHud(); if (craftEl.style.display === 'block') renderCraft(); } else { q.t = q.T; if (!q.full) { q.full = true; Save.flash('🎒 Mochila cheia: a bancada esperou'); } } } }
+    cqT -= dt; if (cqT > 0) return; cqT = .15;
+    const k = Math.min(1, q.t / q.T) * 100;
+    if (craftEl.style.display === 'block') { const u = craftEl.querySelector('.cq .qb u'); if (u) u.style.width = k + '%'; const w = craftEl.querySelector('.cq .qw'); if (w) w.textContent = q.pause ? '⏸ Chegue perto da ' + STN[q.st] : q.full ? '🎒 Mochila cheia' : '⚒ Trabalhando...'; }
+    const sig = q.id + q.n + (q.pause ? 'p' : '') + CQ.length; if (chip.dataset.sig !== sig) { chip.dataset.sig = sig; chip.innerHTML = ''; chip.appendChild(ic(q.id, 20)); chip.appendChild(document.createTextNode((q.pause ? '⏸ ' : '') + RBY[q.id][1] + ' ×' + q.n + (CQ.length > 1 ? ' (+' + (CQ.length - 1) + ')' : ''))); const sb2 = document.createElement('s'); sb2.appendChild(document.createElement('u')); chip.appendChild(sb2); }
+    chip.style.display = 'flex'; const u2 = chip.querySelector('u'); if (u2) u2.style.width = k + '%';
+  }   // à mão (botão 🛠); o resto só na bancada
   let craftMode = 'bench';
   function renderCraft() {
-    craftEl.innerHTML = '<b>' + (craftMode === 'hand' ? '🛠 Criar à mão' : 'Bancada') + '</b><span id="cx">✕</span>' + (craftMode === 'hand' ? '<div class="cnote">Coisas fáceis. As mais difíceis (lança, piso, parede, telhado, abrigo, baú) só na 🪑 bancada.</div>' : '');
-    for (const [id, nome, desc, cost, yld] of RECIPES) { if (craftMode === 'hand' ? !EASY.includes(id) : EASY.includes(id)) continue; const row = document.createElement('div'); row.className = 'rec'; const multi = id === 'bench' || id === 'campfire' || id === 'fence' || id === 'shelter' || id === 'chest' || id === 'floor' || id === 'wall' || id === 'roof' || id === 'bandage' || id === 'skewer', owned = !multi && inv[id], ok = !owned && Object.entries(cost).every(([k, v]) => inv[k] >= v);
-      row.appendChild(icon(id)); const tx = document.createElement('div'); tx.innerHTML = `<b>${nome}</b><br><small>${desc}</small><br><small>${costText(cost)}</small>`; row.appendChild(tx);
-      const bt = document.createElement('button'); bt.textContent = owned ? 'Feito' : 'Criar'; bt.disabled = !ok; bt.onclick = () => { for (const [k, v] of Object.entries(cost)) inv[k] -= v; if (multi) inv[id] += yld || 1; else { inv[id] = true; if (id !== 'canteen') inv.eq = id; } showHud(); renderCraft(); Save.save(); }; row.appendChild(bt); craftEl.appendChild(row); }
+    craftEl.innerHTML = '<b>' + (craftMode === 'hand' ? '🛠 Criar à mão' : craftMode === 'carp' ? '🪚 Bancada de carpinteiro' : '🪑 Bancada') + '</b><span id="cx">✕</span>' + (craftMode === 'hand' ? '<div class="cnote">Feito no chão: o personagem trabalha uns segundos (mexer cancela).</div>' : '<div class="cnote">Vai para a fila e fica pronto sozinho enquanto você estiver por perto.</div>');
+    if (craftMode !== 'hand' && CQ.length) { const box = document.createElement('div'); box.className = 'cq'; box.innerHTML = '<small class="qw">⚒ Trabalhando...</small>';
+      CQ.forEach((q, i) => { const row = document.createElement('div'); row.className = 'qi'; row.appendChild(ic(q.id)); const tx = document.createElement('small'); tx.textContent = RBY[q.id][1] + ' ×' + q.n + (q.st !== craftMode ? ' (' + STN[q.st] + ')' : ''); row.appendChild(tx); if (i === 0) { const b = document.createElement('div'); b.className = 'qb'; b.innerHTML = '<u style="width:' + Math.min(100, q.t / q.T * 100) + '%"></u>'; row.appendChild(b); } else { const sp = document.createElement('div'); sp.style.flex = 1; row.appendChild(sp); } const x = document.createElement('span'); x.className = 'qx'; x.textContent = '✕'; x.title = 'Cancelar (devolve o material)'; x.onclick = () => cancelQ(i); row.appendChild(x); box.appendChild(row); });
+      craftEl.appendChild(box); }
+    if (craftMode !== 'carp') { const tb = document.createElement('div'); tb.className = 'ctabs'; for (const [k, n] of CATS) { const sp = document.createElement('span'); sp.textContent = n; if (craftTab === k) sp.className = 'on'; sp.onclick = () => { craftTab = k; renderCraft(); }; tb.appendChild(sp); } craftEl.appendChild(tb); }
+    const ORDS = { ok: 0, need: 1, lock: 2, done: 3 }, list = [];
+    for (const r of RECIPES) { const id = r[0], S = rState(id); if (craftMode === 'carp' ? S.st !== 'carp' : (craftTab !== 'all' && S.cat !== craftTab)) continue; if (craftMode !== 'carp' && S.st === 'carp' && craftTab === 'all') continue; list.push([r, S]); }
+    list.sort((a, b) => ORDS[a[1].s] - ORDS[b[1].s]);
+    for (const [[id, nome, desc, cost, yld], S] of list) {
+      const row = document.createElement('div'); row.className = 'rec ' + S.s; row.appendChild(ic(id)); const tx = document.createElement('div');
+      let h = `<b>${nome}</b><br><small>${desc}</small>`; if (S.s === 'lock') h += `<br><small class="st">🔒 Precisa da ${STN[S.st]}</small>`; else if (S.pre) h += '<br><small class="st">🔒 Precisa da mochila nível 1</small>'; else if (S.s === 'done') h += `<br><small class="st">${S.queued ? '⏳ Na fila' : '✔ Você já tem'}</small>`; else h += `<br><small>⏱ ${S.st === 'hand' && craftMode === 'hand' ? '~2' : RMETA[id][2]} s${yld > 1 ? ' · rende ' + yld : ''}</small>`;
+      tx.innerHTML = h; const cc = document.createElement('div'); cc.className = 'cc';
+      for (const [k, v] of Object.entries(cost)) { const sp = document.createElement('span'); sp.className = (inv[k] | 0) >= v ? 'ok' : 'no'; sp.appendChild(ic(k)); sp.appendChild(document.createTextNode((inv[k] | 0) + '/' + v)); cc.appendChild(sp); }
+      tx.appendChild(cc); row.appendChild(tx);
+      const rb = document.createElement('div'); rb.className = 'rb';
+      if (S.s === 'ok' || S.s === 'need') { const can = S.s === 'ok', mk = (lab, n, cls) => { const b = document.createElement('button'); b.textContent = lab; b.disabled = !can || S.max < n; if (cls) b.className = cls; b.onclick = () => craftStart(id, n); rb.appendChild(b); };
+        if (SINGLE[id]) mk('Criar', 1); else { mk('×1', 1); if (S.max >= 2) { mk('×5', 5); mk('Máx ' + Math.min(S.max, 99), Math.min(S.max, 99), 'g'); } } }
+      row.appendChild(rb); craftEl.appendChild(row); }
+    if (!list.length) { const e = document.createElement('div'); e.className = 'cnote'; e.textContent = 'Nada nesta aba.'; craftEl.appendChild(e); }
     document.getElementById('cx').onclick = closeCraft;
   }
   function openCraft(m) { craftMode = m || 'bench'; craftEl.style.display = 'block'; document.body.classList.add('crafting'); renderCraft(); }   // com a bancada aberta, só ela aparece (HUD e botões somem)
@@ -1289,7 +1409,7 @@ const Entities = (() => {
   // tocar fora da lista (menos na engrenagem) fecha o craft, sem mover o personagem
   for (const ev of ['touchstart', 'mousedown']) addEventListener(ev, e => { if (!document.body.classList.contains('crafting')) return; if (e.target.closest && e.target.closest('#craft,#gear,#tpanel,#toast')) return; e.stopPropagation(); e.preventDefault(); closeCraft(); }, { capture: true, passive: false });
   const hud = document.getElementById('hud');
-  const MAX = { leather: 20, bench: 3, plank: 30, straw: 30, coconut: 10, twig: 20, skewer: 10, water: 3, bandage: 10, wood: 30, fiber: 30, stone: 30, apple: 10, meat: 10, cooked: 10 }, NAME = { leather: 'Couro', bench: 'Bancada', plank: 'Tábua', straw: 'Palha', coconut: 'Coco', skewer: 'Espeto', twig: 'Galho', water: 'Água fervida', bandage: 'Bandagem', wood: 'Madeira', fiber: 'Fibra', stone: 'Pedra', apple: 'Maçã', meat: 'Carne crua', cooked: 'Carne cozida' };
+  const MAX = { leather: 999, bench: 999, plank: 999, straw: 999, coconut: 999, twig: 999, skewer: 999, water: 3, bandage: 999, wood: 999, fiber: 999, stone: 999, apple: 999, meat: 999, cooked: 999, rope: 999, floor: 999, wall: 999, roof: 999, door: 999, campfire: 999, chest: 999, shelter: 999, carp: 999 }, NAME = { rope: 'Corda', floor: 'Piso', wall: 'Parede', roof: 'Telhado', door: 'Porta', campfire: 'Fogueira', chest: 'Baú', shelter: 'Abrigo', carp: 'Bancada de carpinteiro', leather: 'Couro', bench: 'Bancada', plank: 'Tábua', straw: 'Palha', coconut: 'Coco', skewer: 'Espeto', twig: 'Galho', water: 'Água fervida', bandage: 'Bandagem', wood: 'Madeira', fiber: 'Fibra', stone: 'Pedra', apple: 'Maçã', meat: 'Carne crua', cooked: 'Carne cozida' };
   function showHud() {
     const P = Player.p, pc = v => Math.max(0, Math.min(100, Math.round(v === undefined ? 100 : v))); let ex = ''; if (P.warm < 35) ex += '🥶'; if (P.sick > 0) ex += '🤢'; if (P.bleeding) ex += '🩸'; if (wolfNear()) ex += '🐺';
     const hs = pc(P.hp / (P.maxhp || 100) * 100) + '|' + pc(P.food) + '|' + pc(P.thirst) + '|' + ex; if (hud.dataset.sig !== hs) { hud.dataset.sig = hs; const bar = (ic, v, c, tt) => `<div class="vb" title="${tt} ${v}"><i>${ic}</i><s><u style="width:${v}%;background-color:${c}"></u></s></div>`; hud.innerHTML = bar('❤', pc(P.hp / (P.maxhp || 100) * 100), '#e0442e', 'Vida') + bar('🍗', pc(P.food), '#e8962e', 'Fome') + bar('💧', pc(P.thirst), '#3ea8e6', 'Sede') + (ex ? `<div class="st">${ex}</div>` : ''); } fireBtn.style.display = inv.campfire ? 'flex' : 'none'; dropBtn.style.display = P.carry ? 'flex' : 'none'; bandBtn.style.display = P.bleeding ? 'flex' : 'none'; bandBtn.firstChild.nodeValue = '🩸'; bandBtn.lastChild.textContent = inv.bandage || 0; if (typeof Bag !== 'undefined') Bag.refresh(); if (typeof Build !== 'undefined') Build.refresh();
@@ -1302,7 +1422,7 @@ const Entities = (() => {
     for (let i = 0; i < 12; i++) { const d = toolsEl._sl[i], it = slots[i], k = it ? it.n + (it.tool ? (inv.eq === it.n ? '#E' : '#T') : '') : '';
       if (d._k !== k) { d._k = k; d.textContent = ''; d.className = 'sl'; d.onclick = null; d._b = null;
         if (it) { d.appendChild(HB[it.n] || (HB[it.n] = icon(it.n))); if (it.tool) { d.classList.add('tl'); if (inv.eq === it.n) d.classList.add('eq'); d.onclick = () => { inv.eq = inv.eq === it.n ? null : it.n; toolsEl.dataset.sig = ''; showHud(); }; } else { d._b = document.createElement('b'); d.appendChild(d._b); } } }
-      if (d._b) { const t = String(it.c); if (d._b.textContent !== t) d._b.textContent = t; const mx = MAX[it.n] && it.c >= MAX[it.n] ? 'mx' : ''; if (d._b.className !== mx) d._b.className = mx; } }
+      if (d._b) { const t = String(it.c); if (d._b.textContent !== t) d._b.textContent = t; const mx = room(it.n) <= 0 ? 'mx' : ''; if (d._b.className !== mx) d._b.className = mx; } }
     if (craftEl.style.display === 'block') renderCraft();
   }
   // escala e animações de cada árvore (sway = balanço, fall = queda). Tamanho final = tamanho do sprite x s.
@@ -1530,14 +1650,14 @@ const Entities = (() => {
     for (let _i14 = 0, o; _i14 < World.act.length && (o = World.act[_i14], true); _i14++) { if (!o.kind.startsWith('bush') || o.dead) continue; const d = Math.hypot(o.x - a.x, o.y - a.y); if (d > 40 && d < bd && Math.hypot(o.x - th.x, o.y - th.y) > dth + 15) { bd = d; best = o; } }
     return best;
   }
-  // coelho foge assim: ARRANCADA forte por ~2,6 s (zigue-zague, ou direto a um arbusto onde se esconde), depois CANSA (mais lento que o jogador andando)
-  // e por fim CONGELA; se o perigo chegar a <42 px dá uma disparada de pânico (no máx. 1x a cada 4 s). Sem ameaça, o fôlego volta aos poucos.
+  // coelho foge assim: ARRANCADA forte por ~4,5 s (zigue-zague, ou direto à toca/arbusto onde se esconde), depois CANSA (mais rápido que o jogador andando, mais lento que correndo)
+  // e só congela depois de ~12 s; se o perigo chegar a <42 px dá uma disparada de pânico (no máx. 1x a cada 3 s). Sem ameaça, o fôlego volta aos poucos.
   function rabbitFlee(a, th, K, dt) {
     const dx = a.x - th.x, dy = a.y - th.y, d = Math.hypot(dx, dy) || 1, fx = dx / d, fy = dy / d;
     a.fl = (a.fl || 0) + dt; a.bolt = (a.bolt || 0) - dt;
-    if (a.fl >= 6.5) { if (d < 42 && a.bolt <= 0) { a.bolt = 4; a.fl = 2.1; } else { a.moving = a.running = false; a.dir = dirOf(th.x - a.x, th.y - a.y); return; } }
+    if (a.fl >= 12) { if (d < 42 && a.bolt <= 0) { a.bolt = 3; a.fl = 2.1; } else { a.moving = a.running = false; a.dir = dirOf(th.x - a.x, th.y - a.y); return; } }
     a.running = a.moving = true;
-    if (a.fl < 2.6) {
+    if (a.fl < 4.5) {
       let tx = fx, ty = fy;
       if (a.bsh === undefined || t - (a.bshAt || -9) > 1) { a.bshAt = t; a.bsh = nearDen(a, th) || nearBush(a, th) || null; }
       const b = a.bsh;
@@ -1551,7 +1671,7 @@ const Entities = (() => {
         const c = Math.cos(a.zzS * .75), sn = Math.sin(a.zzS * .75); tx = fx * c - fy * sn; ty = fx * sn + fy * c;
       }
       flee(a, tx, ty, K.flee * 1.8, dt);
-    } else { a.bsh = undefined; flee(a, fx, fy, K.flee * .72, dt); }
+    } else { a.bsh = undefined; flee(a, fx, fy, K.flee, dt); }
   }
   function wander(a, dt, K) {
     if (a.nap > 0) { a.nap -= dt; a.moving = a.running = false; return; }   // descansando
@@ -2658,7 +2778,18 @@ const Entities = (() => {
           }
           continue;
         }
-        const fire = nearestFire(a.x, a.y, 190); if (fire) { const fd = Math.hypot(a.x - fire.x, a.y - fire.y) || 1; a.running = a.moving = true; flee(a, a.x - fire.x, a.y - fire.y, K.run * .8, dt); continue; }
+        { const fire = nearestFire(a.x, a.y, 250);   /* fogueira: com medo do fogo. Antes, bravo com você perto da fogueira ele entrava e saía do raio a cada quadro e ficava 'tremendo' parado na borda */
+          if (fire) { const fd = Math.hypot(a.x - fire.x, a.y - fire.y) || 1, wantsP = a.angry > 0 || a.pursue > 0, pf = Math.hypot(P.x - fire.x, P.y - fire.y);
+            if (fd < 160 || (!wantsP && fd < (a.fireFlee ? 215 : 190))) { a.fireFlee = true; a.running = a.moving = true; flee(a, a.x - fire.x, a.y - fire.y, K.run * .8, dt); continue; }   // perto demais: corre para longe (só para de fugir lá em 215)
+            a.fireFlee = false;
+            if (wantsP && pf < 280) {   // você está protegido pelo fogo: ele não entra; ronda a borda, para e te encara, e aos poucos desiste
+              a.angry = Math.max(0, a.angry - dt * .6); if (a.pursue > 0) a.pursue = Math.max(0, a.pursue - dt * 1.5); a.fsT = (a.fsT || 0) - dt;
+              if (a.fsT <= 0) { a.fsMode = a.fsMode === 'pace' ? 'stare' : 'pace'; a.fsT = a.fsMode === 'pace' ? 1.6 + Math.random() * 1.6 : 1.2 + Math.random() * 1.8; a.fsSg = Math.random() < .5 ? 1 : -1; }
+              a.running = false;
+              if (a.fsMode === 'pace') { const tx = -(fire.y - a.y) / fd * a.fsSg, ty = (fire.x - a.x) / fd * a.fsSg, k = (fd - 205) / 205; a.moving = true; step(a, tx + k * (fire.x - a.x) / fd, ty + k * (fire.y - a.y) / fd, K.walk * .75, dt); }
+              else { a.moving = false; a.dir = dirOf(P.x - a.x, P.y - a.y); }
+              if (a.angry <= 0 && !(a.pursue > 0)) { a.pursue = 0; a.fsMode = null; }
+              continue; } } }
         const nt = Weather.night(); a.hunger += dt * HG * .6 * nt;
         const hungry = a.hunger > 50 - 12 * nt; const hungerHigh = a.hunger > 100, thirstHigh = a.thirst > 80, urgent = hungerHigh || thirstHigh;   // níveis altos: prioridade (passam por cima das áreas de alerta)
         // ferido: foge só até uma distância em que ainda dá para vê-lo, descansa regenerando e volta a fugir se você chegar perto
@@ -2813,7 +2944,7 @@ const Entities = (() => {
     respawnT += LOCS[LOC].fixed ? 0 : DT; if (respawnT > 12) { respawnT = 0; if (animals.filter(o => o.kind === 'urubu' && !o.dead).length < 3) spawnUrubu(); if (animals.filter(o => o.kind === 'gull' && !o.dead).length < 6) spawnGull(true); for (const k in TARGET) { const need = k === 'wolf' ? TARGET.wolf + Math.round(3 * Weather.night()) : BREED[k].floor; if (animals.filter(a => a.kind === k && !a.baby).length < need) spawnAnimal(k, true); } if (animals.filter(a => a.kind === 'boar').length < 4) spawnAnimal('boar', true); if (animals.filter(a => a.kind === 'fox' && !a.dead).length < 5) spawnAnimal('fox', true); if (animals.filter(a => a.kind === 'woodpecker').length < 6) spawnWoodpecker(); }
   }
   function update(dt) {
-    t += dt; noiseTick(dt); if (!window.NET_GUEST && !LOCS[LOC].fixed) breedTick(dt);
+    t += dt; noiseTick(dt); if (!window.NET_GUEST && !LOCS[LOC].fixed) breedTick(dt); handTick(); queueTick(dt);
     { const pp = Player.p; if (pp.lx !== undefined && !pp.swim && !pp.raft) { const dx = pp.x - pp.lx, dy = pp.y - pp.ly, d = Math.hypot(dx, dy);
         if (d > .15 && d < 80) { if (pp.still) { pp.tk = 99; pp.still = false; }   // ao começar a andar já deixa uma pegada
           const n = Math.max(1, Math.ceil(d / 8)); for (let q = 1; q <= n; q++) trackStep({ x: pp.lx + dx * q / n, y: pp.ly + dy * q / n + 8, vx: dx, vy: dy, kind: 'player', get tk() { return pp.tk; }, set tk(v) { pp.tk = v; }, get side() { return pp.tside; }, set side(v) { pp.tside = v; } }, d / n); }
@@ -2831,11 +2962,11 @@ const Entities = (() => {
     for (let _i48 = 0, o; _i48 < World.act.length && (o = World.act[_i48], true); _i48++) if (o.becomeStump && o.kind === 'palm') { // coqueiro caído: toco + tora + folhas + cocos que sobraram; renasce só depois de dias
       o.becomeStump = false; World.add({ kind: 'fallenpalm', x: o.x, y: o.y, ph: 0 });
       if (!LOCS[LOC].fixed) regrow.push({ x: o.x, y: o.y, t: PALM_REGROW }); break; }
-    for (let _i49 = 0, o; _i49 < World.act.length && (o = World.act[_i49], true); _i49++) if (o.becomeStump) { o.becomeStump = false; World.add({ kind: 'stump' + (1 + Math.floor(Math.random() * 3)), x: o.x, y: o.y, ph: 0 }, { kind: 'log', x: o.x + 36, y: o.y + 8, ph: 0 }); break; }
+    for (let _i49 = 0, o; _i49 < World.act.length && (o = World.act[_i49], true); _i49++) if (o.becomeStump) { o.becomeStump = false; World.add({ kind: 'stump' + (1 + Math.floor(Math.random() * 3)), x: o.x, y: o.y, ph: 0 }); spawnDrop('wood', o.x + 34, o.y + 6, 3, .2); break; }   /* árvore derrubada: 3 madeiras no chão (antes ficava um tronco) */
     if (World.act.some(o => o.dead)) { const a = World.objs; for (let i = a.length - 1; i >= 0; i--) if (a[i].dead) a.splice(i, 1); World.touch(); }
     for (let i = regrow.length - 1; i >= 0; i--) { const g = regrow[i]; g.t -= dt; if (g.t > 0) continue; if (Math.hypot(g.x - Player.p.x, g.y - Player.p.y) < 260) { g.t = 20; continue; }
       for (let _i50 = 0, s; _i50 < World.objs.length && (s = World.objs[_i50], true); _i50++) if (s.palmStump && Math.hypot(s.x - g.x, s.y - g.y) < 6) s.dead = true; World.add({ kind: 'palm', x: g.x, y: g.y, ph: Math.random() * 9, solid: true }); regrow.splice(i, 1); }
-    const p = Player.p; if (craftMode === 'bench' && craftEl.style.display === 'block' && !World.act.some(o => o.kind === 'bench' && Math.hypot(o.x - p.x, o.y - p.y) < 160)) closeCraft();
+    const p = Player.p; if ((craftMode === 'bench' || craftMode === 'carp') && craftEl.style.display === 'block' && !World.act.some(o => o.kind === craftMode && Math.hypot(o.x - p.x, o.y - p.y) < 160)) closeCraft();
     // fogueira: acesa queima quem chega perto; apagada é pisoteada até ficar danificada e sumir
     for (let _i51 = 0, o; _i51 < World.act.length && (o = World.act[_i51], true); _i51++) if (o.kind === 'fire' && !o.broken) {
       // cada pisão (no máximo 1 a cada .45 s por pessoa/animal): 5 apagam a fogueira acesa, 10 destroem a apagada
@@ -2848,7 +2979,7 @@ const Entities = (() => {
       }
       stomp(p, p.moving); for (let _i53 = 0, a; _i53 < animals.length && (a = animals[_i53], true); _i53++) if (!a.dead) stomp(a, a.moving);
     }
-    for (let i = drops.length - 1; i >= 0; i--) { const d = drops[i]; d.age += dt; if (d.age > .5 && Math.hypot(d.x - p.x, d.y - p.y) < 42 && inv[d.type] < MAX[d.type]) { inv[d.type]++; drops.splice(i, 1); showHud(); Save.flash('+1 ' + NAME[d.type]); } }
+    for (let i = drops.length - 1; i >= 0; i--) { const d = drops[i]; d.age += dt; if (d.age > .5 && Math.hypot(d.x - p.x, d.y - p.y) < 42 && (d.type === 'water' ? inv.water < 3 : room(d.type) > 0)) { inv[d.type]++; drops.splice(i, 1); showHud(); Save.flash('+1 ' + NAME[d.type]); } }
     for (let i = corpses.length - 1; i >= 0; i--) { corpses[i].age += dt; if (corpses[i].bearT > 0) corpses[i].bearT -= dt; if (corpses[i].age > CORPSE_TIME) { const c = corpses[i]; if (c.kind !== 'fish' && c.kind !== 'shark') dens.push({ kind: 'osso' + (1 + Math.floor(Math.random() * 4)), x: c.x, y: c.y + 4, ph: 0, bone: true, age: 0, sc: ({ rabbit: .6, fawn: .65, woodpecker: .5, deer: .95, boar: 1, wolf: .9, bear: 1.3, urubu: .6, crab: .4 })[c.kind] || .9 }); corpses.splice(i, 1); } }
     for (let i = dens.length - 1; i >= 0; i--) { const b = dens[i]; if (b.bone && (b.age += dt) > BONE_TIME) dens.splice(i, 1); }   // ossos ficam um tempo onde o corpo estava
     if (typeof Chest !== 'undefined') Chest.tick();
@@ -2867,7 +2998,7 @@ const Entities = (() => {
     const p = Player.p; if (p.act) return; p.battle = 7; emitNoise(p.x, p.y, 180);
     const E = eqInfo(), tgt = window.NET_GUEST ? null : nearestAnimal(p, E.reach);   /* convidado: combate com bichos entra na próxima etapa */
     Player.startAct(E.atk, tgt, () => {
-      if (inv.eq === 'machete') { const d = DIRV[p.dir] || [0, 1]; if (World.cutMato(p.x + d[0] * 22, p.y + d[1] * 22, 70)) Save.flash('🌿 Mato cortado!'); }
+      if (inv.eq === 'machete') { const d = DIRV[p.dir] || [0, 1]; if (World.cutMato(p.x + d[0] * 22, p.y + d[1] * 22, 70, m => { if (Math.random() < .2) spawnDrop('fiber', m.x, m.y + 4, 1, .3); })) Save.flash('🌿 Mato cortado!'); }   /* fibra agora só vem do mato cortado: 20% de chance por moita */
       if (!tgt || tgt.dead || Math.hypot(tgt.x - p.x, tgt.y - p.y) > E.reach + 6) return;
       if (tgt.kind === 'deer' || tgt.kind === 'fawn') { const D = defenderFor(tgt); if (D) { if (Math.hypot(D.x - p.x, D.y - p.y) <= 90) { if (deerKick(D, p, true)) Save.flash('🦌 Coice!'); } else if (!(D.kcd > 0) && !D.dead && !(D.avg > 0)) { if (D.sleeping) wakeUp(D); D.avg = 10; Save.flash('🦌 A mãe está vindo!'); } } }
       let dm = E.dmg; if (tgt.sleeping) { dm *= 2; wakeUp(tgt); Save.flash('🗡️ Golpe furtivo!'); }   // dormindo: o 1º golpe dá o dobro
@@ -2885,15 +3016,17 @@ const Entities = (() => {
       if (k === 'water') { inv.water--; P.thirst = Math.min(100, P.thirst + 45); P.sick = 0; showHud(); return; }
       inv[k]--; P.hp = Math.min(P.maxhp, P.hp + heal); P.food = Math.min(100, (P.food || 0) + ({ cooked: 40, meat: 25, apple: 12, coconut: 8 }[k] || 0)); if (k === 'apple') P.thirst = Math.min(100, P.thirst + 8); if (k === 'coconut') P.thirst = Math.min(100, P.thirst + 22); showHud();
     };
-    if (P.swim || P.act || !Assets.hasAnim('player', k === 'water' ? 'drink' : 'eat')) { apply(); return; }
-    Player.startAct(k === 'water' ? 'drinkc' : 'eat', null, apply, 'player', k === 'water' ? .9 : 1.1);   /* água do cantil: animação do cantil */
+    if (P.swim || P.act || !Assets.hasAnim(window.SKIN, k === 'water' ? 'drinkc' : 'eat')) { apply(); return; }
+    if (Player.startAct(k === 'water' ? 'drinkc' : 'eat', null, apply, 'player', ({ water: 1.8, apple: 2, coconut: 2.5, meat: 3, cooked: 3 })[k] || 2.2)) { if (k === 'water') Player.longAct('drink', '#4fb3f0', 2); else Player.longAct('eat', '#f0a23c'); }   /* água do cantil: animação do cantil; leva uns segundos com barrinha (andar cancela) */
   }
   const bandBtn = document.getElementById('band');
   function useBandage() {
     const P = Player.p;
     if (!P.bleeding) { Save.flash('Você não está sangrando'); return; }
-    if (!(inv.bandage > 0)) { Save.flash('Sem bandagem: faça na bancada (3 🌿)'); return; }
-    inv.bandage--; P.bleeding = false; Save.flash('🩹 Sangramento estancado'); showHud(); Save.save();
+    if (!(inv.bandage > 0)) { Save.flash('Sem bandagem: faça à mão (🛠, 3 🌿)'); return; }
+    const done = () => { if (!(inv.bandage > 0) || !P.bleeding) return; inv.bandage--; P.bleeding = false; Save.flash('🩹 Sangramento estancado'); showHud(); Save.save(); };
+    if (P.swim || P.raft || P.act) { done(); return; }
+    if (Player.startAct('bandage', null, done, P.sneak ? 'player_c' : 'player', 2.2)) Player.longAct('band', '#e05050', 2); else done();   /* enfaixa 2 vezes (~2 s) */   /* agachado: enfaixa agachado */   /* enfaixa o braço: 2 s com barrinha (mexer cancela); usa a animação 'bandage' quando existir */
   }
   const dropBtn = document.getElementById('dropbtn');
   function dropLog() {
@@ -2901,14 +3034,14 @@ const Entities = (() => {
     const x = p.x + v[0] * 30, y = p.y + v[1] * 24 + 6; World.add({ kind: p.carry === 'leaves' ? 'leaves' : 'log', palm: p.carry === 'palm' || undefined, x: World.land(x, y) ? x : p.x, y: World.land(x, y) ? y : p.y + 6, ph: 0 }); p.carry = false; showHud(); Save.save(true);
   }
   function drop(k, n) { n = Math.min(n, inv[k]); if (n <= 0 || !MAX[k]) return; inv[k] -= n; const P = Player.p; spawnDrop(k, P.x, P.y + 14, n, 3); showHud(); }
-  const STRUCT = { campfire: 'fire', fence: 'fence', shelter: 'shelter', chest: 'chest', bench: 'bench' };
+  const STRUCT = { campfire: 'fire', fence: 'fence', shelter: 'shelter', chest: 'chest', bench: 'bench', carp: 'carp' };
   function placeItem(k) {
-    const p = Player.p; if (!(inv[k] > 0) || p.act || !STRUCT[k]) return; const v = DIRV[p.dir] || [0, 1]; let x = p.x + v[0] * (k === 'shelter' || k === 'bench' ? 60 : 46), y = p.y + v[1] * (k === 'shelter' || k === 'bench' ? 60 : 46);
+    const p = Player.p; if (!(inv[k] > 0) || p.act || !STRUCT[k]) return; const v = DIRV[p.dir] || [0, 1]; let x = p.x + v[0] * (k === 'shelter' || k === 'bench' || k === 'carp' ? 60 : 46), y = p.y + v[1] * (k === 'shelter' || k === 'bench' || k === 'carp' ? 60 : 46);
     if (!World.walkable(x, y)) { x = p.x; y = p.y; }
     const vert = k === 'fence' && Math.abs(v[0]) > Math.abs(v[1]) + .1;
     Player.startAct('pickup', { x, y }, () => {
       inv[k]--; const o = { kind: STRUCT[k], x, y, ph: Math.random() * 9 };
-      if (k === 'campfire') o.hp = 150; if (k === 'fence') { o.solid = true; o.vert = vert; o.bw = vert ? 6 : 24; o.bh = vert ? 24 : 6; } if (k === 'chest') { o.solid = true; o.bw = 14; o.bh = 8; o.items = {}; } if (k === 'bench') o.solid = true;
+      if (k === 'campfire') o.hp = 150; if (k === 'fence') { o.solid = true; o.vert = vert; o.bw = vert ? 6 : 24; o.bh = vert ? 24 : 6; } if (k === 'chest') { o.solid = true; o.bw = 14; o.bh = 8; o.items = {}; } if (k === 'bench' || k === 'carp') o.solid = true;
       World.add(o); showHud(); Save.save(true);
     }, 'player', .55);
   }
@@ -2930,15 +3063,18 @@ const Entities = (() => {
       if (fb) return { o: fb, label: 'Colocar tronco (' + fb.stage + '/3)' };
       return World.waterNear(p.x, p.y, 70) ? { o: { kind: 'water' }, label: waterLabel() } : null;
     }
-    { const ax = inv.axe && inv.eq === 'axe'; let cb = null, cd = 1e9; for (let _i58 = 0, o; _i58 < World.near.length && (o = World.near[_i58], true); _i58++) { const R = o.kind === 'fallenpalm' ? 80 : o.kind === 'palmcrown' ? 55 : (o.kind === 'leaves' || o.kind === 'log') ? 60 : 0; if (!R) continue; const d = Math.hypot(o.x - p.x, o.y - p.y); if (d < R && d < cd) { cd = d; cb = o; } }
-      if (cb) return { o: cb, label: cb.kind === 'fallenpalm' ? (ax ? 'Cortar coqueiro' : 'Cortar (precisa do machado)') : cb.kind === 'palmcrown' ? (ax ? 'Cortar folhas (+palha)' : 'Folhas (precisa do machado)') : cb.kind === 'leaves' ? 'Pegar folhas' : ax ? 'Cortar em tábuas' : 'Pegar tronco' }; }
-    const bn = World.near.find(o => o.kind === 'bench' && Math.hypot(o.x - p.x, o.y - p.y) < 110); if (bn) return { o: bn, label: 'Bancada' };
+    { let fb = null, fd = 60; for (let i = 0; i < World.near.length; i++) { const o = World.near[i]; if (o.kind === 'fence' && o.stage < 3) { const d = Math.hypot(o.x - p.x, o.y - p.y); if (d < fd) { fd = d; fb = o; } } } if (fb) return { o: fb, label: (inv.wood | 0) >= 2 ? 'Colocar madeira (' + fb.stage + '/3, -2 🪵)' : 'Cerca: precisa de 2 madeiras' }; }
+    { const ax = inv.axe && inv.eq === 'axe'; let cb = null, cd = 1e9; for (let _i58 = 0, o; _i58 < World.near.length && (o = World.near[_i58], true); _i58++) { const R = o.kind === 'fallenpalm' ? 62 : o.kind === 'palmcrown' ? 46 : (o.kind === 'leaves' || o.kind === 'log') ? 46 : 0; if (!R) continue; const d = Math.hypot(o.x - p.x, o.y - p.y); if (d < R && d < cd) { cd = d; cb = o; } }
+      if (cb) return { o: cb, label: cb.kind === 'fallenpalm' ? (ax ? 'Cortar coqueiro' : 'Cortar (precisa do machado)') : cb.kind === 'palmcrown' ? (ax ? 'Cortar folhas (+palha)' : 'Folhas (precisa do machado)') : cb.kind === 'leaves' ? 'Pegar galhos' : 'Pegar tronco (+madeira)' }; }
+    const bn = World.near.find(o => (o.kind === 'bench' || o.kind === 'carp') && Math.hypot(o.x - p.x, o.y - p.y) < 110); if (bn) return { o: bn, label: bn.kind === 'carp' ? 'Serrar tábuas' : 'Bancada' };
 
-    { let cb = null, cd = 62; for (let _i59 = 0, o; _i59 < World.near.length && (o = World.near[_i59], true); _i59++) if (o.kind === 'cocochao' && !o.dead) { const d = Math.hypot(o.x - p.x, o.y - p.y); if (d < cd) { cd = d; cb = o; } } if (cb) return { o: cb, label: '🥥 Pegar coco' }; }
+    { let cb = null, cd = 42; for (let _i59 = 0, o; _i59 < World.near.length && (o = World.near[_i59], true); _i59++) if (o.kind === 'cocochao' && !o.dead) { const d = Math.hypot(o.x - p.x, o.y - p.y); if (d < cd) { cd = d; cb = o; } } if (cb) return { o: cb, label: '🥥 Pegar coco' }; }
     { let sb = null, sd = 60; for (let _i60 = 0, o; _i60 < dens.length && (o = dens[_i60], true); _i60++) if (o.kind === 'stash') { const d = Math.hypot(o.x - p.x, o.y - p.y); if (d < sd) { sd = d; sb = o; } } if (sb) return { o: { kind: 'stash', st: sb }, label: '⛏ Desenterrar comida' }; }
-    const cc = nearestCorpse(p.x, p.y, 62); if (cc) return { o: { kind: 'corpse', c: cc }, label: 'Coletar carne' };
-    for (let _i61 = 0, o; _i61 < World.near.length && (o = World.near[_i61], true); _i61++) { const T = TREES[o.kind], bush = o.kind.startsWith('bush') || (o.kind === 'tuft' && !(o.hp > 0)), rock = o.kind === 'rock' || o.kind === 'boulder', pb = o.kind === 'pedrinha', st = o.kind === 'fence' || o.kind === 'shelter' || o.kind === 'chest'; if (!(T || bush || rock || pb || st) || o.fall !== undefined) continue; if (o.kind === 'palm' && !(inv.axe && inv.eq === 'axe')) continue;   // coco agora fica no chão: sem sacudir if (o.kind === 'appletree' && !o.ap.some(v => v)) continue;
-      const d = Math.hypot(o.x - p.x, o.y - p.y) * (o.kind === 'rock' ? .8 : o.kind === 'boulder' ? .7 : 1); if (d < bd) { bd = d; best = o; label = pb ? 'Pegar pedra' : o.kind === 'chest' ? 'Abrir baú' : st ? 'Desmontar' : o.kind === 'appletree' ? 'Colher maçã' : o.kind === 'palm' ? (inv.axe && inv.eq === 'axe' ? 'Cortar' : 'Sacudir coqueiro') : rock ? (inv.pickaxe ? 'Minerar' : 'Pedra (precisa de picareta)') : bush ? 'Colher' : 'Cortar'; } }
+    const cc = nearestCorpse(p.x, p.y, 48); if (cc) return { o: { kind: 'corpse', c: cc }, label: 'Coletar carne' };
+    for (let _i61 = 0, o; _i61 < World.near.length && (o = World.near[_i61], true); _i61++) { const T = TREES[o.kind], bush = false /* arbusto/tufo não dão mais fibra */, rock = o.kind === 'rock' || o.kind === 'boulder', pb = o.kind === 'pedrinha', st = o.kind === 'fence' || o.kind === 'shelter' || o.kind === 'chest'; if (!(T || bush || rock || pb || st) || o.fall !== undefined) continue; if (o.kind === 'palm' && !(inv.axe && inv.eq === 'axe')) continue;   // coco agora fica no chão: sem sacudir if (o.kind === 'appletree' && !o.ap.some(v => v)) continue;
+      const MR = pb ? 40 : T ? (o.kind === 'appletree' ? 56 : 52) : bush ? 48 : o.kind === 'rock' ? 56 : o.kind === 'boulder' ? 66 : 70, d0 = Math.hypot(o.x - p.x, o.y - p.y); if (d0 > MR) continue;   /* alcance por tipo: tem que chegar perto (antes pegava/cortava de longe) */
+      const d = d0 * (o.kind === 'rock' ? .8 : o.kind === 'boulder' ? .7 : 1); if (d < bd) { bd = d; best = o; label = pb ? 'Pegar pedra' : o.kind === 'chest' ? 'Abrir baú' : st ? 'Desmontar' : o.kind === 'appletree' ? 'Colher maçã' : o.kind === 'palm' ? (inv.axe && inv.eq === 'axe' ? 'Cortar' : 'Sacudir coqueiro') : rock ? (inv.pickaxe ? 'Minerar' : 'Pedra (precisa de picareta)') : bush ? 'Colher' : 'Cortar'; } }
+    if (!best) { let dr = null, dd = 62; for (let i = 0; i < wallsN.length; i++) { const o = wallsN[i]; if (o.kind !== 'door' || o.dead) continue; const d = Math.hypot(o.x - p.x, o.y - 14 - p.y); if (d < dd) { dd = d; dr = o; } } if (dr) return { o: dr, label: dr.open ? 'Fechar porta' : 'Abrir porta' }; }
     if (!best) { const pz = World.poolNear(p.x, p.y, 48); if (pz) return { o: { kind: 'poca', p: pz }, label: canFill() ? 'Encher cantil (poça)' : 'Beber da poça' }; }
     if (!best && World.waterNear(p.x, p.y, 85)) return { o: { kind: 'water' }, label: waterLabel() };
     return best && { o: best, label };
@@ -2946,29 +3082,29 @@ const Entities = (() => {
   function use() {
     const f = findUse(), p = Player.p; if (!f || p.act) return; const best = f.o;
     if (best.kind === 'raft') { if (p.raft) Raft.dismount(); else Raft.open(best); return; }
-    if (best.kind === 'bench') { craftEl.style.display === 'block' ? closeCraft() : openCraft('bench'); return; }
+    if (best.kind === 'bench' || best.kind === 'carp') { craftEl.style.display === 'block' ? closeCraft() : openCraft(best.kind); return; }
     if (best.kind === 'chest') { Chest.open(best); return; }
     if (best.kind === 'fire') { FireMenu.open(best); return; }
     const carrySet = p.carry === 'leaves' ? 'player_leaves' : p.carry === 'palm' ? 'player_palm' : 'player_log';
     if (best.kind === 'sawlog') { Player.startAct('idle', null, () => { if (!p.carry || p.carry === 'leaves') return; const n = p.carry === 'palm' ? 3 : 4; p.carry = false; spawnDrop('wood', p.x, p.y + 14, n, .2); showHud(); Save.save(true); }, carrySet, .55); return; }
     if (best.kind === 'shredleaves') { Player.startAct('idle', null, () => { if (p.carry !== 'leaves') return; p.carry = false; spawnDrop('fiber', p.x, p.y + 14, 6, .2); showHud(); Save.save(true); }, carrySet, .55); return; }
-    if (best.kind === 'leaves') { Player.startAct('pickup', best, () => { if (best.dead || p.carry) return; best.dead = true; p.carry = 'leaves'; Player.setSneak(false); showHud(); Save.save(true); }, 'player', .55); return; }
+    if (best.kind === 'leaves') { Player.startAct('pickup', best, () => { if (best.dead) return; best.dead = true; spawnDrop('twig', best.x, best.y + 6, 3, .2); Save.flash('+3 galhos'); showHud(); Save.save(true); }, 'player', .55); return; }   /* folhas viram fibra na hora (sem carregar) */
     if (best.kind === 'fallenpalm' || best.kind === 'palmcrown') { if (!(inv.axe && inv.eq === 'axe')) { Save.flash('Equipe o machado para cortar'); return; }
       Player.startAct('chop', best, () => { if (best.dead) return;
         if (best.kind === 'fallenpalm') { best.dead = true; World.add({ kind: 'log', palm: true, x: best.x - 30, y: best.y + 2, ph: 0, ct: t }, { kind: 'palmcrown', x: best.x + 26, y: best.y + 4, ph: 0, ct: t }); Save.flash('Coqueiro dividido: tronco e copa'); Save.save(true); }
         else { best.cuts = (best.cuts || 0) + 1; best.hp = best.cuts; best.ct = t; if (best.cuts >= 2) { best.dead = true; spawnDrop('straw', best.x, best.y + 6, 6, .3); Save.flash('+6 palhas'); } } }, 'player_axe', .7); return; }
-    if (best.kind === 'log' && inv.axe && inv.eq === 'axe') { Player.startAct('chop', best, () => { if (best.dead) return; best.cuts = (best.cuts || 0) + 1; best.ct = t; if (best.cuts >= 3) { const n = best.palm ? 4 : 6; best.dead = true; spawnDrop('plank', best.x, best.y + 6, n, .1); Save.flash('+' + n + ' tábuas'); } }, 'player_axe', .7); return; }
-    if (best.kind === 'log') { Player.startAct('pickup', best, () => { if (best.dead || p.carry) return; best.dead = true; p.carry = best.palm ? 'palm' : true; Player.setSneak(false); showHud(); Save.save(true); }, 'player', .55); return; }
-    if (best.kind === 'fence' && p.carry && p.carry !== 'leaves') { Player.startAct('idle', best, () => { if (!p.carry || p.carry === 'leaves' || best.stage >= 3) return; best.stage++; p.carry = false; if (best.stage >= 3) { best.solid = true; const bw = best.bw, bh = best.bh; if (Math.abs(p.x - best.x) < bw + 8 && Math.abs(p.y - best.y) < bh + 8) { if (best.vert) p.x += (p.x >= best.x ? 1 : -1) * (bw + 12 - Math.abs(p.x - best.x)); else p.y += (p.y >= best.y ? 1 : -1) * (bh + 12 - Math.abs(p.y - best.y)); } } showHud(); Save.save(true); }, carrySet, .55); return; }
-    if (best.kind === 'fence' || best.kind === 'shelter') { Player.startAct('pickup', best, () => { best.dead = true; if (best.kind === 'fence') { for (let i = 0; i < (best.stage || 0); i++) World.add({ kind: 'log', x: best.x + (i - 1) * 14, y: best.y + 10 + i * 6, ph: 0 }); } else { spawnDrop('wood', best.x, best.y, 4); spawnDrop('straw', best.x, best.y, 3); } }, 'player', .55); return; }
-    if (best.kind === 'stash') { Player.startAct('pickup', best.st, () => { const i = dens.indexOf(best.st); if (i < 0) return; const k = best.st.item; if (!(inv[k] < MAX[k])) { Save.flash('Mochila cheia'); return; } dens.splice(i, 1); inv[k]++; showHud(); Save.flash('+1 ' + (k === 'meat' ? 'Carne crua' : k === 'cooked' ? 'Carne assada' : 'Maçã') + ' (desenterrada)'); }, 'player', .8); return; }
+    if (best.kind === 'log') { Player.startAct('pickup', best, () => { if (best.dead) return; best.dead = true; const n = best.palm ? 3 : 4; spawnDrop('wood', best.x, best.y + 6, n, .2); Save.flash('+' + n + ' madeira'); showHud(); Save.save(true); }, 'player', .55); return; }   /* tronco vira madeira na hora (sem carregar no ombro) */
+    if (best.kind === 'fence' && best.stage < 3 && (inv.wood | 0) >= 2) { Player.startAct('pickup', best, () => { if (best.stage >= 3 || (inv.wood | 0) < 2) return; best.stage++; inv.wood -= 2; if (best.stage >= 3) { best.solid = true; const bw = best.bw, bh = best.bh; if (Math.abs(p.x - best.x) < bw + 8 && Math.abs(p.y - best.y) < bh + 8) { if (best.vert) p.x += (p.x >= best.x ? 1 : -1) * (bw + 12 - Math.abs(p.x - best.x)); else p.y += (p.y >= best.y ? 1 : -1) * (bh + 12 - Math.abs(p.y - best.y)); } } showHud(); Save.save(true); }, 'player', .55); return; }
+    if (best.kind === 'fence' || best.kind === 'shelter') { Player.startAct('pickup', best, () => { best.dead = true; if (best.kind === 'fence') { if (best.stage) spawnDrop('wood', best.x, best.y, best.stage * 2); } else { spawnDrop('wood', best.x, best.y, 4); spawnDrop('straw', best.x, best.y, 3); } }, 'player', .55); return; }
+    if (best.kind === 'stash') { Player.startAct('pickup', best.st, () => { const i = dens.indexOf(best.st); if (i < 0) return; const k = best.st.item; if (!(room(k) > 0)) { Save.flash('🎒 Mochila cheia'); return; } dens.splice(i, 1); inv[k]++; showHud(); Save.flash('+1 ' + (k === 'meat' ? 'Carne crua' : k === 'cooked' ? 'Carne assada' : 'Maçã') + ' (desenterrada)'); }, 'player', .8); return; }
     if (best.kind === 'corpse') { Player.startAct('pickup', best.c, () => { const c = best.c; if (c.hide === undefined) c.hide = ({ deer: 2, boar: 2, wolf: 1, bear: 3, fox: 1, fawn: 1 })[c.kind] || 0; const got = Math.min(c.meat, MAX.meat - inv.meat), gh = Math.max(0, Math.min(c.hide, MAX.leather - inv.leather)); if (got <= 0 && gh <= 0) { Save.flash('Mochila cheia'); return; } inv.meat += got; c.meat -= got; inv.leather += gh; c.hide -= gh; showHud(); Save.flash((got > 0 ? '+' + got + ' Carne crua' : '') + (gh > 0 ? (got > 0 ? '  ' : '') + '+' + gh + ' Couro' : '')); }, 'player', .55); return; }
     if (best.kind === 'trilha') { Travel.go(best.to); return; }
+    if (best.kind === 'door') { if (best.open && Math.abs(p.x - best.x) < 36 && Math.abs(p.y - best.y) < 15) { Save.flash('Saia do vão para fechar a porta'); return; } best.open = !best.open; best.at = t; best.solid = !best.open; World.touch(); Save.save(true); return; }
     if (best.kind === 'poca') { const pz = best.p;
       if (canFill()) { Player.startAct('pickup', null, () => { inv.dirty = 3 - inv.water; pz.w = Math.max(0, pz.w - .35); showHud(); Save.flash('Cantil cheio (água de poça, suja: ferva antes de beber)'); }, 'player', .55); return; }
-      Player.startAct('drink', null, () => { p.thirst = Math.min(100, p.thirst + 30); pz.w = Math.max(0, pz.w - .3); if (!(p.sick > 0) && Math.random() < .55) { p.sick = 60; Save.flash('🤢 Água de poça: você ficou doente. Beba água fervida'); } showHud(); }, 'player', .8); return; }
+      Player.startAct('drink', null, () => { p.thirst = Math.min(100, p.thirst + 30); pz.w = Math.max(0, pz.w - .3); if (!(p.sick > 0) && Math.random() < .55) { p.sick = 60; Save.flash('🤢 Água de poça: você ficou doente. Beba água fervida'); } showHud(); }, 'player', 1.6) && Player.longAct('drink', '#4fb3f0', 2); return; }
     if (best.kind === 'water' && canFill()) { Player.startAct('pickup', null, () => { inv.dirty = 3 - inv.water; showHud(); Save.flash('Cantil cheio (água suja, ferva antes de beber)'); }, 'player', .55); return; }
-    if (best.kind === 'water') { Player.startAct('drink', null, () => { p.thirst = Math.min(100, p.thirst + 45); if (!(p.sick > 0) && Math.random() < .3) { p.sick = 60; Save.flash('🤢 Água suja: você ficou doente. Beba água fervida'); } showHud(); }, 'player', .8); return; }
+    if (best.kind === 'water') { Player.startAct('drink', null, () => { p.thirst = Math.min(100, p.thirst + 45); if (!(p.sick > 0) && Math.random() < .3) { p.sick = 60; Save.flash('🤢 Água suja: você ficou doente. Beba água fervida'); } showHud(); }, 'player', 1.6) && Player.longAct('drink', '#4fb3f0', 2); return; }
     if (best.kind === 'appletree') { Player.startAct('pickup', best, () => { if (inv.apple >= MAX.apple) { Save.flash('Mochila cheia'); return; } const i = best.ap.indexOf(1); if (i >= 0) { best.ap[i] = 0; best.apT[i] = 45; inv.apple++; p.thirst = Math.min(100, p.thirst + 8); showHud(); } }, 'player', .55); return; }
     if (best.kind === 'cocochao') { Player.startAct('pickup', best, () => { if (best.dead) return; if (inv.coconut >= MAX.coconut) { Save.flash('Mochila cheia'); return; } best.dead = true; inv.coconut++; showHud(); Save.flash('+1 Coco'); }, 'player', .5); return; }
     if (best.kind === 'pedrinha') { Player.startAct('pickup', best, () => { if (best.dead) return; if (inv.stone >= MAX.stone) { Save.flash('Mochila cheia'); return; } best.dead = true; inv.stone++; showHud(); Save.flash('+1 Pedra'); }, 'player', .5); return; }
@@ -3006,31 +3142,50 @@ const Entities = (() => {
       if (!vert) { ctx.fillRect(x - 17, y, 34, 5); ctx.fillStyle = '#6b4220'; ctx.fillRect(x - 17, y - 36, 34, 38); ctx.fillStyle = '#a9733a'; ctx.fillRect(x - 17, y - 36, 34, 5); ctx.fillStyle = '#4a2c12'; for (let i = -12; i < 17; i += 8) ctx.fillRect(x + i, y - 31, 1, 33); ctx.fillStyle = '#8a5a2c'; ctx.fillRect(x - 17, y - 14, 34, 1); }
       else { ctx.fillRect(x - 6, y - 14, 12, 34); ctx.fillStyle = '#6b4220'; ctx.fillRect(x - 5, y - 52, 10, 70); ctx.fillStyle = '#a9733a'; ctx.fillRect(x - 5, y - 52, 10, 36); ctx.fillStyle = '#4a2c12'; ctx.fillRect(x - 1, y - 16, 1, 34); ctx.fillStyle = '#c9965a'; ctx.fillRect(x - 5, y - 52, 10, 2); }  }
   function roofRaw(ctx, x, y) { const a = ctx.globalAlpha; ctx.fillStyle = '#c9a23c'; ctx.fillRect(x - 16, y - 56, 32, 32); ctx.fillStyle = '#e0bf55'; for (let r = 0; r < 4; r++) ctx.fillRect(x - 16, y - 56 + r * 8, 32, 1); ctx.fillStyle = '#7a5f18'; for (let c = -14; c < 16; c += 7) ctx.fillRect(x + c, y - 52, 2, 22); ctx.fillStyle = '#5c4510'; ctx.fillRect(x - 16, y - 27, 32, 3);  }
-  /* piso e telhado das construções: em vez de desenhar peça por peça a cada quadro, junta tudo numa imagem pronta e só refaz quando alguma peça muda */
+  /* CONSTRUÇÃO em grade de 64 px (arte do PixelLab em tábuas). Piso e telhado ocupam um quadrado; parede e porta ficam na borda entre quadrados;
+     parede pode ter 2 de altura (o.h = 2); o telhado sobe junto. Piso e telhado são juntados numa imagem pronta e só refeitos quando alguma peça muda. */
+  const WH = 48;   // altura de um nível de parede na tela
   const BAK = { floor: { src: null, sig: '', c: null, x: 0, y: 0, L: [] }, roof: { src: null, sig: '', c: null, x: 0, y: 0, L: [] } };
+  let wallsN = [], postsN = [], wallSrc = null, wallSig = '', INSIDE = false;
+  function wallsNear() {   /* paredes/portas ativas + postes de canto (onde parede deitada encontra parede em pé) */
+    const N = World.near; if (wallSrc === N) { let s = 0; for (let i = 0; i < wallsN.length; i++) s += (wallsN[i].h || 1) + (wallsN[i].dead ? 9 : 0); if (wallsN.length + ':' + s === wallSig) return; }
+    wallSrc = N; wallsN = []; let s = 0; for (let i = 0; i < N.length; i++) { const o = N[i]; if ((o.kind === 'wall' || o.kind === 'door') && !o.dead) { wallsN.push(o); s += (o.h || 1); } } wallSig = wallsN.length + ':' + s;
+    const V = new Map(), put = (x, y, f, h) => { const k = x + ',' + y, e = V.get(k) || { x, y, f: 0, h: 1 }; e.f |= f; if (h > e.h) e.h = h; V.set(k, e); };
+    for (const o of wallsN) { const h = o.h || 1; if (o.vert) { put(o.x, o.y - 32, 2, h); put(o.x, o.y + 32, 2, h); } else { put(o.x - 32, o.y, 1, h); put(o.x + 32, o.y, 1, h); } }
+    postsN = []; for (const e of V.values()) if (e.f === 3) postsN.push({ kind: 'post', x: e.x, y: e.y, h: e.h });
+    BAK.roof.src = null;   /* a altura do telhado depende das paredes */
+  }
+  const roofLv = o => { for (let i = 0; i < wallsN.length; i++) { const w = wallsN[i]; if ((w.h || 1) > 1 && Math.abs(w.x - o.x) < 330 && Math.abs(w.y - o.y) < 330) return 2; } return 1; };
   function bakeOf(kind) {
     const B = BAK[kind], N = World.near; if (B.src === N) return B; B.src = N;
-    const L = []; let s = 0; for (let i = 0; i < N.length; i++) { const o = N[i]; if (o.kind === kind && !o.dead) { L.push(o); s = (s + o.x * 7 + o.y * 13) % 1e9; } }
+    const L = []; let s = 0; for (let i = 0; i < N.length; i++) { const o = N[i]; if (o.kind === kind && !o.dead) { L.push(o); if (kind === 'roof') o.lv = roofLv(o); s = (s + o.x * 7 + o.y * 13 + (o.lv || 0) * 31) % 1e9; } }
     const sig = L.length + ':' + s; B.L = L; if (sig === B.sig) return B; B.sig = sig; B.c = null; if (!L.length) return B;
     let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9; for (const o of L) { x0 = Math.min(x0, o.x); y0 = Math.min(y0, o.y); x1 = Math.max(x1, o.x); y1 = Math.max(y1, o.y); }
-    const top = kind === 'roof' ? 56 : 16; x0 = Math.round(x0) - 16; y0 = Math.round(y0) - top; const w = Math.round(x1) + 16 - x0, h = Math.round(y1) + 16 - y0 + (kind === 'roof' ? 0 : 0);
+    const top = kind === 'roof' ? 32 + WH * 2 : 32; x0 = Math.round(x0) - 32; y0 = Math.round(y0) - top; const w = Math.round(x1) + 32 - x0, h = Math.round(y1) + 32 - y0;
     if (w * h > 4e6 || w <= 0 || h <= 0) return B;   /* área enorme: desenha peça por peça mesmo */
-    const c = document.createElement('canvas'); c.width = w; c.height = h + (kind === 'roof' ? 0 : 0); const g = c.getContext('2d'); g.imageSmoothingEnabled = false;
-    for (const o of L) drawPiece(g, kind, o.x - x0, o.y - y0 + (kind === 'roof' ? 0 : 0)); B.c = c; B.x = x0; B.y = y0; return B;
+    const c = document.createElement('canvas'); c.width = w; c.height = h; const g = c.getContext('2d'); g.imageSmoothingEnabled = false;
+    for (const o of L) drawPiece(g, kind, o.x - x0, o.y - y0, o.lv); B.c = c; B.x = x0; B.y = y0; return B;
   }
-  function drawFloors(ctx, camX, camY, vw, vh) { const B = bakeOf('floor'); if (B.c) { ctx.drawImage(B.c, Math.round(B.x - camX), Math.round(B.y - camY)); return; } for (const o of B.L) if (o.x > camX - 20 && o.x < camX + vw + 20 && o.y > camY - 20 && o.y < camY + vh + 20) drawPiece(ctx, 'floor', o.x - camX, o.y - camY); }
+  function drawFloors(ctx, camX, camY, vw, vh) { wallsNear(); const B = bakeOf('floor'); if (B.c) { ctx.drawImage(B.c, Math.round(B.x - camX), Math.round(B.y - camY)); return; } for (const o of B.L) if (o.x > camX - 40 && o.x < camX + vw + 40 && o.y > camY - 40 && o.y < camY + vh + 40) drawPiece(ctx, 'floor', o.x - camX, o.y - camY); }
   function drawRoofs(ctx, camX, camY, vw, vh, player) {
-    const B = bakeOf('roof'), pl = player.p, near = B.L.filter(o => Math.abs(o.x - pl.x) < 40 && Math.abs(o.y - pl.y) < 40);   /* telhado em cima de você fica transparente */
-    if (B.c && !(ctx.isGL && near.length)) { if (near.length) { ctx.save(); ctx.beginPath(); ctx.rect(0, 0, vw, vh); for (const o of near) ctx.rect(Math.round(o.x - camX) - 16, Math.round(o.y - camY) - 56, 32, 32); ctx.clip('evenodd'); }
-      ctx.drawImage(B.c, Math.round(B.x - camX), Math.round(B.y - camY)); if (near.length) ctx.restore(); ctx.globalAlpha = .3; for (const o of near) drawPiece(ctx, 'roof', o.x - camX, o.y - camY); ctx.globalAlpha = 1; return; }
-    for (const o of B.L) if (o.x > camX - 20 && o.x < camX + vw + 20 && o.y > camY - 20 && o.y < camY + vh + 100) { ctx.globalAlpha = Math.abs(o.x - pl.x) < 40 && Math.abs(o.y - pl.y) < 40 ? .3 : 1; drawPiece(ctx, 'roof', o.x - camX, o.y - camY); ctx.globalAlpha = 1; }
+    const B = bakeOf('roof'); if (!B.L.length) return;
+    const a0 = ctx.globalAlpha; if (INSIDE) ctx.globalAlpha = a0 * .16;   /* dentro de casa: o telhado inteiro fica quase transparente */
+    if (B.c) ctx.drawImage(B.c, Math.round(B.x - camX), Math.round(B.y - camY));
+    else for (const o of B.L) if (o.x > camX - 40 && o.x < camX + vw + 40 && o.y > camY - 40 && o.y < camY + vh + 140) drawPiece(ctx, 'roof', o.x - camX, o.y - camY, o.lv);
+    ctx.globalAlpha = a0;
   }
-  function drawPiece(ctx, k, x, y, vert, ghost) {
+  function doorFrame(o) { if (!o || o.at === undefined) return o && o.open ? 4 : 0; const k = Math.min(1, (t - o.at) / .28); return Math.round((o.open ? k : 1 - k) * 4); }
+  function drawPiece(ctx, k, x, y, vert, ghost, o) {
     x = Math.round(x); y = Math.round(y);
-    if (k === 'floor') Assets.draw(ctx, 'b_floor', 'rot', '_', 0, x - 16, y - 16, 1);
-    else if (k === 'wall') { ctx.fillStyle = '#0004'; if (vert) ctx.fillRect(x - 6, y - 14, 12, 34); else ctx.fillRect(x - 17, y, 34, 5); Assets.draw(ctx, vert ? 'b_wallv' : 'b_wallh', 'rot', '_', 0, x, y + 2, 1); }
+    if (k === 'floor') Assets.draw(ctx, 'b_floor', 'rot', '_', 0, x, y + 32, 1);
+    else if (k === 'roof') Assets.draw(ctx, 'b_roof', 'rot', '_', 0, x, y + 32 - WH * (vert === 2 ? 2 : 1), 1);
+    else if (k === 'wall' || k === 'door') { const h = (o && o.h) || 1;
+      if (vert) { if (!ghost) { ctx.fillStyle = '#0003'; ctx.fillRect(x - 11, y - 30, 22, 64); } const V2 = o && o.lv === 2 ? 'b_wallv2' : 'b_wallv'; for (let l = h; l >= 0; l--) Assets.draw(ctx, V2, 'rot', '_', 0, x, y + 33 - WH * l, 1); }
+      else { if (!ghost) { ctx.fillStyle = '#0003'; ctx.fillRect(x - 32, y + 2, 64, 5); }
+        if (k === 'door') Assets.draw(ctx, 'b_door', 'open', '_', doorFrame(o), x, y + 4, 1); else Assets.draw(ctx, o && o.lv === 2 ? 'b_wallh2' : 'b_wallh', 'rot', '_', 0, x, y + 4, 1);
+        if (h > 1) Assets.draw(ctx, o && o.lv === 2 ? 'b_wallt2' : 'b_wallt', 'rot', '_', 0, x, y + 4 - WH, 1); } }
+    else if (k === 'post') { const h = (o && o.h) || 1; for (let l = h - 1; l >= 0; l--) Assets.draw(ctx, 'b_post', 'rot', '_', 0, x, y + 5 - WH * l, 1); }
     else if (k === 'fence') drawFence(ctx, x, y, { vert });
-    else if (k === 'roof') Assets.draw(ctx, 'b_roof', 'rot', '_', 0, x - 16, y - 56, 1);
   }
   // tronco no chão (placeholder em código; troque por sprite do PixelLab chamado 'log')
   function drawFallenPalm(ctx, x, y) { // coqueiro inteiro caído = último quadro da animação de queda
@@ -3125,14 +3280,14 @@ const Entities = (() => {
       ctx.fillStyle = '#fff3dc'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.fillText(nm, bx + 7, by + 10); ctx.textBaseline = 'alphabetic'; return; }
     if (o.kind === 'poca') { const px = Math.round(o.x - camX), py = Math.round(o.y - camY), nm = 'poca' + o.v, sc = [0, .9, .9, 1.1, .9][o.v];
       if (o.w < .02) Assets.draw(ctx, nm, 'seca', '_', 0, px, py, sc);
-      else if (o.w < .985) Assets.draw(ctx, nm, 'encher', '_', Math.min(6, Math.floor(o.w * 7)), px, py, sc);
+      else if (o.w < .985) { if (Weather.state !== 'rain' && Assets.hasAnim(nm, 'nivel')) Assets.draw(ctx, nm, 'nivel', '_', Math.min(5, Math.floor(o.w * 6)), px, py, sc); else Assets.draw(ctx, nm, 'encher', '_', Math.min(6, Math.floor(o.w * 7)), px, py, sc); }   /* sem chuva: a água encolhe para o meio e deixa a lama molhada (bebeu/secou) */
       if (o.w < .985 && o.w > .12 && Weather.state === 'rain') {   /* enchendo na chuva: ondinhas feitas em código (a animação pronta é da poça cheia) */
         const q = Math.sqrt(o.w) * sc, rx = [0, 12, 20, 6, 15][o.v] * q, ry = [0, 8, 7, 5, 10][o.v] * q, a0 = ctx.globalAlpha; ctx.strokeStyle = '#e4f3ff'; ctx.lineWidth = 1;
         for (let k = 0; k < 3; k++) { const tt = t * 1.4 + o.ph + k / 3, ph = tt - Math.floor(tt), cy0 = Math.floor(tt), h1 = Math.sin(cy0 * 12.9898 + k * 78.233 + o.ph * 43.1) * 43758.5453, h2 = Math.sin(cy0 * 39.3468 + k * 11.135 + o.ph) * 24634.6345, u = h1 - Math.floor(h1), w2 = h2 - Math.floor(h2), r = (1 + ph * 3.5) * sc;
           ctx.globalAlpha = a0 * (1 - ph) * .75; ctx.beginPath(); ctx.ellipse(Math.round(px + (u * 2 - 1) * rx * .6), Math.round(py + (w2 * 2 - 1) * ry * .6), r * 1.6, r * .9, 0, 0, 6.283); ctx.stroke(); }
         ctx.globalAlpha = a0; }
-      else if (Weather.state === 'rain') Assets.draw(ctx, nm, 'chuva', '_', Math.floor((t + o.ph) * 8) % 8, px, py, sc);
-      else Assets.draw(ctx, nm, 'rot', '_', 0, px, py, sc);
+      else if (o.w >= .985 && Weather.state === 'rain') Assets.draw(ctx, nm, 'chuva', '_', Math.floor((t + o.ph) * 8) % 8, px, py, sc);
+      else if (o.w >= .985) Assets.draw(ctx, nm, 'rot', '_', 0, px, py, sc);   /* cheia só quando está cheia (antes a poça cheia era desenhada por cima sempre que não chovia: beber/secar não aparecia) */
       return; }
     if (o.kind === 'foxhole') { Assets.draw(ctx, 'foxden', 'rot', '_', 0, Math.round(o.x - camX), Math.round(o.y - camY), .8); return; }
     if (o.kind === 'stash') { const px = Math.round(o.x - camX), py = Math.round(o.y - camY); ctx.fillStyle = 'rgba(40,26,14,.35)'; ctx.beginPath(); ctx.ellipse(px, py + 2, 12, 5, 0, 0, 6.283); ctx.fill(); ctx.fillStyle = '#7a5a32'; ctx.beginPath(); ctx.ellipse(px, py, 10, 5, 0, 0, 6.283); ctx.fill(); ctx.fillStyle = '#a07c48'; ctx.beginPath(); ctx.ellipse(px - 2, py - 2, 6, 2.6, 0, 0, 6.283); ctx.fill(); ctx.fillStyle = '#5a4024'; ctx.fillRect(px + 5, py, 2, 2); ctx.fillRect(px - 7, py + 1, 2, 1); return; }
@@ -3149,6 +3304,7 @@ const Entities = (() => {
     else if (o.kind.startsWith('sap')) { const g = Math.min(1, (o.g || 0) / 600); Assets.draw(ctx, (o.kind === 'sappine' ? 'sappine' : 'sapoak') + (1 + Math.abs(Math.round(o.x)) % 2), 'rot', '_', 0, Math.round(sx + Math.sin(t * 1.4 + o.ph) * .8 * g), Math.round(sy), 1.05 + .5 * g); }
     else if (o.kind === 'mato') { if (o.cutT > 0) Assets.draw(ctx, 'matocortado', 'rot', '_', 0, Math.round(sx), Math.round(sy), 1); else Assets.draw(ctx, NM('mato', 1 + (Math.abs(Math.round(o.x) * 7 + Math.round(o.y) * 3) % 4)), 'rot', '_', 0, Math.round(sx + Math.sin(t * 1.6 + o.ph) * 1.2), Math.round(sy), 1.05); }
     else if (o.kind === 'raft') { const lv = Math.max(1, Math.min(3, o.hp | 0)), mt = Player.p.raft === o, bob = Math.round(Math.sin(t * 2 + o.x) * (mt ? 1.5 : 1)); Assets.draw(ctx, NM('raft', lv), 'rot', '_', 0, Math.round(sx), Math.round(sy) + bob, lv === 1 ? 1.1 : 1.1); }
+    else if (o.kind === 'carp') { Assets.draw(ctx, 'bench', 'rot', '_', 0, sx, sy, 1); Assets.draw(ctx, 'plank_stack', 'rot', '_', 0, sx + 8, sy - 20, .8); Assets.draw(ctx, 'plank_stack', 'rot', '_', 0, sx - 30, sy + 6, .7); }   /* bancada de carpinteiro: a bancada com pilhas de tábuas (até ter arte própria) */
     else if (o.kind === 'camptent') Assets.draw(ctx, 'camptenda', 'rot', '_', 0, sx, sy, 1.5);
     else if (o.kind === 'campmesa') Assets.draw(ctx, 'campmesa', 'rot', '_', 0, sx, sy, 1.3);
     else if (o.kind === 'campvaral') Assets.draw(ctx, 'campvaral', 'rot', '_', 0, sx, sy, 1.3);
@@ -3159,7 +3315,8 @@ const Entities = (() => {
     else if (o.kind === 'fallenpalm') drawFallenPalm(ctx, sx, sy);
     else if (o.kind === 'palmcrown') drawPalmCrown(ctx, sx, sy, o);
     else if (o.kind === 'log') drawLog(ctx, sx, sy, o);
-    else if (o.kind === 'wall') drawPiece(ctx, 'wall', sx, sy, o.vert);
+    else if (o.kind === 'wall' || o.kind === 'door' || o.kind === 'post') { const P = Player.p, a0 = ctx.globalAlpha, fr = INSIDE && Math.abs(o.x - P.x) < 300 && Math.abs(o.y - P.y) < 300 && (o.vert ? Math.abs(o.x - P.x) < 44 && o.y + 32 > P.y - 40 : o.y > P.y - 6);   /* dentro de casa: o que está na frente de você fica transparente */
+      if (fr) ctx.globalAlpha = a0 * .38; drawPiece(ctx, o.kind, sx, sy, o.vert, false, o); ctx.globalAlpha = a0; }
     else if (o.kind === 'chest') drawChest(ctx, sx, sy);
     else if (o.kind === 'shelter') drawShelterBase(ctx, sx, sy);
     else if (o.kind === 'flower') Assets.draw(ctx, NM('flor', o.v || 1), 'rot', '_', 0, sx, sy, 1.2);
@@ -3208,6 +3365,7 @@ const Entities = (() => {
         g.fillStyle = 'rgba(8,30,12,.3)'; g.beginPath(); g.ellipse(ox + 2, oy, Math.round(rx * .78), Math.round(ry * .72), 0, 0, 6.283); g.fill(); S.m[kd] = [x0, cw, ch, rx + 2, ry + 2]; } }
     const e = S.m[o.kind]; if (!e) return; const a0 = ctx.globalAlpha; ctx.globalAlpha = a0 * fall; ctx.drawImage(S.c, e[0], 0, e[1], e[2], cx - e[3], cy - e[4], e[1], e[2]); ctx.globalAlpha = a0;
   }
+  function stationBar(ctx, camX, camY) { const q = CQ[0]; if (!q || !q.sb || q.pause) return; const o = q.sb, x = Math.round(o.x - camX) - 17, y = Math.round(o.y - camY) - 62, k = Math.min(1, q.t / q.T); ctx.fillStyle = 'rgba(20,14,8,.85)'; ctx.fillRect(x - 1, y - 1, 36, 7); ctx.fillStyle = 'rgba(255,255,255,.18)'; ctx.fillRect(x, y, 34, 5); ctx.fillStyle = q.full ? '#e05a40' : '#f0c040'; ctx.fillRect(x, y, Math.round(34 * k), 5); }
   function drawDrop(ctx, d, camX, camY) { const x = Math.round(d.x - camX), y = Math.round(d.y - camY); ctx.fillStyle = '#0005'; ctx.fillRect(x - 7, y, 14, 3);
       if (DROPSPR[d.type]) { const [nm, sc, n] = DROPSPR[d.type]; Assets.draw(ctx, nm + (n > 1 ? 1 + Math.abs(Math.floor(d.x * 7 + d.y * 3)) % n : ''), 'rot', '_', 0, x, y + 2, sc); }
       else if (d.type === 'leather') { ctx.fillStyle = '#3a2414'; ctx.fillRect(x - 7, y - 7, 14, 7); ctx.fillStyle = '#9a6a3c'; ctx.fillRect(x - 6, y - 6, 12, 5); ctx.fillStyle = '#c08a54'; ctx.fillRect(x - 5, y - 6, 5, 2); }
@@ -3219,7 +3377,9 @@ const Entities = (() => {
       else if (d.type === 'apple') Assets.draw(ctx, 'apple', 'rot', '_', 0, x, y + 2, .5);
       else if (d.type === 'cooked') { ctx.fillStyle = '#7a3f1c'; ctx.fillRect(x - 6, y - 8, 12, 8); ctx.fillStyle = '#c47a3a'; ctx.fillRect(x - 5, y - 8, 7, 3); ctx.fillStyle = '#f3e7d0'; ctx.fillRect(x + 5, y - 7, 3, 5); }
       else if (d.type === 'meat') { ctx.fillStyle = '#b3342e'; ctx.fillRect(x - 6, y - 8, 12, 8); ctx.fillStyle = '#e8625a'; ctx.fillRect(x - 5, y - 8, 7, 3); ctx.fillStyle = '#f3e7d0'; ctx.fillRect(x + 5, y - 7, 3, 5); }
+      else if (d.type !== 'fiber' && d.type !== 'straw') { const c = dropIc[d.type] || (dropIc[d.type] = icon(d.type)); ctx.drawImage(c, x - 8, y - 15, 16, 16); }
       else { ctx.fillStyle = '#2e8f3a'; ctx.fillRect(x - 4, y - 8, 3, 8); ctx.fillRect(x, y - 10, 3, 10); ctx.fillStyle = '#6fd05a'; ctx.fillRect(x + 3, y - 7, 3, 7); } }
+  const dropIc = {};
   // poses das animações novas: dormir (deitar -> dormir), acordar, comer, uivar. Retorna [sprite, anim, quadro]
   const HAS = (sp, an) => Assets.hasAnim(sp, an), FR = (sp, an, d) => Assets.frames(sp, an, d);
   const clampF = (sp, an, d, e, fps) => Math.min(FR(sp, an, d) - 1, Math.floor(e * (fps || Assets.fps(sp, an))));
@@ -3321,12 +3481,14 @@ const Entities = (() => {
   function draw(ctx, camX, camY, vw, vh, player) {
     dn = 0; const m = 130; cam.x = camX; cam.y = camY; cam.vw = vw; cam.vh = vh;
     drawFloors(ctx, camX, camY, vw, vh);
+    { const pl = Player.p; INSIDE = false; const RL = BAK.roof.src === World.near ? BAK.roof.L : bakeOf('roof').L; for (let i = 0; i < RL.length; i++) if (Math.abs(RL[i].x - pl.x) < 32 && Math.abs(RL[i].y - pl.y) < 34) { INSIDE = true; break; }
+      for (let i = 0; i < postsN.length; i++) { const o = postsN[i]; if (o.x > camX - 40 && o.x < camX + vw + 40 && o.y > camY - 20 && o.y < camY + vh + 160) add(o.y + 2, 0, o); } }
     for (let _i62 = 0, o; _i62 < World.near.length && (o = World.near[_i62], true); _i62++) if (false) { }
       else if (o.kind === 'bridge' && !World.isRope(Math.round(o.x / CONFIG.TILE), Math.round(o.y / CONFIG.TILE)) && o.x > camX - 40 && o.x < camX + vw + 40 && o.y > camY - 40 && o.y < camY + vh + 40) drawBridge(ctx, o.x - camX, o.y - camY, o.x, o.y, o.nat);
     drawTracks(ctx, camX, camY, vw, vh);
     { const OA = World.near; for (let i = 0; i < OA.length; i++) { const o = OA[i], Tr = TREES[o.kind]; if (!Tr || o.dead || (o.fall !== undefined && o.fall > .5) || !inView(o, camX, camY, vw, vh, m)) continue; add(-1e9 + 2, 6, o); } }   // sombra no chão, como no jogo de referência
     World.setViewR(Math.max(vw, vh) / 2 + 450); const O = World.near, MT = window.MATOTHIN | 0; for (let i = 0; i < O.length; i++) { const o = O[i]; if (MT && o.kind === 'mato') { const h = Math.abs(Math.round(o.x * 13 + o.y * 7)) % 6; if (h < (MT === 1 ? 2 : 3) && Math.abs(o.x - Player.p.x) + Math.abs(o.y - Player.p.y) > 90) continue; }   // FPS baixo: desenha menos mato (só o que está longe de você)
-      if (o.kind === 'campdirt' ? (Math.abs(o.x - camX - vw / 2) < vw / 2 + 400 && Math.abs(o.y - camY - vh / 2) < vh / 2 + 330) : inView(o, camX, camY, vw, vh, m)) add(o.kind === 'campdirt' ? -1e8 : o.kind === 'raft' ? o.y - 40 : (o.kind === 'mato' && o.cutT > 0) ? o.y - 60 : o.y, 0, o); }
+      if (o.kind === 'campdirt' ? (Math.abs(o.x - camX - vw / 2) < vw / 2 + 400 && Math.abs(o.y - camY - vh / 2) < vh / 2 + 330) : inView(o, camX, camY, vw, vh, m)) add(o.kind === 'campdirt' ? -1e8 : o.kind === 'raft' ? o.y - 40 : (o.kind === 'mato' && o.cutT > 0) ? o.y - 60 : (o.kind === 'wall' && o.vert) ? o.y + 20 : o.y, 0, o); }
     { const tr = World.trail(); if (tr && tr.x > camX - 80 && tr.x < camX + vw + 80 && tr.y > camY - 40 && tr.y < camY + vh + 90) add(tr.y, 0, tr); }
     { const PZ = World.pocas(); for (let i = 0; i < PZ.length; i++) { const o = PZ[i]; if (o.x > camX - 60 && o.x < camX + vw + 60 && o.y > camY - 60 && o.y < camY + vh + 60) add(-1e8 + 1, 0, o); } }   /* poças: no chão, por baixo de tudo */
     for (let i = 0; i < dens.length; i++) { const o = dens[i]; if (!o.hid && o.x > camX - 140 && o.x < camX + vw + 140 && o.y > camY - 20 && o.y < camY + vh + 160) add(o.y - 30, 0, o); }
@@ -3359,6 +3521,7 @@ const Entities = (() => {
     if (!(typeof Title !== "undefined" && Title.active)) { const pp = player.p; let cov = false; for (let _i67 = 0, o; _i67 < World.near.length && (o = World.near[_i67], true); _i67++) { if (o.y > pp.y && o.y - pp.y < 130 && Math.abs(o.x - pp.x) < 80 && (TREES[o.kind] || o.kind === 'rock') && !o.dead) { cov = true; break; } }
       if (cov) { ctx.globalAlpha = .55; player.draw(ctx, camX, camY); ctx.globalAlpha = 1; } }   // atrás de árvore ou pedra: aparece a silhueta do personagem por cima
     drawRoofs(ctx, camX, camY, vw, vh, player);
+    stationBar(ctx, camX, camY);
     for (let _i68 = 0, o; _i68 < World.near.length && (o = World.near[_i68], true); _i68++) if (o.kind === 'shelter' && o.x > camX - 80 && o.x < camX + vw + 80 && o.y > camY - 20 && o.y < camY + vh + 100) { const pl = player.p, inside = Math.abs(o.x - pl.x) < 52 && Math.abs(o.y - pl.y) < 38; drawShelterRoof(ctx, o.x - camX, o.y - camY, inside ? .35 : 1); }
     if (typeof Build !== 'undefined') Build.draw(ctx, camX, camY);
     for (let i = fx.length - 1; i >= 0; i--) { const f = fx[i]; f.t += .016; if (f.t > .45) { fx.splice(i, 1); continue; } ctx.globalAlpha = 1 - f.t / .45; Assets.draw(ctx, f.k, 'rot', '_', 0, f.x - camX, f.y - camY + 16, (f.small ? .8 : .55) * (.6 + f.t * 1.6)); } ctx.globalAlpha = 1;
@@ -3373,33 +3536,35 @@ const Entities = (() => {
     else if (Math.hypot(P.x - x, P.y - y) < 160) Save.flash('⚡ Raio muito perto!');
   }
   return { snap: snapAnimals, counts: () => { const c = {}; for (const a of animals) if (!a.dead && !a.script) c[a.kind] = (c[a.kind] || 0) + 1; return c; }, strike, bearMem: () => animals.filter(o => o.kind === 'bear').map((b, i) => (b.mem || bearMemSaved[i] || []).slice(-4).map(q => [Math.round(q.x), Math.round(q.y), q.s])), setBearMem: arr => { arr = Array.isArray(arr) ? arr : []; if (arr.length && Array.isArray(arr[0]) && typeof arr[0][0] === 'number') arr = [arr];   // save antigo: lista só do primeiro urso
-      bearMemSaved = arr.map(l => (Array.isArray(l) ? l : []).slice(-4).map(q => ({ x: q[0], y: q[1], s: q[2] || 3 }))); let i = 0; for (let _i71 = 0, b; _i71 < animals.length && (b = animals[_i71], true); _i71++) if (b.kind === 'bear') { b.mem = (bearMemSaved[i++] || []).map(q => ({ x: q.x, y: q.y, s: q.s })); } }, _dens: () => dens, _deerKick: deerKick, setVis: (st, sn) => { visStand = !!st; visSneak = !!sn; }, _tracks: () => tracks, _HAB: HAB, _noise: emitNoise, _dirOf: dirOf, _drops: () => drops, drawBridge, dropLog, useBandage, init, update, draw, bleed, icon, eat, drop, placeItem, toggleHand: () => { if (craftEl.style.display === 'block') closeCraft(); else openCraft('hand'); },  MAX, cam, drawPiece, _corpses: () => corpses, attack, use, placeFire, nearestAnimal, inv, eqSet: () => eqInfo().set, refresh: (force) => { if (force) toolsEl.dataset.sig = ''; showHud(); }, _animals: () => animals, regrow: () => regrow, setRegrow: a => { regrow = Array.isArray(a) ? a : []; },
+      bearMemSaved = arr.map(l => (Array.isArray(l) ? l : []).slice(-4).map(q => ({ x: q[0], y: q[1], s: q[2] || 3 }))); let i = 0; for (let _i71 = 0, b; _i71 < animals.length && (b = animals[_i71], true); _i71++) if (b.kind === 'bear') { b.mem = (bearMemSaved[i++] || []).map(q => ({ x: q.x, y: q.y, s: q.s })); } }, _dens: () => dens, _deerKick: deerKick, setVis: (st, sn) => { visStand = !!st; visSneak = !!sn; }, _tracks: () => tracks, _HAB: HAB, _noise: emitNoise, _dirOf: dirOf, _drops: () => drops, drawBridge, dropLog, useBandage, init, update, draw, bleed, icon, eat, drop, placeItem, room, slotsUsed, cqSave: () => CQ.map(q => [q.id, q.n, Math.round(q.t * 10) / 10, q.st]), cqLoad: a => { CQ = Array.isArray(a) ? a.filter(q => RBY[q[0]]).map(q => ({ id: q[0], n: q[1] | 0, t: +q[2] || 0, T: RMETA[q[0]][2], st: q[3] === 'carp' ? 'carp' : 'bench' })).filter(q => q.n > 0) : []; }, bagCap, STACK, loadInv: d => { invLoading = true; try { Object.assign(invRaw, d); } finally { invLoading = false; } }, toggleHand: () => { if (craftEl.style.display === 'block') closeCraft(); else openCraft('hand'); },  MAX, cam, drawPiece, _corpses: () => corpses, attack, use, placeFire, nearestAnimal, inv, eqSet: () => eqInfo().set, refresh: (force) => { if (force) toolsEl.dataset.sig = ''; showHud(); }, _animals: () => animals, regrow: () => regrow, setRegrow: a => { regrow = Array.isArray(a) ? a : []; },
     tracksList: () => tracks.slice(-500).map(q => [Math.round(q.x), Math.round(q.y), q.k, +q.ang.toFixed(2), Math.round(q.t), q.g, q.life]),
     setTracks: l => { tracks = (Array.isArray(l) ? l : []).map(q => ({ x: q[0], y: q[1], k: q[2], ang: q[3], t: q[4], g: q[5], life: q[6] })); } };
 })();
 
 // Mochila: grade de itens com ícones, detalhes e ações (equipar, comer, montar, soltar).
 const Bag = (() => {
-  const SLOTS = 20, inv = Entities.inv, el = document.getElementById('bag'), btn = document.getElementById('bagbtn');
+  const inv = Entities.inv, el = document.getElementById('bag'), btn = document.getElementById('bagbtn');
   const ITEMS = [ // chave, nome, descrição, tipo
     ['axe', 'Machado', 'Corta árvores 2x mais rápido e machuca mais.', 'tool'], ['pickaxe', 'Picareta', 'Quebra pedras e dá pedra.', 'tool'], ['spear', 'Lança', 'Ataque longo e forte.', 'tool'], ['machete', 'Facão', 'Corta o mato alto (ataque perto dele) e libera a passagem.', 'tool'], ['leather', 'Couro', 'Tirado da carcaça de cervo, javali, lobo, raposa e urso. Guarde: vai servir para as armaduras.', 'res'],
     ['campfire', 'Fogueira', 'Monte no chão: afasta lobos, ilumina a noite e cozinha carne.', 'place'],
     ['floor', 'Piso', 'Piso de tábuas. Use no modo construção (🔨) para escolher onde pôr.', 'build'], ['wall', 'Parede', 'Parede de madeira: barra a passagem. Modo construção (🔨).', 'build'],
-    ['roof', 'Telhado', 'Telhado de palha: cobre a área e protege da chuva e do calor. Modo construção (🔨).', 'build'],
+    ['door', 'Porta', 'Porta de tábuas: abre e fecha pelo botão ✋. Fechada, barra os bichos. Modo construção (🔨).', 'build'], ['roof', 'Telhado', 'Telhado de tábuas: cobre a área e protege da chuva e do calor. Modo construção (🔨).', 'build'],
     ['shelter', 'Abrigo', 'Telhado de palha: protege da chuva e do calor.', 'place'],
     ['chest', 'Baú', 'Guarda recursos e comida. Chegue perto e use.', 'place'],
-    ['bench', 'Bancada', 'Mesa de trabalho: monte no chão e use para criar coisas mais difíceis.', 'place'],
-    ['wood', 'Madeira', 'Material de criação e lenha para a fogueira.', 'res'], ['fiber', 'Fibra', 'Material de criação.', 'res'], ['stone', 'Pedra', 'Material de criação.', 'res'],
-    ['bandage', 'Bandagem', 'Estanca o sangramento dos arranhões de lobo.', 'heal'], ['plank', 'Tábua', 'Madeira serrada: usada em piso, parede e telhado. Corte toras com o machado.', 'res'], ['twig', 'Galho', 'Combustível rápido da fogueira (+30 s).', 'res'], ['skewer', 'Espeto', 'Espete a carne para assar na fogueira. Volta para a mochila quando você retira a carne.', 'res'], ['canteen', 'Cantil', 'Guarda 3 goles de água. Encha no mar (perto da água, sem sede) e ferva na fogueira.', 'misc'], ['water', 'Água fervida', 'Segura e sem doença: mata 45 de sede e cura a doença.', 'drink'], ['apple', 'Maçã', 'Recupera 12 de vida e um pouco de sede.', 'food'], ['straw', 'Palha', 'Folhas de coqueiro cortadas: telhado e abrigo de palha. Corte a copa de um coqueiro caído.', 'res'], ['coconut', 'Coco', 'Mata 22 de sede e recupera 8 de vida. Sacuda um coqueiro para cair.', 'food'], ['meat', 'Carne crua', 'Recupera 25 de vida. Cozinhe na fogueira para render mais.', 'food'], ['cooked', 'Carne cozida', 'Recupera 40 de vida.', 'food']
+    ['bench', 'Bancada', 'Mesa de trabalho: monte no chão e use para criar coisas mais difíceis.', 'place'], ['carp', 'Bancada de carpinteiro', 'Monte no chão e use para serrar madeira em tábuas.', 'place'],
+    ['rope', 'Corda', 'Fibra trançada na bancada. Usada na mochila reforçada.', 'res'], ['wood', 'Madeira', 'Material de criação e lenha para a fogueira.', 'res'], ['fiber', 'Fibra', 'Material de criação. Sai do mato alto cortado com o facão (às vezes).', 'res'], ['stone', 'Pedra', 'Material de criação.', 'res'],
+    ['bandage', 'Bandagem', 'Estanca o sangramento dos arranhões de lobo.', 'heal'], ['plank', 'Tábua', 'Madeira serrada: reforça parede e porta para o nível 2. Serre a madeira na bancada de carpinteiro.', 'res'], ['twig', 'Galho', 'Combustível rápido da fogueira (+30 s).', 'res'], ['skewer', 'Espeto', 'Espete a carne para assar na fogueira. Volta para a mochila quando você retira a carne.', 'res'], ['canteen', 'Cantil', 'Guarda 3 goles de água. Encha no mar (perto da água, sem sede) e ferva na fogueira.', 'misc'], ['water', 'Água fervida', 'Segura e sem doença: mata 45 de sede e cura a doença.', 'drink'], ['apple', 'Maçã', 'Recupera 12 de vida e um pouco de sede.', 'food'], ['straw', 'Palha', 'Folhas de coqueiro cortadas: telhado e abrigo de palha. Corte a copa de um coqueiro caído.', 'res'], ['coconut', 'Coco', 'Mata 22 de sede e recupera 8 de vida. Sacuda um coqueiro para cair.', 'food'], ['meat', 'Carne crua', 'Recupera 25 de vida. Cozinhe na fogueira para render mais.', 'food'], ['cooked', 'Carne cozida', 'Recupera 40 de vida.', 'food']
   ];
   let sel = null, open = false;
   const have = k => (k === 'axe' || k === 'pickaxe' || k === 'spear' || k === 'machete') ? !!inv[k] : inv[k] > 0;
   let sig = '';
   function render() {
     sig = JSON.stringify(inv) + sel;
-    const list = ITEMS.filter(i => have(i[0])), used = list.length;
-    let h = `<div class="bh"><b>🎒 Mochila</b><span class="bc">${used}/${SLOTS}</span><span id="bx">✕</span></div><div class="bg">`;
-    for (let n = 0; n < SLOTS; n++) { const it = list[n]; h += it ? `<div class="bs${sel === it[0] ? ' on' : ''}${inv.eq === it[0] ? ' eqd' : ''}" data-k="${it[0]}"><i></i>${it[3] === 'tool' || it[3] === 'misc' ? '' : `<em>${inv[it[0]]}</em>`}</div>` : '<div class="bs empty"></div>'; }
+    const S = Entities.STACK, CAP = Entities.bagCap(), list = [];   /* cada pilha de até 20 ocupa um espaço */
+    for (const it of ITEMS) { if (it[0] === 'water' || !have(it[0])) continue; if (it[3] === 'tool' || it[3] === 'misc') { list.push([it, 0]); continue; } let n = inv[it[0]] | 0; while (n > 0) { list.push([it, Math.min(S, n)]); n -= S; } }
+    const used = Entities.slotsUsed(), LV = ['Sem mochila', 'Mochila', 'Mochila reforçada'][inv.bag | 0];
+    let h = `<div class="bh"><b>🎒 ${LV}</b><span class="bc">${used}/${CAP}</span><span id="bx">✕</span></div><div class="bg">`;
+    for (let n = 0; n < Math.max(CAP, list.length); n++) { const e = list[n], it = e && e[0]; h += it ? `<div class="bs${sel === it[0] ? ' on' : ''}${inv.eq === it[0] ? ' eqd' : ''}${e[1] >= S ? ' fullst' : ''}" data-k="${it[0]}"><i></i>${it[3] === 'tool' || it[3] === 'misc' ? '' : `<em>${e[1]}</em>`}</div>` : '<div class="bs empty"></div>'; }
     h += '</div>'; const it = ITEMS.find(i => i[0] === sel && have(i[0]));
     if (it) { const [k, name, desc, type] = it; h += `<div class="bd"><b>${name}</b>${type !== 'tool' && type !== 'misc' ? ` · ${inv[k]}` : ''}<br><small>${desc}${k === 'canteen' ? ` <br>Suja: ${inv.dirty} · Fervida: ${inv.water}` : ''}</small><div class="ba">`;
       if (type === 'tool') h += `<button data-a="eq">${inv.eq === k ? 'Guardar' : 'Equipar'}</button>`;
@@ -3500,7 +3665,7 @@ const Chest = (() => {
     document.getElementById('cxx').onclick = close;
   }
   function move(t, from) {
-    if (from === 'c') { const q = Math.min(cur.items[t] || 0, Entities.MAX[t] - inv[t]); if (q <= 0) { Save.flash('Mochila cheia'); return; } cur.items[t] -= q; inv[t] += q; }
+    if (from === 'c') { const q = Math.min(cur.items[t] || 0, Entities.room(t)); if (q <= 0) { Save.flash('Mochila cheia'); return; } cur.items[t] -= q; inv[t] += q; }
     else { const q = Math.min(inv[t], CAP - (cur.items[t] || 0)); if (q <= 0) { Save.flash('Baú cheio'); return; } inv[t] -= q; cur.items[t] = (cur.items[t] || 0) + q; }
     Entities.refresh(); render();
   }
@@ -3551,7 +3716,7 @@ const FireMenu = (() => {
   function act(b) {
     const a = b.dataset.a, i = +b.dataset.i, p = Player.p; if (!f) return;
     if (a === 'meat' && lit() && inv.meat > 0 && inv.skewer > 0 && (f.cook[i] === null || f.cook[i] === undefined)) { inv.meat--; inv.skewer--; f.cook[i] = COOK; f.smell = 45; Entities.refresh(); }
-    else if (a === 'take' && f.cook[i] === 0) { if (inv.cooked >= Entities.MAX.cooked) { Save.flash('Mochila cheia'); return; } inv.cooked++; inv.skewer = Math.min(Entities.MAX.skewer, inv.skewer + 1); f.cook[i] = null; Entities.refresh(); }
+    else if (a === 'take' && f.cook[i] === 0) { if (!(Entities.room('cooked') > 0)) { Save.flash('🎒 Mochila cheia'); return; } inv.cooked++; inv.skewer = Math.min(Entities.MAX.skewer, inv.skewer + 1); f.cook[i] = null; Entities.refresh(); }
     else if (a === 'boil' && lit() && inv.dirty > 0 && !(f.boilT > 0) && !(f.waterReady > 0)) { f.boilN = inv.dirty; inv.dirty = 0; f.boilT = BOIL; f.smell = Math.max(f.smell || 0, 20); }
     else if (a === 'water' && f.waterReady > 0) { const n = Math.min(f.waterReady, 3 - inv.water - inv.dirty); if (n <= 0) { Save.flash('Mochila cheia'); return; } inv.water += n; f.waterReady -= n; Entities.refresh(); }
     else if (a === 'drink') Entities.eat('water');
@@ -3571,20 +3736,22 @@ const FireMenu = (() => {
 
 // Modo construção: escolha a peça (piso, parede, cerca, telhado), toque no mapa para posicionar o fantasma e confirme em ✔.
 const Build = (() => {
-  const G = 32, inv = Entities.inv, bar = document.getElementById('build'), btn = document.getElementById('buildbtn');
-  const PIECES = { floor: ['Piso', 'cell'], wall: ['Parede', 'edge'], fence: ['Cerca', 'edge'], roof: ['Telhado', 'cell'], bridge: ['Ponte', 'vertex'] };
-  const ORDER = ['floor', 'wall', 'fence', 'roof', 'bridge'], TL = CONFIG.TILE, BPLANKS = 2, cnt = k => k === 'bridge' ? Math.floor(inv.plank / BPLANKS) : inv[k];   // ponte: 2 tábuas cada
-  let on = false, piece = 'floor', vert = false, remove = false, turn = false, gx = 0, gy = 0, ok = false, why = '';
+  const GS = k => k === 'fence' ? 32 : 64 /* construção em grade de 64; a cerca continua na de 32 */, inv = Entities.inv, bar = document.getElementById('build'), btn = document.getElementById('buildbtn');
+  const PIECES = { floor: ['Piso', 'cell'], wall: ['Parede', 'edge'], door: ['Porta', 'edge'], fence: ['Cerca', 'edge'], roof: ['Telhado', 'cell'], bridge: ['Ponte', 'vertex'] };
+  const ORDER = ['floor', 'wall', 'door', 'roof', 'fence', 'bridge'], TL = CONFIG.TILE, BPLANKS = 2, cnt = k => k === 'bridge' ? Math.floor(inv.plank / BPLANKS) : inv[k];   // ponte: 2 tábuas cada
+  let on = false, piece = 'floor', vert = false, remove = false, turn = false, upg = false, gx = 0, gy = 0, ok = false, why = '';
+  const UPC = 2, DUR = [0, 60, 180];   /* reforçar parede/porta: 2 tábuas; durabilidade nível 1 = 60, nível 2 = 180 (3x) */
   const REACH = 300;
-  function snapFor(kind, v, wx, wy) { return v ? [Math.round(wx / G) * G, (Math.floor(wy / G) + .5) * G] : [(Math.floor(wx / G) + .5) * G, Math.round(wy / G) * G]; }
-  function snap(wx, wy) {
+  function snapFor(kind, v, wx, wy) { const G = GS(kind); return v ? [Math.round(wx / G) * G, (Math.floor(wy / G) + .5) * G] : [(Math.floor(wx / G) + .5) * G, Math.round(wy / G) * G]; }
+  function snap(wx, wy) { const G = GS(piece); if (piece === 'door') vert = false;
     if (piece === 'bridge') return [Math.round(wx / TL) * TL, Math.round(wy / TL) * TL];
     if (PIECES[piece][1] === 'cell') return [(Math.floor(wx / G) + .5) * G, (Math.floor(wy / G) + .5) * G];
     return vert ? [Math.round(wx / G) * G, (Math.floor(wy / G) + .5) * G] : [(Math.floor(wx / G) + .5) * G, Math.round(wy / G) * G];
   }
-  function solidBox(kind, v) { return kind === 'wall' ? (v ? [5, 17] : [17, 6]) : kind === 'fence' ? (v ? [6, 24] : [24, 6]) : null; }
+  function solidBox(kind, v) { return kind === 'wall' || kind === 'door' ? (v ? [5, 32] : [32, 6]) : kind === 'fence' ? (v ? [6, 24] : [24, 6]) : null; }
   function check() {
     const P = Player.p; ok = false;
+    if (upg) { const f = findAt(gx, gy), w = f && (f.kind === 'wall' || f.kind === 'door'); ok = !!w && f.lv !== 2 && inv.plank >= UPC; why = !w ? 'Toque numa parede ou porta para reforçar' : f.lv === 2 ? 'Já está no nível 2' : ok ? '' : 'Precisa de ' + UPC + ' tábuas (bancada de carpinteiro)'; return; }
     if (remove) { const f = findAt(gx, gy); ok = !!f && !f.nat; why = !f ? 'Nada para remover aqui' : f.nat ? 'Essa ponte natural não sai' : ''; return; }
     if (turn) { const t = findAt(gx, gy); ok = !!(t && (t.kind === 'wall' || t.kind === 'fence')); why = ok ? '' : 'Toque numa parede ou cerca para girar'; return; }
     if (piece === 'bridge') {
@@ -3596,30 +3763,33 @@ const Build = (() => {
     if (piece !== 'fence' && !(inv[piece] > 0)) { why = 'Sem ' + PIECES[piece][0].toLowerCase() + ' na mochila'; return; }
     if (Math.hypot(gx - P.x, gy - P.y) > REACH) { why = 'Longe demais'; return; }
     if (!World.land(gx, gy)) { why = 'Não dá para construir na água'; return; }
-    for (let _i72 = 0, o; _i72 < World.objs.length && (o = World.objs[_i72], true); _i72++) if (o.kind === piece && Math.abs(o.x - gx) < 3 && Math.abs(o.y - gy) < 3 && !!o.vert === (PIECES[piece][1] === 'edge' ? vert : false)) { why = 'Já tem uma peça aqui'; return; }
+    { const ex = same(piece, gx, gy, vert); if (ex) { if (piece === 'wall' && (ex.h || 1) < 2) { /* parede em cima de parede/porta: vira parede dupla */ } else { why = piece === 'wall' ? 'Já tem 2 de altura aqui' : 'Já tem uma peça aqui'; return; } } }
     const sb = solidBox(piece, vert); if (sb && Math.abs(P.x - gx) < sb[0] + 12 && Math.abs(P.y - gy) < sb[1] + 12) { why = 'Você está no caminho'; return; }
     ok = true; why = '';
   }
-  function findAt(x, y) { let b = null, bd = 30; for (let _i73 = 0, o; _i73 < World.objs.length && (o = World.objs[_i73], true); _i73++) if (o.kind in PIECES) { const d = Math.hypot(o.x - x, o.y - y); if (d < bd) { bd = d; b = o; } } return b; }
+  function same(k, x, y, v) { const W = k === 'wall' || k === 'door'; for (let i = 0; i < World.objs.length; i++) { const o = World.objs[i]; if (o.dead || !(W ? (o.kind === 'wall' || o.kind === 'door') : o.kind === k)) continue; if (Math.abs(o.x - x) < 3 && Math.abs(o.y - y) < 3 && !!o.vert === (PIECES[k][1] === 'edge' ? v : false)) return o; } return null; }
+  function findAt(x, y) { let b = null, bd = 44; for (let _i73 = 0, o; _i73 < World.objs.length && (o = World.objs[_i73], true); _i73++) if (o.kind in PIECES) { const d = Math.hypot(o.x - x, o.y - y); if (d < bd) { bd = d; b = o; } } return b; }
   function tap(cx, cy) {
     if (!on) return; const c = Entities.cam, wx = c.x + cx / window.VK, wy = c.y + cy / window.VK;
-    if (remove || turn) { gx = wx; gy = wy; } else [gx, gy] = snap(wx, wy);
+    if (remove || turn || upg) { gx = wx; gy = wy; } else [gx, gy] = snap(wx, wy);
     check(); if (!ok && why) Save.flash(why);
   }
   function confirm() {
     check(); if (!ok) { if (why) Save.flash(why); return; }
-    if (remove) { const o = findAt(gx, gy); if (o) { o.dead = true; if (o.kind === 'bridge') inv.plank++; else if (o.kind === 'fence') { for (let i = 0; i < (o.stage || 0); i++) World.add({ kind: 'log', x: o.x + (i - 1) * 14, y: o.y + 10 + i * 6, ph: 0 }); } else inv[o.kind]++; Entities.refresh(); render(); } return; }
+    if (upg) { const o = findAt(gx, gy); o.lv = 2; inv.plank -= UPC; Entities.refresh(); Save.save(true); Save.flash('🪚 Reforçada: nível 2 (durabilidade ' + DUR[2] + ')'); render(); check(); return; }
+    if (remove) { const o = findAt(gx, gy); if (o && o.lv === 2 && !((o.h || 1) > 1)) inv.plank += UPC; if (o && (o.kind === 'wall' || o.kind === 'door') && (o.h || 1) > 1) { o.h = 1; inv.wall++; Entities.refresh(); Save.save(true); render(); return; } if (o) { o.dead = true; if (o.kind === 'bridge') inv.plank++; else if (o.kind === 'fence') { for (let i = 0; i < (o.stage || 0); i++) World.add({ kind: 'log', x: o.x + (i - 1) * 14, y: o.y + 10 + i * 6, ph: 0 }); } else inv[o.kind]++; Entities.refresh(); render(); } return; }
     if (turn) {
       const o = findAt(gx, gy), P = Player.p, nv = !o.vert, [nx, ny] = snapFor(o.kind, nv, o.x, o.y), sb = solidBox(o.kind, nv);
       if (Math.abs(P.x - nx) < sb[0] + 12 && Math.abs(P.y - ny) < sb[1] + 12) { Save.flash('Você está no caminho'); return; }
       for (let _i74 = 0, q; _i74 < World.objs.length && (q = World.objs[_i74], true); _i74++) if (q !== o && q.kind === o.kind && Math.abs(q.x - nx) < 3 && Math.abs(q.y - ny) < 3 && !!q.vert === nv) { Save.flash('Já tem uma peça lá'); return; }
       o.vert = nv; o.x = nx; o.y = ny; o.bw = sb[0]; o.bh = sb[1]; gx = nx; gy = ny; Save.save(true); Save.flash(nv ? '↕ Girada' : '↔ Girada'); return;
     }
+    { const ex = piece === 'wall' ? same('wall', gx, gy, vert) : null; if (ex) { ex.h = 2; inv.wall--; Entities.refresh(); Save.save(true); Save.flash('Parede dupla'); render(); check(); return; } }
     const o = { kind: piece, x: gx, y: gy, ph: 0 }; const sb = solidBox(piece, vert);
     if (sb) { o.solid = piece !== 'fence'; o.vert = vert; o.bw = sb[0]; o.bh = sb[1]; if (piece === 'fence') o.stage = 0; }
     World.add(o); if (piece === 'bridge') inv.plank -= BPLANKS; else if (piece !== 'fence') inv[piece]--; Entities.refresh(); Save.save(true); render(); check();
   }
-  function rotate() { vert = !vert; [gx, gy] = snap(gx, gy); check(); render(); }
+  function rotate() { vert = piece === 'door' ? false : !vert; [gx, gy] = snap(gx, gy); check(); render(); }
   function open(p) {
     on = true; if (p && PIECES[p]) piece = p; remove = false; turn = false; document.body.classList.add('building'); bar.style.display = 'flex'; btn.classList.add('on');
     const P = Player.p, v = { south: [0, 1], 'south-west': [-.7, .7], west: [-1, 0], 'north-west': [-.7, -.7], north: [0, -1], 'north-east': [.7, -.7], east: [1, 0], 'south-east': [.7, .7] }[P.dir] || [0, 1];
@@ -3629,21 +3799,21 @@ const Build = (() => {
   function toggle() { on ? close() : open(); }
   let sig = '';
   function render() {
-    sig = ORDER.map(cnt).join() + piece + remove + turn + vert;
+    sig = ORDER.map(cnt).join() + piece + remove + turn + vert + upg + inv.plank;
     let h = '';
-    for (const k of ORDER) h += `<div class="bp${!remove && !turn && piece === k ? ' on' : ''}" data-k="${k}"><i></i><em>${k === 'fence' ? '🪵' : cnt(k)}</em><small>${PIECES[k][0]}</small></div>`;
-    h += `<div class="bt" data-a="rot">${vert ? '↕' : '↔'}<small>Girar</small></div><div class="bt${turn ? ' on' : ''}" data-a="turn">↻<small>Girar peça</small></div><div class="bt${remove ? ' on' : ''}" data-a="rem">🗑<small>Remover</small></div><div class="bt ok" data-a="ok">✔<small>Colocar</small></div><div class="bt" data-a="x">✕<small>Sair</small></div>`;
+    for (const k of ORDER) h += `<div class="bp${!remove && !turn && !upg && piece === k ? ' on' : ''}" data-k="${k}"><i></i><em>${k === 'fence' ? '🪵' : cnt(k)}</em><small>${PIECES[k][0]}</small></div>`;
+    h += `<div class="bt" data-a="rot">${vert ? '↕' : '↔'}<small>Girar</small></div><div class="bt${turn ? ' on' : ''}" data-a="turn">↻<small>Girar peça</small></div><div class="bt${upg ? ' on' : ''}" data-a="up">🪚<small>Melhorar</small></div><div class="bt${remove ? ' on' : ''}" data-a="rem">🗑<small>Remover</small></div><div class="bt ok" data-a="ok">✔<small>Colocar</small></div><div class="bt" data-a="x">✕<small>Sair</small></div>`;
     bar.innerHTML = h;
-    bar.querySelectorAll('.bp').forEach(b => { b.firstChild.replaceWith(Entities.icon(b.dataset.k)); b.onclick = e => { e.stopPropagation(); piece = b.dataset.k; remove = false; turn = false; [gx, gy] = snap(gx, gy); check(); render(); }; });
-    bar.querySelectorAll('.bt').forEach(b => b.onclick = e => { e.stopPropagation(); const a = b.dataset.a; if (a === 'rot') rotate(); else if (a === 'rem') { remove = !remove; turn = false; check(); render(); } else if (a === 'turn') { turn = !turn; remove = false; check(); render(); } else if (a === 'ok') confirm(); else close(); });
+    bar.querySelectorAll('.bp').forEach(b => { b.firstChild.replaceWith(Entities.icon(b.dataset.k)); b.onclick = e => { e.stopPropagation(); piece = b.dataset.k; remove = false; turn = false; upg = false; [gx, gy] = snap(gx, gy); check(); render(); }; });
+    bar.querySelectorAll('.bt').forEach(b => b.onclick = e => { e.stopPropagation(); const a = b.dataset.a; if (a === 'rot') rotate(); else if (a === 'rem') { remove = !remove; turn = false; upg = false; check(); render(); } else if (a === 'up') { upg = !upg; remove = false; turn = false; check(); render(); } else if (a === 'turn') { turn = !turn; remove = false; upg = false; check(); render(); } else if (a === 'ok') confirm(); else close(); });
   }
   function draw(ctx, camX, camY) {
     if (!on) return; const x = gx - camX, y = gy - camY, col = ok ? '#4dff6a' : '#ff4d4d';
-    // grade de 32 px ao redor para ajudar a alinhar
-    { const cx0 = Math.floor(gx / G) - 6, cy0 = Math.floor(gy / G) - 4; ctx.strokeStyle = 'rgba(255,255,255,.16)'; ctx.lineWidth = 1; ctx.beginPath(); for (let i = 0; i <= 12; i++) { const gxl = Math.round((cx0 + i) * G - camX) + .5; ctx.moveTo(gxl, Math.round(cy0 * G - camY)); ctx.lineTo(gxl, Math.round((cy0 + 8) * G - camY)); } for (let j = 0; j <= 8; j++) { const gyl = Math.round((cy0 + j) * G - camY) + .5; ctx.moveTo(Math.round(cx0 * G - camX), gyl); ctx.lineTo(Math.round((cx0 + 12) * G - camX), gyl); } ctx.stroke(); }
-    if (remove || turn) { ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(Math.round(x), Math.round(y), 16, 0, 6.283); ctx.stroke(); return; }
+    // grade ao redor para ajudar a alinhar
+    { const G = GS(piece), nx = G === 32 ? 12 : 8, ny = G === 32 ? 8 : 6, cx0 = Math.floor(gx / G) - nx / 2, cy0 = Math.floor(gy / G) - ny / 2; ctx.strokeStyle = 'rgba(255,255,255,.16)'; ctx.lineWidth = 1; ctx.beginPath(); for (let i = 0; i <= nx; i++) { const gxl = Math.round((cx0 + i) * G - camX) + .5; ctx.moveTo(gxl, Math.round(cy0 * G - camY)); ctx.lineTo(gxl, Math.round((cy0 + ny) * G - camY)); } for (let j = 0; j <= ny; j++) { const gyl = Math.round((cy0 + j) * G - camY) + .5; ctx.moveTo(Math.round(cx0 * G - camX), gyl); ctx.lineTo(Math.round((cx0 + nx) * G - camX), gyl); } ctx.stroke(); }
+    if (remove || turn || upg) { ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(Math.round(x), Math.round(y), 16, 0, 6.283); ctx.stroke(); return; }
     ctx.globalAlpha = .6; if (piece === 'bridge') Entities.drawBridge(ctx, x, y, gx, gy, false); else Entities.drawPiece(ctx, piece, x, y, vert, true); ctx.globalAlpha = 1;
-    const sb = piece === 'bridge' ? [32, 32] : piece === 'floor' || piece === 'roof' ? [16, 16] : solidBox(piece, vert); ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.strokeRect(Math.round(x - sb[0]) + 1, Math.round(y - sb[1]) + 1, sb[0] * 2 - 2, sb[1] * 2 - 2);
+    const sb = piece === 'bridge' ? [32, 32] : piece === 'floor' || piece === 'roof' ? [32, 32] : solidBox(piece, vert); ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.strokeRect(Math.round(x - sb[0]) + 1, Math.round(y - sb[1]) + 1, sb[0] * 2 - 2, sb[1] * 2 - 2);
   }
   const go = e => { e.preventDefault(); e.stopPropagation(); toggle(); };
   btn.addEventListener('touchstart', go, { passive: false }); btn.addEventListener('mousedown', go);
@@ -3660,7 +3830,7 @@ const Weather = (() => {
   function set(s) { state = s; timer = s === 'clear' ? 180 + Math.random() * 180 : s === 'hot' ? 900 : 150 + Math.random() * 150; }
   function sheltered(p) {
     for (let _i75 = 0, o; _i75 < World.near.length && (o = World.near[_i75], true); _i75++) if ((o.kind === 'pine' || o.kind === 'fir' || o.kind === 'oak' || o.kind === 'palm' || o.kind === 'appletree') && o.fall === undefined && Math.abs(o.x - p.x) < 70 && p.y > o.y - 30 && p.y < o.y + 80) return true;
-    for (let _i76 = 0, o; _i76 < World.near.length && (o = World.near[_i76], true); _i76++) if (o.kind === 'roof' && Math.abs(o.x - p.x) < 26 && Math.abs(o.y - p.y) < 26) return true;
+    for (let _i76 = 0, o; _i76 < World.near.length && (o = World.near[_i76], true); _i76++) if (o.kind === 'roof' && Math.abs(o.x - p.x) < 33 && Math.abs(o.y - p.y) < 34) return true;
     for (let _i77 = 0, o; _i77 < World.near.length && (o = World.near[_i77], true); _i77++) if ((o.kind === 'shelter' && Math.abs(o.x - p.x) < 52 && Math.abs(o.y - p.y) < 38) || (o.kind === 'camptent' && Math.abs(o.x - p.x) < 60 && p.y > o.y - 40 && p.y < o.y + 50)) return true;
     return false;
   }
@@ -3791,14 +3961,14 @@ const Weather = (() => {
 
 // Salvamento automático no celular (localStorage): a cada 10 s, ao sair da aba e depois de ações importantes.
 const Save = (() => {
-  const KEY = LOCKEY(LOC), VER = 2, SOLID = { camptent: 1, campmesa: 1, campvaral: 1, camptree: 1, fir: 1, boulder: 1, pine: 1, oak: 1, palm: 1, dead: 1, appletree: 1, rock: 1, bench: 1, fence: 1, chest: 1, wall: 1 };
+  const KEY = LOCKEY(LOC), VER = 2, SOLID = { camptent: 1, campmesa: 1, campvaral: 1, camptree: 1, fir: 1, boulder: 1, pine: 1, oak: 1, palm: 1, dead: 1, appletree: 1, rock: 1, bench: 1, fence: 1, chest: 1, wall: 1, door: 1, carp: 1 };
   let toast = null, tT = 0, resetT = 0;
   function pack() {
     const P = Player.p, inv = Entities.inv;
     return { v: VER, seed: CONFIG.SEED, w: CONFIG.WORLD_W, h: CONFIG.WORLD_H, at: Date.now(), tod: Weather.tod(), day: Weather.day(),
-      p: { x: Math.round(P.x), y: Math.round(P.y), hp: P.hp, thirst: P.thirst, dir: P.dir, bleed: !!P.bleeding, carry: P.carry || false, sick: Math.round(P.sick || 0), food: Math.round(P.food ?? 100), warm: Math.round(P.warm ?? 100) }, inv: Object.assign({}, inv), bm: Entities.bearMem(),
+      p: { x: Math.round(P.x), y: Math.round(P.y), hp: P.hp, thirst: P.thirst, dir: P.dir, bleed: !!P.bleeding, carry: P.carry || false, sick: Math.round(P.sick || 0), food: Math.round(P.food ?? 100), warm: Math.round(P.warm ?? 100) }, inv: Object.assign({}, inv), cq: Entities.cqSave(), bm: Entities.bearMem(),
       wn: World.wornList(), tk: Entities.tracksList(), ac: LOCS[LOC].fixed ? Entities.counts() : undefined,
-      objs: World.objs.filter(o => o.fall === undefined && !o.dead && !o.broken).map(o => [o.kind, Math.round(o.x), Math.round(o.y), o.kind === 'mato' ? Math.round(o.cutT || 0) : o.kind.startsWith('sap') ? Math.round(o.g || 0) : o.kind === 'bridge' ? (o.nat ? 1 : 0) : (o.kind === 'fence' || o.kind === 'wall') ? (o.vert ? 1 : 0) : o.palmStump || o.palm ? 1 : (o.hp === undefined ? null : o.hp), o.kind === 'fence' ? o.stage : o.kind === 'palm' ? o.co : o.kind === 'fire' ? { d: o.dmg || 0, c: o.cook || null, b: o.boilT || 0, n: o.boilN || 0, w: o.waterReady || 0 } : (o.ap || o.items || null), o.coT ? o.coT.map(v => Math.round(v)) : o.apT ? o.apT.map(v => Math.round(v)) : null]), rg: Entities.regrow().map(g => [Math.round(g.x), Math.round(g.y), Math.round(g.t)]) };
+      objs: World.objs.filter(o => o.fall === undefined && !o.dead && !o.broken).map(o => [o.kind, Math.round(o.x), Math.round(o.y), o.kind === 'mato' ? Math.round(o.cutT || 0) : o.kind.startsWith('sap') ? Math.round(o.g || 0) : o.kind === 'bridge' ? (o.nat ? 1 : 0) : (o.kind === 'fence' || o.kind === 'wall') ? (o.vert ? 1 : 0) : o.palmStump || o.palm ? 1 : (o.hp === undefined ? null : o.hp), o.kind === 'fence' ? o.stage : (o.kind === 'wall' || o.kind === 'door') ? { h: o.h || 1, op: o.open ? 1 : 0, lv: o.lv === 2 ? 2 : 1 } : o.kind === 'palm' ? o.co : o.kind === 'fire' ? { d: o.dmg || 0, c: o.cook || null, b: o.boilT || 0, n: o.boilN || 0, w: o.waterReady || 0 } : (o.ap || o.items || null), o.coT ? o.coT.map(v => Math.round(v)) : o.apT ? o.apT.map(v => Math.round(v)) : null]), rg: Entities.regrow().map(g => [Math.round(g.x), Math.round(g.y), Math.round(g.t)]) };
   }
   let wiped = false, saveWarned = false;
   function save(quiet) {
@@ -3808,9 +3978,17 @@ const Save = (() => {
   function load(dd) {
     let d = dd || null; if (!d) try { d = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) { d = null; }
     if (!d || d.v !== VER || d.seed !== CONFIG.SEED || d.w !== CONFIG.WORLD_W || d.h !== CONFIG.WORLD_H) return false;
-    const P = Player.p; Object.assign(Entities.inv, d.inv); if (typeof d.tod === 'number') Weather.setTod(d.tod); if (typeof d.day === 'number') Weather.setDay(d.day);
+    const P = Player.p; Entities.loadInv(d.inv); Entities.cqLoad(d.cq); if (typeof d.tod === 'number') Weather.setTod(d.tod); if (typeof d.day === 'number') Weather.setDay(d.day);
     if (World.swimmable(d.p.x, d.p.y)) { P.x = d.p.x; P.y = d.p.y; } P.hp = Math.max(1, d.p.hp); P.bleeding = !!d.p.bleed; P.carry = d.p.carry || false; P.sick = d.p.sick || 0; P.thirst = d.p.thirst; P.food = d.p.food ?? 100; P.warm = d.p.warm ?? 100; P.dir = d.p.dir || 'south';
     World.setWorn(d.wn); Entities.setTracks(d.tk); if (LOCS[LOC].fixed && d.ac) window.__homeAC = d.ac;
+    { /* construções antigas (grade de 32) -> grade de 64: cada peça vai para o quadrado/borda correspondente; o que sobrar repetido volta para a mochila */
+      const m64 = v => ((v % 64) + 64) % 64, seen = new Set(), out = []; let conv = 0;
+      for (const a of d.objs) { const k = a[0];
+        if (k === 'floor' || k === 'roof') { if (m64(a[1]) !== 32 || m64(a[2]) !== 32) { a[1] = Math.floor(a[1] / 64) * 64 + 32; a[2] = Math.floor(a[2] / 64) * 64 + 32; conv++; } }
+        else if (k === 'wall') { const v = a[3] === 1; if (v ? (m64(a[2]) !== 32 || m64(a[1]) !== 0) : (m64(a[1]) !== 32 || m64(a[2]) !== 0)) { if (v) { a[1] = Math.round(a[1] / 64) * 64; a[2] = Math.floor(a[2] / 64) * 64 + 32; } else { a[1] = Math.floor(a[1] / 64) * 64 + 32; a[2] = Math.round(a[2] / 64) * 64; } conv++; } }
+        else { out.push(a); continue; }
+        const key = k + ':' + a[1] + ':' + a[2] + ':' + (k === 'wall' ? a[3] : 0); if (seen.has(key)) { Entities.inv[k] = (Entities.inv[k] | 0) + 1; continue; } seen.add(key); out.push(a); }
+      d.objs = out; if (conv) setTimeout(() => flash('🔨 Construções passadas para a grade nova (o que sobrou voltou para a mochila)'), 2500); }
     World.loadObjs(d.objs.filter(a => a[0] !== 'mato' || World.okL(a[1], a[2], 2, 2)).map(a => { const o = { kind: a[0], x: a[1], y: a[2], hp: a[3] === null ? undefined : a[3], ap: a[4] || undefined, apT: a[5] || undefined, solid: !!SOLID[a[0]], ph: Math.random() * 9 };
       if (a[0] === 'fire') { const fd = a[4] && typeof a[4] === 'object' ? a[4] : { d: typeof a[4] === 'number' ? a[4] : 0 }; o.dmg = fd.d || 0; o.cook = fd.c || undefined; o.boilT = fd.b || 0; o.boilN = fd.n || 0; o.waterReady = fd.w || 0; o.ap = undefined; o.out = !(o.hp > 0); o.outT = 99; }
       if (a[0] === 'fence') { o.vert = a[3] === 1; o.hp = undefined; o.bw = o.vert ? 6 : 24; o.bh = o.vert ? 24 : 6; o.stage = typeof a[4] === 'number' ? a[4] : 3; o.ap = undefined; o.solid = o.stage >= 3; }
@@ -3822,7 +4000,7 @@ const Save = (() => {
       if (a[0].startsWith('sap')) { o.g = a[3] || 0; o.hp = undefined; o.solid = false; }
       if (a[0] === 'mato') { o.cutT = a[3] || 0; o.hp = undefined; o.solid = false; }
       if (a[0] === 'bridge') { o.nat = a[3] === 1 || undefined; o.hp = undefined; o.solid = false; }
-      if (a[0] === 'wall') { o.vert = a[3] === 1; o.hp = undefined; o.bw = o.vert ? 5 : 17; o.bh = o.vert ? 17 : 6; }
+      if (a[0] === 'wall' || a[0] === 'door') { const e = a[4] && typeof a[4] === 'object' ? a[4] : {}; o.vert = a[0] === 'wall' && a[3] === 1; o.hp = undefined; o.ap = undefined; o.h = e.h === 2 ? 2 : 1; o.lv = e.lv === 2 ? 2 : 1; o.open = a[0] === 'door' && !!e.op; o.solid = !o.open; o.bw = o.vert ? 5 : 32; o.bh = o.vert ? 32 : 6; }
       if (a[0] === 'camptent') { o.bw = 40; o.bh = 12; } if (a[0] === 'campmesa') { o.bw = 20; o.bh = 8; } if (a[0] === 'campvaral') { o.bw = 40; o.bh = 6; } if (a[0] === 'camptree') { o.bw = 20; o.bh = 10; }
       if (a[0] === 'chest') { o.items = a[4] || {}; o.ap = undefined; o.bw = 14; o.bh = 8; }
       return o; }));
@@ -3905,7 +4083,7 @@ const Travel = (() => {
   function arrive() {
     let tv = window.__tv || null; if (!tv) try { tv = JSON.parse(localStorage.getItem('iv_travel') || 'null'); } catch (e) {} try { localStorage.removeItem('iv_travel'); } catch (e) {} try { if (location.hash) history.replaceState(null, '', location.href.split('#')[0]); } catch (e) {} if (!tv || tv.to !== LOC) return false;
     if (window.__tv) try { localStorage.setItem('iv_loc', LOC); } catch (e) {}
-    const P = Player.p, inv = Entities.inv; for (const k in inv) delete inv[k]; Object.assign(inv, tv.inv);
+    const P = Player.p, inv = Entities.inv; for (const k in inv) delete inv[k]; Entities.loadInv(tv.inv);
     Object.assign(P, { hp: Math.max(1, tv.p.hp), thirst: tv.p.thirst, food: tv.p.food, warm: tv.p.warm, sick: tv.p.sick, bleeding: tv.p.bleed, carry: false, swim: false, act: null });
     if (typeof tv.tod === 'number') Weather.setTod(tv.tod); if (typeof tv.day === 'number') Weather.setDay(tv.day);
     const rf = World.objs.find(o => o.kind === 'raft');   /* chega pela jangada: ela fica na praia do destino, com o nível da jangada que você usou */
@@ -4481,7 +4659,7 @@ const Title = (() => {
     const sync = () => { el('tcm').classList.toggle('on', sx === 'm'); el('tcf').classList.toggle('on', sx === 'f'); };
     const paint = () => { g.setTransform(1, 0, 0, 1, 0, 0); g.clearRect(0, 0, cv.width, cv.height); g.imageSmoothingEnabled = false; const sp = sx === 'f' ? 'hf' : 'hm';
       if (!Assets.hasAnim(sp, 'stand')) return; const M = Assets.meta, an = M.sprites[sp].anchor, f = M.frames[sp + '/stand/' + DIRS[di] + '/0'], f0 = M.frames[sp + '/stand/south/0']; if (!f || !f0) return;
-      const s = Math.max(1, Math.floor(cv.height * .72 / f0[3])), x = cv.width / 2 - (f[4] - an[0] + f[2] / 2) * s, y = cv.height / 2 - (f0[5] - an[1] + f0[3] / 2) * s;   /* boneco no meio do círculo, em escala inteira (pixel nítido) */
+      const s = Math.max(1, Math.round(cv.height * .72 / f0[3])), x = cv.width / 2 - (f[4] - an[0] + f[2] / 2) * s, y = cv.height / 2 - (f0[5] - an[1] + f0[3] / 2) * s;   /* boneco no meio do círculo, em escala inteira (pixel nítido) */
       Assets.draw(g, sp, 'stand', DIRS[di], 0, Math.round(x), Math.round(y), s); };
     sync(); paint(); box.classList.add('on'); tm = setInterval(() => { di = (di + 1) % 8; paint(); }, 450);
     el('tcm').onclick = () => { sx = 'm'; di = 0; sync(); paint(); }; el('tcf').onclick = () => { sx = 'f'; di = 0; sync(); paint(); };
@@ -4493,7 +4671,7 @@ const Title = (() => {
     try { if (localStorage.getItem('iv_fs') === '1') goFull(true); } catch (e) {}   // tela cheia (+ trava na horizontal)
     if (!T.active) return; T.active = false; endScene(); document.body.classList.remove('title'); el('tpanel').classList.remove('on');
     const P = Player.p; P.x = home.x; P.y = home.y; P.dir = home.dir; Weather.setTod(tod0);
-    if (!localStorage.getItem('ilhaverde_save_v1')) { P.bleeding = false; P.sick = 0; P.hp = P.maxhp; P.hurtT = 0; }   /* jogo novo: começa inteiro */
+    if (!localStorage.getItem('ilhaverde_save_v1')) { P.bleeding = false; P.sick = 0; P.hp = P.maxhp; P.hurtT = 0; Player.getUp(); }   /* jogo novo: começa inteiro, deitado e levantando */   /* jogo novo: começa inteiro */
     try { const f = World.falls[0]; if (f && !localStorage.getItem('iv_tp_falls')) { localStorage.setItem('iv_tp_falls', '1'); P.x = (f.vx + 2.5) * 64; P.y = (f.vy + 2.5) * 64; P.dir = 'west'; P.swim = false; } } catch (e) {}   // uma única vez: começa ao lado da cachoeira
     /* a tela inicial roda o mundo com o jogador-fantasma parado: lobos já podiam estar caçando/alertas. Zera isso e afasta quem está perto */
     try { P.battle = 0; for (const o of Entities._animals()) { if (o.dead) continue;
@@ -4554,7 +4732,8 @@ const Title = (() => {
     console.error(where, e); errSeen[k] = (errSeen[k] || 0) + 1; if (errSeen[k] === 1) { window.__errs.push(msg); if (window.__errs.length > 20) window.__errs.shift(); }
     if (!errBox) { errBox = document.createElement('div'); errBox.style.cssText = 'position:fixed;left:6px;right:6px;bottom:6px;z-index:99999;background:#400d;color:#fff;font:11px/1.35 monospace;padding:8px;border-radius:8px;max-height:40vh;overflow:auto;word-break:break-all;user-select:text'; errBox.onclick = () => { errBox.style.display = 'none'; }; document.body.appendChild(errBox); }
     errBox.style.display = 'block'; errBox.textContent = '⚠ Erro (toque para fechar e me mande foto):\n' + window.__errs.slice(-3).join('\n\n'); } catch (_) {} }
-  const sf = (where, f) => { try { f(); } catch (e) { reportErr(e, where); } };
+  let slD = 0, slW = '', pkW = '', pkD = 0, pkT = 0;   /* qual parte deixou o pior quadro lento (aparece no FPS como 'pico') */
+  const sf = (where, f) => { const t0 = pn(); try { f(); } catch (e) { reportErr(e, where); } const d = pn() - t0; if (d > slD) { slD = d; slW = where; } };
   function frame(now) { try { frame0(now); } catch (e) { reportErr(e, 'frame'); requestAnimationFrame(frame); } }
   function frame0(now) {
     /* taxa da tela medida o tempo todo (antes era só nos primeiros quadros, durante o carregamento, e errava: celular de 120 Hz aparecia como 45 e ficava sem limite) */
@@ -4563,9 +4742,9 @@ const Title = (() => {
     { const cm = window.FPS30 ? 1000 / 30 : cap ? 1000 / 60 : 0; if (cm) { if (now < nextT - 2) { requestAnimationFrame(frame); return; } nextT = Math.max(nextT + cm, now + cm * .5); } }   /* ritmo fixo: em 90 Hz desenha 2 de cada 3 telas = 60 FPS */
     if (window.TRAVEL_LOCK) { last = now; requestAnimationFrame(frame); return; }   /* saiu do local (mapa de viagem / carregando): o mapa atual fica desligado, sem atualizar nem desenhar */
     const dtRaw = (now - last) / 1000; last = now; const dt = Math.min(dtRaw, .05); Assets.tick(now);
-    const a0 = pn(); const TT = Title.active; if (TT) Title.update(dt);
+    slD = 0; slW = ''; const a0 = pn(); const TT = Title.active; if (TT) Title.update(dt);
     if (!Death.active && !window.TRAVEL_LOCK) { sf('mundo', () => World.tick(dt, Player.p.x, Player.p.y)); if (!TT) { sf('ataque', () => { if (window.__atkHeld && window.__atkHeld()) Entities.attack(); }); sf('jogador', () => Player.update(dt, Input.axis())); } sf('bichos', () => Entities.update(dt)); sf('mar', () => Sea.update(dt)); sf('clima', () => Weather.update(dt, vw, vh)); sf('som', () => Sfx.update(dt)); sf('rede', () => Net.update(dt)); if (!TT) sf('save', () => Save.update(dt)); } const a1 = pn();
-    { const tz = (!TT && World.onPlat(Player.p.x, Player.p.y)) ? 1.35 : 1; if (VZc !== tz) { VZc += (tz - VZc) * Math.min(1, dt * 2.5); if (Math.abs(tz - VZc) < .01) VZc = tz; if (Math.abs(VZc - (window.VZ || 1)) >= .02 || VZc === tz) { window.VZ = VZc; resize(); } } }   // vista: sobe no planalto → a tela abre
+    { const PP = Player.p, tz = (!TT && (PP.dying !== undefined || PP.dead || PP.getup !== undefined)) ? .85 : (!TT && World.onPlat(PP.x, PP.y)) ? 1.35 : 1;   /* morrendo/levantando: zoom pequeno no personagem */ if (VZc !== tz) { VZc += (tz - VZc) * Math.min(1, dt * 2.5); if (Math.abs(tz - VZc) < .01) VZc = tz; if (Math.abs(VZc - (window.VZ || 1)) >= .02 || VZc === tz) { window.VZ = VZc; resize(); } } }   // vista: sobe no planalto → a tela abre
     const cx0 = TT ? Title.cam.x - (vw > vh ? vw * .24 : 0) : Player.p.x, cy0 = TT ? Title.cam.y + (vw > vh ? 0 : vh * .1) : Player.p.y;   // na tela inicial o bicho fica fora do menu
     const camX = Math.min(Math.max(Math.round(cx0) - (vw >> 1), 0), World.size.w - vw), camY = Math.min(Math.max(Math.round(cy0) - (vh >> 1), 0), World.size.h - vh);
     if (ctx.begin) ctx.begin(); ctx.setTransform(window.RS || 1, 0, 0, window.RS || 1, 0, 0); ctx.fillStyle = '#1d5a7a'; ctx.fillRect(0, 0, vw, vh);
@@ -4573,8 +4752,8 @@ const Title = (() => {
     Sea.draw(ctx, camX, camY, vw, vh); Entities.draw(ctx, camX, camY, vw, vh, Player); const b2 = pn();
     Weather.draw(ctx, vw, vh, camX, camY); if (ctx.end) ctx.end(); const b3 = pn();
     tU += a1 - a0; tW += b1 - b0; tE += b2 - b1; tC += b3 - b2; if (dtRaw > (window.FPS30 ? .045 : .026)) spikes++;
-    frames++; fpsT += dtRaw; worst = Math.max(worst, dtRaw * 1000);
-    if (fpsT >= .5) { const f1 = x => (x / frames).toFixed(1); fpsEl.textContent = `${ctx.isGL ? 'GL · ' : ''}${Math.round(frames / fpsT)} FPS · pior ${Math.round(worst)}\nlag ${spikes}${hz ? ' · ' + hz + 'Hz' + (cap ? '→60' : '') : ''}\nJS ${f1(tU)}+${f1(tW)}+${f1(tE)}+${f1(tC)} ms${ctx.isGL ? '\n' + ctx.gpu + ' · lotes ' + (window.__glc | 0) + ' · envios ' + ctx.up + (ctx.up ? ' (' + Math.round(ctx.upPx / 1000) + 'k px)' : '') : ''}`; if (ctx.isGL) { ctx.up = 0; ctx.upPx = 0; } const fp = frames / fpsT;
+    frames++; fpsT += dtRaw; if (dtRaw * 1000 > worst) { worst = dtRaw * 1000; if (worst > 22) { let w = slW, d = slD; if (b1 - b0 > d) { d = b1 - b0; w = 'chão'; } if (b2 - b1 > d) { d = b2 - b1; w = 'desenho'; } if (b3 - b2 > d) { d = b3 - b2; w = 'envio GPU'; } if (d < 6) { w = 'fora do JS'; d = worst; } if (d > pkD || now - pkT > 3000) { pkW = w; pkD = d; pkT = now; } } }
+    if (fpsT >= .5) { const f1 = x => (x / frames).toFixed(1); fpsEl.textContent = `${ctx.isGL ? 'GL · ' : ''}${Math.round(frames / fpsT)} FPS · pior ${Math.round(worst)}\nlag ${spikes}${hz ? ' · ' + hz + 'Hz' + (cap ? '→60' : '') : ''}\nJS ${f1(tU)}+${f1(tW)}+${f1(tE)}+${f1(tC)} ms${pkW && now - pkT < 3000 ? ' · pico: ' + pkW + ' ' + Math.round(pkD) : ''}${ctx.isGL ? '\n' + ctx.gpu + ' · lotes ' + (window.__glc | 0) + ' · envios ' + ctx.up + (ctx.up ? ' (' + Math.round(ctx.upPx / 1000) + 'k px)' : '') : ''}`; if (ctx.isGL) { ctx.up = 0; ctx.upPx = 0; } const fp = frames / fpsT;
       if (ctx.isGL && !window.TRAVEL_LOCK && !document.hidden && performance.now() > 20000) { const js = (tU + tW + tE + tC) / frames; if (fp < (window.FPS30 ? 18 : 25) && js < 6) glBad++; else glBad = Math.max(0, glBad - 2);   /* ~8 s seguidos assim -> o aparelho trava no WebGL */
         if (glBad >= 16) { glBad = -1e9; try { localStorage.setItem('iv_gl2', 'auto'); } catch (e) {} Save.flash('⚙️ Este celular roda melhor no modo Normal: trocando...'); try { Save.save(true); } catch (e) {} setTimeout(() => location.reload(), 1200); } } if (!TT && fp < (window.FPS30 ? 25 : 40) && !window.TRAVEL_LOCK && performance.now() > 15000) { goodT = 0; if (++lowFps >= 2) { lowFps = 0; if (performance.now() - restAt < 45000) noRest = true; const cur = window.PIXCAP || (vw * vh); if (!window.LOWFX) { window.LOWFX = 1; Save.flash('🌊 Menos efeitos para ganhar FPS'); } else if (fp < 28 && (window.MATOTHIN | 0) < 2) { window.MATOTHIN = (window.MATOTHIN | 0) + 1; Save.flash('🌿 Menos mato na tela para ganhar FPS'); } else if ((window.RS || 1) > .67) { window.RS = (window.RS || 1) > .8 ? .8 : .67; resize(); Save.flash('⚙️ Resolução reduzida para ganhar FPS (mesmo zoom)'); } else if (false && cur > 110000) { window.PIXCAP = Math.max(110000, Math.round(Math.min(cur, vw * vh) * .75)); resize(); Save.flash('⚙️ Qualidade reduzida para ganhar FPS'); } } } else { lowFps = 0; if (!TT && !noRest && fp >= (window.FPS30 ? 29 : 56) && (window.LOWFX || window.PIXCAP || window.MATOTHIN || (window.RS || 1) < 1)) { goodT += fpsT; if (goodT >= 20) { goodT = 0; restAt = performance.now(); if ((window.RS || 1) < 1) { window.RS = window.RS < .8 ? .8 : 1; resize(); if (window.RS === 1) Save.flash('✨ Qualidade de volta'); } else if (window.PIXCAP) { window.PIXCAP = 0; resize(); } else if (window.MATOTHIN) window.MATOTHIN--; else window.LOWFX = 0; } } else goodT = 0; }   /* FPS bom por 20 s: desfaz um passo; se cair de novo logo depois, para de alternar */
       tU = tW = tE = tC = 0; spikes = 0; frames = 0; fpsT = 0; worst = 0; }
