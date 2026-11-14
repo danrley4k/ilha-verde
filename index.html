@@ -409,7 +409,7 @@ class GL2D {
 }
 
 /* imagens do jogo ficam na pasta assets (ao lado deste index.html); ASSET_V muda a cada atualização de arte para o navegador baixar a versão nova */
-const ASSET_V = '2026111412';
+const ASSET_V = '2026111413';
 async function getJSON(u) { const r = await fetch(u + '?v=' + ASSET_V); if (!r.ok) throw new Error('Não achei ' + u + ' — suba a pasta assets junto com o index.html'); return r.json(); }
 const Assets = {
   meta: null, tiles: {}, tilesets: null, pg: [], grp: {}, sg: {}, now: 0, TTL: 90000,
@@ -427,12 +427,22 @@ const Assets = {
     for (const [n] of CONFIG.TILESETS) this.tiles[n] = await this.loadImg(E ? E.tiles[n] : `assets/tile_${n}.png?v=${ASSET_V}`);
     for (const n of ['sand_shallow', 'shallow_deep', 'sandg_water', 'sandg_grass', 'mud_water', 'mud_grass', 'grass_plat', 'dirt_grass2', 'dirt_grass3']) this.tiles[n] = await this.loadImg(E ? E.tiles[n] : `assets/tile_${n}.png?v=${ASSET_V}`);
   },
+  /* imagem com tamanho diferente do atlas.json = arquivo velho no cache do navegador (ou o site ainda estava publicando quando abriu).
+     Força o navegador a baixar de novo o atlas.json e as páginas e recarrega 1 vez; antes os pedaços de personagem apareciam espalhados pela tela */
+  chkSize(im, p) {
+    if (this.E || !p.size || !im || (im.naturalWidth || im.width) === p.size[0] && (im.naturalHeight || im.height) === p.size[1]) return;
+    console.warn('atlas desatualizado:', p.file, im.naturalWidth + 'x' + im.naturalHeight, '≠', p.size.join('x'));
+    let done = false; try { done = sessionStorage.getItem('iv_fix') === ASSET_V; sessionStorage.setItem('iv_fix', ASSET_V); } catch (e) { done = true; }
+    if (done || this._fixing) return; this._fixing = true;
+    const urls = ['assets/atlas.json?v=' + ASSET_V].concat(this.meta.pages.map(q => 'assets/' + q.file + '?v=' + ASSET_V));
+    Promise.all(urls.map(u => fetch(u, { cache: 'reload' }).catch(() => {}))).then(() => location.reload());
+  },
   // garante que as páginas do grupo estão (ou ficam) carregadas; devolve a promessa
   need(g) {
     if (typeof g === 'string') g = this.grp[g]; if (!g) return Promise.resolve();
     g.use = this.now; if (g.st) return g.p || Promise.resolve();
     g.st = 1;
-    return g.p = Promise.all(g.pages.map(p => this.loadImg(this.E ? this.E.pages[p.i] : 'assets/' + p.file + '?v=' + ASSET_V).then(im => this.ready(im, p.file, g.eager)).then(im => { p.img = im; }))).then(() => { g.st = 2; g.p = null; }).catch(e => { g.st = 0; g.p = null; console.warn(e.message); });
+    return g.p = Promise.all(g.pages.map(p => this.loadImg(this.E ? this.E.pages[p.i] : 'assets/' + p.file + '?v=' + ASSET_V).then(im => { this.chkSize(im, p); return im; }).then(im => this.ready(im, p.file, g.eager)).then(im => { p.img = im; }))).then(() => { g.st = 2; g.p = null; }).catch(e => { g.st = 0; g.p = null; console.warn(e.message); });
   },
   // avisa que o sprite vai ser usado em breve (bichos acordados): mantém o grupo vivo e começa a carregar se preciso
   // 'perto' = o bicho está a uns 600 px: carrega também as animações RARAS da espécie (grupo '<espécie>_x'); longe, só as básicas
