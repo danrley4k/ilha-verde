@@ -2526,12 +2526,13 @@ const Entities = (() => {
   }
   let GHOST = null;
   let lodF = 0;
+  function nearGuest(a, r) { const G = window.NET_PTS; if (!G) return false; for (let i = 0; i < G.length; i++) if (Math.abs(a.x - G[i].x) < r && Math.abs(a.y - G[i].y) < r) return true; return false; }
   function updateAnimals(DT) {
     const PR = Player.p; lodF++; const lvw = cam.vw > 1 ? cam.vw / 2 + 220 : 860, lvh = cam.vh > 1 ? cam.vh / 2 + 220 : 520; if (PR.sneak) PR.sneakT = World.clock;
     const hid = !PR.swim && !PR.raft && World.inMato(PR.x, PR.y, 22); if (hid && !PR.hidden) Save.flash('🌿 Escondido no mato alto'); PR.hidden = hid;   // última vez que você estava agachado
     for (let _i44 = 0, a; _i44 < animals.length && (a = animals[_i44], true); _i44++) {
       /* bicho fora da tela e sem briga com você: pensa 1 a cada 3 quadros (~20 vezes por segundo) com o tempo somado; na tela, tudo normal */
-      if (!a.script && !a.dead && (Math.abs(a.x - PR.x) > lvw || Math.abs(a.y - PR.y) > lvh) && !(a.angry > 0 || a.rage > 0 || a.pursue > 0 || a.growl > 0 || a.windup > 0 || a.lunge > 0 || a.zAlarm || a.zGrowl > 0 || a.zBark > 0)) {
+      if (!a.script && !a.dead && (Math.abs(a.x - PR.x) > lvw || Math.abs(a.y - PR.y) > lvh) && !nearGuest(a, 700) && !(a.angry > 0 || a.rage > 0 || a.pursue > 0 || a.growl > 0 || a.windup > 0 || a.lunge > 0 || a.zAlarm || a.zGrowl > 0 || a.zBark > 0)) {
         if (a.lph === undefined) a.lph = (Math.random() * 3) | 0; if ((lodF + a.lph) % 3) { a.lacc = (a.lacc || 0) + DT; continue; } }
       const dt = Math.min(.12, DT + (a.lacc || 0)); a.lacc = 0;
       const K = KINDS[a.kind]; const hidA = hid && !(a.aware > World.clock); PR.hidden = hidA;   /* barulho recente revela você no mato para quem ouviu */
@@ -2548,7 +2549,7 @@ const Entities = (() => {
         const hot = Weather.state === 'hot'; if (a.running && a.moving) a.fat = Math.min(1, (a.fat || 0) + dt / (hot ? 11 : 18)); else a.fat = Math.max(0, (a.fat || 0) - dt / (a.moving ? 9 : 5));
         if (!a.exh && a.fat >= 1) a.exh = true; else if (a.exh && a.fat <= .35) a.exh = false;
       }
-      if (Math.abs(a.x - PR.x) > FAR || Math.abs(a.y - PR.y) > FAR) { if (!a.far) sleepAnimal(a); farAnimal(a, dt, K); continue; }   // (distância real: o 'esconderijo' no mato só afeta o que o bicho percebe)
+      if ((Math.abs(a.x - PR.x) > FAR || Math.abs(a.y - PR.y) > FAR) && !nearGuest(a, FAR)) { if (!a.far) sleepAnimal(a); farAnimal(a, dt, K); continue; }   // (distância real: o 'esconderijo' no mato só afeta o que o bicho percebe)
       if (a.far) wakeAnimal(a);
       Assets.touch(K.sprite, Math.abs(a.x - PR.x) < 600 && Math.abs(a.y - PR.y) < 600); // bicho acordado: carrega as animações básicas da espécie e, a <600 px, as raras também
       a.t += dt * (a.moving ? SPEED_K + .1 : 1);
@@ -2769,7 +2770,7 @@ const Entities = (() => {
     respawnT += DT; if (respawnT > 12) { respawnT = 0; if (animals.filter(o => o.kind === 'urubu' && !o.dead).length < 3) spawnUrubu(); if (animals.filter(o => o.kind === 'gull' && !o.dead).length < 6) spawnGull(true); for (const k in TARGET) { const need = k === 'wolf' ? TARGET.wolf + Math.round(3 * Weather.night()) : BREED[k].floor; if (animals.filter(a => a.kind === k && !a.baby).length < need) spawnAnimal(k, true); } if (animals.filter(a => a.kind === 'boar').length < 4) spawnAnimal('boar', true); if (animals.filter(a => a.kind === 'fox' && !a.dead).length < 5) spawnAnimal('fox', true); if (animals.filter(a => a.kind === 'woodpecker').length < 6) spawnWoodpecker(); }
   }
   function update(dt) {
-    t += dt; noiseTick(dt); breedTick(dt);
+    t += dt; noiseTick(dt); if (!window.NET_GUEST) breedTick(dt);
     { const pp = Player.p; if (pp.lx !== undefined && !pp.swim && !pp.raft) { const dx = pp.x - pp.lx, dy = pp.y - pp.ly, d = Math.hypot(dx, dy);
         if (d > .15 && d < 80) { if (pp.still) { pp.tk = 99; pp.still = false; }   // ao começar a andar já deixa uma pegada
           const n = Math.max(1, Math.ceil(d / 8)); for (let q = 1; q <= n; q++) trackStep({ x: pp.lx + dx * q / n, y: pp.ly + dy * q / n + 8, vx: dx, vy: dy, kind: 'player', get tk() { return pp.tk; }, set tk(v) { pp.tk = v; }, get side() { return pp.tside; }, set side(v) { pp.tside = v; } }, d / n); }
@@ -2808,7 +2809,7 @@ const Entities = (() => {
     for (let i = corpses.length - 1; i >= 0; i--) { corpses[i].age += dt; if (corpses[i].bearT > 0) corpses[i].bearT -= dt; if (corpses[i].age > CORPSE_TIME) { const c = corpses[i]; if (c.kind !== 'fish' && c.kind !== 'shark') dens.push({ kind: 'osso' + (1 + Math.floor(Math.random() * 4)), x: c.x, y: c.y + 4, ph: 0, bone: true, age: 0, sc: ({ rabbit: .6, fawn: .65, woodpecker: .5, deer: .95, boar: 1, wolf: .9, bear: 1.3, urubu: .6, crab: .4 })[c.kind] || .9 }); corpses.splice(i, 1); } }
     for (let i = dens.length - 1; i >= 0; i--) { const b = dens[i]; if (b.bone && (b.age += dt) > BONE_TIME) dens.splice(i, 1); }   // ossos ficam um tempo onde o corpo estava
     if (typeof Chest !== 'undefined') Chest.tick();
-    updateAnimals(dt); useT -= dt; if (useT <= 0) { useT = .15; const f = findUse(); if (f && !p.act) { useEl.style.display = 'flex'; if (useEl.textContent !== f.label) useEl.textContent = f.label; } else useEl.style.display = 'none'; const ai = ({ spear: '🗡️', machete: '🗡️', axe: '🪓', pickaxe: '⛏️' })[inv.eq && inv[inv.eq] ? inv.eq : ''] || '👊'; if (atkEl.dataset.i !== ai) { atkEl.dataset.i = ai; atkEl.textContent = ai; } }   // botão vermelho: soco (ou a arma/ferramenta na mão); a ação do que está perto fica no botão ao lado
+    if (!window.NET_GUEST) updateAnimals(dt); useT -= dt; if (useT <= 0) { useT = .15; const f = findUse(); if (f && !p.act) { useEl.style.display = 'flex'; if (useEl.textContent !== f.label) useEl.textContent = f.label; } else useEl.style.display = 'none'; const ai = ({ spear: '🗡️', machete: '🗡️', axe: '🪓', pickaxe: '⛏️' })[inv.eq && inv[inv.eq] ? inv.eq : ''] || '👊'; if (atkEl.dataset.i !== ai) { atkEl.dataset.i = ai; atkEl.textContent = ai; } }   // botão vermelho: soco (ou a arma/ferramenta na mão); a ação do que está perto fica no botão ao lado
     atkEl.classList.toggle('on', p.battle > 0); batEl.style.display = p.battle > 0 ? 'block' : 'none';
     hudT += dt; if (hudT > .4) { hudT = 0; showHud(); }
   }
@@ -2821,7 +2822,7 @@ const Entities = (() => {
     if (Player.p.swim) return;
     Player.setSneak(false);
     const p = Player.p; if (p.act) return; p.battle = 7; emitNoise(p.x, p.y, 180);
-    const E = eqInfo(), tgt = nearestAnimal(p, E.reach);
+    const E = eqInfo(), tgt = window.NET_GUEST ? null : nearestAnimal(p, E.reach);   /* convidado: combate com bichos entra na próxima etapa */
     Player.startAct(E.atk, tgt, () => {
       if (inv.eq === 'machete') { const d = DIRV[p.dir] || [0, 1]; if (World.cutMato(p.x + d[0] * 22, p.y + d[1] * 22, 70)) Save.flash('🌿 Mato cortado!'); }
       if (!tgt || tgt.dead || Math.hypot(tgt.x - p.x, tgt.y - p.y) > E.reach + 6) return;
@@ -2832,7 +2833,7 @@ const Entities = (() => {
   }
   const DIRV = { south: [0, 1], 'south-west': [-.7, .7], west: [-1, 0], 'north-west': [-.7, -.7], north: [0, -1], 'north-east': [.7, -.7], east: [1, 0], 'south-east': [.7, .7] };
   // alerta: um lobo acordado e perto que está atacando ou com fome
-  function wolfNear() { const P = Player.p; for (let _i54 = 0, a; _i54 < animals.length && (a = animals[_i54], true); _i54++) if (a.kind === 'wolf' && !a.dead && !a.far && !a.sleeping && Math.hypot(a.x - P.x, a.y - P.y) < 260 && (a.angry > 0 || a.hunger > 60)) return true; return false; }
+  function wolfNear() { if (window.NET_GUEST) return false; const P = Player.p; for (let _i54 = 0, a; _i54 < animals.length && (a = animals[_i54], true); _i54++) if (a.kind === 'wolf' && !a.dead && !a.far && !a.sleeping && Math.hypot(a.x - P.x, a.y - P.y) < 260 && (a.angry > 0 || a.hunger > 60)) return true; return false; }
   function eat(k) {
     const P = Player.p; if (!(inv[k] > 0)) return;
     const heal = { cooked: 40, meat: 25, apple: 12, coconut: 8 }[k]; if (k !== 'water' && !heal) return;
@@ -3132,6 +3133,7 @@ const Entities = (() => {
   // Texto/emoji pré-renderizado: fillText a cada quadro é caro no celular (fontes, emoji colorido); desenha-se UMA vez num canvas e depois é só drawImage.
   const TXT = {};
   function txt(ctx, str, font, color, x, y) {
+    if (REC) { REC.l.push([str, font, color, Math.round(x - REC.x), Math.round(y - REC.y)]); return; }
     const k = str + font + color; let c = TXT[k];
     if (!c) { const g0 = document.createElement('canvas').getContext('2d'); g0.font = font; const px = +font.match(/(\d+)px/)[1], w = Math.ceil(g0.measureText(str).width) + 6, h = px + 10; c = TXT[k] = document.createElement('canvas'); c.width = w; c.height = h;
       const g = c.getContext('2d'); g.font = font; g.fillStyle = color; g.textAlign = 'center'; g.fillText(str, w / 2, h - 6); c.ax = w / 2; c.ay = h - 6; }
@@ -3245,6 +3247,14 @@ const Entities = (() => {
     const hf = w.hp / K.hp; bar(y, hf, hf > .4 ? '#7ad36a' : hf > .2 ? '#e0b43a' : '#e0442e');
     if (w.kind === 'wolf' && dP <= 300) { bar(y + 5, (w.thirst || 0) / 100, '#4aa8ff'); bar(y + 10, (w.hunger || 0) / 140, '#e08a3a'); }
   }
+  let REC = null, NIDC = 0; const FAKE = { beginPath() {}, ellipse() {}, fill() {}, stroke() {}, moveTo() {}, lineTo() {}, arc() {}, closePath() {}, save() {}, restore() {}, fillRect() {}, strokeRect() {}, drawImage() {}, fillText() {}, translate() {}, rotate() {}, scale() {}, setTransform() {}, fillStyle: '', strokeStyle: '', globalAlpha: 1, lineWidth: 1, font: '', textAlign: '' };
+  function snapAnimals(pts, R) {   /* dono do mundo: para cada bicho perto dos convidados, grava os sprites e marcas ('?', '!', 'z') que ele desenharia */
+    const out = [], AD = Assets.draw; Assets.draw = function (c, name, anim, dir, frame, x, y, scale, tint) { if (REC) REC.s.push([name, anim, dir, frame, Math.round(x - REC.x), Math.round(y - REC.y), scale || 1, tint || 0]); else return AD.apply(Assets, arguments); };
+    try { for (let i = 0; i < animals.length; i++) { const w = animals[i]; if (w.dead || w.hid || w.inDen > 0) continue; let ok = false; for (let j = 0; j < pts.length; j++) if (Math.abs(w.x - pts[j].x) < R && Math.abs(w.y - pts[j].y) < R * .7) { ok = true; break; } if (!ok) continue;
+        if (!w.nid) w.nid = ++NIDC; REC = { s: [], l: [], x: w.x, y: w.y }; try { drawAnimal0(FAKE, w, 0, 0); } catch (e) {} out.push([w.nid, Math.round(w.x), Math.round(w.y), REC.s, REC.l, Math.round(w.alt || 0), World.inMato(w.x, w.y, 30) ? 1 : 0]); REC = null; } }
+    finally { REC = null; Assets.draw = AD; }
+    return out;
+  }
   function drawAnimal(ctx, w, camX, camY) { const pp = Player.p, gr = !w.dead && World.inMato(w.x, w.y, 30) && Math.hypot(w.x - pp.x, w.y - pp.y) > 80; const tg = gr ? .5 : 1; w._ga = w._ga === undefined ? tg : w._ga + (tg - w._ga) * .15; const al = Math.abs(w._ga - 1) < .02 ? 1 : w._ga; if (al < 1) ctx.globalAlpha = al; drawAnimal0(ctx, w, camX, camY); if (al < 1) ctx.globalAlpha = 1; }   // no mato alto: meio transparente (50%), com transição suave
   function drawAnimal0(ctx, w, camX, camY) { if (w.hid) return; let mvH = w.moving, rnH = w.running; if (w.kind === 'wolf') { if (w.moving) { w._mh = w.t; w._rh = w.running ? w.t : (w._rh || -9); } else if (w.t - (w._mh || -9) < .3 && !(w.bite > 0 || w.lunge > 0 || w.howl > 0 || w.zBark > 0 && !w.zAlarm)) { mvH = true; rnH = w.t - (w._rh || -9) < .3; } } const K = w.baby ? BABY_K[w.kind] : KINDS[w.kind], an = w.bite > 0 ? 'bite' : w.eat > 0 && Assets.hasAnim(K.sprite, 'eat') ? 'eat' : rnH ? 'run' : mvH ? 'walk' : 'idle', nf = Assets.frames(K.sprite, an, w.dir), fr = an === 'bite' ? Math.min(nf - 1, Math.floor((.75 - w.bite) * 12)) : Math.floor(w.t * Assets.fps(K.sprite, an)) % nf; let sp = K.sprite, an2 = an, fr2 = fr;
       if (w.kind === 'wolf') {
@@ -3279,7 +3289,7 @@ const Entities = (() => {
     for (let i = 0; i < dens.length; i++) { const o = dens[i]; if (!o.hid && o.x > camX - 140 && o.x < camX + vw + 140 && o.y > camY - 20 && o.y < camY + vh + 160) add(o.y - 30, 0, o); }
     for (let i = 0; i < drops.length; i++) { const d = drops[i]; if (d.x > camX - 30 && d.x < camX + vw + 30 && d.y > camY - 20 && d.y < camY + vh + 30) add(d.y, 1, d); }
     for (let _i63 = 0, c; _i63 < corpses.length && (c = corpses[_i63], true); _i63++) if (c.x > camX - m && c.x < camX + vw + m && c.y > camY - 30 && c.y < camY + vh + m) add(c.y - 1, 2, c);
-    if (player.p.sneak ? visSneak : visStand) for (let _i64 = 0, w; _i64 < animals.length && (w = animals[_i64], true); _i64++) if (w.x > camX - m && w.x < camX + vw + m && w.y > camY - m && w.y < camY + vh + m) addF(-1e9 + 1, () => {
+    if (!window.NET_GUEST && (player.p.sneak ? visSneak : visStand)) for (let _i64 = 0, w; _i64 < animals.length && (w = animals[_i64], true); _i64++) if (w.x > camX - m && w.x < camX + vw + m && w.y > camY - m && w.y < camY + vh + m) addF(-1e9 + 1, () => {
       const P = player.p, ang = DANG[w.dir] || 0, full = w.kind === 'wolf' ? wolfR1() : KINDS[w.kind].fearR, dp = Math.hypot(P.x - w.x, P.y - w.y);
       ctx.translate(w.x - camX, w.y - camY);
       if (P.sneak) {   // agachado: cone pequeno à frente do bicho
@@ -3291,13 +3301,14 @@ const Entities = (() => {
         ctx.beginPath(); ctx.arc(0, 0, full, 0, 6.283); ctx.fillStyle = seen ? 'rgba(255,60,50,.09)' : 'rgba(255,225,70,.05)'; ctx.fill(); ctx.strokeStyle = seen ? 'rgba(255,90,70,.45)' : 'rgba(255,225,70,.3)'; ctx.lineWidth = 1; ctx.stroke();
       }
       ctx.setTransform(window.RS || 1, 0, 0, window.RS || 1, 0, 0); });
-    for (let _i65 = 0, w; _i65 < animals.length && (w = animals[_i65], true); _i65++) if ((w.growl > 0 || w.windup > 0) && !w.script && !(typeof Title !== 'undefined' && Title.active) && w.x > camX - m && w.x < camX + vw + m && w.y > camY - m && w.y < camY + vh + m) addF(-1e9, () => {
+    if (!window.NET_GUEST) for (let _i65 = 0, w; _i65 < animals.length && (w = animals[_i65], true); _i65++) if ((w.growl > 0 || w.windup > 0) && !w.script && !(typeof Title !== 'undefined' && Title.active) && w.x > camX - m && w.x < camX + vw + m && w.y > camY - m && w.y < camY + vh + m) addF(-1e9, () => {
       let dx = w.lx, dy = w.ly; if (w.growl > 0) { const d = Math.hypot(P0().x - w.x, P0().y - w.y) || 1; dx = (P0().x - w.x) / d; dy = (P0().y - w.y) / d; }
       const L = 135 * 2.6 * .35 + 30, W = 46, pulse = w.windup > 0 ? .38 + .22 * Math.sin(w.t * 30) : .2;
       ctx.translate(w.x - camX, w.y - camY + 4); ctx.rotate(Math.atan2(dy, dx)); ctx.scale(1, .62);
       ctx.fillStyle = 'rgba(220,40,30,' + pulse + ')'; ctx.fillRect(0, -W, L, W * 2);
       ctx.strokeStyle = 'rgba(255,90,70,' + Math.min(.9, pulse + .3) + ')'; ctx.lineWidth = 2; ctx.strokeRect(0, -W, L, W * 2); ctx.setTransform(window.RS || 1, 0, 0, window.RS || 1, 0, 0); ctx.lineWidth = 1; });
-    for (let _i66 = 0, w; _i66 < animals.length && (w = animals[_i66], true); _i66++) if (w.x > camX - m && w.x < camX + vw + m && w.y > camY - 30 && w.y < camY + vh + m) if (!(w.inDen > 0)) add(w.y + (w.alt > 8 ? 400 : 0), 3, w);
+    if (!window.NET_GUEST) for (let _i66 = 0, w; _i66 < animals.length && (w = animals[_i66], true); _i66++) if (w.x > camX - m && w.x < camX + vw + m && w.y > camY - 30 && w.y < camY + vh + m) if (!(w.inDen > 0)) add(w.y + (w.alt > 8 ? 400 : 0), 3, w);
+    if (window.NET_GUEST && window.Net) for (const r of window.Net.remoteAnimals().values()) if (r.x > camX - m && r.x < camX + vw + m && r.y > camY - 30 && r.y < camY + vh + m) add(r.y + (r.alt > 8 ? 400 : 0), 4, r);   /* bichos do dono do mundo */
     if (!(typeof Title !== "undefined" && Title.active)) add(player.p.y, 4, player);
     if (window.Net && window.Net.active) for (const r of window.Net.list().values()) if (r.x > camX - m && r.x < camX + vw + m && r.y > camY - 30 && r.y < camY + vh + m) add(r.y, 4, r);   /* outros jogadores (multiplayer) */   /* tela inicial: jogador-fantasma não aparece */
     ord.length = dn; for (let i = 0; i < dn; i++) ord[i] = dl[i]; ord.sort(byY);
@@ -3318,7 +3329,7 @@ const Entities = (() => {
     if (!P.swim && Math.hypot(P.x - x, P.y - y) < 60) { P.hp -= 40; P.hurtT = .4; Save.flash('⚡ Você foi atingido por um raio!'); if (P.hp <= 0) Player.hurt(0); }
     else if (Math.hypot(P.x - x, P.y - y) < 160) Save.flash('⚡ Raio muito perto!');
   }
-  return { strike, bearMem: () => animals.filter(o => o.kind === 'bear').map((b, i) => (b.mem || bearMemSaved[i] || []).slice(-4).map(q => [Math.round(q.x), Math.round(q.y), q.s])), setBearMem: arr => { arr = Array.isArray(arr) ? arr : []; if (arr.length && Array.isArray(arr[0]) && typeof arr[0][0] === 'number') arr = [arr];   // save antigo: lista só do primeiro urso
+  return { snap: snapAnimals, strike, bearMem: () => animals.filter(o => o.kind === 'bear').map((b, i) => (b.mem || bearMemSaved[i] || []).slice(-4).map(q => [Math.round(q.x), Math.round(q.y), q.s])), setBearMem: arr => { arr = Array.isArray(arr) ? arr : []; if (arr.length && Array.isArray(arr[0]) && typeof arr[0][0] === 'number') arr = [arr];   // save antigo: lista só do primeiro urso
       bearMemSaved = arr.map(l => (Array.isArray(l) ? l : []).slice(-4).map(q => ({ x: q[0], y: q[1], s: q[2] || 3 }))); let i = 0; for (let _i71 = 0, b; _i71 < animals.length && (b = animals[_i71], true); _i71++) if (b.kind === 'bear') { b.mem = (bearMemSaved[i++] || []).map(q => ({ x: q.x, y: q.y, s: q.s })); } }, _dens: () => dens, _deerKick: deerKick, setVis: (st, sn) => { visStand = !!st; visSneak = !!sn; }, _tracks: () => tracks, _HAB: HAB, _noise: emitNoise, _dirOf: dirOf, _drops: () => drops, drawBridge, dropLog, useBandage, init, update, draw, bleed, icon, eat, drop, placeItem, toggleHand: () => { if (craftEl.style.display === 'block') closeCraft(); else openCraft('hand'); },  MAX, cam, drawPiece, _corpses: () => corpses, attack, use, placeFire, nearestAnimal, inv, eqSet: () => eqInfo().set, refresh: (force) => { if (force) toolsEl.dataset.sig = ''; showHud(); }, _animals: () => animals, regrow: () => regrow, setRegrow: a => { regrow = Array.isArray(a) ? a : []; },
     tracksList: () => tracks.slice(-500).map(q => [Math.round(q.x), Math.round(q.y), q.k, +q.ang.toFixed(2), Math.round(q.t), q.g, q.life]),
     setTracks: l => { tracks = (Array.isArray(l) ? l : []).map(q => ({ x: q[0], y: q[1], k: q[2], ang: q[3], t: q[4], g: q[5], life: q[6] })); } };
@@ -3657,11 +3668,11 @@ const Weather = (() => {
     dialC.classList.toggle('warn', sec < 20);
   }
   function update(dt, vw, vh) {
-    t += dt; { const nt0 = tod + dt / DAY; if (nt0 >= 1) day++; tod = nt0 % 1; } drawDial(); timer -= dt; if (timer <= 0) set(state === 'clear' ? 'rain' : 'clear');
+    t += dt; { const nt0 = tod + dt / DAY; if (nt0 >= 1) day++; tod = nt0 % 1; } drawDial(); if (!window.NET_GUEST) { timer -= dt; if (timer <= 0) set(state === 'clear' ? 'rain' : 'clear'); }
     // calor: só em ~metade dos dias, e só nas horas quentes ao redor do meio-dia (tod .92 → .12), como na vida real; os bichos buscam sombra nessa janela
     if (tod > .8 && tod < .85) { if (hotToday < 0) hotToday = Math.random() < .5 ? 1 : 0; } else if (tod > .5 && tod < .55) hotToday = -1;   // sorteio feito 1x por ciclo, perto do amanhecer, para o calor do meio-dia seguinte
     const hotWin = tod > .92 || tod < .12;
-    if (hotToday === 1 && hotWin && state === 'clear') set('hot'); else if (state === 'hot' && !hotWin) set('clear');
+    if (!window.NET_GUEST) { if (hotToday === 1 && hotWin && state === 'clear') set('hot'); else if (state === 'hot' && !hotWin) set('clear'); }
     // trovões: só com chuva forte; clarão (dois pulsos) e o estrondo chega depois
     if (rain > .6) { thT -= dt; if (thT <= 0) { thT = 14 + Math.random() * 28; flash = 1; flashT = 0; { const Pp = Player.p, an = Math.random() * 6.283, dd = Math.random() < .3 ? 45 + Math.random() * 110 : 260 + Math.random() * 300, bx = Pp.x + Math.cos(an) * dd, by = Pp.y + Math.sin(an) * dd * .7, pts = [[bx, by]]; let cx = bx, cy = by; while (cy > by - 700) { cy -= 30 + Math.random() * 40; cx += (Math.random() - .5) * 46; pts.push([cx, cy]); } bolt = { pts, x: bx, y: by }; try { Entities.strike(bx, by); } catch (_) {} scorch.push({ x: bx, y: by, a: 1 }); if (scorch.length > 6) scorch.shift(); } setTimeout(() => { try { Sfx.play('thunder'); } catch (_) {} }, 350 + Math.random() * 1600); } } else thT = Math.max(thT, 8);
     if (flash > 0) { flashT += dt; flash = flashT < .12 ? 1 : flashT < .2 ? .25 : flashT < .3 ? .9 : Math.max(0, 1 - (flashT - .3) * 2.2); }
@@ -3926,10 +3937,10 @@ const Cloud = (() => {
 // e recebe a dos outros. Cada um ainda tem o SEU mundo (árvores, bichos): nesta etapa só os jogadores aparecem uns para os outros.
 const Net = (() => {
   const NAME_KEY = 'iv_nome', ID = (() => { try { let v = sessionStorage.getItem('iv_mpid'); if (!v) { v = Math.random().toString(36).slice(2, 10); sessionStorage.setItem('iv_mpid', v); } return v; } catch (e) { return Math.random().toString(36).slice(2, 10); } })();
-  let ws = null, on = false, want = null, ref = 1, topic = '', hbT = 0, sendT = 0, lastS = '', status = '', tries = 0, retryT = 0, useTok = false, badge = null;
-  const peers = new Map();
+  let ws = null, on = false, want = null, ref = 1, topic = '', hbT = 0, sendT = 0, lastS = '', status = '', tries = 0, retryT = 0, useTok = false, badge = null, since = 0, hostId = '', wT = 0, lastW = 0;
+  const peers = new Map(), rA = new Map();   /* rA: bichos recebidos do dono do mundo */
   try { want = sessionStorage.getItem('iv_mp'); } catch (e) {}
-  const setBadge = () => { if (!badge) { badge = document.createElement('div'); badge.id = 'mpb'; badge.style.cssText = 'position:fixed;left:calc(env(safe-area-inset-left,0px) + 6px);top:calc(env(safe-area-inset-top,0px) + 66px);z-index:60;background:#0008;color:#fff;font:600 11px/1.2 sans-serif;padding:3px 9px;border-radius:9px;pointer-events:none;white-space:nowrap'; document.body.appendChild(badge); } badge.style.display = want ? 'block' : 'none'; badge.textContent = on ? '🌐 ' + (peers.size + 1) + ' online' + (peers.size ? ': ' + [...peers.values()].map(p => p.n).join(', ') : '') : '🌐 ' + (status || 'conectando…'); };
+  const setBadge = () => { if (!badge) { badge = document.createElement('div'); badge.id = 'mpb'; badge.style.cssText = 'position:fixed;left:calc(env(safe-area-inset-left,0px) + 6px);top:calc(env(safe-area-inset-top,0px) + 66px);z-index:60;background:#0008;color:#fff;font:600 11px/1.2 sans-serif;padding:3px 9px;border-radius:9px;pointer-events:none;white-space:nowrap'; document.body.appendChild(badge); } badge.style.display = want ? 'block' : 'none'; badge.textContent = on ? '🌐 ' + (peers.size + 1) + ' online' + (peers.size ? (hostId === ID ? ' · você é o dono do mundo' : ' · mundo de ' + ((peers.get(hostId) || {}).n || '…')) : '') + (peers.size && hostId === ID ? ': ' + [...peers.values()].map(p => p.n).join(', ') : '') : '🌐 ' + (status || 'conectando…'); };
   const send = (event, payload) => { if (ws && ws.readyState === 1) try { ws.send(JSON.stringify({ topic, event, payload, ref: String(ref++), join_ref: '1' })); } catch (e) {} };
   function url() { let o = ''; try { o = localStorage.getItem('iv_mp_ws') || ''; } catch (e) {} if (o) return o; const c = Cloud.cfg(); if (!c.url || !c.key) return ''; return c.url.replace(/^http/, 'ws') + '/realtime/v1/websocket?apikey=' + encodeURIComponent(c.key) + '&vsn=1.0.0'; }
   function connect() {
@@ -3938,15 +3949,31 @@ const Net = (() => {
     try { ws = new WebSocket(u); } catch (e) { status = 'erro ao conectar'; setBadge(); retryT = 5; return; }
     ws.onopen = () => { const pl = { config: { broadcast: { self: false, ack: false }, presence: { key: '', enabled: false }, postgres_changes: [], private: false } }; if (useTok) pl.access_token = Cloud.cfg().key; send('phx_join', pl); };
     ws.onmessage = ev => { let m; try { m = JSON.parse(ev.data); } catch (e) { return; }
-      if (m.event === 'phx_reply' && m.topic === topic && m.ref === '1') { if (m.payload && m.payload.status === 'ok') { on = true; tries = 0; status = ''; lastS = ''; sendT = 0; Save.flash('🌐 Multiplayer conectado'); } else { status = 'recusado: ' + JSON.stringify(m.payload && m.payload.response || '').slice(0, 60); if (!useTok) { useTok = true; try { ws.close(); } catch (e) {} } } setBadge(); return; }
+      if (m.event === 'phx_reply' && m.topic === topic && m.ref === '1') { if (m.payload && m.payload.status === 'ok') { on = true; since = Date.now(); tries = 0; status = ''; lastS = ''; sendT = 0; Save.flash('🌐 Multiplayer conectado'); } else { status = 'recusado: ' + JSON.stringify(m.payload && m.payload.response || '').slice(0, 60); if (!useTok) { useTok = true; try { ws.close(); } catch (e) {} } } setBadge(); return; }
       if (m.event === 'phx_error' || m.event === 'phx_close') { on = false; status = 'conexão caiu'; setBadge(); return; }
-      if (m.event === 'broadcast' && m.payload) { const b = m.payload; if (b.event === 'p') recv(b.payload); else if (b.event === 'bye' && b.payload) { const r = peers.get(b.payload.i); if (r) { peers.delete(b.payload.i); Save.flash('🌐 ' + r.n + ' saiu'); setBadge(); } } } };
-    ws.onclose = () => { on = false; ws = null; if (want) { tries++; retryT = Math.min(20, 2 + tries * 2); status = 'reconectando…'; setBadge(); } };
+      if (m.event === 'broadcast' && m.payload) { const b = m.payload; if (b.event === 'p') recv(b.payload); else if (b.event === 'w') recvWorld(b.payload); else if (b.event === 'bye' && b.payload) { const r = peers.get(b.payload.i); if (r) { peers.delete(b.payload.i); Save.flash('🌐 ' + r.n + ' saiu'); setBadge(); } } } };
+    ws.onclose = () => { on = false; ws = null; window.NET_GUEST = false; window.NET_PTS = null; if (want) { tries++; retryT = Math.min(20, 2 + tries * 2); status = 'reconectando…'; setBadge(); } };
     ws.onerror = () => { status = 'erro de conexão'; setBadge(); };
   }
   function recv(d) { if (!d || !d.i || d.i === ID) return; let r = peers.get(d.i);
     if (!r) { r = { i: d.i, x: d.x, y: d.y, t: 0, draw(ctx, cx, cy) { drawPeer(ctx, this, cx, cy); } }; peers.set(d.i, r); Save.flash('🌐 ' + (d.n || 'Jogador') + ' entrou'); }
-    r.n = String(d.n || 'Jogador').slice(0, 14); r.tx = d.x; r.ty = d.y; r.d = d.d || 'south'; r.s = d.s || 'player'; r.a = d.a || 'idle'; r.sc = d.sc || 1; r.dy = d.dy || 0; r.sw = !!d.sw; r.ac = d.ac || ''; r.as = d.as || 'player'; r.ap = d.ap || 0; r.seen = performance.now(); setBadge(); }
+    r.n = String(d.n || 'Jogador').slice(0, 14); r.tx = d.x; r.ty = d.y; r.d = d.d || 'south'; r.s = d.s || 'player'; r.a = d.a || 'idle'; r.sc = d.sc || 1; r.dy = d.dy || 0; r.sw = !!d.sw; r.ac = d.ac || ''; r.as = d.as || 'player'; r.ap = d.ap || 0; r.since = d.t || 9e15; r.seen = performance.now(); setBadge(); }
+  function recvWorld(d) {   /* convidado: mundo do dono (bichos perto de você, hora e clima) */
+    if (!d || d.h !== hostId || hostId === ID) return; lastW = performance.now();
+    if (d.w) { const [td, dy, st] = d.w; let df = Math.abs(td - Weather.tod()); df = Math.min(df, 1 - df); if (df > .002) Weather.setTod(td); if (Weather.day() !== dy) Weather.setDay(dy); if (Weather.state !== st) Weather.set(st); }
+    const seen = new Set(), now = performance.now();
+    for (const q of d.a || []) { const id = q[0]; seen.add(id); let r = rA.get(id); if (!r) { r = { x: q[1], y: q[2], draw(ctx, cx, cy) { drawRemoteAnimal(ctx, this, cx, cy); } }; rA.set(id, r); }
+      r.tx = q[1]; r.ty = q[2]; r.s = q[3]; r.l = q[4]; r.alt = q[5]; r.m = q[6]; r.seen = now; }
+    for (const [id] of rA) if (!seen.has(id)) rA.delete(id);
+  }
+  function drawRemoteAnimal(ctx, r, camX, camY) {
+    const x = Math.round(r.x - camX), y = Math.round(r.y - camY), P = Player.p, al = r.m && Math.hypot(r.x - P.x, r.y - P.y) > 80 ? .5 : 1;
+    if (r.alt > 3) { ctx.fillStyle = 'rgba(0,0,0,.2)'; ctx.beginPath(); ctx.ellipse(x, y + 3 + r.alt, Math.max(6, 16 - r.alt * .15), 5, 0, 0, 6.283); ctx.fill(); }
+    const a0 = ctx.globalAlpha; if (al < 1) ctx.globalAlpha = a0 * al;
+    for (const s of r.s) Assets.draw(ctx, s[0], s[1], s[2], s[3], x + s[4], y + s[5], s[6], s[7] || undefined);
+    ctx.globalAlpha = a0;
+    for (const l of r.l) { ctx.font = l[1]; ctx.fillStyle = l[2]; ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic'; ctx.fillText(l[0], x + l[3], y + l[4]); } ctx.textAlign = 'start';
+  }
   function drawPeer(ctx, r, camX, camY) {
     const x = Math.round(r.x - camX), y = Math.round(r.y - camY);
     if (r.sw) { ctx.save(); ctx.beginPath(); ctx.rect(x - 60, y - 130, 120, 118); ctx.clip(); }
@@ -3960,7 +3987,7 @@ const Net = (() => {
     if (P.raft && !P.raftDeck) a = (P.battle > 0 && s0 === 'player') ? 'fight' : 'idle';
     if (P.carry) { s = P.carry === 'leaves' ? 'player_leaves' : P.carry === 'palm' ? 'player_palm' : 'player_log'; a = P.moving ? 'walk' : 'idle'; }
     else if (P.sneak) { a = P.moving ? 'walk' : 'idle'; if (s0 === 'player') s = 'player_c'; else if (s0 === 'player_spear') { if (P.moving) s = 'player_spear_c'; } else { sc = .9; dy = 2; } }
-    const st = { i: ID, n: name(), x: Math.round(P.x), y: Math.round(P.y), d: P.dir, s, a, sc, dy, sw: P.swim && !P.act ? 1 : 0 };
+    const st = { i: ID, t: since, n: name(), x: Math.round(P.x), y: Math.round(P.y), d: P.dir, s, a, sc, dy, sw: P.swim && !P.act ? 1 : 0 };
     if (P.act) { st.ac = P.act.anim; st.as = P.act.set; st.ap = Math.round(P.act.t / P.act.dur * 20) / 20; }
     return st;
   }
@@ -3974,15 +4001,20 @@ const Net = (() => {
       if (sendT <= 0 && (k !== lastS || sendT < -1)) { sendT = .125; lastS = k; send('broadcast', { type: 'broadcast', event: 'p', payload: st }); }   /* andando: 8x por segundo; parado: 1x por segundo */
     }
     const now = performance.now();
+    { let h = ID, hs = on ? since : 9e15; for (const [id, r] of peers) if (r.since < hs || (r.since === hs && id < h)) { hs = r.since; h = id; } if (h !== hostId) { hostId = h; rA.clear(); if (on && peers.size) Save.flash(h === ID ? '🌐 Você é o dono do mundo' : '🌐 Entrando no mundo de ' + ((peers.get(h) || {}).n || '…')); setBadge(); } }   /* dono = quem entrou primeiro */
+    window.NET_GUEST = on && hostId !== ID && peers.has(hostId);
+    window.NET_PTS = on && hostId === ID && peers.size ? [...peers.values()].map(r => ({ x: r.tx, y: r.ty })) : null;
+    if (on && hostId === ID && peers.size) { wT -= dt; if (wT <= 0) { wT = .125; let a = []; try { a = Entities.snap(window.NET_PTS, 1300); } catch (e) {} send('broadcast', { type: 'broadcast', event: 'w', payload: { h: ID, w: [Math.round(Weather.tod() * 1e4) / 1e4, Weather.day(), Weather.state], a } }); } }   /* dono: manda o mundo 8x por segundo */
+    for (const r of rA.values()) { const dx = r.tx - r.x, dy = r.ty - r.y; if (dx * dx + dy * dy > 300 * 300) { r.x = r.tx; r.y = r.ty; } else { const k = Math.min(1, dt * 10); r.x += dx * k; r.y += dy * k; } }
     for (const [id, r] of peers) { if (now - r.seen > 7000) { peers.delete(id); setBadge(); continue; } r.t += dt; const dx = r.tx - r.x, dy = r.ty - r.y; if (dx * dx + dy * dy > 400 * 400) { r.x = r.tx; r.y = r.ty; } else { const k = Math.min(1, dt * 12); r.x += dx * k; r.y += dy * k; } }
   }
   function start() {
     let n = name(); try { const v = prompt('Seu nome no multiplayer:', n === 'Jogador' ? '' : n); if (v === null) return false; n = (v.trim() || 'Jogador').slice(0, 14); localStorage.setItem(NAME_KEY, n); sessionStorage.setItem('iv_mp', '1'); } catch (e) {}
     want = '1'; retryT = 0; setBadge(); return true;
   }
-  function stop() { if (on) send('broadcast', { type: 'broadcast', event: 'bye', payload: { i: ID } }); want = null; try { sessionStorage.removeItem('iv_mp'); } catch (e) {} try { ws && ws.close(); } catch (e) {} ws = null; on = false; peers.clear(); setBadge(); }
+  function stop() { if (on) send('broadcast', { type: 'broadcast', event: 'bye', payload: { i: ID } }); want = null; window.NET_GUEST = false; window.NET_PTS = null; rA.clear(); hostId = ''; try { sessionStorage.removeItem('iv_mp'); } catch (e) {} try { ws && ws.close(); } catch (e) {} ws = null; on = false; peers.clear(); setBadge(); }
   addEventListener('pagehide', () => { if (on) send('broadcast', { type: 'broadcast', event: 'bye', payload: { i: ID } }); });
-  return { update, start, stop, list: () => peers, get on() { return on; }, get active() { return !!want; } };
+  return { update, start, stop, list: () => peers, remoteAnimals: () => rA, get host() { return hostId === ID; }, get on() { return on; }, get active() { return !!want; } };
 })();
 window.Net = Net;
 
