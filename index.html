@@ -198,9 +198,9 @@ try { var h = location.hash, tv = /viagem=|skip/.test(h) || sessionStorage.getIt
 </script>
 <div id="rot">↻</div><canvas id="game"></canvas><div id="tfade"></div><div id="ttoast"></div>
 <div id="title"><div id="tlogo"><h1>ILHA VERDE</h1><p>SOBREVIVÊNCIA</p></div>
-<div id="tmenu"><button id="tcont" style="display:none">▶ Continuar<small>retomar a aventura salva</small></button><button id="tsolo">✦ Nova aventura</button><button id="tmulti" class="dim">🌐 Multiplayer<i>EM BREVE</i></button><button id="tset">⚙ Configurações</button></div>
+<div id="tmenu"><button id="tcont" style="display:none">▶ Continuar<small>retomar a aventura salva</small></button><button id="tsolo">✦ Nova aventura</button><button id="tmulti">🌐 Multiplayer<i>TESTE</i></button><button id="tset">⚙ Configurações</button></div>
 <div id="tver">v0.9</div>
-<div id="tpanel"><h3>⚙ Configurações</h3><div class="r">Música<button id="tmus">Ligada</button></div><div class="r">Efeitos sonoros<button id="tsnd">Ligado</button></div><div class="r">Gráficos<button id="tq">HD</button></div><div class="r">FPS<button id="tfps">60</button></div><div class="r">Clima (teste)<button id="twx">Chuva agora</button></div><div class="r">Tela horizontal<button id="trot">Girar</button></div><div class="r">Tela cheia<button id="tfs">Desligada</button></div><div class="r">Tamanho dos controles<button id="tcs2">Médio</button></div><div class="r">Mostrar FPS<button id="tfps">Ligado</button></div><pre id="tperf">…</pre><div class="r">Ver visão dos animais<button id="tvis">Desligado</button></div><div id="tvisopts" style="display:none;gap:6px;margin:-2px 0 8px"><button id="tvis1" style="flex:1;font-size:13px;padding:7px 4px;margin:0">Em pé</button><button id="tvis2" style="flex:1;font-size:13px;padding:7px 4px;margin:0">Agachado</button></div><div class="r">Nuvem<button id="tcl">☁ Entrar</button></div><div id="tcmsg"></div>
+<div id="tpanel"><h3>⚙ Configurações</h3><div class="r">Música<button id="tmus">Ligada</button></div><div class="r">Efeitos sonoros<button id="tsnd">Ligado</button></div><div class="r">Gráficos<button id="tq">HD</button></div><div class="r">Multiplayer (teste)<button id="tmp">Desligado</button></div><div class="r">FPS<button id="tfps">60</button></div><div class="r">Clima (teste)<button id="twx">Chuva agora</button></div><div class="r">Tela horizontal<button id="trot">Girar</button></div><div class="r">Tela cheia<button id="tfs">Desligada</button></div><div class="r">Tamanho dos controles<button id="tcs2">Médio</button></div><div class="r">Mostrar FPS<button id="tfps">Ligado</button></div><pre id="tperf">…</pre><div class="r">Ver visão dos animais<button id="tvis">Desligado</button></div><div id="tvisopts" style="display:none;gap:6px;margin:-2px 0 8px"><button id="tvis1" style="flex:1;font-size:13px;padding:7px 4px;margin:0">Em pé</button><button id="tvis2" style="flex:1;font-size:13px;padding:7px 4px;margin:0">Agachado</button></div><div class="r">Nuvem<button id="tcl">☁ Entrar</button></div><div id="tcmsg"></div>
 <div id="tcbox"><input id="tce" type="email" placeholder="e-mail" autocomplete="username"><input id="tcp" type="password" placeholder="senha (mín. 6)" autocomplete="current-password"><div class="r2"><button id="tcin">Entrar</button><button id="tcup">Criar conta</button></div><div id="tcst"></div>
 <details><summary>Servidor (avançado)</summary><input id="tcu" placeholder="URL do projeto Supabase"><input id="tck" placeholder="chave anon public"><button id="tcs" class="g">Salvar servidor</button></details></div>
 <button id="twipe" class="red">Apagar progresso</button><button id="tclose" class="g">Voltar</button></div></div>
@@ -208,7 +208,7 @@ try { var h = location.hash, tv = /viagem=|skip/.test(h) || sessionStorage.getIt
 <script>
 // Ajustes gerais. Tudo em pixels do mundo (tile = 64px, igual ao tileset do PixelLab).
 const CONFIG = {
-  TILE: 64, CHUNK: 8, WORLD_W: 80, WORLD_H: 50, VIEW_H: 600, CACHE_CHUNKS: 14,
+  TILE: 64, CHUNK: 8, WORLD_W: 80, WORLD_H: 50, VIEW_H: 600, CACHE_CHUNKS: 24,
   PLAYER_SPEED: 80, SPRINT: 1.6, SEED: 20240607,
   // níveis do terreno: 0 água, 1 areia, 2 grama, 3 terra, 4 pedra (anda), 5 montanha/penhasco (bloqueia)
   TILESETS: [ // nome, nível "lo", nível "hi"
@@ -231,6 +231,8 @@ window.FPS30 = (() => { try { return localStorage.getItem('iv_fps30') === '1'; }
 window.GLMODE = (() => { try { if (/[?&#]gl=1/.test(location.href)) return true; if (/[?&#]gl=0/.test(location.href)) return false; const v = localStorage.getItem('iv_gl2'); return v !== 'off' && v !== 'auto'; } catch (e) { return true; } })();   /* motor de desenho: WebGL por padrão; volta ao Normal se o jogador escolher ou se ficar lento no aparelho */
 // Motor de desenho WebGL compatível com o pedaço do Canvas 2D que o jogo usa (drawImage, retângulos, elipses, linhas, texto, transformações, recorte retangular).
 // Junta os desenhos em lotes (até 8 texturas por lote) e manda para a placa de vídeo de uma vez no fim do quadro.
+{ const H0 = Math.hypot; Math.hypot = function (a, b, c, d) { return d !== undefined ? H0(a, b, c, d) : c === undefined ? (b === undefined ? (a === undefined ? 0 : Math.abs(a)) : Math.sqrt(a * a + b * b)) : Math.sqrt(a * a + b * b + c * c); }; }   /* Math.hypot original gera lixo de memória a cada chamada (milhares por quadro) */
+const NMC = {}; function NM(p, n) { const a = NMC[p] || (NMC[p] = []); return a[n] || (a[n] = p + n); }   /* nome de sprite + número sem criar texto novo a cada quadro */
 class GL2D {
   static make(cv) {
     try { const gl = cv.getContext('webgl', { alpha: false, antialias: false, depth: false, stencil: false, premultipliedAlpha: true, preserveDrawingBuffer: false, powerPreference: 'high-performance' }); return gl ? new GL2D(cv, gl) : null; } catch (e) { return null; }
@@ -240,7 +242,7 @@ class GL2D {
     const NT = this.NT = 1;   /* 1 textura por lote: no celular o shader com várias texturas lia todas em cada pixel e travava em ~15 FPS */
     const vs = 'attribute vec2 p;attribute vec2 uv;attribute vec4 col;attribute float ti;uniform vec2 res;varying vec2 vuv;varying vec4 vcol;varying float vti;void main(){gl_Position=vec4(p.x/res.x*2.0-1.0,1.0-p.y/res.y*2.0,0.0,1.0);vuv=uv;vcol=col;vti=ti;}';
     const hp = (() => { try { const f = gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.HIGH_FLOAT); return f && f.precision > 0; } catch (e) { return false; } })();
-    const fsx = 'precision mediump float;varying ' + (hp ? 'highp ' : '') + 'vec2 vuv;varying vec4 vcol;varying float vti;uniform sampler2D t0;void main(){gl_FragColor=mix(texture2D(t0,vuv),vec4(1.0),step(vti,-0.5))*vcol;}';   /* sem desvios: 1 leitura de textura por pixel; cor sólida = branco × cor */
+    this.hp = hp; const fsx = 'precision mediump float;varying ' + (hp ? 'highp ' : '') + 'vec2 vuv;varying vec4 vcol;varying float vti;uniform sampler2D t0;void main(){gl_FragColor=mix(texture2D(t0,vuv),vec4(1.0),step(vti,-0.5))*vcol;}';   /* sem desvios: 1 leitura de textura por pixel; cor sólida = branco × cor */
     const sh = (t, s) => { const o = gl.createShader(t); gl.shaderSource(o, s); gl.compileShader(o); if (!gl.getShaderParameter(o, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(o)); return o; };
     const pr = this.pr = gl.createProgram(); gl.attachShader(pr, sh(gl.VERTEX_SHADER, vs)); gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, fsx)); gl.linkProgram(pr); if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(pr)); gl.useProgram(pr);
     this.uRes = gl.getUniformLocation(pr, 'res'); for (let i = 0; i < NT; i++) gl.uniform1i(gl.getUniformLocation(pr, 't' + i), i);
@@ -252,7 +254,7 @@ class GL2D {
     gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
     this.texs = new Map(); this.calls = 0; this.up = 0; this.upPx = 0; this.slots = []; try { const ex = gl.getExtension('WEBGL_debug_renderer_info'); this.gpu = String(ex ? gl.getParameter(ex.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER)); const m = this.gpu.match(/^ANGLE \((.*)\)$/); if (m) { const p = m[1].split(','); this.gpu = p[1] || p[0]; } this.gpu = this.gpu.replace(/[()]/g, ' ').replace(/Vulkan[\d. ]*|OpenGL ES[\d. ]*|Device|Subzero|0x[0-9A-Fa-f]+|\bTM\b/g, '').replace(/\s+/g, ' ').trim().slice(0, 24) || '?'; } catch (e) { this.gpu = '?'; } this.frame = 0; this.colC = new Map(); this.txtC = new Map();
     const pc = document.createElement('canvas'); pc.width = pc.height = 1; this.pg = pc.getContext('2d', { willReadFrequently: true });
-    this.s = { m: [1, 0, 0, 1, 0, 0], ga: 1, fs: '#000', ss: '#000', lw: 1, clip: null, dash: null, font: '10px sans-serif', ta: 'start', tb: 'alphabetic' }; this.st = []; this.sp = []; this.cur = null; this.sc = null;
+    this.s = { m: [1, 0, 0, 1, 0, 0], ga: 1, fs: '#000', ss: '#000', lw: 1, clip: null, dash: null, font: '10px sans-serif', ta: 'start', tb: 'alphabetic' }; this.st = []; this.spP = []; this.spN = 0; this.cur = null; this.sc = null;
     this.imageSmoothingEnabled = false; this.lineJoin = 'miter'; this.lineCap = 'butt'; this.globalCompositeOperation = 'source-over';
     cv.addEventListener('webglcontextlost', e => { e.preventDefault(); this.lost = true; }); cv.addEventListener('webglcontextrestored', () => location.reload());
   }
@@ -280,10 +282,31 @@ class GL2D {
     if (s[0] === '#') { r = parseInt(s.slice(1, 3), 16); gg = parseInt(s.slice(3, 5), 16); b = parseInt(s.slice(5, 7), 16); } else { const p = s.match(/[\d.]+/g) || []; r = +p[0] || 0; gg = +p[1] || 0; b = +p[2] || 0; a = p[3] === undefined ? 1 : +p[3]; }
     c = [r / 255, gg / 255, b / 255, a]; if (this.colC.size > 4000) this.colC.clear(); this.colC.set(v, c); return c; }
   // ---- texturas (imagem ou canvas), guardadas por objeto
+  /* folha do cenário: as páginas de arte do cenário (objetos, mato, árvores, pedras, praia, poças...) viram 1 textura só na placa de vídeo.
+     Assim o jogo não troca de imagem a cada mato/árvore na hora de desenhar. Montada sozinha a partir do atlas.json (arte nova entra sem mexer aqui). */
+  packInit() {
+    this.pk = {}; try { const gl = this.gl, M = Assets.meta; if (!M || !this.hp) return; const max = gl.getParameter(gl.MAX_TEXTURE_SIZE) || 4096, W = 1024;
+      const want = { core: 1, deco: 1, mato: 1, raft: 1, poca: 1, muda: 1, ossos: 1, camp: 1, dens: 1 };
+      const L = M.pages.filter(p => want[p.group] && p.kb > 0 && p.size[0] <= W).map(p => ({ f: p.file, w: p.size[0], h: p.size[1] })); if (!L.length) return;
+      L.sort((a, b) => b.h - a.h || b.w - a.w); let x = 0, y = 0, rh = 0; for (const p of L) { if (x + p.w > W) { y += rh; x = 0; rh = 0; } p.x = x; p.y = y; x += p.w; rh = Math.max(rh, p.h); } const H = y + rh;
+      if (H > max) return;   /* placa não aceita textura tão alta: fica do jeito antigo (uma textura por página) */
+      this.flush(); const t = gl.createTexture(); gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, t); this.slots = [];
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, W, H, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+      const T = { t, w: W, h: H, u: 0, img: true }; this.sheetH = H; for (const p of L) this.pk[p.f] = { al: true, T, x: p.x, y: p.y, w: p.w, h: p.h, img: null };
+    } catch (e) { this.pk = {}; }
+  }
   tex(src) {
+    let pk = src.__pk; if (pk === undefined) { if (!this.pk && typeof Assets !== 'undefined' && Assets.meta) this.packInit(); if (this.pk) { pk = null; const f = src.__file || (src instanceof HTMLImageElement && src.src ? src.src.split('/').pop().split('?')[0] : ''); if (f) pk = this.pk[f] || null; src.__pk = pk; } }
+    if (pk) { if (pk.img !== src) { if (src.complete === false || !(src.naturalWidth || src.width)) return null; const gl = this.gl; this.flush(); gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, pk.T.t); this.slots = []; this.up++; this.upPx += pk.w * pk.h;
+        try { gl.texSubImage2D(gl.TEXTURE_2D, 0, pk.x, pk.y, gl.RGBA, gl.UNSIGNED_BYTE, src); } catch (e) { return null; } pk.img = src; } pk.T.u = this.frame; return pk; }
     let t = this.texs.get(src); if (t && !(src.__glv !== undefined && src.__glv !== t.v)) { t.u = this.frame; return t; }
+    if (t && src.__glsub && src.__glsub.length) { const gl = this.gl; this.flush(); gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, t.t); this.slots = [];   /* só os pedaços novos (ex.: pegada nova na folha de pegadas), sem reenviar a imagem inteira */
+      for (const s of src.__glsub) { try { gl.texSubImage2D(gl.TEXTURE_2D, 0, s.x, s.y, gl.RGBA, gl.UNSIGNED_BYTE, s.c); this.up++; this.upPx += s.c.width * s.c.height; } catch (e) {} }
+      src.__glsub.length = 0; t.v = src.__glv; t.u = this.frame; return t; }
+    if (src.__glsub) src.__glsub.length = 0;
     const w = src.naturalWidth || src.width, h = src.naturalHeight || src.height; if (!w || !h) return null; const gl = this.gl;
-    if (!t) { this.flush(); t = { t: gl.createTexture(), w, h, u: this.frame, v: src.__glv, img: src instanceof HTMLImageElement }; this.texs.set(src, t); } else { this.flush(); t.w = w; t.h = h; t.v = src.__glv; }
+    if (!t) { this.flush(); t = { t: gl.createTexture(), w, h, u: this.frame, v: src.__glv, img: src instanceof HTMLImageElement || !!src.__file }; this.texs.set(src, t); } else { this.flush(); t.w = w; t.h = h; t.v = src.__glv; }
     gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, t.t); this.slots = [];
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
     this.up++; this.upPx += w * h; try { gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, src); } catch (e) { return null; }
@@ -316,35 +339,40 @@ class GL2D {
   drawImage(src, a1, a2, a3, a4, a5, a6, a7, a8) {
     if (!src || this.lost) return; const t = this.tex(src); if (!t) return; let sx = 0, sy = 0, sw = t.w, sh = t.h, dx, dy, dw, dh;
     if (a5 !== undefined) { sx = a1; sy = a2; sw = a3; sh = a4; dx = a5; dy = a6; dw = a7; dh = a8; } else if (a3 !== undefined) { dx = a1; dy = a2; dw = a3; dh = a4; } else { dx = a1; dy = a2; dw = t.w; dh = t.h; }
-    const ga = this.s.ga; if (ga <= 0) return; const ti = this.slot(t);
-    this.rectQ(dx, dy, dw, dh, ga, ga, ga, ga, ti, sx / t.w, sy / t.h, (sx + sw) / t.w, (sy + sh) / t.h);
+    const ga = this.s.ga; if (ga <= 0) return; const TT = t.al ? t.T : t, ox = t.al ? t.x : 0, oy = t.al ? t.y : 0, ti = this.slot(TT);
+    this.rectQ(dx, dy, dw, dh, ga, ga, ga, ga, ti, (sx + ox) / TT.w, (sy + oy) / TT.h, (sx + sw + ox) / TT.w, (sy + sh + oy) / TT.h);
   }
   fillRect(x, y, w, h) { const c = this.col(this.s.fs), a = c[3] * this.s.ga; if (a <= 0) return; this.rectQ(x, y, w, h, c[0] * a, c[1] * a, c[2] * a, a, -1, 0, 0, 0, 0); }
   clearRect() {}
-  strokeRect(x, y, w, h) { const sp = this.sp, cur = this.cur; this.beginPath(); this.rect(x, y, w, h); this.stroke(); this.sp = sp; this.cur = cur; }
-  beginPath() { this.sp = []; this.cur = null; }
-  P(x, y) { const m = this.s.m; return [m[0] * x + m[2] * y + m[4], m[1] * x + m[3] * y + m[5]]; }
-  moveTo(x, y) { this.cur = [this.P(x, y)]; this.sp.push(this.cur); }
-  lineTo(x, y) { if (!this.cur) return this.moveTo(x, y); this.cur.push(this.P(x, y)); }
-  closePath() { if (this.cur && this.cur.length) { this.cur.closed = true; const f = this.cur[0]; this.cur = [f.slice()]; this.sp.push(this.cur); } }
-  rect(x, y, w, h) { const p = [this.P(x, y), this.P(x + w, y), this.P(x + w, y + h), this.P(x, y + h)]; p.closed = true; p.rect = [x, y, w, h]; this.sp.push(p); this.cur = [this.P(x, y)]; this.sp.push(this.cur); }
+  /* caminhos (formas) guardados em listas reaproveitadas: nada de criar listas novas a cada ponto (isso gerava lixo de memória e engasgos) */
+  strokeRect(x, y, w, h) { const c = this.col(this.s.ss), a = c[3] * this.s.ga; if (a <= 0) return; this.sci(this.s.clip); const m = this.s.m, r = c[0] * a, g = c[1] * a, b = c[2] * a, hw = this.hw();
+    const X = (px, py) => m[0] * px + m[2] * py + m[4], Y = (px, py) => m[1] * px + m[3] * py + m[5], x1 = x + w, y1 = y + h;
+    this.seg(X(x, y), Y(x, y), X(x1, y), Y(x1, y), r, g, b, a, hw); this.seg(X(x1, y), Y(x1, y), X(x1, y1), Y(x1, y1), r, g, b, a, hw); this.seg(X(x1, y1), Y(x1, y1), X(x, y1), Y(x, y1), r, g, b, a, hw); this.seg(X(x, y1), Y(x, y1), X(x, y), Y(x, y), r, g, b, a, hw); }
+  beginPath() { this.spN = 0; this.cur = null; }
+  sub() { const P = this.spP || (this.spP = []); let s = P[this.spN]; if (!s) s = P[this.spN] = { p: [], n: 0, closed: false }; this.spN++; s.n = 0; s.closed = false; return s; }
+  pt(s, x, y) { const m = this.s.m, p = s.p, i = s.n * 2; p[i] = m[0] * x + m[2] * y + m[4]; p[i + 1] = m[1] * x + m[3] * y + m[5]; s.n++; }
+  moveTo(x, y) { this.cur = this.sub(); this.pt(this.cur, x, y); }
+  lineTo(x, y) { if (!this.cur) return this.moveTo(x, y); this.pt(this.cur, x, y); }
+  closePath() { const c = this.cur; if (c && c.n) { c.closed = true; const x = c.p[0], y = c.p[1], s = this.sub(); s.p[0] = x; s.p[1] = y; s.n = 1; this.cur = s; } }
+  rect(x, y, w, h) { const s = this.sub(); this.pt(s, x, y); this.pt(s, x + w, y); this.pt(s, x + w, y + h); this.pt(s, x, y + h); s.closed = true; this.moveTo(x, y); }
   ellipse(x, y, rx, ry, rot, a0, a1, ccw) {
     rx = Math.abs(rx); ry = Math.abs(ry); let sweep = a1 - a0; if (ccw) { if (sweep > 0) sweep -= Math.PI * 2; } else if (sweep < 0) sweep += Math.PI * 2; if (Math.abs(sweep) > Math.PI * 2) sweep = Math.sign(sweep) * Math.PI * 2;
     const sc = Math.sqrt(Math.abs(this.s.m[0] * this.s.m[3] - this.s.m[1] * this.s.m[2])) || 1, n = Math.max(8, Math.min(48, Math.ceil(Math.max(rx, ry) * sc * Math.abs(sweep) / 3))), cr = Math.cos(rot || 0), sr = Math.sin(rot || 0);
-    if (!this.cur) { this.cur = []; this.sp.push(this.cur); }
-    for (let i = 0; i <= n; i++) { const a = a0 + sweep * i / n, ex = Math.cos(a) * rx, ey = Math.sin(a) * ry; this.cur.push(this.P(x + ex * cr - ey * sr, y + ex * sr + ey * cr)); }
-    if (Math.abs(sweep) >= Math.PI * 2 - 1e-6) this.cur.closed = true;
+    if (!this.cur) this.cur = this.sub(); const s = this.cur;
+    for (let i = 0; i <= n; i++) { const a = a0 + sweep * i / n, ex = Math.cos(a) * rx, ey = Math.sin(a) * ry; this.pt(s, x + ex * cr - ey * sr, y + ex * sr + ey * cr); }
+    if (Math.abs(sweep) >= Math.PI * 2 - 1e-6) s.closed = true;
   }
   arc(x, y, r, a0, a1, ccw) { this.ellipse(x, y, r, r, 0, a0, a1, ccw); }
   fill() { const c = this.col(this.s.fs), a = c[3] * this.s.ga; if (a <= 0) return; this.sci(this.s.clip); const r = c[0] * a, g = c[1] * a, b = c[2] * a;
-    for (const p of this.sp) { if (p.length < 3) continue; const x0 = p[0][0], y0 = p[0][1]; for (let i = 1; i < p.length - 1; i++) { if (this.nv + 3 > this.MAXV) this.flush(); this.v(x0, y0, 0, 0, r, g, b, a, -1); this.v(p[i][0], p[i][1], 0, 0, r, g, b, a, -1); this.v(p[i + 1][0], p[i + 1][1], 0, 0, r, g, b, a, -1); } } }
-  stroke() { const c = this.col(this.s.ss), a = c[3] * this.s.ga; if (a <= 0) return; this.sci(this.s.clip); const r = c[0] * a, g = c[1] * a, b = c[2] * a, m = this.s.m, hw = Math.max(.5, this.s.lw * (Math.sqrt(Math.abs(m[0] * m[3] - m[1] * m[2])) || 1) / 2), dash = this.s.dash;
-    const seg = (x0, y0, x1, y1) => { const dx = x1 - x0, dy = y1 - y0, L = Math.hypot(dx, dy); if (L < 1e-6) return; const nx = -dy / L * hw, ny = dx / L * hw;
-      if (!dash) { this.quad(x0 + nx, y0 + ny, x1 + nx, y1 + ny, x1 - nx, y1 - ny, x0 - nx, y0 - ny, 0, 0, 0, 0, r, g, b, a, -1); return; }
-      const ds = dash.map(d => d * (Math.sqrt(Math.abs(m[0] * m[3] - m[1] * m[2])) || 1)); let pos = 0, k = 0, on = true; while (pos < L) { const e = Math.min(L, pos + ds[k % ds.length]); if (on) { const ax = x0 + dx * pos / L, ay = y0 + dy * pos / L, bx = x0 + dx * e / L, by = y0 + dy * e / L; this.quad(ax + nx, ay + ny, bx + nx, by + ny, bx - nx, by - ny, ax - nx, ay - ny, 0, 0, 0, 0, r, g, b, a, -1); } pos = e; k++; on = !on; } };
-    for (const p of this.sp) { for (let i = 0; i < p.length - 1; i++) seg(p[i][0], p[i][1], p[i + 1][0], p[i + 1][1]); if (p.closed && p.length > 2) seg(p[p.length - 1][0], p[p.length - 1][1], p[0][0], p[0][1]); } }
-  clip() { const R = this.sp.filter(p => p.length >= 3); if (R.length !== 1 || R[0].length !== 4) return; const p = R[0], xs = p.map(q => q[0]), ys = p.map(q => q[1]);
-    let x0 = Math.min(...xs), y0 = Math.min(...ys), x1 = Math.max(...xs), y1 = Math.max(...ys); const c = this.s.clip; if (c) { x0 = Math.max(x0, c[0]); y0 = Math.max(y0, c[1]); x1 = Math.min(x1, c[0] + c[2]); y1 = Math.min(y1, c[1] + c[3]); }
+    for (let k = 0; k < this.spN; k++) { const s = this.spP[k], p = s.p, n = s.n; if (n < 3) continue; const x0 = p[0], y0 = p[1]; for (let i = 1; i < n - 1; i++) { if (this.nv + 3 > this.MAXV) this.flush(); this.v(x0, y0, 0, 0, r, g, b, a, -1); this.v(p[i * 2], p[i * 2 + 1], 0, 0, r, g, b, a, -1); this.v(p[i * 2 + 2], p[i * 2 + 3], 0, 0, r, g, b, a, -1); } } }
+  hw() { const m = this.s.m; return Math.max(.5, this.s.lw * (Math.sqrt(Math.abs(m[0] * m[3] - m[1] * m[2])) || 1) / 2); }
+  seg(x0, y0, x1, y1, r, g, b, a, hw) { const dx = x1 - x0, dy = y1 - y0, L = Math.sqrt(dx * dx + dy * dy); if (L < 1e-6) return; const nx = -dy / L * hw, ny = dx / L * hw, dash = this.s.dash;
+    if (!dash) { this.quad(x0 + nx, y0 + ny, x1 + nx, y1 + ny, x1 - nx, y1 - ny, x0 - nx, y0 - ny, 0, 0, 0, 0, r, g, b, a, -1); return; }
+    const m = this.s.m, sc = Math.sqrt(Math.abs(m[0] * m[3] - m[1] * m[2])) || 1; let pos = 0, k = 0, on = true; while (pos < L) { const e = Math.min(L, pos + Math.max(.5, dash[k % dash.length] * sc)); if (on) { const ax = x0 + dx * pos / L, ay = y0 + dy * pos / L, bx = x0 + dx * e / L, by = y0 + dy * e / L; this.quad(ax + nx, ay + ny, bx + nx, by + ny, bx - nx, by - ny, ax - nx, ay - ny, 0, 0, 0, 0, r, g, b, a, -1); } pos = e; k++; on = !on; } }
+  stroke() { const c = this.col(this.s.ss), a = c[3] * this.s.ga; if (a <= 0) return; this.sci(this.s.clip); const r = c[0] * a, g = c[1] * a, b = c[2] * a, hw = this.hw();
+    for (let k = 0; k < this.spN; k++) { const s = this.spP[k], p = s.p, n = s.n; for (let i = 0; i < n - 1; i++) this.seg(p[i * 2], p[i * 2 + 1], p[i * 2 + 2], p[i * 2 + 3], r, g, b, a, hw); if (s.closed && n > 2) this.seg(p[n * 2 - 2], p[n * 2 - 1], p[0], p[1], r, g, b, a, hw); } }
+  clip() { let s = null, cnt = 0; for (let k = 0; k < this.spN; k++) if (this.spP[k].n >= 3) { s = this.spP[k]; cnt++; } if (cnt !== 1 || s.n !== 4) return; const p = s.p;
+    let x0 = Math.min(p[0], p[2], p[4], p[6]), y0 = Math.min(p[1], p[3], p[5], p[7]), x1 = Math.max(p[0], p[2], p[4], p[6]), y1 = Math.max(p[1], p[3], p[5], p[7]); const c = this.s.clip; if (c) { x0 = Math.max(x0, c[0]); y0 = Math.max(y0, c[1]); x1 = Math.min(x1, c[0] + c[2]); y1 = Math.min(y1, c[1] + c[3]); }
     this.s.clip = [Math.round(x0), Math.round(y0), Math.max(0, Math.round(x1 - x0)), Math.max(0, Math.round(y1 - y0))]; this.applyClip(); }
   fillText(s, x, y) { s = String(s); const S = this.s, k = s + '|' + S.font + '|' + S.fs; let c = this.txtC.get(k);
     if (!c) { const g0 = this.pg; g0.font = S.font; const w = Math.ceil(g0.measureText(s).width) + 4, px = +((S.font.match(/(\d+)px/) || [0, 12])[1]), h = Math.ceil(px * 1.5) + 4; c = document.createElement('canvas'); c.width = w; c.height = h; const g = c.getContext('2d'); g.font = S.font; g.fillStyle = S.fs; g.textBaseline = 'alphabetic'; g.fillText(s, 2, Math.ceil(px * 1.15) + 2); c.bl = Math.ceil(px * 1.15) + 2; c.px = px; if (this.txtC.size > 300) this.txtC.clear(); this.txtC.set(k, c); }
@@ -356,7 +384,7 @@ class GL2D {
   begin() { const gl = this.gl, cv = this.canvas; this.frame++; window.__glc = this.calls; this.calls = 0; gl.viewport(0, 0, cv.width, cv.height); gl.useProgram(this.pr); gl.uniform2f(this.uRes, cv.width, cv.height); this.s.clip = null; this.sciR = null; this.st.length = 0; gl.disable(gl.SCISSOR_TEST); gl.clearColor(0, 0, 0, 1); gl.clear(gl.COLOR_BUFFER_BIT); }
   flush() { if (!this.nv) { this.slots = []; return; } const gl = this.gl; for (let i = 0; i < this.slots.length; i++) { gl.activeTexture(gl.TEXTURE0 + i); gl.bindTexture(gl.TEXTURE_2D, this.slots[i].t); }
     gl.bindBuffer(gl.ARRAY_BUFFER, this.buf); gl.bufferData(gl.ARRAY_BUFFER, this.vb.subarray(0, this.nv * 9), gl.STREAM_DRAW); gl.drawArrays(gl.TRIANGLES, 0, this.nv);   /* cada lote ganha memória nova (bufferData): a placa não precisa esperar o desenho anterior terminar (no Adreno o bufferSubData no mesmo lugar travava) */ this.nv = 0; this.slots = []; this.calls++; }
-  end() { this.flush(); if (this.frame % 120 === 0) for (const [src, t] of this.texs) if (!t.img && this.frame - t.u > 300) { this.gl.deleteTexture(t.t); this.texs.delete(src); } }
+  end() { this.flush(); if (this.frame % 120 === 0) for (const [src, t] of this.texs) if (!src.__keep && this.frame - t.u > (t.img ? 2400 : 300)) { this.gl.deleteTexture(t.t); this.texs.delete(src); } }   /* página de bicho sem uso por ~40 s também sai da placa (antes ficava para sempre e somava memória a cada recarga) */
 }
 
 /* imagens do jogo ficam na pasta assets (ao lado deste index.html); ASSET_V muda a cada atualização de arte para o navegador baixar a versão nova */
@@ -383,7 +411,7 @@ const Assets = {
     if (typeof g === 'string') g = this.grp[g]; if (!g) return Promise.resolve();
     g.use = this.now; if (g.st) return g.p || Promise.resolve();
     g.st = 1;
-    return g.p = Promise.all(g.pages.map(p => this.loadImg(this.E ? this.E.pages[p.i] : 'assets/' + p.file + '?v=' + ASSET_V).then(im => { p.img = im; }))).then(() => { g.st = 2; g.p = null; }).catch(e => { g.st = 0; g.p = null; console.warn(e.message); });
+    return g.p = Promise.all(g.pages.map(p => this.loadImg(this.E ? this.E.pages[p.i] : 'assets/' + p.file + '?v=' + ASSET_V).then(im => this.ready(im, p.file, g.eager)).then(im => { p.img = im; }))).then(() => { g.st = 2; g.p = null; }).catch(e => { g.st = 0; g.p = null; console.warn(e.message); });
   },
   // avisa que o sprite vai ser usado em breve (bichos acordados): mantém o grupo vivo e começa a carregar se preciso
   // 'perto' = o bicho está a uns 600 px: carrega também as animações RARAS da espécie (grupo '<espécie>_x'); longe, só as básicas
@@ -396,6 +424,12 @@ const Assets = {
   tick(now) {
     this.now = now; if (now - (this.sw || 0) < 5000) return; this.sw = now;
     for (const n in this.grp) { const g = this.grp[n]; if (!g.eager && g.st === 2 && now - g.use > this.TTL) this.unload(g); }
+  },
+  /* imagem pronta para desenhar sem travar: decodificada fora do jogo; no WebGL vira ImageBitmap (vai para a placa de vídeo bem mais rápido) */
+  ready(im, file, keep) {
+    const dec = () => { im.__file = file; if (keep) im.__keep = 1; return im.decode ? im.decode().then(() => im, () => im) : im; };
+    if (window.GLMODE && window.createImageBitmap) { try { return createImageBitmap(im, { premultiplyAlpha: 'premultiply' }).then(b => { b.__file = file; if (keep) b.__keep = 1; return b; }, dec); } catch (e) {} }
+    return dec();
   },
   unload(g) { for (const p of g.pages) { p.img = null; p.tint = {}; } g.st = 0; },
   // desenha um quadro do atlas com o pé (âncora) em (x,y) da tela
@@ -455,7 +489,7 @@ const World = (() => {
     const vx = Math.floor(x / T), vy = Math.floor(y / T);
     if (!okL(x, y, 2, 2) || nearPath(vx, vy) || nearPath(vx - 1, vy) || nearPath(vx + 1, vy) || nearPath(vx, vy - 1) || nearPath(vx, vy + 1)) return false;
     if (Math.hypot(x - spawnPt.x, y - spawnPt.y) < 150 || (raftPos && Math.hypot(x - raftPos.x, y - raftPos.y) < 150)) return false;
-    let n = 0; for (const o of objs) { if (o.kind.slice(0, 3) === 'sap') n++; if (Math.abs(o.x - x) < 30 && Math.abs(o.y - y) < 22 && (o.solid || o.kind.slice(0, 3) === 'sap' || o.kind === 'bench' || o.kind === 'fire')) return false; }
+    let n = 0; for (let _i1 = 0, o; _i1 < objs.length && (o = objs[_i1], true); _i1++) { if (o.kind.startsWith('sap')) n++; if (Math.abs(o.x - x) < 30 && Math.abs(o.y - y) < 22 && (o.solid || o.kind.startsWith('sap') || o.kind === 'bench' || o.kind === 'fire')) return false; }
     if (n >= 40) return false;
     objs.push({ kind, x, y, ph: Math.random() * 9, g: 0 }); actVer++; return true;
   }
@@ -465,7 +499,7 @@ const World = (() => {
   function cutMato(x, y, r) { let n = 0; for (let i = 0; i < act.length; i++) { const o = act[i]; if (o.kind === 'mato' && !(o.cutT > 0) && Math.hypot(o.x - x, (o.y - y) * 1.3) < r) { o.cutT = 420; n++; } } return n; }
   function tick(dt, px, py) {
     if ((natT -= dt) <= 0) { natT = 25 + Math.random() * 20; natural(px, py); }
-    for (let i = 0; i < act.length; i++) { const o = act[i]; if (o.kind === 'mato' && o.cutT > 0) { if (!LOCS[LOC].fixed) o.cutT -= dt; if (o.cutT <= 0) o.cutT = 0; } else if (o.g !== undefined && o.kind.slice(0, 3) === 'sap') { o.g += dt; if (o.g >= GROW && !o.dead && Math.hypot(o.x - px, o.y - py) > 50) { o.dead = true; const k = o.kind === 'sappine' ? 'pine' : o.kind === 'sapoak' ? 'oak' : 'appletree'; add(Object.assign({ kind: k, x: o.x, y: o.y, ph: Math.random() * 9, solid: true }, k === 'appletree' ? { ap: [0, 0, 0, 0], apT: [30, 40, 50, 60] } : {})); } } }
+    for (let i = 0; i < act.length; i++) { const o = act[i]; if (o.kind === 'mato' && o.cutT > 0) { if (!LOCS[LOC].fixed) o.cutT -= dt; if (o.cutT <= 0) o.cutT = 0; } else if (o.g !== undefined && o.kind.startsWith('sap')) { o.g += dt; if (o.g >= GROW && !o.dead && Math.hypot(o.x - px, o.y - py) > 50) { o.dead = true; const k = o.kind === 'sappine' ? 'pine' : o.kind === 'sapoak' ? 'oak' : 'appletree'; add(Object.assign({ kind: k, x: o.x, y: o.y, ph: Math.random() * 9, solid: true }, k === 'appletree' ? { ap: [0, 0, 0, 0], apT: [30, 40, 50, 60] } : {})); } } }
     clock += dt; actT -= dt; const cx = (px / 200) | 0, cy = (py / 200) | 0;
     if (actVer !== lastVer || objs.length !== lastLen || cx !== lastCx || cy !== lastCy || actT <= 0) { lastCx = cx; lastCy = cy; rebuildAct(px, py); }
     rebuildSolids();
@@ -733,8 +767,9 @@ const World = (() => {
   function grassK(tx, ty) { return 0;   // um tom só de grama (os tons variados foram removidos)
     if (!gnoise) gnoise = noise(CONFIG.SEED + 555);
     const n = gnoise(tx / 13, ty / 13) * .7 + gnoise(tx / 5.5 + 40, ty / 5.5) * .3; return Math.max(-2, Math.min(2, Math.round((n - .5) * 7))); }
+  let chunkMade = false;
   function chunkCanvas(cx, cy) {
-    const id = cy * 1000 + cx, hit = cache.get(id); if (hit) { cache.delete(id); cache.set(id, hit); return hit; }
+    const id = cy * 1000 + cx, hit = cache.get(id); if (hit) { cache.delete(id); cache.set(id, hit); return hit; } chunkMade = true;
     const c = document.createElement('canvas'); c.width = c.height = CH * T; const g = c.getContext('2d');
     for (let j = 0; j < CH; j++) for (let i = 0; i < CH; i++) { const tx = cx * CH + i, ty = cy * CH + j; if (tx >= W || ty >= H) continue;
       const [im, col, row, vr, fp] = pickTile(tx, ty);
@@ -811,7 +846,7 @@ const World = (() => {
       const x = vx * T + r() * T, y = vy * T + r() * T; if (Math.hypot(x - spawnPt.x, y - spawnPt.y) < 120 || inPlat(x, y)) continue; objs.push(Object.assign({ kind, x, y, ph: r() * 9 }, extra)); k++; } };
     put('pine', CONFIG.TREES, 2, { solid: true }); put('oak', CONFIG.OAKS, 2, { solid: true }); put('appletree', CONFIG.APPLETREES, 2, { solid: true, ap: [1, 1, 1, 1], apT: [0, 0, 0, 0] });
     put('palm', CONFIG.PALMS, 1, { solid: true }, 1); put('dead', CONFIG.DEADS, 3, { solid: true }, 3);
-    for (const o of objs) { if (o.kind === 'appletree') { o.ap = [1, 1, 1, 1]; o.apT = [0, 0, 0, 0]; } } // cada árvore com os seus próprios frutos
+    for (let _i2 = 0, o; _i2 < objs.length && (o = objs[_i2], true); _i2++) { if (o.kind === 'appletree') { o.ap = [1, 1, 1, 1]; o.apT = [0, 0, 0, 0]; } } // cada árvore com os seus próprios frutos
     { const rc = rng(CONFIG.SEED + 91); for (const o of objs.slice()) if (o.kind === 'palm') { const n = 1 + (rc() < .55 ? 1 : 0); for (let k = 0; k < n; k++) { const an = rc() * 6.283, rd = 30 + rc() * 24, x = o.x + 22 + Math.cos(an) * rd, y = o.y + 8 + Math.sin(an) * rd * .55; if (okL(x, y, 1, 2)) objs.push({ kind: 'cocochao', x, y, ph: rc() * 9 }); } } }   // cocos caídos no chão, em volta do tronco
     put('tuft', CONFIG.TUFTS || 0, 2, {});
     put('rock', CONFIG.ROCKS, 2, { solid: true, hp: 3 }, 3);
@@ -828,7 +863,7 @@ const World = (() => {
     { const rp = rng(CONFIG.SEED + 991); pocas = []; let tries = 0;   /* poças de chuva: só em clareira da floresta (grama/terra), longe de arbustos, mato, árvores e água; rng próprio (não mexe no resto do mapa) e fora da lista de objetos (o jogo salvo não precisa guardá-las) */
       const ok4 = (x, y, lo, hi) => okL(x, y, lo, hi) && okL(x - 28, y - 18, lo, hi) && okL(x + 28, y + 18, lo, hi) && okL(x + 28, y - 18, lo, hi) && okL(x - 28, y + 18, lo, hi);
       while (pocas.length < 26 && tries++ < 4000) { const x = 160 + rp() * (W * T - 320), y = 160 + rp() * (H * T - 320);
-        if (!ok4(x, y, 2, 3) || waterNear(x, y, 100) || Math.hypot(x - spawnPt.x, y - spawnPt.y) < 130 || inPlat(x, y) || objs.some(o => Math.hypot(o.x - x, o.y - y) < (o.solid ? 70 : (o.kind === 'mato' || o.kind.slice(0, 4) === 'bush') ? 90 : 56)) || pocas.some(q => Math.hypot(q.x - x, q.y - y) < 170)) continue;
+        if (!ok4(x, y, 2, 3) || waterNear(x, y, 100) || Math.hypot(x - spawnPt.x, y - spawnPt.y) < 130 || inPlat(x, y) || objs.some(o => Math.hypot(o.x - x, o.y - y) < (o.solid ? 70 : (o.kind === 'mato' || o.kind.startsWith('bush')) ? 90 : 56)) || pocas.some(q => Math.hypot(q.x - x, q.y - y) < 170)) continue;
         pocas.push({ kind: 'poca', x, y, v: 1 + Math.floor(rp() * 4), w: .5 + .5 * rp(), ph: rp() * 9 }); } }
     trail = null; if (false) { let best = null;   /* (desligada: a viagem agora é pela jangada) trilha para o outro local: no ponto de grama mais a leste (borda do mapa), perto do meio */
       for (let x = W - 3; x > W / 2 && !best; x--) for (let dy = 0; dy < H / 2 - 3 && !best; dy++) for (const s of [1, -1]) { const y = Math.round(H / 2 + s * dy), px = x * T, py = y * T;
@@ -839,7 +874,7 @@ const World = (() => {
   let campPos = null, raftPos = null;
   function decor() {
     const r2 = rng(CONFIG.SEED + 909), okL = (x, y, lo, hi) => { const vx = Math.floor(x / T), vy = Math.floor(y / T); for (const [a, b] of [[0, 0], [1, 0], [0, 1], [1, 1]]) { const l = L(vx + a, vy + b); if (l < lo || l > hi) return false; } return true; };
-    const free = (x, y, d) => { if (Math.hypot(x - spawnPt.x, y - spawnPt.y) < 120 || plateaus.some(q => x > (q.x0 - 1.5) * T && x < (q.x1 + 1.5) * T && y > (q.y0 - 1.5) * T && y < (q.cy + 1.8) * T)) return false; for (const o of objs) if (o.solid && Math.abs(o.x - x) < d && Math.abs(o.y - y) < d) return false; return true; };
+    const free = (x, y, d) => { if (Math.hypot(x - spawnPt.x, y - spawnPt.y) < 120 || plateaus.some(q => x > (q.x0 - 1.5) * T && x < (q.x1 + 1.5) * T && y > (q.y0 - 1.5) * T && y < (q.cy + 1.8) * T)) return false; for (let _i3 = 0, o; _i3 < objs.length && (o = objs[_i3], true); _i3++) if (o.solid && Math.abs(o.x - x) < d && Math.abs(o.y - y) < d) return false; return true; };
     for (let c = 0, tries = 0; c < 55 && tries++ < 900;) {   // flores: manchas na grama do meio e de baixo
       const cx = 100 + r2() * (W * T - 200), cy = 15 * T + r2() * (H * T - 15 * T - 100); if (!okL(cx, cy, 2, 2) || !free(cx, cy, 30)) continue;
       const col = Math.floor(r2() * 3), n = 3 + Math.floor(r2() * 5); c++;
@@ -911,10 +946,10 @@ const World = (() => {
   function ensureRope() { for (const k of ropeCells) { const vx = Math.floor(k / 1000), vy = k % 1000; if (!objs.some(o => o.kind === 'bridge' && Math.round(o.x / T) === vx && Math.round(o.y / T) === vy)) objs.push({ kind: 'bridge', nat: true, x: vx * T, y: vy * T, ph: 0 }); } stale = true; }
   function clearArea(x, y, rx, ry) { const K = { pine: 1, oak: 1, fir: 1, appletree: 1, palm: 1, tuft: 1, rock: 1, bush1: 1, bush2: 1, flower: 1, boulder: 1, mato: 1, sapoak: 1, sappine: 1, sapapple: 1, dead: 1 }; const n0 = objs.length; for (let i = objs.length - 1; i >= 0; i--) { const o = objs[i]; if (K[o.kind] && ((o.x - x) / rx) ** 2 + ((o.y - y) / ry) ** 2 < 1) objs.splice(i, 1); } if (objs.length !== n0) { stale = true; actVer++; } }
   function loadObjs(list) { stale = true; objs.length = 0; for (const o of list) objs.push(o); ensureRope(); actVer++; }
-  function poolNear(x, y, r) { for (const p of pocas) if (p.w > .3 && Math.hypot(p.x - x, p.y - y) < r) return p; return null; }
-  function nearestPool(x, y, maxR) { let b = null, bd = maxR; for (const p of pocas) { if (p.w < .4) continue; const d = Math.hypot(p.x - x, p.y - y); if (d < bd) { bd = d; b = p; } } return b; }
+  function poolNear(x, y, r) { for (let _i4 = 0, p; _i4 < pocas.length && (p = pocas[_i4], true); _i4++) if (p.w > .3 && Math.hypot(p.x - x, p.y - y) < r) return p; return null; }
+  function nearestPool(x, y, maxR) { let b = null, bd = maxR; for (let _i5 = 0, p; _i5 < pocas.length && (p = pocas[_i5], true); _i5++) { if (p.w < .4) continue; const d = Math.hypot(p.x - x, p.y - y); if (d < bd) { bd = d; b = p; } } return b; }
   function sipPool(x, y) { const p = poolNear(x, y, 50); if (p) p.w = Math.max(0, p.w - .08); }
-  function pocaTick(dt, rain, heat) { for (const p of pocas) { if (rain > .05) p.w = Math.min(1, p.w + rain * dt / 40); else p.w = Math.max(0, p.w - dt / (heat > .5 ? 110 : 320)); } }   /* enche na chuva (~40 s), seca devagar no tempo limpo (~5 min) e rápido no calor */
+  function pocaTick(dt, rain, heat) { for (let _i6 = 0, p; _i6 < pocas.length && (p = pocas[_i6], true); _i6++) { if (rain > .05) p.w = Math.min(1, p.w + rain * dt / 40); else p.w = Math.max(0, p.w - dt / (heat > .5 ? 110 : 320)); } }   /* enche na chuva (~40 s), seca devagar no tempo limpo (~5 min) e rápido no calor */
   function waterNear(x, y, r) { const cx = Math.round(x / T), cy = Math.round(y / T), n = Math.ceil(r / T); for (let j = cy - n; j <= cy + n; j++) for (let i = cx - n; i <= cx + n; i++) { if (i < 0 || j < 0 || i > W || j > H) continue; if (L(i, j) < 1 && Math.hypot(i * T - x, j * T - y) < r) return true; } return false; }
   function init() {
     generate(); let best = 1e9;
@@ -926,7 +961,10 @@ const World = (() => {
   }
   function draw(ctx, camX, camY, vw, vh) {
     const cs = CH * T, x0 = Math.max(0, Math.floor(camX / cs)), x1 = Math.min(Math.ceil(W / CH) - 1, Math.floor((camX + vw) / cs)), y0 = Math.max(0, Math.floor(camY / cs)), y1 = Math.min(Math.ceil(H / CH) - 1, Math.floor((camY + vh) / cs));
-    for (let cy = y0; cy <= y1; cy++) for (let cx = x0; cx <= x1; cx++) ctx.drawImage(chunkCanvas(cx, cy), Math.round(cx * cs - camX), Math.round(cy * cs - camY));
+    chunkMade = false; for (let cy = y0; cy <= y1; cy++) for (let cx = x0; cx <= x1; cx++) ctx.drawImage(chunkCanvas(cx, cy), Math.round(cx * cs - camX), Math.round(cy * cs - camY));
+    if (!chunkMade) {   /* adianta 1 pedaço do chão que vai entrar na tela (até 256 px fora dela) por quadro: andando, o chão já está pronto e não engasga */
+      const M = 256, ax0 = Math.max(0, Math.floor((camX - M) / cs)), ax1 = Math.min(Math.ceil(W / CH) - 1, Math.floor((camX + vw + M) / cs)), ay0 = Math.max(0, Math.floor((camY - M) / cs)), ay1 = Math.min(Math.ceil(H / CH) - 1, Math.floor((camY + vh + M) / cs));
+      outer: for (let cy = ay0; cy <= ay1; cy++) for (let cx = ax0; cx <= ax1; cx++) if (!cache.has(cy * 1000 + cx)) { const c = chunkCanvas(cx, cy); if (ctx.tex) ctx.tex(c); break outer; } }
     // ondas animadas sobre a água aberta (só onde os 4 cantos são água): fase diferente por casa
     if (false && Assets.hasAnim('water_wave', 'wave')) { const tx0 = Math.max(0, Math.floor(camX / T)), tx1 = Math.min(W - 1, Math.floor((camX + vw) / T)), ty0 = Math.max(0, Math.floor(camY / T)), ty1 = Math.min(H - 1, Math.floor((camY + vh) / T)), nf = Assets.frames('water_wave', 'wave', '_'), tm = performance.now() / 1000;
       ctx.globalAlpha = .75; for (let ty = ty0; ty <= ty1; ty++) for (let tx = tx0; tx <= tx1; tx++) { if (lvl[ty * VW + tx] !== 0 || lvl[ty * VW + tx + 1] !== 0 || lvl[(ty + 1) * VW + tx] !== 0 || lvl[(ty + 1) * VW + tx + 1] !== 0) continue; const h = (Math.imul(tx, 73856093) ^ Math.imul(ty, 19349663)) >>> 0;
@@ -1168,7 +1206,7 @@ const Entities = (() => {
   const DIRS = ['south', 'south-west', 'west', 'north-west', 'north', 'north-east', 'east', 'south-east'];
   const PALM_REGROW = 1800, COCO_REGROW = 420;
   // coco novo no chão em volta do coqueiro (no máximo 3 por árvore; nunca aparece à vista do jogador)
-  function cocoGrow(o) { const p = Player.p; if (Math.hypot(o.x - p.x, o.y - p.y) < 300) { o.cgT = 60; return; } let n = 0; for (const q of World.objs) if (q.kind === 'cocochao' && !q.dead && Math.abs(q.x - o.x - 22) < 90 && Math.abs(q.y - o.y) < 70) n++; if (n >= 3) return;
+  function cocoGrow(o) { const p = Player.p; if (Math.hypot(o.x - p.x, o.y - p.y) < 300) { o.cgT = 60; return; } let n = 0; for (let _i7 = 0, q; _i7 < World.objs.length && (q = World.objs[_i7], true); _i7++) if (q.kind === 'cocochao' && !q.dead && Math.abs(q.x - o.x - 22) < 90 && Math.abs(q.y - o.y) < 70) n++; if (n >= 3) return;
     for (let k = 0; k < 8; k++) { const an = Math.random() * 6.283, rd = 30 + Math.random() * 24, x = o.x + 22 + Math.cos(an) * rd, y = o.y + 8 + Math.sin(an) * rd * .55; if (World.walkable(x, y) && !World.inWater(x, y)) { World.add({ kind: 'cocochao', x, y, ph: Math.random() * 9 }); return; } } }; // coqueiro novo em ~3 dias de jogo (1 dia = 600 s); cocos caem no chão a cada ~0,7 dia // coqueiro novo em ~3 dias de jogo (1 dia = 600 s); cocos voltam em ~0,7 dia
   let regrow = [];
   let burnT = 0, drops = [], t = 0, hudT = 0, useT = 0; const useEl = document.getElementById('use'), atkEl = document.getElementById('atk'), batEl = document.getElementById('bat'); const inv = { plank: 0, canteen: false, dirty: 0, twig: 0, coconut: 0, straw: 0, skewer: 0, water: 0, bandage: 0, wood: 0, fiber: 0, stone: 0, meat: 0, apple: 0, axe: false, pickaxe: false, spear: false, machete: false, leather: 0, eq: null, cooked: 0, campfire: 0, fence: 0, shelter: 0, chest: 0, bench: 0, floor: 0, wall: 0, roof: 0 };
@@ -1342,16 +1380,16 @@ const Entities = (() => {
     }   // caverna do urso visível, com clareira em volta
     if (LOCS[LOC].safe) for (let i = dens.length - 1; i >= 0; i--) if (dens[i].kind === 'cave_bear') dens.splice(i, 1);   /* Home: sem caverna de urso */
     if (LOCS[LOC].safe) { const CAP = { deer: 6, rabbit: 12, fawn: 2, woodpecker: 4, urubu: 1, crab: 8, gull: 4 }, cnt = {}; for (let i = 0; i < animals.length; i++) { const a = animals[i], c = CAP[a.kind]; if (c === undefined) continue; cnt[a.kind] = (cnt[a.kind] || 0) + 1; if (cnt[a.kind] > c) { animals.splice(i, 1); i--; } } }   /* Home é menor: menos bichos */
-    for (const d of dens) if (d.kind === 'cave_bear') animals.push({ kind: 'bear', x: d.x + 10, y: d.y + 50, dir: 'south', vx: 0, vy: 0, wait: 2, t: Math.random() * 9, moving: false, running: false, hp: KINDS.bear.hp, hunger: 0, eat: 0, cd: 0, angry: 0, home: { x: d.x + 10, y: d.y + 70 } });
+    for (let _i8 = 0, d; _i8 < dens.length && (d = dens[_i8], true); _i8++) if (d.kind === 'cave_bear') animals.push({ kind: 'bear', x: d.x + 10, y: d.y + 50, dir: 'south', vx: 0, vy: 0, wait: 2, t: Math.random() * 9, moving: false, running: false, hp: KINDS.bear.hp, hunger: 0, eat: 0, cd: 0, angry: 0, home: { x: d.x + 10, y: d.y + 70 } });
   }
   let breedT = 0;
   function breedTick(dt) {
-    for (const a of animals) if (a.baby) { a.grow = (a.grow || 0) + dt; if (a.grow > BREED[a.kind].kitGrow) { a.baby = false; a.grow = 0; } }
+    for (let _i9 = 0, a; _i9 < animals.length && (a = animals[_i9], true); _i9++) if (a.baby) { a.grow = (a.grow || 0) + dt; if (a.grow > BREED[a.kind].kitGrow) { a.baby = false; a.grow = 0; } }
     breedT += dt; if (breedT < 1) return; const d = breedT; breedT = 0;
-    for (const a of animals) if ((a.bcd || 0) > 0) a.bcd = Math.max(0, a.bcd - d);   // descanso entre filhotes
+    for (let _i10 = 0, a; _i10 < animals.length && (a = animals[_i10], true); _i10++) if ((a.bcd || 0) > 0) a.bcd = Math.max(0, a.bcd - d);   // descanso entre filhotes
     const cnt = k => animals.reduce((n, o) => n + (o.kind === k && !o.dead ? 1 : 0), 0);
     const ok = a => !a.dead && !a.baby && a.kind in BREED && (a.bcd || 0) <= 0 && a.hunger < 60 && a.hp >= KINDS[a.kind].hp * .6 && !a.sleeping && !a.fleeing;
-    for (const a of animals) {
+    for (let _i11 = 0, a; _i11 < animals.length && (a = animals[_i11], true); _i11++) {
       if (!ok(a)) continue;
       const B = BREED[a.kind];
       const p = animals.find(o => o !== a && o.kind === a.kind && ok(o) && Math.hypot(o.x - a.x, o.y - a.y) <= B.range);
@@ -1367,7 +1405,7 @@ const Entities = (() => {
   }
   // predador (jogador ou lobo acordado) perto de um ponto: cervo e filhote não tentam se reunir ali
   function predatorNear(x, y, r) { const P = Player.p; if (Math.hypot(P.x - x, P.y - y) < r) return true; return animals.some(o => o.kind === 'wolf' && !o.dead && !o.far && !o.sleeping && Math.hypot(o.x - x, o.y - y) < r); }
-  function nearest(a, pred, maxD) { let best = null, bd = maxD; for (const o of animals) { if (o === a || o.inDen > 0 || !pred(o)) continue; const d = Math.hypot(o.x - a.x, o.y - a.y); if (d < bd) { bd = d; best = o; } } return best; }
+  function nearest(a, pred, maxD) { let best = null, bd = maxD; for (let _i12 = 0, o; _i12 < animals.length && (o = animals[_i12], true); _i12++) { if (o === a || o.inDen > 0 || !pred(o)) continue; const d = Math.hypot(o.x - a.x, o.y - a.y); if (d < bd) { bd = d; best = o; } } return best; }
   // pegadas: a cada passo do bicho uma marca fica no chão; some sozinha (mais rápido na chuva)
   const TRACK_LIFE = 90, TRACK_SIZE = { wolf: 3.2, deer: 3.4, fawn: 2.4, rabbit: 2.2, player: 2.6, bear: 5, boar: 3.6 }, TRACK_BY_GROUND = { 0: 140, 1: 420, 3: 700 }, TRACK_MAX = 600;   // vida (s) da pegada: grama some logo, areia dura, terra/barro dura bastante
   const groundAt = (x, y) => { const l = World.lvlAt(Math.round(x / 64), Math.round(y / 64)); return l === 3 ? 3 : l === 1 ? 1 : l === 2 ? 0 : -1; };
@@ -1389,10 +1427,10 @@ const Entities = (() => {
     x.fill(); return c;
   }
   function trackCell(k, gr, ai) {   /* todas as pegadas prontas numa folha só (1 textura no WebGL) */
-    const A = trackCell.A || (trackCell.A = { c: null, g: null, m: new Map(), n: 0 }), ck = k + gr * 1000 + ai * 10; let e = A.m.get(ck); if (e) return e;
+    const A = trackCell.A || (trackCell.A = { c: null, g: null, m: new Map(), n: 0 }); let mk = A.m.get(k); if (!mk) A.m.set(k, mk = []); const ck = gr * 16 + ai; let e = mk[ck]; if (e) return e;
     if (!A.c || A.n >= 441) { if (!A.c) { A.c = document.createElement('canvas'); A.c.width = A.c.height = 1024; A.g = A.c.getContext('2d'); } A.g.clearRect(0, 0, 1024, 1024); A.m.clear(); A.n = 0; }
-    const s = trackSprite(k, gr, ai * Math.PI / 8), cx = (A.n % 21) * 48, cy = Math.floor(A.n / 21) * 48; A.n++; A.g.drawImage(s, cx, cy);
-    e = { x: cx, y: cy, w: s.width, h: s.height }; A.m.set(ck, e); A.c.__glv = (A.c.__glv || 0) + 1; return e;
+    const s = trackSprite(k, gr, ai * Math.PI / 8), cx = (A.n % 21) * 48, cy = Math.floor(A.n / 21) * 48; A.n++; A.g.drawImage(s, cx, cy); (A.c.__glsub || (A.c.__glsub = [])).push({ x: cx, y: cy, c: s });
+    e = { x: cx, y: cy, w: s.width, h: s.height }; mk[ck] = e; A.c.__glv = (A.c.__glv || 0) + 1; return e;
   }
   function trackEach(x0, y0, x1, y1, f) {
     for (const tr of tracks) { if (tr.x < x0 || tr.x > x1 || tr.y < y0 || tr.y > y1) continue;
@@ -1449,12 +1487,12 @@ const Entities = (() => {
   // toca de coelho: foge para a toca mais próxima (até ~420 px, do lado oposto ao perigo) e some lá dentro por um tempo
   function nearDen(a, th) {
     let best = null, bd = 420, dth = Math.hypot(a.x - th.x, a.y - th.y);
-    for (const o of dens) { if (o.kind !== 'den_rabbit') continue; const d = Math.hypot(o.x - a.x, o.y - a.y); if (d < bd && Math.hypot(o.x - th.x, o.y - th.y) > dth * .6 + 20) { bd = d; best = o; } }
+    for (let _i13 = 0, o; _i13 < dens.length && (o = dens[_i13], true); _i13++) { if (o.kind !== 'den_rabbit') continue; const d = Math.hypot(o.x - a.x, o.y - a.y); if (d < bd && Math.hypot(o.x - th.x, o.y - th.y) > dth * .6 + 20) { bd = d; best = o; } }
     return best;
   }
   function nearBush(a, th) {
     let best = null, bd = 320, dth = Math.hypot(a.x - th.x, a.y - th.y);
-    for (const o of World.act) { if (o.kind.slice(0, 4) !== 'bush' || o.dead) continue; const d = Math.hypot(o.x - a.x, o.y - a.y); if (d > 40 && d < bd && Math.hypot(o.x - th.x, o.y - th.y) > dth + 15) { bd = d; best = o; } }
+    for (let _i14 = 0, o; _i14 < World.act.length && (o = World.act[_i14], true); _i14++) { if (!o.kind.startsWith('bush') || o.dead) continue; const d = Math.hypot(o.x - a.x, o.y - a.y); if (d > 40 && d < bd && Math.hypot(o.x - th.x, o.y - th.y) > dth + 15) { bd = d; best = o; } }
     return best;
   }
   // coelho foge assim: ARRANCADA forte por ~2,6 s (zigue-zague, ou direto a um arbusto onde se esconde), depois CANSA (mais lento que o jogador andando)
@@ -1494,10 +1532,10 @@ const Entities = (() => {
     if (!a.shelter) {
       a.shT = (a.shT || 0) - dt; if (a.shT > 0) return false; a.shT = .8 + Math.random() * .8;   // procura abrigo no máximo ~1x por segundo (varrer o mapa todo quadro derrubava o FPS na chuva)
       let best = null, bd = 1600;
-      for (const o of World.act) { const T = TREES[o.kind]; if (!((T && o.kind !== 'dead') || o.kind === 'shelter' || (a.kind === 'rabbit' && o.kind.slice(0, 4) === 'bush')) || o.fall !== undefined) continue;
+      for (let _i15 = 0, o; _i15 < World.act.length && (o = World.act[_i15], true); _i15++) { const T = TREES[o.kind]; if (!((T && o.kind !== 'dead') || o.kind === 'shelter' || (a.kind === 'rabbit' && o.kind.startsWith('bush'))) || o.fall !== undefined) continue;
         if (K.fearR && Math.hypot(o.x - PP.x, o.y - PP.y) < safe) continue;   // sombra colada no jogador não serve para quem tem medo dele
         if (a.badSh === o && World.clock < a.badShT) continue;   // abrigo que não deu para alcançar (água/obstáculo): ignora por um tempo
-        let d = Math.hypot(o.x - a.x, o.y - a.y); if (a.kind === 'rabbit' && o.kind.slice(0, 4) === 'bush') d *= .35; if (d >= bd) continue; let n = 0; for (const b of animals) if (b.shelter === o) n++; if (n >= (o.kind === 'shelter' ? 5 : 3)) continue; bd = d; best = o; }
+        let d = Math.hypot(o.x - a.x, o.y - a.y); if (a.kind === 'rabbit' && o.kind.startsWith('bush')) d *= .35; if (d >= bd) continue; let n = 0; for (let _i16 = 0, b; _i16 < animals.length && (b = animals[_i16], true); _i16++) if (b.shelter === o) n++; if (n >= (o.kind === 'shelter' ? 5 : 3)) continue; bd = d; best = o; }
       a.shelter = best; if (!best) return false; a.sx = Math.random() * 44 - 22;
     }
     const o = a.shelter, dx = o.x + a.sx - a.x, dy = o.y + 16 - a.y, d = Math.hypot(dx, dy);
@@ -1507,15 +1545,15 @@ const Entities = (() => {
     return true;
   }
   // corpos ficam no local da morte por 5 min (somem aos poucos nos últimos 30 s): dá para coletar a carne e lobos famintos comem carniça
-  const CORPSE_TIME = 300, FADE = 30, BONE_TIME = 420; let corpses = [];
+  const CORPSE_TIME = 180, FADE = 30, BONE_TIME = 180;   /* corpo some em 3 min (antes 5); ossos ficam 3 min (antes 7) */ let corpses = [];
   function killAnimal(a, cause) {
     if (window.Sfx) Sfx.death(a);
     if (!cause) emitNoise(a.x, a.y, 330);   /* morte por você: os bichos por perto ficam alertas */
     a.dead = true; const K = KINDS[a.kind];
-    corpses.push({ kind: a.kind, x: a.x, y: a.y, dir: a.dir, age: 0, meat: a.kind === 'wolf' ? 2 : K.meat, cause: cause || 'ataque', side: a.dir.indexOf('west') >= 0 ? -1 : 1 });
+    corpses.push({ kind: a.kind, x: a.x, y: a.y, dir: a.dir, age: 0, meat: a.kind === 'wolf' ? 2 : K.meat, left: ({ rabbit: 1, woodpecker: 1, crab: 1, gull: 1, fawn: 2, fox: 2, deer: 3, boar: 3, wolf: 3, bear: 4 })[a.kind] || 2,   /* left: quanto de carcaça os urubus comem até o corpo sumir */ cause: cause || 'ataque', side: a.dir.indexOf('west') >= 0 ? -1 : 1 });
     return corpses[corpses.length - 1];
   }
-  const nearestCorpse = (x, y, r) => { let b = null, bd = r; for (const c of corpses) if (c.meat > 0) { const d = Math.hypot(c.x - x, c.y - y); if (d < bd) { bd = d; b = c; } } return b; };
+  const nearestCorpse = (x, y, r) => { let b = null, bd = r; for (let _i17 = 0, c; _i17 < corpses.length && (c = corpses[_i17], true); _i17++) if (c.meat > 0) { const d = Math.hypot(c.x - x, c.y - y); if (d < bd) { bd = d; b = c; } } return b; };
   function drawCorpse(ctx, c, camX, camY) {
     const K = KINDS[c.kind], p = Math.min(1, c.age / .55), ease = 1 - (1 - p) * (1 - p), x = c.x - camX, y = c.y - camY, fade = c.age > CORPSE_TIME - FADE ? Math.max(0, (CORPSE_TIME - c.age) / FADE) : 1;
     ctx.globalAlpha = fade;
@@ -1546,13 +1584,13 @@ const Entities = (() => {
     if (!World.walkable(a.x, a.y)) for (let r = 20; r <= 200; r += 20) { let ok = false; for (let k = 0; k < 8 && !ok; k++) { const x = a.x + Math.cos(k * .785) * r, y = a.y + Math.sin(k * .785) * r; if (World.walkable(x, y)) { a.x = x; a.y = y; ok = true; } } if (ok) break; }
   }
   // o lobo que uivou chama os outros lobos por perto: eles correm até o uivo e atacam o que estiver ali
-  function alertPack(c) { for (const o of animals) if (o !== c && o.kind === 'wolf' && !o.dead && !o.baby && Math.hypot(o.x - c.x, o.y - c.y) < 700 && !(o.eat > 0)) { o.ix = c.x; o.iy = c.y; o.invest = 16; o.helping = true; o.far = false; } }
+  function alertPack(c) { for (let _i18 = 0, o; _i18 < animals.length && (o = animals[_i18], true); _i18++) if (o !== c && o.kind === 'wolf' && !o.dead && !o.baby && Math.hypot(o.x - c.x, o.y - c.y) < 700 && !(o.eat > 0)) { o.ix = c.x; o.iy = c.y; o.invest = 16; o.helping = true; o.far = false; } }
   function farAnimal(a, dt, K) {
     a.ft = (a.ft || 0) + dt; if (a.ft < 1) return; const e = a.ft; a.ft = 0; a.t += e;
     { const ws = wantsSleep(a); if (ws !== !!a.sleeping) { a.sleeping = ws; a.bed = null; } }   // longe: dorme no lugar onde está enquanto a hora de dormir dele durar
     if (a.kind === 'wolf') {
       a.hunger += e * HG * (1 + .6 * Weather.night()) * (a.sleeping ? .3 : 1); if (a.hunger > 140) { a.dead = true; return; }
-      if (a.hunger > 45 && !a.sleeping) for (const o of animals) if (o !== a && o.kind !== 'wolf' && o.kind !== 'bear' && !o.dead && o.far && Math.abs(o.x - a.x) < 220 && Math.abs(o.y - a.y) < 220) { if (Math.random() < .4) { o.dead = true; a.hunger = 0; } break; }
+      if (a.hunger > 45 && !a.sleeping) for (let _i19 = 0, o; _i19 < animals.length && (o = animals[_i19], true); _i19++) if (o !== a && o.kind !== 'wolf' && o.kind !== 'bear' && !o.dead && o.far && Math.abs(o.x - a.x) < 220 && Math.abs(o.y - a.y) < 220) { if (Math.random() < .4) { const c = killAnimal(o, 'lobo'); c.meat = Math.max(0, c.meat - 1); a.hunger = 0; }   /* longe também deixa carcaça (os urubus vêm limpar) */ break; }
     }
     if (HAB[a.kind]) { a.hg = Math.min(100, (a.hg === undefined ? Math.random() * 40 : a.hg) + e * HAB[a.kind].hr); if (a.hg > 60 && !a.sleeping && Math.random() < .15) a.hg -= 45; }   // longe: come "fora de vista" (não gasta tufos)
     if (a.sleeping) return;
@@ -1564,7 +1602,7 @@ const Entities = (() => {
   }
   // objeto que acorda depois de ficar longe: recebe o tempo que passou (frutas voltam, fogueira apaga, tufo cresce...)
   function wakeObj(o, e) {
-    if (o.g !== undefined && o.kind.slice(0, 3) === 'sap') o.g += e;
+    if (o.g !== undefined && o.kind.startsWith('sap')) o.g += e;
     if (o.ap) for (let i = 0; i < 4; i++) if (!o.ap[i]) { o.apT[i] -= e; if (o.apT[i] <= 0) o.ap[i] = 1; }
     if (o.kind === 'palm' && !o.fall && !o.becomeStump) { o.cgT = (o.cgT === undefined ? Math.random() * COCO_REGROW : o.cgT) - e; if (o.cgT <= 0) { const n = Math.min(3, 1 + Math.floor(-o.cgT / COCO_REGROW)); o.cgT = COCO_REGROW; for (let i = 0; i < n; i++) cocoGrow(o); } }
     if (o.kind === 'tuft' && o.hp > 0) o.hp = Math.max(0, o.hp - e);
@@ -1585,11 +1623,11 @@ const Entities = (() => {
   const HAB = { deer: { r: 760, hr: .08 }, rabbit: { r: 380, hr: .12 } };   // hr = fome por segundo (0..100): coelho com fome em ~200 s, cervo em ~330 s
   function habScore(a, x, y, mode, K, H) {
     let trees = 0, bush = 0, tuft = 0, fruit = 0, bad = 0;
-    for (const o of World.act) {
+    for (let _i20 = 0, o; _i20 < World.act.length && (o = World.act[_i20], true); _i20++) {
       const dx = o.x - x, dy = o.y - y; if (dx > 420 || dx < -420 || dy > 420 || dy < -420) continue; const d2 = dx * dx + dy * dy, k = o.kind;
       if (k === 'fire') { if (!o.out && d2 < 400 * 400) bad += 5; }
       else if ((k === 'shelter' || k === 'floor' || k === 'wall' || k === 'fence' || k === 'roof' || k === 'bench' || k === 'chest') && d2 < 300 * 300) bad += .8;
-      else if (d2 < 240 * 240) { if (k === 'appletree') { trees++; if (o.ap && o.ap.some(Boolean)) fruit++; } else if (TREES[k] && k !== 'dead') trees++; else if (k.slice(0, 4) === 'bush') bush++; else if (k === 'tuft' && !(o.hp > 0)) tuft++; }
+      else if (d2 < 240 * 240) { if (k === 'appletree') { trees++; if (o.ap && o.ap.some(Boolean)) fruit++; } else if (TREES[k] && k !== 'dead') trees++; else if (k.startsWith('bush')) bush++; else if (k === 'tuft' && !(o.hp > 0)) tuft++; }
     }
     let wet = 0; for (let i = 0; i < 8; i++) if (!World.land(x + Math.cos(i * .785) * 100, y + Math.sin(i * .785) * 100)) wet++;
     const P = Player.p; if (Math.hypot(x - P.x, y - P.y) < K.fearR + 120) bad += 3;
@@ -1601,10 +1639,10 @@ const Entities = (() => {
   // ---------- comida de verdade ----------
   // Coelho come TUFOS de grama prontos. Cervo come maçãs caídas, tufos e folhas de arbusto. Tufo comido some e rebrota (hp = 420 s, o mesmo tempo de quando o jogador colhe);
   // arbusto fica "desfolhado" por 240 s (o.gz). Fome (a.hg, 0..100) sobe com o tempo; com fome (>50) o bicho vai procurar comida. Sem arte nova: usa 'eat' se existir no atlas.
-  const edible = (a, o) => !o.dead && ((o.kind === 'tuft' && !(o.hp > 0)) || (a.kind === 'deer' && o.kind.slice(0, 4) === 'bush' && !(o.gz > World.clock)));
+  const edible = (a, o) => !o.dead && ((o.kind === 'tuft' && !(o.hp > 0)) || (a.kind === 'deer' && o.kind.startsWith('bush') && !(o.gz > World.clock)));
   function findFood(a, maxD) {
     let best = null, bd = maxD;
-    for (const o of World.act) { if (o.kind !== 'tuft' && o.kind.slice(0, 4) !== 'bush') continue; if (o === a.badFood || !edible(a, o)) continue; const d = Math.hypot(o.x - a.x, o.y - a.y); if (d < bd) { bd = d; best = o; } }
+    for (let _i21 = 0, o; _i21 < World.act.length && (o = World.act[_i21], true); _i21++) { if (o.kind !== 'tuft' && !o.kind.startsWith('bush')) continue; if (o === a.badFood || !edible(a, o)) continue; const d = Math.hypot(o.x - a.x, o.y - a.y); if (d < bd) { bd = d; best = o; } }
     return best;
   }
   function eatFood(a, o) {
@@ -1618,7 +1656,7 @@ const Entities = (() => {
     const tod = Weather.tod(), dd = (tod >= .22 && tod < .32) || (tod >= .68 && tod < .78), nt = tod >= .32 && tod < .68;
     const hungry = (a.hg || 0) > 50, mode = hungry || Math.random() < (dd ? 1 : nt ? .35 : .7) ? 'forage' : 'rest';   // o descanso de verdade agora é o sono por horário: aqui só pausas curtas
     let best = null, bs = -1e9, drop = null, food = null;
-    if (mode === 'forage' && a.kind === 'deer') { let bd = 320; for (const d of drops) if (d.type === 'apple') { const m = Math.hypot(d.x - a.x, d.y - a.y); if (m < bd) { bd = m; drop = d; } } }
+    if (mode === 'forage' && a.kind === 'deer') { let bd = 320; for (let _i22 = 0, d; _i22 < drops.length && (d = drops[_i22], true); _i22++) if (d.type === 'apple') { const m = Math.hypot(d.x - a.x, d.y - a.y); if (m < bd) { bd = m; drop = d; } } }
     if (mode === 'forage' && !drop) food = findFood(a, hungry ? H.r + 250 : H.r * .6);
     if (drop) best = { x: drop.x, y: drop.y + 4 };
     else if (food) best = { x: food.x, y: food.y + 6 };
@@ -1668,7 +1706,7 @@ const Entities = (() => {
   function alertUp(a, x, y) { a.sleeping = false; a.alert = 5 + Math.random() * 2; a.alx = x; a.aly = y; a.nap = 0; }
   // work = barulho de trabalho (machado, picareta): bichos acordados vão devagar até o lugar para investigar
   function emitNoise(x, y, R, work, src) {
-    for (const a of animals) {
+    for (let _i23 = 0, a; _i23 < animals.length && (a = animals[_i23], true); _i23++) {
       if (a.far || a.dead || a === src || (src && src.kind === 'wolf' && a.kind === 'wolf')) continue; const hear = 1; if (Math.hypot(a.x - x, a.y - y) >= R * hear) continue;
       if (!src && !a.sleeping) a.aware = World.clock + 8;   /* barulho do jogador (golpe, corte, morte): por uns 8 s o bicho te percebe mesmo agachado/de costas */
       if (a.sleeping) alertUp(a, x, y);
@@ -1685,8 +1723,8 @@ const Entities = (() => {
     if (!P.moving || P.swim) return;
     let R = P.run ? 110 : 50;
     if (crackT <= 0) {
-      for (const d of drops) if (d.type === 'twig' && Math.abs(d.x - P.x) < 26 && Math.abs(d.y - P.y) < 26) { R = 150; crackT = 1; break; }   // pisou num galho
-      if (crackT <= 0) for (const o of World.near) if (o.kind.slice(0, 4) === 'bush' && Math.abs(o.x - P.x) < 34 && Math.abs(o.y - P.y) < 34) { R = Math.max(R, P.run ? 170 : 100); crackT = .8; break; }   // roçou num arbusto
+      for (let _i24 = 0, d; _i24 < drops.length && (d = drops[_i24], true); _i24++) if (d.type === 'twig' && Math.abs(d.x - P.x) < 26 && Math.abs(d.y - P.y) < 26) { R = 150; crackT = 1; break; }   // pisou num galho
+      if (crackT <= 0) for (let _i25 = 0, o; _i25 < World.near.length && (o = World.near[_i25], true); _i25++) if (o.kind.startsWith('bush') && Math.abs(o.x - P.x) < 34 && Math.abs(o.y - P.y) < 34) { R = Math.max(R, P.run ? 170 : 100); crackT = .8; break; }   // roçou num arbusto
     }
     emitNoise(P.x, P.y, R * (P.sneak ? .4 : 1));
   }
@@ -1698,7 +1736,7 @@ const Entities = (() => {
     if (a.alert > 0) {   // ouviu um barulho: de pé, virado para o som
       a.alert -= dt; a.moving = a.running = false; a.nap = 0; a.dir = dirOf(a.alx - a.x, a.aly - a.y);
       if (!want) { a.alert = 0; return false; }
-      if (dp < (a.kind === 'wolf' ? 240 : K.fearR * 1.1)) { a.alert = 0; wakeUp(a); if (a.kind === 'wolf') a.alertT = 1.2; else a.spooked = 4; return false; }   // jogador perto: ataca ou foge
+      if (dp < (a.kind === 'wolf' ? wolfR1() : K.fearR * 1.1)) { a.alert = 0; wakeUp(a); if (a.kind === 'wolf') a.alertT = 1.2; else a.spooked = 4; return false; }   // jogador perto: ataca ou foge
       if (a.alert <= 0) { a.sleeping = true; a.nap = 1.5; }   // longe: volta a dormir
       return true;
     }
@@ -1709,7 +1747,7 @@ const Entities = (() => {
         // você estava agachado e levantou perto dele: acorda na hora (animação de acordar), '!' e ataca
         if (!Player.p.sneak && World.clock - (Player.p.sneakT ?? -99) < 4 && dp < 120) { wakeUp(a); a.angry = 8; a.jolt = 1.1; return false; }
         // você entrou na área vermelha (em pé ou agachado, cada um com sua área): acorda e segue as 3 áreas, como acordado
-        if (noticed(a, dp, 260 + 100 * Weather.night())) { wakeUp(a); a.alertT = 1.2; return false; }
+        if (noticed(a, dp, wolfR1())) { wakeUp(a); a.noSl = World.clock + 20; a.alertT = 1.2; return false; }   /* antes acordava a 260 px (fora da área desenhada) e ficava 90 s sem poder voltar a dormir */
       }
       const P = Player.p, R = (P.sneak ? 40 : 80) * (a.kind === 'deer' ? 1.3 : 1);   // colado nele: acorda de vez (o resto é por barulho)
       if (dp < R || (a.kind !== 'wolf' && nearest(a, o => o.kind === 'wolf' && !o.sleeping, 130))) { wakeUp(a); if (a.kind === 'wolf' && dp < R) a.alertT = 1.2; else if (a.kind !== 'wolf') a.spooked = 4; return false; }
@@ -1735,8 +1773,9 @@ const Entities = (() => {
   // área 1 (maior): ele vê você -> '?' e vem furtivo (uma vez, até você sair da área 1);
   // área 2 (média): late uma vez, rosna sem parar por 3 s, com '!'; depois se aproxima furtivo com '!' até você sair da área 1;
   // área 3 (menor): perseguição: corre e ataca.
+  function wolfR1() { return 170 + 70 * Weather.night(); }   /* área 1 do lobo (a que aparece desenhada): a mesma para acordar e para reagir acordado */
   function wolfZone(a, dp, K, dt) {
-    const P = Player.p, nt = Weather.night(), R1 = 170 + 70 * nt, R2 = 110 + 30 * nt, R3 = 60;   // áreas menores (antes 260/160/80)
+    const P = Player.p, nt = Weather.night(), R1 = wolfR1(), R2 = 110 + 30 * nt, R3 = 60;   // áreas menores (antes 260/160/80)
     const face = () => { a.moving = a.running = false; a.dir = dirOf(P.x - a.x, P.y - a.y); };
     const calm = () => { a.pArm = false; a.zq = false; a.zInv = false; a.zAlarm = false; a.zGrowl = 0; a.zBark = 0; a.zT = 0; };
     if (a.alertT > 0) { a.alertT -= dt; face(); return true; }   // acordou: alerta parado olhando
@@ -1785,13 +1824,13 @@ const Entities = (() => {
   function bearFood(a, r, away) {
     let b = null, bd = r; const sm = nearestSmell(a.x, a.y, r); if (sm) { bd = Math.hypot(sm.x - a.x, sm.y - a.y); b = { x: sm.x, y: sm.y, k: 'fire', ref: sm }; }
     if (away) {
-      for (const o of World.act) if (o.kind === 'chest' && hasFood(o)) { const d = Math.hypot(o.x - a.x, o.y - a.y); if (d < bd) { bd = d; b = { x: o.x, y: o.y, k: 'chest', ref: o }; } }
-      for (const d of drops) if (FOODS[d.type]) { const m = Math.hypot(d.x - a.x, d.y - a.y); if (m < bd) { bd = m; b = { x: d.x, y: d.y, k: 'drop', ref: d }; } }
+      for (let _i26 = 0, o; _i26 < World.act.length && (o = World.act[_i26], true); _i26++) if (o.kind === 'chest' && hasFood(o)) { const d = Math.hypot(o.x - a.x, o.y - a.y); if (d < bd) { bd = d; b = { x: o.x, y: o.y, k: 'chest', ref: o }; } }
+      for (let _i27 = 0, d; _i27 < drops.length && (d = drops[_i27], true); _i27++) if (FOODS[d.type]) { const m = Math.hypot(d.x - a.x, d.y - a.y); if (m < bd) { bd = m; b = { x: d.x, y: d.y, k: 'drop', ref: d }; } }
     }
     return b;
   }
   let bearMemSaved = [];   // memória de cada urso vinda do save (lista por urso, até 4 lugares cada); o urso a assume quando aparece
-  const bearIdx = a => { let i = 0; for (const o of animals) { if (o === a) return i; if (o.kind === 'bear') i++; } return 0; };
+  const bearIdx = a => { let i = 0; for (let _i28 = 0, o; _i28 < animals.length && (o = animals[_i28], true); _i28++) { if (o === a) return i; if (o.kind === 'bear') i++; } return 0; };
   const bearRemember = (a, x, y) => { a.mem = a.mem || []; const m = a.mem.find(q => Math.hypot(q.x - x, q.y - y) < 120); if (m) m.s = 3; else { a.mem.push({ x, y, s: 3 }); if (a.mem.length > 4) a.mem.shift(); } };   // lembra onde achou comida e volta lá depois
   function updateBear(a, dt, K, P) {
     if (a.dead) return;
@@ -1872,8 +1911,8 @@ const Entities = (() => {
         if (seen) { if (d <= 40) a.guard = 14; a.feastCd = 8; set('warn'); a.dir = dirOf(P.x - a.x, P.y - a.y); break; }
         if (d > 34) { a.moving = true; bearGo(a, c.x, c.y, K.walk * 1.4, dt); if (a.mt > 25) { set('idle'); a.feastCd = 20; } break; }
         a.dir = dirOf(c.x - a.x, c.y - a.y); a.fT = (a.fT || 0) + dt; c.bearT = .6; c.bearO = a;
-        if (a.fT > 13) { a.fT -= 13; c.meat--; if (c.meat <= 0) c.age = Math.max(c.age, CORPSE_TIME - FADE); }
-        if (!(a.shCd > 0)) { let bw = null, bd = 260; for (const o of animals) if (o.kind === 'wolf' && !o.dead && !o.far && !(o.noFeast > 0) && !(o.bearFlee > 0)) { const wd = Math.hypot(o.x - c.x, o.y - c.y); if (wd < bd) { bd = wd; bw = o; } } if (bw) { a.tw = bw; set('shoo'); } }
+        if (a.fT > 13) { a.fT -= 13; c.meat--;  }
+        if (!(a.shCd > 0)) { let bw = null, bd = 260; for (let _i29 = 0, o; _i29 < animals.length && (o = animals[_i29], true); _i29++) if (o.kind === 'wolf' && !o.dead && !o.far && !(o.noFeast > 0) && !(o.bearFlee > 0)) { const wd = Math.hypot(o.x - c.x, o.y - c.y); if (wd < bd) { bd = wd; bw = o; } } if (bw) { a.tw = bw; set('shoo'); } }
         break; }
       case 'shoo': {   // corre atrás do lobo que ronda a carcaça
         const w = a.tw; if (!w || w.dead || a.mt > 3.5) { a.shCd = 3; set('feast'); break; }
@@ -1953,7 +1992,7 @@ const Entities = (() => {
     { let k = 0; for (let i = 0; i < 20000 && k < 2; i++) { const vx = 4 + Math.floor(r() * (CONFIG.WORLD_W - 8)), vy = 4 + Math.floor(r() * (CONFIG.WORLD_H - 8)), l = World.lvlAt;
         if (l(vx, vy) !== 4 || l(vx - 1, vy) !== 4 || l(vx + 1, vy) !== 4 || l(vx, vy + 1) !== 4 || l(vx, vy + 2) !== 4 || l(vx, vy - 1) < 5 || l(vx - 1, vy - 1) < 5 || l(vx + 1, vy - 1) < 5) continue;
         if (World.falls.some(q => Math.abs(q.vx - vx) <= 9 && Math.abs(q.vy - vy) <= 3)) continue; const x = vx * T + T / 2, y = vy * T + 8; if (Math.hypot(x - sp.x, y - sp.y) < 700 || dens.some(o => Math.hypot(o.x - x, o.y - y) < 500) || (World.trail() && Math.hypot(World.trail().x - x, World.trail().y - y) < 900)) continue; dens.push({ kind: 'cave_bear', x, y, ph: 0, den: true, hid: true }); k++; }
-      if (!k) { place('cave_bear', 2, 2, 1800, 3, 9000); for (const d of dens) if (d.kind === 'cave_bear') d.hid = true; } }
+      if (!k) { place('cave_bear', 2, 2, 1800, 3, 9000); for (let _i30 = 0, d; _i30 < dens.length && (d = dens[_i30], true); _i30++) if (d.kind === 'cave_bear') d.hid = true; } }
     
     for (let i = 0; i < 5; i++) { const before = dens.length; place('den_rabbit', 2, 2, 400, 1, 600); if (dens.length === before) break; }
   }
@@ -1998,7 +2037,7 @@ const Entities = (() => {
         if (!c || c.meat <= 0 || c.age > CORPSE_TIME || c.bearT > 0 || a.mt > 90) { a.eatingC = false; a.scCd = 30; a.wait = 2; set('idle'); break; }
         const d = Math.hypot(c.x - a.x, c.y - a.y);
         if (d > 30) { a.eatingC = false; if (a.mt > 25 || !step(a, (c.x - a.x) / d, (c.y - a.y) / d, K.walk * 1.4, dt)) { a.scCd = 30; a.wait = 2; set('idle'); break; } a.moving = true; break; }
-        a.eatingC = true; a.dir = dirOf(c.x - a.x, c.y - a.y); a.fT = (a.fT || 0) + dt; if (a.fT > 13) { a.fT -= 13; c.meat--; if (c.meat <= 0) c.age = Math.max(c.age, CORPSE_TIME - FADE); }
+        a.eatingC = true; a.dir = dirOf(c.x - a.x, c.y - a.y); a.fT = (a.fT || 0) + dt; if (a.fT > 13) { a.fT -= 13; c.meat--;  }
         if (!P.swim && !P.hidden && a.cd <= 0 && noticed(a, dp, P.sneak ? 40 : 70)) { a.eatingC = false; a.rage = 10; set('windup'); }
         break; }
       case 'root':   // fuça a terra: desgasta o chão
@@ -2060,7 +2099,7 @@ const Entities = (() => {
     if (!a.mode) set('idle');
     if (a.mode !== 'hide' && a.mode !== 'flap' && a.mode !== 'fly') {
       let th = !P.swim && noticed(a, dp, P.sneak ? 80 : 140) ? P : null;
-      if (!th) for (const o of animals) if (!o.dead && !o.sleeping && !o.hid && (o.kind === 'wolf' || o.kind === 'boar' || o.kind === 'bear') && Math.abs(o.x - a.x) < 140 && Math.hypot(o.x - a.x, o.y - a.y) < 140) { th = o; break; }
+      if (!th) for (let _i31 = 0, o; _i31 < animals.length && (o = animals[_i31], true); _i31++) if (!o.dead && !o.sleeping && !o.hid && (o.kind === 'wolf' || o.kind === 'boar' || o.kind === 'bear') && Math.abs(o.x - a.x) < 140 && Math.hypot(o.x - a.x, o.y - a.y) < 140) { th = o; break; }
       if (th) { const d = Math.hypot(a.x - th.x, a.y - th.y) || 1; a.fx = (a.x - th.x) / d; a.fy = (a.y - th.y) / d; a.dir = dirOf(a.fx, a.fy); set('flap'); }
     }
     switch (a.mode) {
@@ -2069,8 +2108,8 @@ const Entities = (() => {
         if (night > .65) { a.nightHide = true; a.hid = true; set('hide'); break; }
         if (a.wait <= 0) {
           let tgt = null, food = false;
-          if (Math.random() < .55) { let bd = 600; for (const o of World.act) if (o.kind === 'appletree' && o.ap && o.ap.some(Boolean)) { const d = Math.hypot(o.x - a.x, o.y - a.y); if (d < bd) { bd = d; tgt = o; food = true; } } }
-          if (!tgt && Math.random() < .35) { let bd = 500; for (const d of drops) if (d.type === 'apple' && d.age >= 0) { const m = Math.hypot(d.x - a.x, d.y - a.y); if (m < bd) { bd = m; tgt = d; food = true; } } }
+          if (Math.random() < .55) { let bd = 600; for (let _i32 = 0, o; _i32 < World.act.length && (o = World.act[_i32], true); _i32++) if (o.kind === 'appletree' && o.ap && o.ap.some(Boolean)) { const d = Math.hypot(o.x - a.x, o.y - a.y); if (d < bd) { bd = d; tgt = o; food = true; } } }
+          if (!tgt && Math.random() < .35) { let bd = 500; for (let _i33 = 0, d; _i33 < drops.length && (d = drops[_i33], true); _i33++) if (d.type === 'apple' && d.age >= 0) { const m = Math.hypot(d.x - a.x, d.y - a.y); if (m < bd) { bd = m; tgt = d; food = true; } } }
           if (!tgt) { const ts = World.act.filter(o => (o.kind === 'pine' || o.kind === 'oak' || o.kind === 'appletree') && Math.hypot(o.x - a.x, o.y - a.y) < 320); if (ts.length) tgt = ts[Math.floor(Math.random() * ts.length)]; }
           if (tgt) { a.tgt = tgt; a.food = food; a.side = Math.random() < .5 ? -1 : 1; set('hop'); } else { a.wait = 2 + Math.random() * 3; }
         }
@@ -2127,13 +2166,13 @@ const Entities = (() => {
     const PL = Player.p; Assets.touch(K.sprite, Math.abs(a.x - PL.x) < 500 && Math.abs(a.y - PL.y) < 500);
     const set = m => { a.mode = m; a.mt = 0; }, night = Weather.night(), wet = Weather.state === 'rain';
     const den = a.den; if (den && !den.cov) {   /* pisar em cima do buraco (você ou qualquer bicho de chão) tampa: o caranguejo terá que cavar de novo */
-      let st = !PL.swim && Math.hypot(PL.x - den.x, PL.y - den.y) < 15; if (!st) for (const o of animals) if (o !== a && !o.dead && !o.far && o.kind !== 'crab' && !(o.alt > 3) && o.kind !== 'urubu' && o.kind !== 'gull' && o.kind !== 'woodpecker' && !o.hid && Math.hypot(o.x - den.x, o.y - den.y) < 15) { st = true; break; }
+      let st = !PL.swim && Math.hypot(PL.x - den.x, PL.y - den.y) < 15; if (!st) for (let _i34 = 0, o; _i34 < animals.length && (o = animals[_i34], true); _i34++) if (o !== a && !o.dead && !o.far && o.kind !== 'crab' && !(o.alt > 3) && o.kind !== 'urubu' && o.kind !== 'gull' && o.kind !== 'woodpecker' && !o.hid && Math.hypot(o.x - den.x, o.y - den.y) < 15) { st = true; break; }
       if (st) den.cov = true; }
     const enter = () => { a.x = a.hx; a.y = a.hy; if (den && den.cov) { a.entering = true; set('dig'); } else { a.hid = true; a.ht = 20 + Math.random() * 12; a.ck = 1; set('hole'); } };   /* buraco livre: corre e entra direto; tampado: cava antes */
     // ameaça: você (de longe se estiver em pé, de perto se agachado) ou um predador
     let th = null, td = 1e9; const dpP = P.swim ? 1e9 : Math.hypot(P.x - a.x, P.y - a.y);
     if (noticed(a, dpP, P.sneak ? 95 : 150)) { th = P; td = dpP; }
-    for (const o of animals) if (!o.dead && !o.sleeping && !o.far && (o.kind === 'wolf' || o.kind === 'boar' || o.kind === 'bear')) { const d = Math.hypot(o.x - a.x, o.y - a.y); if (d < 150 && d < td) { th = o; td = d; } }
+    for (let _i35 = 0, o; _i35 < animals.length && (o = animals[_i35], true); _i35++) if (!o.dead && !o.sleeping && !o.far && (o.kind === 'wolf' || o.kind === 'boar' || o.kind === 'bear')) { const d = Math.hypot(o.x - a.x, o.y - a.y); if (d < 150 && d < td) { th = o; td = d; } }
     const go = (tx, ty, sp) => { const dx = tx - a.x, dy = ty - a.y, d = Math.hypot(dx, dy) || 1; const nx = a.x + dx / d * sp * dt, ny = a.y + dy / d * sp * dt; a.dir = dirOf(dx, dy); const okp = (x, y) => World.walkable(x, y) && !World.waterNear(x, y, 10); if (okp(nx, ny)) { a.x = nx; a.y = ny; a.moving = true; }
       else { if (!(a.sdT > World.clock)) { a.sd = Math.random() < .5 ? 1 : -1; a.sdT = World.clock + 1.5; } const px = -dy / d * a.sd, py = dx / d * a.sd, sx = a.x + px * sp * dt, sy = a.y + py * sp * dt; if (okp(sx, sy)) { a.x = sx; a.y = sy; a.moving = true; a.dir = dirOf(px, py); } else a.sd = -a.sd; }   /* obstáculo (coqueiro/pedra): desliza de lado para contornar */
       return d; };
@@ -2151,7 +2190,7 @@ const Entities = (() => {
         if (react()) break; a.wait -= dt; a.out -= dt;
         if (wet || a.out <= 0) { set('home'); break; }
         if (a.wait <= 0) {
-          let bc = null, bd = 260; for (const c of corpses) if (valid(c) && c.kind !== 'urubu') { const d = Math.hypot(c.x - a.x, c.y - a.y); if (d < bd && World.okL(c.x, c.y, 1, 2)) { bd = d; bc = c; } }
+          let bc = null, bd = 260; for (let _i36 = 0, c; _i36 < corpses.length && (c = corpses[_i36], true); _i36++) if (valid(c) && c.kind !== 'urubu') { const d = Math.hypot(c.x - a.x, c.y - a.y); if (d < bd && World.okL(c.x, c.y, 1, 2)) { bd = d; bc = c; } }
           if (bc && Math.random() < .55) { a.cc = bc; set('goeat'); break; }
           for (let k = 0; k < 6; k++) { const an = Math.random() * 6.283, r = 25 + Math.random() * 85, x = a.hx + Math.cos(an) * r, y = a.hy + Math.sin(an) * r; if (World.okL(x, y, 1, 1) && !World.waterNear(x, y, 20) && World.walkable(x, y)) { a.tx = x; a.ty = y; set('walk'); break; } }
           if (a.mode === 'idle') a.wait = 1 + Math.random() * 2;
@@ -2167,7 +2206,7 @@ const Entities = (() => {
         break; }
       case 'eat': {
         if (react()) break; const c = a.cc; if (!valid(c)) { a.wait = 1; set('idle'); break; }
-        a.dir = dirOf(c.x - a.x, c.y - a.y); a.fT = (a.fT || 0) + dt; if (a.fT > 16) { a.fT -= 16; c.meat--; if (c.meat <= 0) c.age = Math.max(c.age, CORPSE_TIME - FADE); }
+        a.dir = dirOf(c.x - a.x, c.y - a.y); a.fT = (a.fT || 0) + dt; if (a.fT > 16) { a.fT -= 16; c.meat--;  }
         if (a.mt > 45) { a.wait = 2; set('idle'); }
         break; }
       case 'defend': {   // garras para cima, olhando para a ameaça; se ela chega perto, foge; encurralado, belisca
@@ -2205,7 +2244,7 @@ const Entities = (() => {
     let th = null, td = 1e9; const dpP = P.swim ? 1e9 : Math.hypot(P.x - a.x, P.y - a.y);
     const hy = a.mode === 'flee' ? 1.4 : (World.clock < (a.calmUntil || 0) ? .6 : 1);   // histerese: quem já está fugindo só se acalma bem longe; recém-acalmado só reage se você chegar muito perto
     if (noticed(a, dpP, (P.sneak ? 105 : 190) * hy) || (World.clock - (a.hitAt || -99) < 6 && dpP < 420)) { th = P; td = dpP; }
-    for (const o of animals) if (!o.dead && !o.sleeping && !o.far && (o.kind === 'wolf' || o.kind === 'boar' || o.kind === 'bear')) { const d = Math.hypot(o.x - a.x, o.y - a.y); if (d < 170 && d < td) { th = o; td = d; } }
+    for (let _i37 = 0, o; _i37 < animals.length && (o = animals[_i37], true); _i37++) if (!o.dead && !o.sleeping && !o.far && (o.kind === 'wolf' || o.kind === 'boar' || o.kind === 'bear')) { const d = Math.hypot(o.x - a.x, o.y - a.y); if (d < 170 && d < td) { th = o; td = d; } }
     if (th) a.lt = { x: th.x, y: th.y };
     if (th && a.mode !== 'flee' && a.mode !== 'dig' && a.mode !== 'pounce' && a.mode !== 'bury' && a.mode !== 'unbury') { a.fleeT = 0; a.fleeUntil = World.clock + 3; set('flee'); }
     const go = (dx, dy, sp) => { const d = Math.hypot(dx, dy) || 1, ox = a.x, oy = a.y; step(a, dx / d, dy / d, sp, dt); a.moving = Math.hypot(a.x - ox, a.y - oy) > .05; if (!a.moving) a.running = false; };
@@ -2270,8 +2309,8 @@ const Entities = (() => {
         if (a.stash) { a.fetchT -= dt; if (a.fetchT <= 0) { set('fetch'); break; } }
         a.stealCd = (a.stealCd || 0) - dt;
         if (!a.loot && a.stealCd <= 0 && a.hunger > 25 && dpP > 150) {
-          let tg = null, bd = 380; for (const o of World.act) if (o.kind === 'chest' && !o.dead && hasFood(o)) { const d = Math.hypot(o.x - a.x, o.y - a.y); if (d < bd) { bd = d; tg = { k: 'chest', ref: o, x: o.x, y: o.y + 8 }; } }
-          for (const dd of drops) if (FOODS[dd.type] && dd.age >= 0) { const d = Math.hypot(dd.x - a.x, dd.y - a.y); if (d < bd) { bd = d; tg = { k: 'drop', ref: dd, x: dd.x, y: dd.y }; } }
+          let tg = null, bd = 380; for (let _i38 = 0, o; _i38 < World.act.length && (o = World.act[_i38], true); _i38++) if (o.kind === 'chest' && !o.dead && hasFood(o)) { const d = Math.hypot(o.x - a.x, o.y - a.y); if (d < bd) { bd = d; tg = { k: 'chest', ref: o, x: o.x, y: o.y + 8 }; } }
+          for (let _i39 = 0, dd; _i39 < drops.length && (dd = drops[_i39], true); _i39++) if (FOODS[dd.type] && dd.age >= 0) { const d = Math.hypot(dd.x - a.x, dd.y - a.y); if (d < bd) { bd = d; tg = { k: 'drop', ref: dd, x: dd.x, y: dd.y }; } }
           if (tg && Math.random() < .5) { a.stl = tg; set('steal'); break; } a.stealCd = 12;
         }
         if (a.hunger > 55 && (a.coolHunt || 0) <= 0) { const r = nearest(a, o => o.kind === 'rabbit' && preyOk(o), 330); if (r) { a.prey = r; set('stalk'); break; } a.coolHunt = 5; } else a.coolHunt = (a.coolHunt || 0) - dt;
@@ -2309,9 +2348,9 @@ const Entities = (() => {
     Assets.touch(K.sprite, Math.abs(a.x - Player.p.x) < 700 && Math.abs(a.y - Player.p.y) < 700);
     const set = m => { a.mode = m; a.mt = 0; }, now = World.clock, WT = CONFIG.WORLD_W * CONFIG.TILE, HT = CONFIG.WORLD_H * CONFIG.TILE;
     const air = a.alt > 6;
-    const danger = (x, y, r, rp) => { if (!P.swim && noticed(a, Math.hypot(P.x - x, P.y - y), rp)) return true; for (const o of animals) if (!o.dead && !o.sleeping && !o.far && (o.kind === 'wolf' || o.kind === 'boar' || o.kind === 'bear') && Math.hypot(o.x - x, o.y - y) < r) return true; return false; };
+    const danger = (x, y, r, rp) => { if (!P.swim && noticed(a, Math.hypot(P.x - x, P.y - y), rp)) return true; for (let _i40 = 0, o; _i40 < animals.length && (o = animals[_i40], true); _i40++) if (!o.dead && !o.sleeping && !o.far && (o.kind === 'wolf' || o.kind === 'boar' || o.kind === 'bear') && Math.hypot(o.x - x, o.y - y) < r) return true; return false; };
     const fly = (tx, ty, sp) => { const dx = tx - a.x, dy = ty - a.y, d = Math.hypot(dx, dy) || 1; a.x += dx / d * sp * dt; a.y += dy / d * sp * dt; a.dir = dirOf(dx, dy); return d; };
-    const valid = c => c && c.meat > 0 && c.age < CORPSE_TIME - FADE && c.kind !== 'urubu';
+    const valid = c => c && (c.left === undefined || c.left > 0) && c.age < CORPSE_TIME - FADE && c.kind !== 'urubu' && c.kind !== 'fish' && c.kind !== 'shark' && corpses.indexOf(c) >= 0;   /* urubu come qualquer carcaça, com ou sem carne */
     const scare = () => { a.fx = Math.cos(a.hd = Math.atan2(a.y - P.y, a.x - P.x) + (Math.random() - .5)); a.fy = Math.sin(a.hd); a.noLand = now + 25; a.cc = null; };
     if (!air && a.mode !== 'takeoff' && a.mode !== 'flee' && (a.hp < K.hp - .5 || danger(a.x, a.y, 130, P.sneak ? 70 : 125))) { scare(); a.dir = dirOf(a.fx, a.fy); set('takeoff'); }
     switch (a.mode) {
@@ -2319,7 +2358,7 @@ const Entities = (() => {
         a.alt = Math.min(46, a.alt + 30 * dt);
         if (!a.tx || Math.hypot(a.tx - a.x, a.ty - a.y) < 40 || a.mt > 25) { const an = Math.random() * 6.283, r = 200 + Math.random() * 700; a.tx = Math.max(200, Math.min(WT - 200, a.hx + Math.cos(an) * r)); a.ty = Math.max(200, Math.min(HT - 200, a.hy + Math.sin(an) * r)); a.mt = 0; if (Math.random() < .15) { a.hx = a.x; a.hy = a.y; } }
         fly(a.tx, a.ty, 55);
-        a.lkT = (a.lkT || 0) - dt; if (a.lkT <= 0 && !(a.noLand > now)) { a.lkT = 1.5; let bc = null, bd = 1100; for (const c of corpses) if (valid(c)) { const d = Math.hypot(c.x - a.x, c.y - a.y); if (d < bd) { bd = d; bc = c; } } if (bc) { a.cc = bc; a.ang = Math.atan2(a.y - bc.y, a.x - bc.x); set('circle'); } }
+        a.lkT = (a.lkT || 0) - dt; if (a.lkT <= 0 && !(a.noLand > now)) { a.lkT = 1.5; let bc = null, bd = 4000;   /* enxerga carcaça do mapa todo */ for (let _i41 = 0, c; _i41 < corpses.length && (c = corpses[_i41], true); _i41++) if (valid(c)) { const d = Math.hypot(c.x - a.x, c.y - a.y); if (d < bd) { bd = d; bc = c; } } if (bc) { a.cc = bc; a.ang = Math.atan2(a.y - bc.y, a.x - bc.x); set('circle'); } }
         break; }
       case 'circle': {
         const c = a.cc; if (!valid(c)) { a.cc = null; set('soar'); break; }
@@ -2338,7 +2377,7 @@ const Entities = (() => {
         const c = a.cc; if (!valid(c)) { a.cc = null; a.fl = 0; set('takeoff'); a.fx = Math.cos(a.hd || 0); a.fy = Math.sin(a.hd || 0); break; }
         if (Math.hypot(c.x - a.x, c.y - a.y) > 70) { set('circle'); break; }   // longe do corpo: volta a rodear e pousa de novo
         a.alt = 0; a.dir = dirOf(c.x - a.x, c.y - a.y); a.fT = (a.fT || 0) + dt; c.bearT = Math.max(c.bearT || 0, 0);
-        if (a.fT > 12) { a.fT -= 12; c.meat--; if (c.meat <= 0) c.age = Math.max(c.age, CORPSE_TIME - FADE); }
+        if (a.fT > 8) { a.fT -= 8; if (c.meat > 0) c.meat--; c.left = (c.left === undefined ? 2 : c.left) - 1; if (c.left <= 0) { c.left = 0; c.meat = 0; const ci = corpses.indexOf(c); if (ci >= 0) corpses.splice(ci, 1); } }   /* urubu limpa a carcaça: acabou, o corpo some na hora (sem ossos), liberando memória */
         break; }
       case 'takeoff': {   // bate as asas no chão, agacha e sobe; depois foge voando
         if (a.mt < .67) a.alt = 0; else { a.alt = Math.min(22, (a.mt - .67) * 70); a.x += (a.fx || 0) * 70 * dt; a.y += (a.fy || 0) * 70 * dt; }
@@ -2393,7 +2432,7 @@ const Entities = (() => {
     const set = (m, d) => { a.mode = m; a.mt = 0; a.dur = d || 1; }, now = World.clock, WT = CONFIG.WORLD_W * CONFIG.TILE, HT = CONFIG.WORLD_H * CONFIG.TILE;
     const air = a.alt > 6, onWater = a.mode === 'float' || a.mode === 'swim' || a.mode === 'fish';
     const hurtNow = a.hp < K.hp - .5;
-    const danger = (rp, r) => { if (!P.swim && noticed(a, Math.hypot(P.x - a.x, P.y - a.y), rp)) return true; for (const o of animals) if (!o.dead && !o.sleeping && !o.far && (o.kind === 'wolf' || o.kind === 'boar' || o.kind === 'bear' || o.kind === 'fox') && Math.hypot(o.x - a.x, o.y - a.y) < r) return true; return false; };
+    const danger = (rp, r) => { if (!P.swim && noticed(a, Math.hypot(P.x - a.x, P.y - a.y), rp)) return true; for (let _i42 = 0, o; _i42 < animals.length && (o = animals[_i42], true); _i42++) if (!o.dead && !o.sleeping && !o.far && (o.kind === 'wolf' || o.kind === 'boar' || o.kind === 'bear' || o.kind === 'fox') && Math.hypot(o.x - a.x, o.y - a.y) < r) return true; return false; };
     const fly = (tx, ty, sp) => { const dx = tx - a.x, dy = ty - a.y, d = Math.hypot(dx, dy) || 1; a.x += dx / d * sp * dt; a.y += dy / d * sp * dt; a.dir = dirOf(dx, dy); return d; };
     const walkTo = (tx, ty, sp) => { const dx = tx - a.x, dy = ty - a.y, d = Math.hypot(dx, dy) || 1, nx = a.x + dx / d * sp * dt, ny = a.y + dy / d * sp * dt; a.dir = dirOf(dx, dy); if (isBeach(nx, ny) || (World.okL(nx, ny, 1, 1) && !World.inWater(nx, ny))) { a.x = nx; a.y = ny; a.moving = true; } return d; };
     const scare = () => { const an = Math.atan2(a.y - P.y, a.x - P.x) + (Math.random() - .5) * .8; a.fx = Math.cos(an); a.fy = Math.sin(an); a.noLand = now + 25; a.dir = dirOf(a.fx, a.fy); };
@@ -2412,7 +2451,7 @@ const Entities = (() => {
         else if (r < .52) set('peck', 2.5 + Math.random() * 2.5);
         else if (r < .64) set('preen', 3 + Math.random());
         else if (r < .74) set('scream', 1.0);
-        else if (r < .82) { let mate = null; for (const o of animals) if (o !== a && o.kind === 'gull' && !o.dead && o.alt < 3 && (o.mode === 'idle' || o.mode === 'peck' || o.mode === 'walk') && Math.hypot(o.x - a.x, o.y - a.y) < 110) { mate = o; break; } if (mate) { a.dir = dirOf(mate.x - a.x, mate.y - a.y); mate.dir = dirOf(a.x - mate.x, a.y - mate.y); set('fight', 2.4); mate.mode = 'fight'; mate.mt = 0; mate.dur = 2.4; } else set('look', 2); }
+        else if (r < .82) { let mate = null; for (let _i43 = 0, o; _i43 < animals.length && (o = animals[_i43], true); _i43++) if (o !== a && o.kind === 'gull' && !o.dead && o.alt < 3 && (o.mode === 'idle' || o.mode === 'peck' || o.mode === 'walk') && Math.hypot(o.x - a.x, o.y - a.y) < 110) { mate = o; break; } if (mate) { a.dir = dirOf(mate.x - a.x, mate.y - a.y); mate.dir = dirOf(a.x - mate.x, a.y - mate.y); set('fight', 2.4); mate.mode = 'fight'; mate.mt = 0; mate.dur = 2.4; } else set('look', 2); }
         else if (r < .92) set('idle', 1.5 + Math.random() * 3);
         else if (!(a.noLand > now)) { a.fx = Math.cos(a.hd = Math.random() * 6.283); a.fy = Math.sin(a.hd); set('takeoff', 1); }
         else set('idle', 2);
@@ -2486,16 +2525,21 @@ const Entities = (() => {
     return [S, 'idle', Math.floor(w.t * 6) % FR(S, 'idle', d)];
   }
   let GHOST = null;
-  function updateAnimals(dt) {
-    const PR = Player.p; if (PR.sneak) PR.sneakT = World.clock;
+  let lodF = 0;
+  function updateAnimals(DT) {
+    const PR = Player.p; lodF++; const lvw = cam.vw > 1 ? cam.vw / 2 + 220 : 860, lvh = cam.vh > 1 ? cam.vh / 2 + 220 : 520; if (PR.sneak) PR.sneakT = World.clock;
     const hid = !PR.swim && !PR.raft && World.inMato(PR.x, PR.y, 22); if (hid && !PR.hidden) Save.flash('🌿 Escondido no mato alto'); PR.hidden = hid;   // última vez que você estava agachado
-    for (const a of animals) {
+    for (let _i44 = 0, a; _i44 < animals.length && (a = animals[_i44], true); _i44++) {
+      /* bicho fora da tela e sem briga com você: pensa 1 a cada 3 quadros (~20 vezes por segundo) com o tempo somado; na tela, tudo normal */
+      if (!a.script && !a.dead && (Math.abs(a.x - PR.x) > lvw || Math.abs(a.y - PR.y) > lvh) && !(a.angry > 0 || a.rage > 0 || a.pursue > 0 || a.growl > 0 || a.windup > 0 || a.lunge > 0 || a.zAlarm || a.zGrowl > 0 || a.zBark > 0)) {
+        if (a.lph === undefined) a.lph = (Math.random() * 3) | 0; if ((lodF + a.lph) % 3) { a.lacc = (a.lacc || 0) + DT; continue; } }
+      const dt = Math.min(.12, DT + (a.lacc || 0)); a.lacc = 0;
       const K = KINDS[a.kind]; const hidA = hid && !(a.aware > World.clock); PR.hidden = hidA;   /* barulho recente revela você no mato para quem ouviu */
       if (!a.far && !a.dead && (a.kind === 'wolf' || a.kind === 'boar' || a.kind === 'deer' || a.kind === 'bear' || a.kind === 'rabbit') && !World.swimmable(a.x, a.y)) { if (placeNear(a, a.x, a.y)) { a.detT = 0; a.stuck = 0; } }   // parede/construção colocada em cima do bicho: empurra para fora em vez de ficar preso
       let P = PR;   // no mato alto os bichos não te veem, a menos que estejam perto (ou já irritados/perseguindo)
       if (window.SAFE_UNTIL > World.clock && (a.kind === 'wolf' || a.kind === 'bear' || a.kind === 'boar' || a.kind === 'fox') && !a.script) { a.angry = a.pursue = a.rage = 0; a.zAlarm = false; a.zInv = false; a.alertT = 0; a.zGrowl = a.zBark = a.growl = a.windup = a.lunge = 0; if (!GHOST) GHOST = Object.create(PR); GHOST.x = a.x + 6000; GHOST.y = a.y + 6000; P = GHOST; }   /* recém-chegado de viagem: uns segundos sem predador vir atrás de você */
       else if (hidA && !(a.angry > 0 || a.rage > 0 || a.pursue > 0 || a.zAlarm || a.tgt || a.script) && Math.hypot(PR.x - a.x, PR.y - a.y) > (PR.sneak ? 55 : 90)) { if (!GHOST) GHOST = Object.create(PR); GHOST.x = a.x + 6000; GHOST.y = a.y + 6000; P = GHOST; a.look = 0; a.wsee = 0; if (!a.zAlarm) { a.zInv = false; a.alertT = 0; } }   // escondido no mato alto: larga a desconfiança ('?')
-      if (a.foeT > 0 && !a.foeSent && a.foe && !a.foe.dead) { a.foeSent = true; const fo0 = a.foe; for (const o of animals) if (o !== a && o.kind === 'wolf' && !o.dead && !o.baby && !o.weak && o.hp > K.hp * .3 && Math.hypot(o.x - a.x, o.y - a.y) < 700) { if (o.sleeping) wakeUp(o); o.foe = fo0; o.foeT = Math.max(o.foeT || 0, 12); o.foeSent = true; o.eat = 0; o.drink = 0; o.invest = 0; o.zInv = false; o.zq = false; o.far = false; } }   // lobo atacado marca o agressor: a matilha toda ataca o alvo
+      if (a.foeT > 0 && !a.foeSent && a.foe && !a.foe.dead) { a.foeSent = true; const fo0 = a.foe; for (let _i45 = 0, o; _i45 < animals.length && (o = animals[_i45], true); _i45++) if (o !== a && o.kind === 'wolf' && !o.dead && !o.baby && !o.weak && o.hp > K.hp * .3 && Math.hypot(o.x - a.x, o.y - a.y) < 700) { if (o.sleeping) wakeUp(o); o.foe = fo0; o.foeT = Math.max(o.foeT || 0, 12); o.foeSent = true; o.eat = 0; o.drink = 0; o.invest = 0; o.zInv = false; o.zq = false; o.far = false; } }   // lobo atacado marca o agressor: a matilha toda ataca o alvo
       if (!(a.foeT > 0)) a.foeSent = false;
       if (a.slowT > 0) a.slowT -= dt;
       if (a.script) { a.far = false; a.t += dt; Assets.touch(K.sprite, true); continue; }
@@ -2619,7 +2663,7 @@ const Entities = (() => {
           if (dp < 260) P.battle = Math.max(P.battle, 3);   // lobo vindo: entra em modo batalha
           a.zGrowl = 0; a.zBark = 0; a.growl = 0; a.windup = 0; a.running = a.moving = true;
           if (dp > 38) { const ox = a.x, oy = a.y; step(a, (P.x - a.x) / dp, (P.y - a.y) / dp, K.run, dt); if (Math.hypot(a.x - ox, a.y - oy) < .05) a.moving = a.running = false; } else { a.moving = a.running = false; a.dir = dirOf(P.x - a.x, P.y - a.y); if (a.cd <= 0) { a.cd = 1.5; a.bite = .75; a.biteHit = false; } }   /* colado em você: fica parado entre as mordidas (antes corria no lugar) */
-        } else if (hungry && !prey && !cp && P.sneak && dp > 40 && dp < 230 && a.hunger > 70 - 20 * nt && !noticed(a, dp, 260 + 100 * nt)) {
+        } else if (hungry && !prey && !cp && P.sneak && dp > 40 && dp < 230 && a.hunger > 70 - 20 * nt && !noticed(a, dp, wolfR1())) {
           // furtivo: com você agachado, o lobo se aproxima por trás sem ser visto; a 70 px ataca de surpresa (50% de dano dobrado)
           a.stalk = true; a.running = false; a.moving = true;
           // contorna por trás: vai para um ponto atrás de você (na direção oposta a que está olhando)
@@ -2722,7 +2766,7 @@ const Entities = (() => {
     }
     PR.hidden = hid;
     if (animals.some(a => a.dead)) animals = animals.filter(a => !a.dead);
-    respawnT += dt; if (respawnT > 12) { respawnT = 0; if (animals.filter(o => o.kind === 'urubu' && !o.dead).length < 3) spawnUrubu(); if (animals.filter(o => o.kind === 'gull' && !o.dead).length < 6) spawnGull(true); for (const k in TARGET) { const need = k === 'wolf' ? TARGET.wolf + Math.round(3 * Weather.night()) : BREED[k].floor; if (animals.filter(a => a.kind === k && !a.baby).length < need) spawnAnimal(k, true); } if (animals.filter(a => a.kind === 'boar').length < 4) spawnAnimal('boar', true); if (animals.filter(a => a.kind === 'fox' && !a.dead).length < 5) spawnAnimal('fox', true); if (animals.filter(a => a.kind === 'woodpecker').length < 6) spawnWoodpecker(); }
+    respawnT += DT; if (respawnT > 12) { respawnT = 0; if (animals.filter(o => o.kind === 'urubu' && !o.dead).length < 3) spawnUrubu(); if (animals.filter(o => o.kind === 'gull' && !o.dead).length < 6) spawnGull(true); for (const k in TARGET) { const need = k === 'wolf' ? TARGET.wolf + Math.round(3 * Weather.night()) : BREED[k].floor; if (animals.filter(a => a.kind === k && !a.baby).length < need) spawnAnimal(k, true); } if (animals.filter(a => a.kind === 'boar').length < 4) spawnAnimal('boar', true); if (animals.filter(a => a.kind === 'fox' && !a.dead).length < 5) spawnAnimal('fox', true); if (animals.filter(a => a.kind === 'woodpecker').length < 6) spawnWoodpecker(); }
   }
   function update(dt) {
     t += dt; noiseTick(dt); breedTick(dt);
@@ -2730,9 +2774,9 @@ const Entities = (() => {
         if (d > .15 && d < 80) { if (pp.still) { pp.tk = 99; pp.still = false; }   // ao começar a andar já deixa uma pegada
           const n = Math.max(1, Math.ceil(d / 8)); for (let q = 1; q <= n; q++) trackStep({ x: pp.lx + dx * q / n, y: pp.ly + dy * q / n + 8, vx: dx, vy: dy, kind: 'player', get tk() { return pp.tk; }, set tk(v) { pp.tk = v; }, get side() { return pp.tside; }, set side(v) { pp.tside = v; } }, d / n); }
         else if (d <= .15) pp.still = true; } pp.lx = pp.x; pp.ly = pp.y; }
-    for (const a of animals) if (a.moving && !a.dead && !a.inDen && a.kind !== 'shark' && a.kind !== 'fish' && a.kind !== 'woodpecker' && a.kind !== 'urubu' && a.kind !== 'gull' && a.kind !== 'crab') World.trample(a.x, a.y + 6, dt); { const pp = Player.p; if (pp.moving && !pp.raft && !pp.swim) World.trample(pp.x, pp.y + 6, dt * .4); } World.wearTick(dt, Weather.state === 'rain');
+    for (let _i46 = 0, a; _i46 < animals.length && (a = animals[_i46], true); _i46++) if (a.moving && !a.dead && !a.inDen && a.kind !== 'shark' && a.kind !== 'fish' && a.kind !== 'woodpecker' && a.kind !== 'urubu' && a.kind !== 'gull' && a.kind !== 'crab') World.trample(a.x, a.y + 6, dt); { const pp = Player.p; if (pp.moving && !pp.raft && !pp.swim) World.trample(pp.x, pp.y + 6, dt * .4); } World.wearTick(dt, Weather.state === 'rain');
     { const wet = Weather.state === 'rain' ? 4 : 1; for (let i = tracks.length - 1; i >= 0; i--) { tracks[i].t += dt * wet; if (tracks[i].t > (tracks[i].life || TRACK_LIFE)) tracks.splice(i, 1); } }
-    for (const o of World.act) {
+    for (let _i47 = 0, o; _i47 < World.act.length && (o = World.act[_i47], true); _i47++) {
       if (o.fall !== undefined) { o.fall += dt; if (o.fall > 1.3) { o.dead = true; o.becomeStump = true; } }
       if (o.kind === 'fire' && !o.out && !o.broken) { if (o.cook) for (let i = 0; i < 3; i++) if (o.cook[i] > 0) { o.cook[i] = Math.max(0, o.cook[i] - dt); o.smell = 45; } if (o.boilT > 0) { o.boilT -= dt; o.smell = Math.max(o.smell || 0, 20); if (o.boilT <= 0) { o.boilT = 0; o.waterReady = (o.waterReady || 0) + (o.boilN || 1); o.boilN = 0; } } }
       if (o.kind === 'fire') { if (o.smell > 0) o.smell -= dt; if (o.broken) { o.life -= dt; if (o.life <= 0) o.dead = true; } else if (!o.out) { o.hp -= dt; if (o.hp <= 0) { o.hp = 0; o.out = true; o.outT = 0; o.smell = 0; } } else o.outT = (o.outT || 0) + dt; }
@@ -2740,25 +2784,25 @@ const Entities = (() => {
       if (o.kind === 'tuft' && o.hp > 0) o.hp -= dt;
       if (o.kind === 'palm' && !o.fall && !o.becomeStump) { o.cgT = (o.cgT === undefined ? Math.random() * COCO_REGROW : o.cgT) - dt; if (o.cgT <= 0) { o.cgT = COCO_REGROW * (.8 + Math.random() * .4); cocoGrow(o); } }
     }
-    for (const o of World.act) if (o.becomeStump && o.kind === 'palm') { // coqueiro caído: toco + tora + folhas + cocos que sobraram; renasce só depois de dias
+    for (let _i48 = 0, o; _i48 < World.act.length && (o = World.act[_i48], true); _i48++) if (o.becomeStump && o.kind === 'palm') { // coqueiro caído: toco + tora + folhas + cocos que sobraram; renasce só depois de dias
       o.becomeStump = false; World.add({ kind: 'fallenpalm', x: o.x, y: o.y, ph: 0 });
       if (!LOCS[LOC].fixed) regrow.push({ x: o.x, y: o.y, t: PALM_REGROW }); break; }
-    for (const o of World.act) if (o.becomeStump) { o.becomeStump = false; World.add({ kind: 'stump' + (1 + Math.floor(Math.random() * 3)), x: o.x, y: o.y, ph: 0 }, { kind: 'log', x: o.x + 36, y: o.y + 8, ph: 0 }); break; }
+    for (let _i49 = 0, o; _i49 < World.act.length && (o = World.act[_i49], true); _i49++) if (o.becomeStump) { o.becomeStump = false; World.add({ kind: 'stump' + (1 + Math.floor(Math.random() * 3)), x: o.x, y: o.y, ph: 0 }, { kind: 'log', x: o.x + 36, y: o.y + 8, ph: 0 }); break; }
     if (World.act.some(o => o.dead)) { const a = World.objs; for (let i = a.length - 1; i >= 0; i--) if (a[i].dead) a.splice(i, 1); World.touch(); }
     for (let i = regrow.length - 1; i >= 0; i--) { const g = regrow[i]; g.t -= dt; if (g.t > 0) continue; if (Math.hypot(g.x - Player.p.x, g.y - Player.p.y) < 260) { g.t = 20; continue; }
-      for (const s of World.objs) if (s.palmStump && Math.hypot(s.x - g.x, s.y - g.y) < 6) s.dead = true; World.add({ kind: 'palm', x: g.x, y: g.y, ph: Math.random() * 9, solid: true }); regrow.splice(i, 1); }
+      for (let _i50 = 0, s; _i50 < World.objs.length && (s = World.objs[_i50], true); _i50++) if (s.palmStump && Math.hypot(s.x - g.x, s.y - g.y) < 6) s.dead = true; World.add({ kind: 'palm', x: g.x, y: g.y, ph: Math.random() * 9, solid: true }); regrow.splice(i, 1); }
     const p = Player.p; if (craftMode === 'bench' && craftEl.style.display === 'block' && !World.act.some(o => o.kind === 'bench' && Math.hypot(o.x - p.x, o.y - p.y) < 160)) closeCraft();
     // fogueira: acesa queima quem chega perto; apagada é pisoteada até ficar danificada e sumir
-    for (const o of World.act) if (o.kind === 'fire' && !o.broken) {
+    for (let _i51 = 0, o; _i51 < World.act.length && (o = World.act[_i51], true); _i51++) if (o.kind === 'fire' && !o.broken) {
       // cada pisão (no máximo 1 a cada .45 s por pessoa/animal): 5 apagam a fogueira acesa, 10 destroem a apagada
       const stomp = (e, mv) => { e.stompT = (e.stompT || 0) - dt; if (mv && e.stompT <= 0 && Math.hypot(o.x - e.x, o.y - e.y) < 26) { e.stompT = .45; o.dmg = (o.dmg || 0) + 1;
         if (!o.out && o.dmg >= 5) { o.out = true; o.hp = 0; o.outT = 0; if (e === p) Save.flash('Você apagou a fogueira pisando'); }
         else if (o.out && o.dmg >= 10) { o.broken = true; o.life = 40; if (e === p) Save.flash('Fogueira destruída'); } } };
       if (!o.out) {
         if (Math.hypot(o.x - p.x, o.y - p.y) < 32) { p.hp -= dt * 6; p.hurtT = .25; burnT -= dt; if (burnT <= 0) { burnT = 1.6; Save.flash('🔥 Queimando! Afaste-se'); } if (p.hp <= 0) Player.hurt(0); }
-        for (const a of animals) if (!a.dead && Math.hypot(o.x - a.x, o.y - a.y) < 30) { a.hp -= dt * 8; a.angry = 0; if (a.hp <= 0) killAnimal(a, 'fogo'); }
+        for (let _i52 = 0, a; _i52 < animals.length && (a = animals[_i52], true); _i52++) if (!a.dead && Math.hypot(o.x - a.x, o.y - a.y) < 30) { a.hp -= dt * 8; a.angry = 0; if (a.hp <= 0) killAnimal(a, 'fogo'); }
       }
-      stomp(p, p.moving); for (const a of animals) if (!a.dead) stomp(a, a.moving);
+      stomp(p, p.moving); for (let _i53 = 0, a; _i53 < animals.length && (a = animals[_i53], true); _i53++) if (!a.dead) stomp(a, a.moving);
     }
     for (let i = drops.length - 1; i >= 0; i--) { const d = drops[i]; d.age += dt; if (d.age > .5 && Math.hypot(d.x - p.x, d.y - p.y) < 42 && inv[d.type] < MAX[d.type]) { inv[d.type]++; drops.splice(i, 1); showHud(); Save.flash('+1 ' + NAME[d.type]); } }
     for (let i = corpses.length - 1; i >= 0; i--) { corpses[i].age += dt; if (corpses[i].bearT > 0) corpses[i].bearT -= dt; if (corpses[i].age > CORPSE_TIME) { const c = corpses[i]; if (c.kind !== 'fish' && c.kind !== 'shark') dens.push({ kind: 'osso' + (1 + Math.floor(Math.random() * 4)), x: c.x, y: c.y + 4, ph: 0, bone: true, age: 0, sc: ({ rabbit: .6, fawn: .65, woodpecker: .5, deer: .95, boar: 1, wolf: .9, bear: 1.3, urubu: .6, crab: .4 })[c.kind] || .9 }); corpses.splice(i, 1); } }
@@ -2788,7 +2832,7 @@ const Entities = (() => {
   }
   const DIRV = { south: [0, 1], 'south-west': [-.7, .7], west: [-1, 0], 'north-west': [-.7, -.7], north: [0, -1], 'north-east': [.7, -.7], east: [1, 0], 'south-east': [.7, .7] };
   // alerta: um lobo acordado e perto que está atacando ou com fome
-  function wolfNear() { const P = Player.p; for (const a of animals) if (a.kind === 'wolf' && !a.dead && !a.far && !a.sleeping && Math.hypot(a.x - P.x, a.y - P.y) < 260 && (a.angry > 0 || a.hunger > 60)) return true; return false; }
+  function wolfNear() { const P = Player.p; for (let _i54 = 0, a; _i54 < animals.length && (a = animals[_i54], true); _i54++) if (a.kind === 'wolf' && !a.dead && !a.far && !a.sleeping && Math.hypot(a.x - P.x, a.y - P.y) < 260 && (a.angry > 0 || a.hunger > 60)) return true; return false; }
   function eat(k) {
     const P = Player.p; if (!(inv[k] > 0)) return;
     const heal = { cooked: 40, meat: 25, apple: 12, coconut: 8 }[k]; if (k !== 'water' && !heal) return;
@@ -2825,8 +2869,8 @@ const Entities = (() => {
     }, 'player', .55);
   }
   const placeFire = () => placeItem('campfire');
-  const nearestPit = (x, y, r) => { let b = null, bd = r; for (const o of World.act) if (o.kind === 'fire') { const d = Math.hypot(o.x - x, o.y - y); if (d < bd) { bd = d; b = o; } } return b; };
-  const nearestSmell = (x, y, r) => { let b = null, bd = r; for (const o of World.act) if (o.kind === 'fire' && !o.out && !o.broken) { const d = Math.hypot(o.x - x, o.y - y); if (d < Math.min(r, o.smell > 0 ? 520 : 330) && d < bd) { bd = d; b = o; } } return b; };
+  const nearestPit = (x, y, r) => { let b = null, bd = r; for (let _i55 = 0, o; _i55 < World.act.length && (o = World.act[_i55], true); _i55++) if (o.kind === 'fire') { const d = Math.hypot(o.x - x, o.y - y); if (d < bd) { bd = d; b = o; } } return b; };
+  const nearestSmell = (x, y, r) => { let b = null, bd = r; for (let _i56 = 0, o; _i56 < World.act.length && (o = World.act[_i56], true); _i56++) if (o.kind === 'fire' && !o.out && !o.broken) { const d = Math.hypot(o.x - x, o.y - y); if (d < Math.min(r, o.smell > 0 ? 520 : 330) && d < bd) { bd = d; b = o; } } return b; };
   let fireL = [], fireSrc = null, fireN = -1; const fires = () => { const A = World.act; if (fireSrc !== A || fireN !== A.length) { fireSrc = A; fireN = A.length; fireL = A.filter(o => o.kind === 'fire'); } return fireL; };   /* só as fogueiras perto, em cache */
   const nearestFire = (x, y, r) => { let b = null, bd = r; for (const o of fires()) if (!o.out && !o.broken) { const d = Math.hypot(o.x - x, o.y - y); if (d < bd) { bd = d; b = o; } } return b; };
   // USAR: botão que só aparece perto de algo (árvore, arbusto, macieira, pedra, bancada, água)
@@ -2838,18 +2882,18 @@ const Entities = (() => {
     { const fm = nearestPit(p.x, p.y, 70); if (fm && !fm.broken) return { o: fm, label: '✋ Fogueira' }; }
     if (p.carry) {   // carregando tronco: serrar na bancada, ou colocar numa cerca em construção
       const bn0 = World.near.find(o => o.kind === 'bench' && Math.hypot(o.x - p.x, o.y - p.y) < 110); if (bn0) return p.carry === 'leaves' ? { o: { kind: 'shredleaves' }, label: 'Desfiar folhas (+6 🌿)' } : { o: { kind: 'sawlog' }, label: 'Serrar tronco (+' + (p.carry === 'palm' ? 3 : 4) + ' 🪵)' };
-      let fb = null, fd = 80; if (p.carry !== 'leaves') for (const o of World.near) if (o.kind === 'fence' && o.stage < 3) { const d = Math.hypot(o.x - p.x, o.y - p.y); if (d < fd) { fd = d; fb = o; } }
+      let fb = null, fd = 80; if (p.carry !== 'leaves') for (let _i57 = 0, o; _i57 < World.near.length && (o = World.near[_i57], true); _i57++) if (o.kind === 'fence' && o.stage < 3) { const d = Math.hypot(o.x - p.x, o.y - p.y); if (d < fd) { fd = d; fb = o; } }
       if (fb) return { o: fb, label: 'Colocar tronco (' + fb.stage + '/3)' };
       return World.waterNear(p.x, p.y, 70) ? { o: { kind: 'water' }, label: waterLabel() } : null;
     }
-    { const ax = inv.axe && inv.eq === 'axe'; let cb = null, cd = 1e9; for (const o of World.near) { const R = o.kind === 'fallenpalm' ? 80 : o.kind === 'palmcrown' ? 55 : (o.kind === 'leaves' || o.kind === 'log') ? 60 : 0; if (!R) continue; const d = Math.hypot(o.x - p.x, o.y - p.y); if (d < R && d < cd) { cd = d; cb = o; } }
+    { const ax = inv.axe && inv.eq === 'axe'; let cb = null, cd = 1e9; for (let _i58 = 0, o; _i58 < World.near.length && (o = World.near[_i58], true); _i58++) { const R = o.kind === 'fallenpalm' ? 80 : o.kind === 'palmcrown' ? 55 : (o.kind === 'leaves' || o.kind === 'log') ? 60 : 0; if (!R) continue; const d = Math.hypot(o.x - p.x, o.y - p.y); if (d < R && d < cd) { cd = d; cb = o; } }
       if (cb) return { o: cb, label: cb.kind === 'fallenpalm' ? (ax ? 'Cortar coqueiro' : 'Cortar (precisa do machado)') : cb.kind === 'palmcrown' ? (ax ? 'Cortar folhas (+palha)' : 'Folhas (precisa do machado)') : cb.kind === 'leaves' ? 'Pegar folhas' : ax ? 'Cortar em tábuas' : 'Pegar tronco' }; }
     const bn = World.near.find(o => o.kind === 'bench' && Math.hypot(o.x - p.x, o.y - p.y) < 110); if (bn) return { o: bn, label: 'Bancada' };
 
-    { let cb = null, cd = 62; for (const o of World.near) if (o.kind === 'cocochao' && !o.dead) { const d = Math.hypot(o.x - p.x, o.y - p.y); if (d < cd) { cd = d; cb = o; } } if (cb) return { o: cb, label: '🥥 Pegar coco' }; }
-    { let sb = null, sd = 60; for (const o of dens) if (o.kind === 'stash') { const d = Math.hypot(o.x - p.x, o.y - p.y); if (d < sd) { sd = d; sb = o; } } if (sb) return { o: { kind: 'stash', st: sb }, label: '⛏ Desenterrar comida' }; }
+    { let cb = null, cd = 62; for (let _i59 = 0, o; _i59 < World.near.length && (o = World.near[_i59], true); _i59++) if (o.kind === 'cocochao' && !o.dead) { const d = Math.hypot(o.x - p.x, o.y - p.y); if (d < cd) { cd = d; cb = o; } } if (cb) return { o: cb, label: '🥥 Pegar coco' }; }
+    { let sb = null, sd = 60; for (let _i60 = 0, o; _i60 < dens.length && (o = dens[_i60], true); _i60++) if (o.kind === 'stash') { const d = Math.hypot(o.x - p.x, o.y - p.y); if (d < sd) { sd = d; sb = o; } } if (sb) return { o: { kind: 'stash', st: sb }, label: '⛏ Desenterrar comida' }; }
     const cc = nearestCorpse(p.x, p.y, 62); if (cc) return { o: { kind: 'corpse', c: cc }, label: 'Coletar carne' };
-    for (const o of World.near) { const T = TREES[o.kind], bush = o.kind.slice(0, 4) === 'bush' || (o.kind === 'tuft' && !(o.hp > 0)), rock = o.kind === 'rock' || o.kind === 'boulder', pb = o.kind === 'pedrinha', st = o.kind === 'fence' || o.kind === 'shelter' || o.kind === 'chest'; if (!(T || bush || rock || pb || st) || o.fall !== undefined) continue; if (o.kind === 'palm' && !(inv.axe && inv.eq === 'axe')) continue;   // coco agora fica no chão: sem sacudir if (o.kind === 'appletree' && !o.ap.some(v => v)) continue;
+    for (let _i61 = 0, o; _i61 < World.near.length && (o = World.near[_i61], true); _i61++) { const T = TREES[o.kind], bush = o.kind.startsWith('bush') || (o.kind === 'tuft' && !(o.hp > 0)), rock = o.kind === 'rock' || o.kind === 'boulder', pb = o.kind === 'pedrinha', st = o.kind === 'fence' || o.kind === 'shelter' || o.kind === 'chest'; if (!(T || bush || rock || pb || st) || o.fall !== undefined) continue; if (o.kind === 'palm' && !(inv.axe && inv.eq === 'axe')) continue;   // coco agora fica no chão: sem sacudir if (o.kind === 'appletree' && !o.ap.some(v => v)) continue;
       const d = Math.hypot(o.x - p.x, o.y - p.y) * (o.kind === 'rock' ? .8 : o.kind === 'boulder' ? .7 : 1); if (d < bd) { bd = d; best = o; label = pb ? 'Pegar pedra' : o.kind === 'chest' ? 'Abrir baú' : st ? 'Desmontar' : o.kind === 'appletree' ? 'Colher maçã' : o.kind === 'palm' ? (inv.axe && inv.eq === 'axe' ? 'Cortar' : 'Sacudir coqueiro') : rock ? (inv.pickaxe ? 'Minerar' : 'Pedra (precisa de picareta)') : bush ? 'Colher' : 'Cortar'; } }
     if (!best) { const pz = World.poolNear(p.x, p.y, 48); if (pz) return { o: { kind: 'poca', p: pz }, label: canFill() ? 'Encher cantil (poça)' : 'Beber da poça' }; }
     if (!best && World.waterNear(p.x, p.y, 85)) return { o: { kind: 'water' }, label: waterLabel() };
@@ -3058,9 +3102,9 @@ const Entities = (() => {
     else if (T && T.sway) { const n = Assets.frames(o.kind, 'sway', '_'); Assets.draw(ctx, o.kind, 'sway', '_', Math.floor((t + o.ph) * (T.swf || 6)) % n, sx, sy, s); }
     else if (o.kind === 'waterfall') { const n = Assets.frames('waterfall', 'flow', '_'); Assets.draw(ctx, 'wfstream', 'flow', '_', Math.floor(performance.now() / 100) % 8, sx + 1, sy - 143, 1); Assets.draw(ctx, 'waterfall', 'flow', '_', Math.floor(performance.now() / 100) % n, sx, sy, 1); }
     else if (o.kind === 'campdirt') { const gx = Math.round(sx - 5 * 64), gy = Math.round(sy - 4 * 64); const mk = (a, b) => ((a - 5) / 4.2) ** 2 + ((b - 4) / 3.2) ** 2 < 1 ? 1 : 0; for (let b = 0; b < 8; b++) for (let a = 0; a < 10; a++) { const k = '' + mk(a, b) + mk(a + 1, b) + mk(a, b + 1) + mk(a + 1, b + 1); if (k !== '0000') Assets.draw(ctx, 'cd_' + k, 'rot', '_', 0, gx + a * 64, gy + b * 64, 1); } }
-    else if (o.kind.slice(0, 3) === 'sap') { const g = Math.min(1, (o.g || 0) / 600); Assets.draw(ctx, (o.kind === 'sappine' ? 'sappine' : 'sapoak') + (1 + Math.abs(Math.round(o.x)) % 2), 'rot', '_', 0, Math.round(sx + Math.sin(t * 1.4 + o.ph) * .8 * g), Math.round(sy), 1.05 + .5 * g); }
-    else if (o.kind === 'mato') { if (o.cutT > 0) Assets.draw(ctx, 'matocortado', 'rot', '_', 0, Math.round(sx), Math.round(sy), 1); else Assets.draw(ctx, 'mato' + (1 + (Math.abs(Math.round(o.x) * 7 + Math.round(o.y) * 3) % 4)), 'rot', '_', 0, Math.round(sx + Math.sin(t * 1.6 + o.ph) * 1.2), Math.round(sy), 1.05); }
-    else if (o.kind === 'raft') { const lv = Math.max(1, Math.min(3, o.hp | 0)), mt = Player.p.raft === o, bob = Math.round(Math.sin(t * 2 + o.x) * (mt ? 1.5 : 1)); Assets.draw(ctx, 'raft' + lv, 'rot', '_', 0, Math.round(sx), Math.round(sy) + bob, lv === 1 ? 1.1 : 1.1); }
+    else if (o.kind.startsWith('sap')) { const g = Math.min(1, (o.g || 0) / 600); Assets.draw(ctx, (o.kind === 'sappine' ? 'sappine' : 'sapoak') + (1 + Math.abs(Math.round(o.x)) % 2), 'rot', '_', 0, Math.round(sx + Math.sin(t * 1.4 + o.ph) * .8 * g), Math.round(sy), 1.05 + .5 * g); }
+    else if (o.kind === 'mato') { if (o.cutT > 0) Assets.draw(ctx, 'matocortado', 'rot', '_', 0, Math.round(sx), Math.round(sy), 1); else Assets.draw(ctx, NM('mato', 1 + (Math.abs(Math.round(o.x) * 7 + Math.round(o.y) * 3) % 4)), 'rot', '_', 0, Math.round(sx + Math.sin(t * 1.6 + o.ph) * 1.2), Math.round(sy), 1.05); }
+    else if (o.kind === 'raft') { const lv = Math.max(1, Math.min(3, o.hp | 0)), mt = Player.p.raft === o, bob = Math.round(Math.sin(t * 2 + o.x) * (mt ? 1.5 : 1)); Assets.draw(ctx, NM('raft', lv), 'rot', '_', 0, Math.round(sx), Math.round(sy) + bob, lv === 1 ? 1.1 : 1.1); }
     else if (o.kind === 'camptent') Assets.draw(ctx, 'camptenda', 'rot', '_', 0, sx, sy, 1.5);
     else if (o.kind === 'campmesa') Assets.draw(ctx, 'campmesa', 'rot', '_', 0, sx, sy, 1.3);
     else if (o.kind === 'campvaral') Assets.draw(ctx, 'campvaral', 'rot', '_', 0, sx, sy, 1.3);
@@ -3074,13 +3118,13 @@ const Entities = (() => {
     else if (o.kind === 'wall') drawPiece(ctx, 'wall', sx, sy, o.vert);
     else if (o.kind === 'chest') drawChest(ctx, sx, sy);
     else if (o.kind === 'shelter') drawShelterBase(ctx, sx, sy);
-    else if (o.kind === 'flower') Assets.draw(ctx, 'flor' + (o.v || 1), 'rot', '_', 0, sx, sy, 1.2);
-    else if (o.kind === 'boulder') Assets.draw(ctx, 'boulder' + (1 + Math.abs(Math.floor(o.x * 3 + o.y)) % 3), 'rot', '_', 0, sx, sy, .85);
-    else if (o.kind === 'cocochao') Assets.draw(ctx, 'coco' + (1 + Math.abs(Math.floor(o.x * 3 + o.y)) % 3), 'rot', '_', 0, sx, sy + 2, .5);
-    else if (o.kind === 'pedrinha') Assets.draw(ctx, 'rock' + (1 + Math.abs(Math.floor(o.x * 5 + o.y * 3)) % 4), 'rot', '_', 0, sx, sy + 3, .3);
-    else if (o.kind === 'rock') Assets.draw(ctx, 'rock' + (1 + Math.abs(Math.floor(o.x * 3 + o.y)) % 4), 'rot', '_', 0, sx, sy + 4, .75);
+    else if (o.kind === 'flower') Assets.draw(ctx, NM('flor', o.v || 1), 'rot', '_', 0, sx, sy, 1.2);
+    else if (o.kind === 'boulder') Assets.draw(ctx, NM('boulder', 1 + Math.abs(Math.floor(o.x * 3 + o.y)) % 3), 'rot', '_', 0, sx, sy, .85);
+    else if (o.kind === 'cocochao') Assets.draw(ctx, NM('coco', 1 + Math.abs(Math.floor(o.x * 3 + o.y)) % 3), 'rot', '_', 0, sx, sy + 2, .5);
+    else if (o.kind === 'pedrinha') Assets.draw(ctx, NM('rock', 1 + Math.abs(Math.floor(o.x * 5 + o.y * 3)) % 4), 'rot', '_', 0, sx, sy + 3, .3);
+    else if (o.kind === 'rock') Assets.draw(ctx, NM('rock', 1 + Math.abs(Math.floor(o.x * 3 + o.y)) % 4), 'rot', '_', 0, sx, sy + 4, .75);
     else if (o.kind === 'leaves') drawLeaves(ctx, sx, sy);
-    else if (o.kind === 'tuft') { if (!(o.hp > 0)) Assets.draw(ctx, 'tuft' + (1 + Math.floor(o.ph * 7) % 2), 'rot', '_', 0, sx, sy, .9); }
+    else if (o.kind === 'tuft') { if (!(o.hp > 0)) Assets.draw(ctx, NM('tuft', 1 + Math.floor(o.ph * 7) % 2), 'rot', '_', 0, sx, sy, .9); }
     else Assets.draw(ctx, o.kind, 'rot', '_', 0, sx, sy, s);
     if (o.ap) for (let i = 0; i < 4; i++) if (o.ap[i]) Assets.draw(ctx, 'apple', 'rot', '_', 0, sx + APPLE_SPOTS[i][0] * s, sy + APPLE_SPOTS[i][1] * s, .5 * s / .9);
   }
@@ -3105,14 +3149,19 @@ const Entities = (() => {
     const T = TREES[o.kind], sc = T ? T.s : (SCALE[o.kind] || 1), x = o.x - camX, y = o.y - camY;
     return x + e.r * sc + 6 > 0 && x - e.l * sc - 6 < vw && y + e.d * sc + 6 > 0 && y - e.u * sc - 6 < vh;
   }
-  const dl = [], ord = [], byY = (a, b) => a.y - b.y; let dn = 0;
+  const dl = [], ord = [], byY = (a, b) => a.y < b.y ? -1 : a.y > b.y ? 1 : 0;   /* devolve -1/0/1 (número inteiro): a conta com vírgula criava lixo em cada comparação da ordenação */ let dn = 0;
   function add(y, t, a) { let e = dl[dn]; if (!e) e = dl[dn] = { y: 0, t: 0, a: null, f: null }; dn++; e.y = y; e.t = t; e.a = a; e.f = null; }
   function addF(y, f) { add(y, 5, null); dl[dn - 1].f = f; }
   const SHW = { oak: [58, 24, 8], pine: [44, 18, 5], fir: [44, 18, 5], palm: [36, 13, 10], appletree: [46, 19, 6], dead: [22, 9, 3] };
   function treeShadow(ctx, o, camX, camY) {   // duas elipses de verde-escuro (borda mais clara, miolo mais escuro), levemente para a direita
-    const w = SHW[o.kind]; if (!w) return; const k = (TREES[o.kind].s || .8) / .8, cx = Math.round(o.x - camX + w[2] * k), cy = Math.round(o.y - camY - 3), rx = Math.round(w[0] * k), ry = Math.round(w[1] * k), fall = o.fall !== undefined ? Math.max(0, 1 - o.fall * 2) : 1;
-    ctx.globalAlpha = fall; ctx.fillStyle = 'rgba(8,30,12,.26)'; ctx.beginPath(); ctx.ellipse(cx, cy, rx, ry, 0, 0, 6.283); ctx.fill();
-    ctx.fillStyle = 'rgba(8,30,12,.3)'; ctx.beginPath(); ctx.ellipse(cx + 2, cy, Math.round(rx * .78), Math.round(ry * .72), 0, 0, 6.283); ctx.fill(); ctx.globalAlpha = 1;
+    const w = SHW[o.kind]; if (!w) return; const k = (TREES[o.kind].s || .8) / .8, cx = Math.round(o.x - camX + w[2] * k), cy = Math.round(o.y - camY - 3), fall = o.fall !== undefined ? Math.max(0, 1 - o.fall * 2) : 1;
+    let S = treeShadow.S; if (!S) {   /* as sombras de cada tipo de árvore desenhadas 1 vez numa folha (antes: 2 elipses por árvore a cada quadro) */
+      S = treeShadow.S = { c: document.createElement('canvas'), m: {} }; let x = 0, H = 0; const L = [];
+      for (const kd in SHW) { if (!TREES[kd]) continue; const q = SHW[kd], kk = (TREES[kd].s || .8) / .8, rx = Math.round(q[0] * kk), ry = Math.round(q[1] * kk), cw = rx * 2 + 8, ch = ry * 2 + 4; L.push([kd, x, rx, ry, cw, ch]); x += cw; H = Math.max(H, ch); }
+      S.c.width = Math.max(1, x); S.c.height = Math.max(1, H); const g = S.c.getContext('2d');
+      for (const [kd, x0, rx, ry, cw, ch] of L) { const ox = x0 + rx + 2, oy = ry + 2; g.fillStyle = 'rgba(8,30,12,.26)'; g.beginPath(); g.ellipse(ox, oy, rx, ry, 0, 0, 6.283); g.fill();
+        g.fillStyle = 'rgba(8,30,12,.3)'; g.beginPath(); g.ellipse(ox + 2, oy, Math.round(rx * .78), Math.round(ry * .72), 0, 0, 6.283); g.fill(); S.m[kd] = [x0, cw, ch, rx + 2, ry + 2]; } }
+    const e = S.m[o.kind]; if (!e) return; const a0 = ctx.globalAlpha; ctx.globalAlpha = a0 * fall; ctx.drawImage(S.c, e[0], 0, e[1], e[2], cx - e[3], cy - e[4], e[1], e[2]); ctx.globalAlpha = a0;
   }
   function drawDrop(ctx, d, camX, camY) { const x = Math.round(d.x - camX), y = Math.round(d.y - camY); ctx.fillStyle = '#0005'; ctx.fillRect(x - 7, y, 14, 3);
       if (DROPSPR[d.type]) { const [nm, sc, n] = DROPSPR[d.type]; Assets.draw(ctx, nm + (n > 1 ? 1 + Math.abs(Math.floor(d.x * 7 + d.y * 3)) % n : ''), 'rot', '_', 0, x, y + 2, sc); }
@@ -3219,57 +3268,58 @@ const Entities = (() => {
   function draw(ctx, camX, camY, vw, vh, player) {
     dn = 0; const m = 130; cam.x = camX; cam.y = camY; cam.vw = vw; cam.vh = vh;
     drawFloors(ctx, camX, camY, vw, vh);
-    for (const o of World.near) if (false) { }
+    for (let _i62 = 0, o; _i62 < World.near.length && (o = World.near[_i62], true); _i62++) if (false) { }
       else if (o.kind === 'bridge' && !World.isRope(Math.round(o.x / CONFIG.TILE), Math.round(o.y / CONFIG.TILE)) && o.x > camX - 40 && o.x < camX + vw + 40 && o.y > camY - 40 && o.y < camY + vh + 40) drawBridge(ctx, o.x - camX, o.y - camY, o.x, o.y, o.nat);
     drawTracks(ctx, camX, camY, vw, vh);
-    { const OA = World.near; for (let i = 0; i < OA.length; i++) { const o = OA[i], Tr = TREES[o.kind]; if (!Tr || o.dead || (o.fall !== undefined && o.fall > .5) || !inView(o, camX, camY, vw, vh, m)) continue; addF(-1e9 + 2, () => treeShadow(ctx, o, camX, camY)); } }   // sombra no chão, como no jogo de referência
+    { const OA = World.near; for (let i = 0; i < OA.length; i++) { const o = OA[i], Tr = TREES[o.kind]; if (!Tr || o.dead || (o.fall !== undefined && o.fall > .5) || !inView(o, camX, camY, vw, vh, m)) continue; add(-1e9 + 2, 6, o); } }   // sombra no chão, como no jogo de referência
     World.setViewR(Math.max(vw, vh) / 2 + 450); const O = World.near, MT = window.MATOTHIN | 0; for (let i = 0; i < O.length; i++) { const o = O[i]; if (MT && o.kind === 'mato') { const h = Math.abs(Math.round(o.x * 13 + o.y * 7)) % 6; if (h < (MT === 1 ? 2 : 3) && Math.abs(o.x - Player.p.x) + Math.abs(o.y - Player.p.y) > 90) continue; }   // FPS baixo: desenha menos mato (só o que está longe de você)
       if (o.kind === 'campdirt' ? (Math.abs(o.x - camX - vw / 2) < vw / 2 + 400 && Math.abs(o.y - camY - vh / 2) < vh / 2 + 330) : inView(o, camX, camY, vw, vh, m)) add(o.kind === 'campdirt' ? -1e8 : o.kind === 'raft' ? o.y - 40 : (o.kind === 'mato' && o.cutT > 0) ? o.y - 60 : o.y, 0, o); }
     { const tr = World.trail(); if (tr && tr.x > camX - 80 && tr.x < camX + vw + 80 && tr.y > camY - 40 && tr.y < camY + vh + 90) add(tr.y, 0, tr); }
     { const PZ = World.pocas(); for (let i = 0; i < PZ.length; i++) { const o = PZ[i]; if (o.x > camX - 60 && o.x < camX + vw + 60 && o.y > camY - 60 && o.y < camY + vh + 60) add(-1e8 + 1, 0, o); } }   /* poças: no chão, por baixo de tudo */
     for (let i = 0; i < dens.length; i++) { const o = dens[i]; if (!o.hid && o.x > camX - 140 && o.x < camX + vw + 140 && o.y > camY - 20 && o.y < camY + vh + 160) add(o.y - 30, 0, o); }
     for (let i = 0; i < drops.length; i++) { const d = drops[i]; if (d.x > camX - 30 && d.x < camX + vw + 30 && d.y > camY - 20 && d.y < camY + vh + 30) add(d.y, 1, d); }
-    for (const c of corpses) if (c.x > camX - m && c.x < camX + vw + m && c.y > camY - 30 && c.y < camY + vh + m) add(c.y - 1, 2, c);
-    if (player.p.sneak ? visSneak : visStand) for (const w of animals) if (w.x > camX - m && w.x < camX + vw + m && w.y > camY - m && w.y < camY + vh + m) addF(-1e9 + 1, () => {
-      const P = player.p, ang = DANG[w.dir] || 0, full = w.kind === 'wolf' ? 260 + 100 * Weather.night() : KINDS[w.kind].fearR, dp = Math.hypot(P.x - w.x, P.y - w.y);
+    for (let _i63 = 0, c; _i63 < corpses.length && (c = corpses[_i63], true); _i63++) if (c.x > camX - m && c.x < camX + vw + m && c.y > camY - 30 && c.y < camY + vh + m) add(c.y - 1, 2, c);
+    if (player.p.sneak ? visSneak : visStand) for (let _i64 = 0, w; _i64 < animals.length && (w = animals[_i64], true); _i64++) if (w.x > camX - m && w.x < camX + vw + m && w.y > camY - m && w.y < camY + vh + m) addF(-1e9 + 1, () => {
+      const P = player.p, ang = DANG[w.dir] || 0, full = w.kind === 'wolf' ? wolfR1() : KINDS[w.kind].fearR, dp = Math.hypot(P.x - w.x, P.y - w.y);
       ctx.translate(w.x - camX, w.y - camY);
       if (P.sneak) {   // agachado: cone pequeno à frente do bicho
         const seen = noticed(w, dp, full);
-        ctx.beginPath(); ctx.moveTo(0, 0); ctx.arc(0, 0, full * .6, ang - 1.15, ang + 1.15); ctx.closePath();
+        ctx.beginPath(); ctx.moveTo(0, 0); ctx.arc(0, 0, w.kind === 'wolf' ? full : full * .6, ang - 1.15, ang + 1.15); ctx.closePath();
         ctx.fillStyle = seen ? 'rgba(255,60,50,.22)' : 'rgba(255,225,70,.13)'; ctx.fill(); ctx.strokeStyle = seen ? 'rgba(255,90,70,.7)' : 'rgba(255,225,70,.4)'; ctx.lineWidth = 1; ctx.stroke();
       } else {         // em pé: vê em volta, até o raio cheio
         const seen = dp < full;
         ctx.beginPath(); ctx.arc(0, 0, full, 0, 6.283); ctx.fillStyle = seen ? 'rgba(255,60,50,.09)' : 'rgba(255,225,70,.05)'; ctx.fill(); ctx.strokeStyle = seen ? 'rgba(255,90,70,.45)' : 'rgba(255,225,70,.3)'; ctx.lineWidth = 1; ctx.stroke();
       }
       ctx.setTransform(window.RS || 1, 0, 0, window.RS || 1, 0, 0); });
-    for (const w of animals) if ((w.growl > 0 || w.windup > 0) && !w.script && !(typeof Title !== 'undefined' && Title.active) && w.x > camX - m && w.x < camX + vw + m && w.y > camY - m && w.y < camY + vh + m) addF(-1e9, () => {
+    for (let _i65 = 0, w; _i65 < animals.length && (w = animals[_i65], true); _i65++) if ((w.growl > 0 || w.windup > 0) && !w.script && !(typeof Title !== 'undefined' && Title.active) && w.x > camX - m && w.x < camX + vw + m && w.y > camY - m && w.y < camY + vh + m) addF(-1e9, () => {
       let dx = w.lx, dy = w.ly; if (w.growl > 0) { const d = Math.hypot(P0().x - w.x, P0().y - w.y) || 1; dx = (P0().x - w.x) / d; dy = (P0().y - w.y) / d; }
       const L = 135 * 2.6 * .35 + 30, W = 46, pulse = w.windup > 0 ? .38 + .22 * Math.sin(w.t * 30) : .2;
       ctx.translate(w.x - camX, w.y - camY + 4); ctx.rotate(Math.atan2(dy, dx)); ctx.scale(1, .62);
       ctx.fillStyle = 'rgba(220,40,30,' + pulse + ')'; ctx.fillRect(0, -W, L, W * 2);
       ctx.strokeStyle = 'rgba(255,90,70,' + Math.min(.9, pulse + .3) + ')'; ctx.lineWidth = 2; ctx.strokeRect(0, -W, L, W * 2); ctx.setTransform(window.RS || 1, 0, 0, window.RS || 1, 0, 0); ctx.lineWidth = 1; });
-    for (const w of animals) if (w.x > camX - m && w.x < camX + vw + m && w.y > camY - 30 && w.y < camY + vh + m) if (!(w.inDen > 0)) add(w.y + (w.alt > 8 ? 400 : 0), 3, w);
-    if (!(typeof Title !== "undefined" && Title.active)) add(player.p.y, 4, player);   /* tela inicial: jogador-fantasma não aparece */
+    for (let _i66 = 0, w; _i66 < animals.length && (w = animals[_i66], true); _i66++) if (w.x > camX - m && w.x < camX + vw + m && w.y > camY - 30 && w.y < camY + vh + m) if (!(w.inDen > 0)) add(w.y + (w.alt > 8 ? 400 : 0), 3, w);
+    if (!(typeof Title !== "undefined" && Title.active)) add(player.p.y, 4, player);
+    if (window.Net && window.Net.active) for (const r of window.Net.list().values()) if (r.x > camX - m && r.x < camX + vw + m && r.y > camY - 30 && r.y < camY + vh + m) add(r.y, 4, r);   /* outros jogadores (multiplayer) */   /* tela inicial: jogador-fantasma não aparece */
     ord.length = dn; for (let i = 0; i < dn; i++) ord[i] = dl[i]; ord.sort(byY);
-    for (let i = 0; i < dn; i++) { const e = ord[i]; switch (e.t) { case 0: drawObj(ctx, e.a, camX, camY); break; case 1: drawDrop(ctx, e.a, camX, camY); break; case 2: drawCorpse(ctx, e.a, camX, camY); break; case 3: drawAnimal(ctx, e.a, camX, camY); break; case 4: e.a.draw(ctx, camX, camY); break; default: e.f(); } e.a = null; e.f = null; }
-    if (!(typeof Title !== "undefined" && Title.active)) { const pp = player.p; let cov = false; for (const o of World.near) { if (o.y > pp.y && o.y - pp.y < 130 && Math.abs(o.x - pp.x) < 80 && (TREES[o.kind] || o.kind === 'rock') && !o.dead) { cov = true; break; } }
+    for (let i = 0; i < dn; i++) { const e = ord[i]; switch (e.t) { case 0: drawObj(ctx, e.a, camX, camY); break; case 1: drawDrop(ctx, e.a, camX, camY); break; case 2: drawCorpse(ctx, e.a, camX, camY); break; case 3: drawAnimal(ctx, e.a, camX, camY); break; case 4: e.a.draw(ctx, camX, camY); break; case 6: treeShadow(ctx, e.a, camX, camY); break; default: e.f(); } e.a = null; e.f = null; }
+    if (!(typeof Title !== "undefined" && Title.active)) { const pp = player.p; let cov = false; for (let _i67 = 0, o; _i67 < World.near.length && (o = World.near[_i67], true); _i67++) { if (o.y > pp.y && o.y - pp.y < 130 && Math.abs(o.x - pp.x) < 80 && (TREES[o.kind] || o.kind === 'rock') && !o.dead) { cov = true; break; } }
       if (cov) { ctx.globalAlpha = .55; player.draw(ctx, camX, camY); ctx.globalAlpha = 1; } }   // atrás de árvore ou pedra: aparece a silhueta do personagem por cima
     drawRoofs(ctx, camX, camY, vw, vh, player);
-    for (const o of World.near) if (o.kind === 'shelter' && o.x > camX - 80 && o.x < camX + vw + 80 && o.y > camY - 20 && o.y < camY + vh + 100) { const pl = player.p, inside = Math.abs(o.x - pl.x) < 52 && Math.abs(o.y - pl.y) < 38; drawShelterRoof(ctx, o.x - camX, o.y - camY, inside ? .35 : 1); }
+    for (let _i68 = 0, o; _i68 < World.near.length && (o = World.near[_i68], true); _i68++) if (o.kind === 'shelter' && o.x > camX - 80 && o.x < camX + vw + 80 && o.y > camY - 20 && o.y < camY + vh + 100) { const pl = player.p, inside = Math.abs(o.x - pl.x) < 52 && Math.abs(o.y - pl.y) < 38; drawShelterRoof(ctx, o.x - camX, o.y - camY, inside ? .35 : 1); }
     if (typeof Build !== 'undefined') Build.draw(ctx, camX, camY);
     for (let i = fx.length - 1; i >= 0; i--) { const f = fx[i]; f.t += .016; if (f.t > .45) { fx.splice(i, 1); continue; } ctx.globalAlpha = 1 - f.t / .45; Assets.draw(ctx, f.k, 'rot', '_', 0, f.x - camX, f.y - camY + 16, (f.small ? .8 : .55) * (.6 + f.t * 1.6)); } ctx.globalAlpha = 1;
   }
   // raio: derruba árvore/coqueiro e acende fogo, fere bichos e o jogador por perto
   function strike(x, y) {
     window.__boltAt = World.clock; const P = Player.p; let burn = false;
-    for (const o of World.act) { if (o.dead || o.fall !== undefined || !TREES[o.kind]) continue; if (Math.hypot(o.x - x, o.y - y) < 60) { burn = true; const sp = Assets.meta.sprites[o.kind]; if (sp && sp.anims && sp.anims.fall) { o.fall = 0; o.solid = false; } } /* só cai quem tem animação de queda */  }
-    for (const a of animals) { if (a.dead || a.far) continue; if (Math.hypot(a.x - x, a.y - y) < 55) { a.hp -= 45; if (a.hp <= 0) killAnimal(a, 'raio'); else { a.spooked = 3; } } }
+    for (let _i69 = 0, o; _i69 < World.act.length && (o = World.act[_i69], true); _i69++) { if (o.dead || o.fall !== undefined || !TREES[o.kind]) continue; if (Math.hypot(o.x - x, o.y - y) < 60) { burn = true; const sp = Assets.meta.sprites[o.kind]; if (sp && sp.anims && sp.anims.fall) { o.fall = 0; o.solid = false; } } /* só cai quem tem animação de queda */  }
+    for (let _i70 = 0, a; _i70 < animals.length && (a = animals[_i70], true); _i70++) { if (a.dead || a.far) continue; if (Math.hypot(a.x - x, a.y - y) < 55) { a.hp -= 45; if (a.hp <= 0) killAnimal(a, 'raio'); else { a.spooked = 3; } } }
     if (burn && Math.random() < .5) World.add({ kind: 'fire', x, y, ph: Math.random() * 9, hp: 40 });
     if (!P.swim && Math.hypot(P.x - x, P.y - y) < 60) { P.hp -= 40; P.hurtT = .4; Save.flash('⚡ Você foi atingido por um raio!'); if (P.hp <= 0) Player.hurt(0); }
     else if (Math.hypot(P.x - x, P.y - y) < 160) Save.flash('⚡ Raio muito perto!');
   }
   return { strike, bearMem: () => animals.filter(o => o.kind === 'bear').map((b, i) => (b.mem || bearMemSaved[i] || []).slice(-4).map(q => [Math.round(q.x), Math.round(q.y), q.s])), setBearMem: arr => { arr = Array.isArray(arr) ? arr : []; if (arr.length && Array.isArray(arr[0]) && typeof arr[0][0] === 'number') arr = [arr];   // save antigo: lista só do primeiro urso
-      bearMemSaved = arr.map(l => (Array.isArray(l) ? l : []).slice(-4).map(q => ({ x: q[0], y: q[1], s: q[2] || 3 }))); let i = 0; for (const b of animals) if (b.kind === 'bear') { b.mem = (bearMemSaved[i++] || []).map(q => ({ x: q.x, y: q.y, s: q.s })); } }, _dens: () => dens, _deerKick: deerKick, setVis: (st, sn) => { visStand = !!st; visSneak = !!sn; }, _tracks: () => tracks, _HAB: HAB, _noise: emitNoise, _dirOf: dirOf, _drops: () => drops, drawBridge, dropLog, useBandage, init, update, draw, bleed, icon, eat, drop, placeItem, toggleHand: () => { if (craftEl.style.display === 'block') closeCraft(); else openCraft('hand'); },  MAX, cam, drawPiece, _corpses: () => corpses, attack, use, placeFire, nearestAnimal, inv, eqSet: () => eqInfo().set, refresh: (force) => { if (force) toolsEl.dataset.sig = ''; showHud(); }, _animals: () => animals, regrow: () => regrow, setRegrow: a => { regrow = Array.isArray(a) ? a : []; },
+      bearMemSaved = arr.map(l => (Array.isArray(l) ? l : []).slice(-4).map(q => ({ x: q[0], y: q[1], s: q[2] || 3 }))); let i = 0; for (let _i71 = 0, b; _i71 < animals.length && (b = animals[_i71], true); _i71++) if (b.kind === 'bear') { b.mem = (bearMemSaved[i++] || []).map(q => ({ x: q.x, y: q.y, s: q.s })); } }, _dens: () => dens, _deerKick: deerKick, setVis: (st, sn) => { visStand = !!st; visSneak = !!sn; }, _tracks: () => tracks, _HAB: HAB, _noise: emitNoise, _dirOf: dirOf, _drops: () => drops, drawBridge, dropLog, useBandage, init, update, draw, bleed, icon, eat, drop, placeItem, toggleHand: () => { if (craftEl.style.display === 'block') closeCraft(); else openCraft('hand'); },  MAX, cam, drawPiece, _corpses: () => corpses, attack, use, placeFire, nearestAnimal, inv, eqSet: () => eqInfo().set, refresh: (force) => { if (force) toolsEl.dataset.sig = ''; showHud(); }, _animals: () => animals, regrow: () => regrow, setRegrow: a => { regrow = Array.isArray(a) ? a : []; },
     tracksList: () => tracks.slice(-500).map(q => [Math.round(q.x), Math.round(q.y), q.k, +q.ang.toFixed(2), Math.round(q.t), q.g, q.life]),
     setTracks: l => { tracks = (Array.isArray(l) ? l : []).map(q => ({ x: q[0], y: q[1], k: q[2], ang: q[3], t: q[4], g: q[5], life: q[6] })); } };
 })();
@@ -3492,11 +3542,11 @@ const Build = (() => {
     if (piece !== 'fence' && !(inv[piece] > 0)) { why = 'Sem ' + PIECES[piece][0].toLowerCase() + ' na mochila'; return; }
     if (Math.hypot(gx - P.x, gy - P.y) > REACH) { why = 'Longe demais'; return; }
     if (!World.land(gx, gy)) { why = 'Não dá para construir na água'; return; }
-    for (const o of World.objs) if (o.kind === piece && Math.abs(o.x - gx) < 3 && Math.abs(o.y - gy) < 3 && !!o.vert === (PIECES[piece][1] === 'edge' ? vert : false)) { why = 'Já tem uma peça aqui'; return; }
+    for (let _i72 = 0, o; _i72 < World.objs.length && (o = World.objs[_i72], true); _i72++) if (o.kind === piece && Math.abs(o.x - gx) < 3 && Math.abs(o.y - gy) < 3 && !!o.vert === (PIECES[piece][1] === 'edge' ? vert : false)) { why = 'Já tem uma peça aqui'; return; }
     const sb = solidBox(piece, vert); if (sb && Math.abs(P.x - gx) < sb[0] + 12 && Math.abs(P.y - gy) < sb[1] + 12) { why = 'Você está no caminho'; return; }
     ok = true; why = '';
   }
-  function findAt(x, y) { let b = null, bd = 30; for (const o of World.objs) if (o.kind in PIECES) { const d = Math.hypot(o.x - x, o.y - y); if (d < bd) { bd = d; b = o; } } return b; }
+  function findAt(x, y) { let b = null, bd = 30; for (let _i73 = 0, o; _i73 < World.objs.length && (o = World.objs[_i73], true); _i73++) if (o.kind in PIECES) { const d = Math.hypot(o.x - x, o.y - y); if (d < bd) { bd = d; b = o; } } return b; }
   function tap(cx, cy) {
     if (!on) return; const c = Entities.cam, wx = c.x + cx / window.VK, wy = c.y + cy / window.VK;
     if (remove || turn) { gx = wx; gy = wy; } else [gx, gy] = snap(wx, wy);
@@ -3508,7 +3558,7 @@ const Build = (() => {
     if (turn) {
       const o = findAt(gx, gy), P = Player.p, nv = !o.vert, [nx, ny] = snapFor(o.kind, nv, o.x, o.y), sb = solidBox(o.kind, nv);
       if (Math.abs(P.x - nx) < sb[0] + 12 && Math.abs(P.y - ny) < sb[1] + 12) { Save.flash('Você está no caminho'); return; }
-      for (const q of World.objs) if (q !== o && q.kind === o.kind && Math.abs(q.x - nx) < 3 && Math.abs(q.y - ny) < 3 && !!q.vert === nv) { Save.flash('Já tem uma peça lá'); return; }
+      for (let _i74 = 0, q; _i74 < World.objs.length && (q = World.objs[_i74], true); _i74++) if (q !== o && q.kind === o.kind && Math.abs(q.x - nx) < 3 && Math.abs(q.y - ny) < 3 && !!q.vert === nv) { Save.flash('Já tem uma peça lá'); return; }
       o.vert = nv; o.x = nx; o.y = ny; o.bw = sb[0]; o.bh = sb[1]; gx = nx; gy = ny; Save.save(true); Save.flash(nv ? '↕ Girada' : '↔ Girada'); return;
     }
     const o = { kind: piece, x: gx, y: gy, ph: 0 }; const sb = solidBox(piece, vert);
@@ -3555,9 +3605,9 @@ const Weather = (() => {
   const LABEL = { rain: '🌧 Chuva', hot: '☀ Calor' }, wx = document.getElementById('wx');
   function set(s) { state = s; timer = s === 'clear' ? 180 + Math.random() * 180 : s === 'hot' ? 900 : 150 + Math.random() * 150; }
   function sheltered(p) {
-    for (const o of World.near) if ((o.kind === 'pine' || o.kind === 'fir' || o.kind === 'oak' || o.kind === 'palm' || o.kind === 'appletree') && o.fall === undefined && Math.abs(o.x - p.x) < 70 && p.y > o.y - 30 && p.y < o.y + 80) return true;
-    for (const o of World.near) if (o.kind === 'roof' && Math.abs(o.x - p.x) < 26 && Math.abs(o.y - p.y) < 26) return true;
-    for (const o of World.near) if ((o.kind === 'shelter' && Math.abs(o.x - p.x) < 52 && Math.abs(o.y - p.y) < 38) || (o.kind === 'camptent' && Math.abs(o.x - p.x) < 60 && p.y > o.y - 40 && p.y < o.y + 50)) return true;
+    for (let _i75 = 0, o; _i75 < World.near.length && (o = World.near[_i75], true); _i75++) if ((o.kind === 'pine' || o.kind === 'fir' || o.kind === 'oak' || o.kind === 'palm' || o.kind === 'appletree') && o.fall === undefined && Math.abs(o.x - p.x) < 70 && p.y > o.y - 30 && p.y < o.y + 80) return true;
+    for (let _i76 = 0, o; _i76 < World.near.length && (o = World.near[_i76], true); _i76++) if (o.kind === 'roof' && Math.abs(o.x - p.x) < 26 && Math.abs(o.y - p.y) < 26) return true;
+    for (let _i77 = 0, o; _i77 < World.near.length && (o = World.near[_i77], true); _i77++) if ((o.kind === 'shelter' && Math.abs(o.x - p.x) < 52 && Math.abs(o.y - p.y) < 38) || (o.kind === 'camptent' && Math.abs(o.x - p.x) < 60 && p.y > o.y - 40 && p.y < o.y + 50)) return true;
     return false;
   }
   const DAY = 600, clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -3657,7 +3707,7 @@ const Weather = (() => {
       g.globalCompositeOperation = 'destination-out'; g.imageSmoothingEnabled = true;
       const light = (x, y, r, a) => { g.globalAlpha = a; g.drawImage(L, (x - r) / Q, (y - r) / Q, r * 2 / Q, r * 2 / Q); };
       const P = Player.p; light(P.x - camX, P.y - camY - 30, 110, .5);
-      for (const o of World.near) if (o.kind === 'fire' && !o.out && !o.broken && o.x > camX - 260 && o.x < camX + vw + 260 && o.y > camY - 260 && o.y < camY + vh + 260) light(o.x - camX, o.y - camY - 10, 210 + Math.sin(t * 9 + o.x) * 8, 1);
+      for (let _i78 = 0, o; _i78 < World.near.length && (o = World.near[_i78], true); _i78++) if (o.kind === 'fire' && !o.out && !o.broken && o.x > camX - 260 && o.x < camX + vw + 260 && o.y > camY - 260 && o.y < camY + vh + 260) light(o.x - camX, o.y - camY - 10, 210 + Math.sin(t * 9 + o.x) * 8, 1);
       g.globalAlpha = 1; }
     }
   }
@@ -3694,7 +3744,7 @@ const Save = (() => {
     return { v: VER, seed: CONFIG.SEED, w: CONFIG.WORLD_W, h: CONFIG.WORLD_H, at: Date.now(), tod: Weather.tod(), day: Weather.day(),
       p: { x: Math.round(P.x), y: Math.round(P.y), hp: P.hp, thirst: P.thirst, dir: P.dir, bleed: !!P.bleeding, carry: P.carry || false, sick: Math.round(P.sick || 0), food: Math.round(P.food ?? 100), warm: Math.round(P.warm ?? 100) }, inv: Object.assign({}, inv), bm: Entities.bearMem(),
       wn: World.wornList(), tk: Entities.tracksList(),
-      objs: World.objs.filter(o => o.fall === undefined && !o.dead && !o.broken).map(o => [o.kind, Math.round(o.x), Math.round(o.y), o.kind === 'mato' ? Math.round(o.cutT || 0) : o.kind.slice(0, 3) === 'sap' ? Math.round(o.g || 0) : o.kind === 'bridge' ? (o.nat ? 1 : 0) : (o.kind === 'fence' || o.kind === 'wall') ? (o.vert ? 1 : 0) : o.palmStump || o.palm ? 1 : (o.hp === undefined ? null : o.hp), o.kind === 'fence' ? o.stage : o.kind === 'palm' ? o.co : o.kind === 'fire' ? { d: o.dmg || 0, c: o.cook || null, b: o.boilT || 0, n: o.boilN || 0, w: o.waterReady || 0 } : (o.ap || o.items || null), o.coT ? o.coT.map(v => Math.round(v)) : o.apT ? o.apT.map(v => Math.round(v)) : null]), rg: Entities.regrow().map(g => [Math.round(g.x), Math.round(g.y), Math.round(g.t)]) };
+      objs: World.objs.filter(o => o.fall === undefined && !o.dead && !o.broken).map(o => [o.kind, Math.round(o.x), Math.round(o.y), o.kind === 'mato' ? Math.round(o.cutT || 0) : o.kind.startsWith('sap') ? Math.round(o.g || 0) : o.kind === 'bridge' ? (o.nat ? 1 : 0) : (o.kind === 'fence' || o.kind === 'wall') ? (o.vert ? 1 : 0) : o.palmStump || o.palm ? 1 : (o.hp === undefined ? null : o.hp), o.kind === 'fence' ? o.stage : o.kind === 'palm' ? o.co : o.kind === 'fire' ? { d: o.dmg || 0, c: o.cook || null, b: o.boilT || 0, n: o.boilN || 0, w: o.waterReady || 0 } : (o.ap || o.items || null), o.coT ? o.coT.map(v => Math.round(v)) : o.apT ? o.apT.map(v => Math.round(v)) : null]), rg: Entities.regrow().map(g => [Math.round(g.x), Math.round(g.y), Math.round(g.t)]) };
   }
   let wiped = false, saveWarned = false;
   function save(quiet) {
@@ -3715,7 +3765,7 @@ const Save = (() => {
       if (a[0] === 'palmcrown') { o.cuts = a[3] || 0; o.hp = undefined; o.ct = o.cuts ? -9 : undefined; }
       if (a[0] === 'fallenpalm') { o.hp = undefined; }
       if (a[0] === 'log') { o.palm = a[3] === 1 || undefined; o.hp = undefined; }
-      if (a[0].slice(0, 3) === 'sap') { o.g = a[3] || 0; o.hp = undefined; o.solid = false; }
+      if (a[0].startsWith('sap')) { o.g = a[3] || 0; o.hp = undefined; o.solid = false; }
       if (a[0] === 'mato') { o.cutT = a[3] || 0; o.hp = undefined; o.solid = false; }
       if (a[0] === 'bridge') { o.nat = a[3] === 1 || undefined; o.hp = undefined; o.solid = false; }
       if (a[0] === 'wall') { o.vert = a[3] === 1; o.hp = undefined; o.bw = o.vert ? 5 : 17; o.bh = o.vert ? 17 : 6; }
@@ -3870,6 +3920,71 @@ const Cloud = (() => {
   const setCfg = (url, key) => lsSet(CFG_KEY, JSON.stringify({ url: (url || '').trim(), key: (key || '').trim() }));
   return { enabled, auth, logout, push, pull, boot, markDirty, setCfg, cfg, get email() { return ses && ses.email; }, get logged() { return !!ses; }, get msg() { return msg; } };
 })();
+
+// ---------- MULTIPLAYER (teste, etapa 1): ver outros jogadores andando no mesmo mapa ----------
+// Usa o Realtime do Supabase (o mesmo projeto do salvamento na nuvem) como "rádio": cada jogador manda a própria posição ~8x por segundo
+// e recebe a dos outros. Cada um ainda tem o SEU mundo (árvores, bichos): nesta etapa só os jogadores aparecem uns para os outros.
+const Net = (() => {
+  const NAME_KEY = 'iv_nome', ID = (() => { try { let v = sessionStorage.getItem('iv_mpid'); if (!v) { v = Math.random().toString(36).slice(2, 10); sessionStorage.setItem('iv_mpid', v); } return v; } catch (e) { return Math.random().toString(36).slice(2, 10); } })();
+  let ws = null, on = false, want = null, ref = 1, topic = '', hbT = 0, sendT = 0, lastS = '', status = '', tries = 0, retryT = 0, useTok = false, badge = null;
+  const peers = new Map();
+  try { want = sessionStorage.getItem('iv_mp'); } catch (e) {}
+  const setBadge = () => { if (!badge) { badge = document.createElement('div'); badge.id = 'mpb'; badge.style.cssText = 'position:fixed;left:calc(env(safe-area-inset-left,0px) + 6px);top:calc(env(safe-area-inset-top,0px) + 66px);z-index:60;background:#0008;color:#fff;font:600 11px/1.2 sans-serif;padding:3px 9px;border-radius:9px;pointer-events:none;white-space:nowrap'; document.body.appendChild(badge); } badge.style.display = want ? 'block' : 'none'; badge.textContent = on ? '🌐 ' + (peers.size + 1) + ' online' + (peers.size ? ': ' + [...peers.values()].map(p => p.n).join(', ') : '') : '🌐 ' + (status || 'conectando…'); };
+  const send = (event, payload) => { if (ws && ws.readyState === 1) try { ws.send(JSON.stringify({ topic, event, payload, ref: String(ref++), join_ref: '1' })); } catch (e) {} };
+  function url() { let o = ''; try { o = localStorage.getItem('iv_mp_ws') || ''; } catch (e) {} if (o) return o; const c = Cloud.cfg(); if (!c.url || !c.key) return ''; return c.url.replace(/^http/, 'ws') + '/realtime/v1/websocket?apikey=' + encodeURIComponent(c.key) + '&vsn=1.0.0'; }
+  function connect() {
+    const u = url(); if (!u) { status = 'sem servidor configurado'; setBadge(); return; }
+    status = 'conectando…'; setBadge(); topic = 'realtime:ilha-' + LOC; on = false;
+    try { ws = new WebSocket(u); } catch (e) { status = 'erro ao conectar'; setBadge(); retryT = 5; return; }
+    ws.onopen = () => { const pl = { config: { broadcast: { self: false, ack: false }, presence: { key: '', enabled: false }, postgres_changes: [], private: false } }; if (useTok) pl.access_token = Cloud.cfg().key; send('phx_join', pl); };
+    ws.onmessage = ev => { let m; try { m = JSON.parse(ev.data); } catch (e) { return; }
+      if (m.event === 'phx_reply' && m.topic === topic && m.ref === '1') { if (m.payload && m.payload.status === 'ok') { on = true; tries = 0; status = ''; lastS = ''; sendT = 0; Save.flash('🌐 Multiplayer conectado'); } else { status = 'recusado: ' + JSON.stringify(m.payload && m.payload.response || '').slice(0, 60); if (!useTok) { useTok = true; try { ws.close(); } catch (e) {} } } setBadge(); return; }
+      if (m.event === 'phx_error' || m.event === 'phx_close') { on = false; status = 'conexão caiu'; setBadge(); return; }
+      if (m.event === 'broadcast' && m.payload) { const b = m.payload; if (b.event === 'p') recv(b.payload); else if (b.event === 'bye' && b.payload) { const r = peers.get(b.payload.i); if (r) { peers.delete(b.payload.i); Save.flash('🌐 ' + r.n + ' saiu'); setBadge(); } } } };
+    ws.onclose = () => { on = false; ws = null; if (want) { tries++; retryT = Math.min(20, 2 + tries * 2); status = 'reconectando…'; setBadge(); } };
+    ws.onerror = () => { status = 'erro de conexão'; setBadge(); };
+  }
+  function recv(d) { if (!d || !d.i || d.i === ID) return; let r = peers.get(d.i);
+    if (!r) { r = { i: d.i, x: d.x, y: d.y, t: 0, draw(ctx, cx, cy) { drawPeer(ctx, this, cx, cy); } }; peers.set(d.i, r); Save.flash('🌐 ' + (d.n || 'Jogador') + ' entrou'); }
+    r.n = String(d.n || 'Jogador').slice(0, 14); r.tx = d.x; r.ty = d.y; r.d = d.d || 'south'; r.s = d.s || 'player'; r.a = d.a || 'idle'; r.sc = d.sc || 1; r.dy = d.dy || 0; r.sw = !!d.sw; r.ac = d.ac || ''; r.as = d.as || 'player'; r.ap = d.ap || 0; r.seen = performance.now(); setBadge(); }
+  function drawPeer(ctx, r, camX, camY) {
+    const x = Math.round(r.x - camX), y = Math.round(r.y - camY);
+    if (r.sw) { ctx.save(); ctx.beginPath(); ctx.rect(x - 60, y - 130, 120, 118); ctx.clip(); }
+    if (r.ac) { const n = Assets.frames(r.as, r.ac, r.d); if (n) Assets.draw(ctx, r.as, r.ac, r.d, Math.min(n - 1, Math.floor(r.ap * n)), x, y); }
+    else { const n = Assets.frames(r.s, r.a, r.d); if (n) Assets.draw(ctx, r.s, r.a, r.d, Math.floor(r.t * Assets.fps(r.s, r.a) * (r.a === 'walk' ? 1.45 : r.a === 'run' ? 1.15 : 1)) % n, x, y + r.dy, r.sc); }
+    if (r.sw) { ctx.restore(); ctx.strokeStyle = 'rgba(255,255,255,.6)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.ellipse(x, y - 12, 16, 5, 0, 0, 6.283); ctx.stroke(); }
+    ctx.font = 'bold 12px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic'; ctx.fillStyle = '#000a'; ctx.fillText(r.n, x + 1, y - 95); ctx.fillStyle = '#9fe8ff'; ctx.fillText(r.n, x, y - 96); ctx.textAlign = 'start';
+  }
+  function myState() {
+    const P = Player.p, s0 = Entities.eqSet(); let s = s0, a = P.run ? 'run' : P.moving ? 'walk' : (P.battle > 0 && s0 === 'player') ? 'fight' : 'idle', sc = 1, dy = 0;
+    if (P.raft && !P.raftDeck) a = (P.battle > 0 && s0 === 'player') ? 'fight' : 'idle';
+    if (P.carry) { s = P.carry === 'leaves' ? 'player_leaves' : P.carry === 'palm' ? 'player_palm' : 'player_log'; a = P.moving ? 'walk' : 'idle'; }
+    else if (P.sneak) { a = P.moving ? 'walk' : 'idle'; if (s0 === 'player') s = 'player_c'; else if (s0 === 'player_spear') { if (P.moving) s = 'player_spear_c'; } else { sc = .9; dy = 2; } }
+    const st = { i: ID, n: name(), x: Math.round(P.x), y: Math.round(P.y), d: P.dir, s, a, sc, dy, sw: P.swim && !P.act ? 1 : 0 };
+    if (P.act) { st.ac = P.act.anim; st.as = P.act.set; st.ap = Math.round(P.act.t / P.act.dur * 20) / 20; }
+    return st;
+  }
+  const name = () => { try { return localStorage.getItem(NAME_KEY) || 'Jogador'; } catch (e) { return 'Jogador'; } };
+  function update(dt) {
+    if (!want) return; if (!badge) setBadge();
+    if (!ws && !(typeof Title !== 'undefined' && Title.active) && !window.TRAVEL_LOCK) { retryT -= dt; if (retryT <= 0) connect(); }
+    if (on) {
+      hbT -= dt; if (hbT <= 0) { hbT = 25; if (ws && ws.readyState === 1) try { ws.send(JSON.stringify({ topic: 'phoenix', event: 'heartbeat', payload: {}, ref: String(ref++) })); } catch (e) {} }
+      const st = myState(), k = JSON.stringify(st); sendT -= dt;
+      if (sendT <= 0 && (k !== lastS || sendT < -1)) { sendT = .125; lastS = k; send('broadcast', { type: 'broadcast', event: 'p', payload: st }); }   /* andando: 8x por segundo; parado: 1x por segundo */
+    }
+    const now = performance.now();
+    for (const [id, r] of peers) { if (now - r.seen > 7000) { peers.delete(id); setBadge(); continue; } r.t += dt; const dx = r.tx - r.x, dy = r.ty - r.y; if (dx * dx + dy * dy > 400 * 400) { r.x = r.tx; r.y = r.ty; } else { const k = Math.min(1, dt * 12); r.x += dx * k; r.y += dy * k; } }
+  }
+  function start() {
+    let n = name(); try { const v = prompt('Seu nome no multiplayer:', n === 'Jogador' ? '' : n); if (v === null) return false; n = (v.trim() || 'Jogador').slice(0, 14); localStorage.setItem(NAME_KEY, n); sessionStorage.setItem('iv_mp', '1'); } catch (e) {}
+    want = '1'; retryT = 0; setBadge(); return true;
+  }
+  function stop() { if (on) send('broadcast', { type: 'broadcast', event: 'bye', payload: { i: ID } }); want = null; try { sessionStorage.removeItem('iv_mp'); } catch (e) {} try { ws && ws.close(); } catch (e) {} ws = null; on = false; peers.clear(); setBadge(); }
+  addEventListener('pagehide', () => { if (on) send('broadcast', { type: 'broadcast', event: 'bye', payload: { i: ID } }); });
+  return { update, start, stop, list: () => peers, get on() { return on; }, get active() { return !!want; } };
+})();
+window.Net = Net;
 
 // Tubarões: vivem só no mar aberto (águas fundas, longe da costa e dos rios). Patrulham devagar; se o jogador estiver nadando por perto, vão atrás e mordem.
 // Desenho provisório (barbatana + rastro); dá para trocar por sprite do PixelLab depois.
@@ -4063,7 +4178,7 @@ const Sfx = (() => {
     setG(amb.wind, .018 + (rain ? .025 : 0)); setG(amb.water, pv.nearW ? (P.swim ? .12 : .07) : 0);
     pv.waterT -= dt; if (pv.waterT <= 0) { pv.waterT = .5; pv.nearW = !!World.waterNear(P.x, P.y, 150); }
     // fogueira acesa por perto: estalos
-    pv.fireT -= dt; if (pv.fireT <= 0) { pv.fireT = .5; pv.fireD = 1e9; for (const o of World.near) if (o.kind === 'fire' && !o.out) { const d = Math.hypot(o.x - P.x, o.y - P.y); if (d < pv.fireD) { pv.fireD = d; pv.fireX = o.x; pv.fireY = o.y; } } }
+    pv.fireT -= dt; if (pv.fireT <= 0) { pv.fireT = .5; pv.fireD = 1e9; for (let _i79 = 0, o; _i79 < World.near.length && (o = World.near[_i79], true); _i79++) if (o.kind === 'fire' && !o.out) { const d = Math.hypot(o.x - P.x, o.y - P.y); if (d < pv.fireD) { pv.fireD = d; pv.fireX = o.x; pv.fireY = o.y; } } }
     if (pv.fireD < 400 && Math.random() < dt * 7) S.crackle(pv.fireX, pv.fireY);
     // pássaros de dia, grilos à noite
     if (VOICES && !rain && night < .3 && Math.random() < dt * .35) S.bird(P.x + rnd(-500, 500), P.y + rnd(-400, 400));
@@ -4196,7 +4311,7 @@ const Title = (() => {
     },
     // 3) lobo atrás do coelho, que se esconde no arbusto; o lobo fareja e desiste
     rabbit() {
-      const bs = World.objs.filter(o => String(o.kind).slice(0, 4) === 'bush' && !o.dead); const r = live('rabbit')[0], w = live('wolf')[2] || live('wolf')[0]; if (!bs.length || !r || !w) return null;
+      const bs = World.objs.filter(o => String(o.kind).startsWith('bush') && !o.dead); const r = live('rabbit')[0], w = live('wolf')[2] || live('wolf')[0]; if (!bs.length || !r || !w) return null;
       let B = null, ang = 0; for (let k = 0; k < 200 && !B; k++) { const o = bs[Math.floor(Math.random() * bs.length)]; const an = Math.floor(Math.random() * 8) * Math.PI / 4; if (clear(o.x - Math.cos(an) * 520, o.y - Math.sin(an) * 520, an, 560)) { B = o; ang = an; } }
       if (!B) return null; const ux = Math.cos(ang), uy = Math.sin(ang), S = { x: B.x - ux * 440, y: B.y - uy * 440 };
       put(r, S.x, S.y); put(w, S.x - ux * 240, S.y - uy * 240); const ox = -uy, oy = ux, R0 = { x: B.x - ux * 26, y: B.y - uy * 26 };
@@ -4238,7 +4353,7 @@ const Title = (() => {
     go('tcs2', () => { const i = csApply(); try { localStorage.setItem('iv_cs', String((i + 1) % 3)); } catch (e) {} csApply(); });
     setInterval(() => { if (el('tpanel').classList.contains('on')) { const f = el('fps'); el('tperf').textContent = 'Desempenho\n' + (f ? f.textContent : ''); } }, 500);
     try { if (sessionStorage.getItem('iv_autoplay')) { sessionStorage.removeItem('iv_autoplay'); setTimeout(() => { if (T.active) play(); }, 600); } } catch (e) {}
- go('tmulti', () => toast('🌐 Multiplayer em breve!')); go('tset', () => el('tpanel').classList.add('on')); go('tclose', () => { el('tpanel').classList.remove('on'); document.body.classList.remove('inset'); });
+ go('tmulti', () => { if (Net.start()) play(); }); go('tmp', () => { if (Net.active) Net.stop(); else Net.start(); sync(); }); go('tset', () => el('tpanel').classList.add('on')); go('tclose', () => { el('tpanel').classList.remove('on'); document.body.classList.remove('inset'); });
     { const g = el('gear'); let gt = 0; const gh = e => { e.preventDefault(); e.stopPropagation(); if (performance.now() - gt < 350) return; gt = performance.now(); if (T.active) return; document.body.classList.add('inset'); el('tpanel').classList.add('on'); fsShow(); }; g.addEventListener('touchstart', gh, { passive: false }); g.addEventListener('click', gh); }
     go('tfps', () => { window.FPS30 = !window.FPS30; try { localStorage.setItem('iv_fps30', window.FPS30 ? '1' : '0'); } catch (e) {} sync(); });   /* 60 <-> 30 FPS, na hora */
     go('tq', () => { try { localStorage.setItem('iv_gl2', window.GLMODE ? 'off' : 'on'); } catch (e) {} try { Save.save(true); } catch (e) {} el('tq').textContent = '...'; setTimeout(() => location.reload(), 150); });   /* troca o motor de desenho e recarrega */
@@ -4280,7 +4395,7 @@ const Title = (() => {
   }
   function fsShow() { const b = el('tfs'); if (b) b.textContent = document.fullscreenElement ? 'Ligada' : 'Desligada'; }
   document.addEventListener('fullscreenchange', fsShow);
-  function sync() { el('tq').textContent = window.GLMODE ? 'WebGL' : (() => { try { return localStorage.getItem('iv_gl2') === 'auto' ? 'Normal (auto)' : 'Normal'; } catch (e) { return 'Normal'; } })(); el('tfps').textContent = window.FPS30 ? '30 (estável)' : '60'; }
+  function sync() { el('tmp').textContent = Net.active ? 'Ligado · sair' : 'Desligado'; el('tq').textContent = window.GLMODE ? 'WebGL' : (() => { try { return localStorage.getItem('iv_gl2') === 'auto' ? 'Normal (auto)' : 'Normal'; } catch (e) { return 'Normal'; } })(); el('tfps').textContent = window.FPS30 ? '30 (estável)' : '60'; }
   let tt = 0; function toast(m) { const t = el('ttoast'); t.textContent = m; t.style.opacity = 1; clearTimeout(tt); tt = setTimeout(() => t.style.opacity = 0, 1800); }
   function play() {
     try { if (localStorage.getItem('iv_fs') === '1') goFull(true); } catch (e) {}   // tela cheia (+ trava na horizontal)
@@ -4338,7 +4453,7 @@ const Title = (() => {
   let last = performance.now(), acc = 0, frames = 0, worst = 0, fpsT = 0, tU = 0, tW = 0, tE = 0, tC = 0, spikes = 0; const pn = () => performance.now();
   // Telas de 90/120 Hz: o jogo mede a taxa de atualização e, se for ≥ ~100 Hz, desenha 1 a cada 2 quadros (60 FPS estáveis, menos calor).
   let VZc = 1; window.VZ = 1;
-  let glBad = 0, lowFps = 0, goodT = 0, restAt = -1e9, noRest = false, cap = 0, hz = 0, prevT = 0, hzT = 0; const ivs = [];
+  let glBad = 0, lowFps = 0, goodT = 0, restAt = -1e9, noRest = false, cap = 0, hz = 0, prevT = 0, hzT = 0, nextT = 0; const ivs = [];
   // um erro em qualquer sistema não pode derrubar o loop (o jogo travava inteiro): mostra o erro na tela e segue
   let errT = 0; window.__errs = [];
   let errBox = null, errHide = 0; const errSeen = {};
@@ -4352,12 +4467,12 @@ const Title = (() => {
   function frame0(now) {
     /* taxa da tela medida o tempo todo (antes era só nos primeiros quadros, durante o carregamento, e errava: celular de 120 Hz aparecia como 45 e ficava sem limite) */
     if (prevT) { const d = now - prevT; if (d > 2 && d < 100) { ivs.push(d); if (ivs.length > 90) ivs.shift(); } } prevT = now;
-    if (ivs.length >= 30 && now - hzT > 500) { hzT = now; const s = ivs.slice().sort((a, b) => a - b), p = s[Math.floor(s.length * .2)]; hz = Math.round(1000 / p); cap = p < 10.5 ? 15 : 0; }   /* tela de 120 Hz: o jogo desenha 1 a cada 2 (60 FPS), economiza bateria e não esquenta */
-    if ((window.FPS30 ? Math.max(cap, 30) : cap) && now - last < (window.FPS30 ? Math.max(cap, 30) : cap)) { requestAnimationFrame(frame); return; }
+    if (ivs.length >= 30 && now - hzT > 500) { hzT = now; const s = ivs.slice().sort((a, b) => a - b), p = s[Math.floor(s.length * .2)]; hz = Math.round(1000 / p); cap = p < 14 ? 1 : 0; }   /* tela de 90/120 Hz: o jogo fica em 60 FPS fixos (antes ia 55–90 variando), economiza bateria e não esquenta */
+    { const cm = window.FPS30 ? 1000 / 30 : cap ? 1000 / 60 : 0; if (cm) { if (now < nextT - 2) { requestAnimationFrame(frame); return; } nextT = Math.max(nextT + cm, now + cm * .5); } }   /* ritmo fixo: em 90 Hz desenha 2 de cada 3 telas = 60 FPS */
     if (window.TRAVEL_LOCK) { last = now; requestAnimationFrame(frame); return; }   /* saiu do local (mapa de viagem / carregando): o mapa atual fica desligado, sem atualizar nem desenhar */
     const dtRaw = (now - last) / 1000; last = now; const dt = Math.min(dtRaw, .05); Assets.tick(now);
     const a0 = pn(); const TT = Title.active; if (TT) Title.update(dt);
-    if (!Death.active && !window.TRAVEL_LOCK) { sf('mundo', () => World.tick(dt, Player.p.x, Player.p.y)); if (!TT) { sf('ataque', () => { if (window.__atkHeld && window.__atkHeld()) Entities.attack(); }); sf('jogador', () => Player.update(dt, Input.axis())); } sf('bichos', () => Entities.update(dt)); sf('mar', () => Sea.update(dt)); sf('clima', () => Weather.update(dt, vw, vh)); sf('som', () => Sfx.update(dt)); if (!TT) sf('save', () => Save.update(dt)); } const a1 = pn();
+    if (!Death.active && !window.TRAVEL_LOCK) { sf('mundo', () => World.tick(dt, Player.p.x, Player.p.y)); if (!TT) { sf('ataque', () => { if (window.__atkHeld && window.__atkHeld()) Entities.attack(); }); sf('jogador', () => Player.update(dt, Input.axis())); } sf('bichos', () => Entities.update(dt)); sf('mar', () => Sea.update(dt)); sf('clima', () => Weather.update(dt, vw, vh)); sf('som', () => Sfx.update(dt)); sf('rede', () => Net.update(dt)); if (!TT) sf('save', () => Save.update(dt)); } const a1 = pn();
     { const tz = (!TT && World.onPlat(Player.p.x, Player.p.y)) ? 1.35 : 1; if (VZc !== tz) { VZc += (tz - VZc) * Math.min(1, dt * 2.5); if (Math.abs(tz - VZc) < .01) VZc = tz; if (Math.abs(VZc - (window.VZ || 1)) >= .02 || VZc === tz) { window.VZ = VZc; resize(); } } }   // vista: sobe no planalto → a tela abre
     const cx0 = TT ? Title.cam.x - (vw > vh ? vw * .24 : 0) : Player.p.x, cy0 = TT ? Title.cam.y + (vw > vh ? 0 : vh * .1) : Player.p.y;   // na tela inicial o bicho fica fora do menu
     const camX = Math.min(Math.max(Math.round(cx0) - (vw >> 1), 0), World.size.w - vw), camY = Math.min(Math.max(Math.round(cy0) - (vh >> 1), 0), World.size.h - vh);
