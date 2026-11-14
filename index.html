@@ -200,7 +200,7 @@ try { var h = location.hash, tv = /viagem=|skip/.test(h) || sessionStorage.getIt
 <div id="title"><div id="tlogo"><h1>ILHA VERDE</h1><p>SOBREVIVÊNCIA</p></div>
 <div id="tmenu"><button id="tcont" style="display:none">▶ Continuar<small>retomar a aventura salva</small></button><button id="tsolo">✦ Nova aventura</button><button id="tmulti" class="dim">🌐 Multiplayer<i>EM BREVE</i></button><button id="tset">⚙ Configurações</button></div>
 <div id="tver">v0.9</div>
-<div id="tpanel"><h3>⚙ Configurações</h3><div class="r">Música<button id="tmus">Ligada</button></div><div class="r">Efeitos sonoros<button id="tsnd">Ligado</button></div><div class="r">Gráficos<button id="tq">HD</button></div><div class="r">Clima (teste)<button id="twx">Chuva agora</button></div><div class="r">Tela horizontal<button id="trot">Girar</button></div><div class="r">Tela cheia<button id="tfs">Desligada</button></div><div class="r">Tamanho dos controles<button id="tcs2">Médio</button></div><div class="r">Mostrar FPS<button id="tfps">Ligado</button></div><pre id="tperf">…</pre><div class="r">Ver visão dos animais<button id="tvis">Desligado</button></div><div id="tvisopts" style="display:none;gap:6px;margin:-2px 0 8px"><button id="tvis1" style="flex:1;font-size:13px;padding:7px 4px;margin:0">Em pé</button><button id="tvis2" style="flex:1;font-size:13px;padding:7px 4px;margin:0">Agachado</button></div><div class="r">Nuvem<button id="tcl">☁ Entrar</button></div><div id="tcmsg"></div>
+<div id="tpanel"><h3>⚙ Configurações</h3><div class="r">Música<button id="tmus">Ligada</button></div><div class="r">Efeitos sonoros<button id="tsnd">Ligado</button></div><div class="r">Gráficos<button id="tq">HD</button></div><div class="r">FPS<button id="tfps">60</button></div><div class="r">Clima (teste)<button id="twx">Chuva agora</button></div><div class="r">Tela horizontal<button id="trot">Girar</button></div><div class="r">Tela cheia<button id="tfs">Desligada</button></div><div class="r">Tamanho dos controles<button id="tcs2">Médio</button></div><div class="r">Mostrar FPS<button id="tfps">Ligado</button></div><pre id="tperf">…</pre><div class="r">Ver visão dos animais<button id="tvis">Desligado</button></div><div id="tvisopts" style="display:none;gap:6px;margin:-2px 0 8px"><button id="tvis1" style="flex:1;font-size:13px;padding:7px 4px;margin:0">Em pé</button><button id="tvis2" style="flex:1;font-size:13px;padding:7px 4px;margin:0">Agachado</button></div><div class="r">Nuvem<button id="tcl">☁ Entrar</button></div><div id="tcmsg"></div>
 <div id="tcbox"><input id="tce" type="email" placeholder="e-mail" autocomplete="username"><input id="tcp" type="password" placeholder="senha (mín. 6)" autocomplete="current-password"><div class="r2"><button id="tcin">Entrar</button><button id="tcup">Criar conta</button></div><div id="tcst"></div>
 <details><summary>Servidor (avançado)</summary><input id="tcu" placeholder="URL do projeto Supabase"><input id="tck" placeholder="chave anon public"><button id="tcs" class="g">Salvar servidor</button></details></div>
 <button id="twipe" class="red">Apagar progresso</button><button id="tclose" class="g">Voltar</button></div></div>
@@ -227,6 +227,129 @@ const LOCKEY = l => l === 'floresta' ? 'ilhaverde_save_v1' : 'ilhaverde_save_v1_
 // Carrega os atlas de sprites (VÁRIAS páginas, agrupadas) + tilesets. EMBED (gerado pelo build.py) traz tudo dentro do HTML; sem ele, lê da pasta assets/.
 // Grupos 'eager' (jogador, objetos) carregam na abertura. Grupos sob demanda (lobo, cervo, coelho, e as espécies futuras) carregam quando um bicho do grupo
 // chega perto (Assets.touch) e são descarregados depois de TTL sem uso, para a memória de vídeo não crescer com o número de animações.
+window.FPS30 = (() => { try { return localStorage.getItem('iv_fps30') === '1'; } catch (e) { return false; } })();   /* 30 FPS travado: mais estável e frio em celular fraco */
+window.GLMODE = (() => { try { return localStorage.getItem('iv_gl') === '1' || /[?&#]gl=1/.test(location.href); } catch (e) { return false; } })();   /* motor de desenho WebGL (teste): liga em Configurações > Gráficos */
+// Motor de desenho WebGL compatível com o pedaço do Canvas 2D que o jogo usa (drawImage, retângulos, elipses, linhas, texto, transformações, recorte retangular).
+// Junta os desenhos em lotes (até 8 texturas por lote) e manda para a placa de vídeo de uma vez no fim do quadro.
+class GL2D {
+  static make(cv) {
+    try { const gl = cv.getContext('webgl', { alpha: false, antialias: false, depth: false, stencil: false, premultipliedAlpha: true, preserveDrawingBuffer: false, powerPreference: 'high-performance' }); return gl ? new GL2D(cv, gl) : null; } catch (e) { return null; }
+  }
+  constructor(cv, gl) {
+    this.canvas = cv; this.gl = gl; this.isGL = true;
+    const NT = this.NT = 1;   /* 1 textura por lote: no celular o shader com várias texturas lia todas em cada pixel e travava em ~15 FPS */
+    const vs = 'attribute vec2 p;attribute vec2 uv;attribute vec4 col;attribute float ti;uniform vec2 res;varying vec2 vuv;varying vec4 vcol;varying float vti;void main(){gl_Position=vec4(p.x/res.x*2.0-1.0,1.0-p.y/res.y*2.0,0.0,1.0);vuv=uv;vcol=col;vti=ti;}';
+    const hp = (() => { try { const f = gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.HIGH_FLOAT); return f && f.precision > 0; } catch (e) { return false; } })();
+    const fsx = 'precision mediump float;varying ' + (hp ? 'highp ' : '') + 'vec2 vuv;varying vec4 vcol;varying float vti;uniform sampler2D t0;void main(){gl_FragColor=mix(texture2D(t0,vuv),vec4(1.0),step(vti,-0.5))*vcol;}';   /* sem desvios: 1 leitura de textura por pixel; cor sólida = branco × cor */
+    const sh = (t, s) => { const o = gl.createShader(t); gl.shaderSource(o, s); gl.compileShader(o); if (!gl.getShaderParameter(o, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(o)); return o; };
+    const pr = this.pr = gl.createProgram(); gl.attachShader(pr, sh(gl.VERTEX_SHADER, vs)); gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, fsx)); gl.linkProgram(pr); if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(pr)); gl.useProgram(pr);
+    this.uRes = gl.getUniformLocation(pr, 'res'); for (let i = 0; i < NT; i++) gl.uniform1i(gl.getUniformLocation(pr, 't' + i), i);
+    this.MAXV = 6 * 12000; this.F = 9; this.vb = new Float32Array(this.MAXV * this.F); this.nv = 0;
+    this.buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, this.buf);
+    const at = (n, sz, off) => { const l = gl.getAttribLocation(pr, n); gl.enableVertexAttribArray(l); gl.vertexAttribPointer(l, sz, gl.FLOAT, false, this.F * 4, off * 4); };
+    at('p', 2, 0); at('uv', 2, 2); at('col', 4, 4); at('ti', 1, 8);
+    gl.enable(gl.BLEND); gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA); gl.disable(gl.DEPTH_TEST);
+    gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
+    this.texs = new Map(); this.calls = 0; this.up = 0; this.upPx = 0; this.slots = []; try { const ex = gl.getExtension('WEBGL_debug_renderer_info'); this.gpu = String(ex ? gl.getParameter(ex.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER)); const m = this.gpu.match(/^ANGLE \((.*)\)$/); if (m) { const p = m[1].split(','); this.gpu = p[1] || p[0]; } this.gpu = this.gpu.replace(/[()]/g, ' ').replace(/Vulkan[\d. ]*|OpenGL ES[\d. ]*|Device|Subzero|0x[0-9A-Fa-f]+|\bTM\b/g, '').replace(/\s+/g, ' ').trim().slice(0, 24) || '?'; } catch (e) { this.gpu = '?'; } this.frame = 0; this.colC = new Map(); this.txtC = new Map();
+    const pc = document.createElement('canvas'); pc.width = pc.height = 1; this.pg = pc.getContext('2d', { willReadFrequently: true });
+    this.s = { m: [1, 0, 0, 1, 0, 0], ga: 1, fs: '#000', ss: '#000', lw: 1, clip: null, dash: null, font: '10px sans-serif', ta: 'start', tb: 'alphabetic' }; this.st = []; this.sp = []; this.cur = null; this.sc = null;
+    this.imageSmoothingEnabled = false; this.lineJoin = 'miter'; this.lineCap = 'butt'; this.globalCompositeOperation = 'source-over';
+    cv.addEventListener('webglcontextlost', e => { e.preventDefault(); this.lost = true; }); cv.addEventListener('webglcontextrestored', () => location.reload());
+  }
+  // ---- estado
+  get fillStyle() { return this.s.fs; } set fillStyle(v) { this.s.fs = v; }
+  get strokeStyle() { return this.s.ss; } set strokeStyle(v) { this.s.ss = v; }
+  get globalAlpha() { return this.s.ga; } set globalAlpha(v) { this.s.ga = Math.max(0, Math.min(1, +v)); }
+  get lineWidth() { return this.s.lw; } set lineWidth(v) { this.s.lw = +v; }
+  get font() { return this.s.font; } set font(v) { this.s.font = v; }
+  get textAlign() { return this.s.ta; } set textAlign(v) { this.s.ta = v; }
+  get textBaseline() { return this.s.tb; } set textBaseline(v) { this.s.tb = v; }
+  save() { const s = this.s; this.st.push({ m: s.m.slice(), ga: s.ga, fs: s.fs, ss: s.ss, lw: s.lw, clip: s.clip, dash: s.dash, font: s.font, ta: s.ta, tb: s.tb }); }
+  restore() { const s = this.st.pop(); if (!s) return; const ch = s.clip !== this.s.clip; this.s = s; if (ch) this.applyClip(); }
+  setTransform(a, b, c, d, e, f) { if (typeof a === 'object' && a) { const o = a; a = o.a; b = o.b; c = o.c; d = o.d; e = o.e; f = o.f; } const m = this.s.m; m[0] = a; m[1] = b; m[2] = c; m[3] = d; m[4] = e; m[5] = f; }
+  resetTransform() { this.setTransform(1, 0, 0, 1, 0, 0); }
+  transform(a, b, c, d, e, f) { const m = this.s.m, n0 = m[0] * a + m[2] * b, n1 = m[1] * a + m[3] * b, n2 = m[0] * c + m[2] * d, n3 = m[1] * c + m[3] * d, n4 = m[0] * e + m[2] * f + m[4], n5 = m[1] * e + m[3] * f + m[5]; m[0] = n0; m[1] = n1; m[2] = n2; m[3] = n3; m[4] = n4; m[5] = n5; }
+  translate(x, y) { this.transform(1, 0, 0, 1, x, y); }
+  scale(x, y) { this.transform(x, 0, 0, y, 0, 0); }
+  rotate(r) { const c = Math.cos(r), s = Math.sin(r); this.transform(c, s, -s, c, 0, 0); }
+  setLineDash(a) { this.s.dash = a && a.length ? a.slice() : null; }
+  getLineDash() { return this.s.dash ? this.s.dash.slice() : []; }
+  measureText(t) { this.pg.font = this.s.font; return this.pg.measureText(t); }
+  // ---- cores (qualquer cor CSS, convertida uma vez)
+  col(v) { let c = this.colC.get(v); if (c) return c; const g = this.pg; g.fillStyle = '#000'; g.fillStyle = v; const s = g.fillStyle; let r = 0, gg = 0, b = 0, a = 1;
+    if (s[0] === '#') { r = parseInt(s.slice(1, 3), 16); gg = parseInt(s.slice(3, 5), 16); b = parseInt(s.slice(5, 7), 16); } else { const p = s.match(/[\d.]+/g) || []; r = +p[0] || 0; gg = +p[1] || 0; b = +p[2] || 0; a = p[3] === undefined ? 1 : +p[3]; }
+    c = [r / 255, gg / 255, b / 255, a]; if (this.colC.size > 4000) this.colC.clear(); this.colC.set(v, c); return c; }
+  // ---- texturas (imagem ou canvas), guardadas por objeto
+  tex(src) {
+    let t = this.texs.get(src); if (t && !(src.__glv !== undefined && src.__glv !== t.v)) { t.u = this.frame; return t; }
+    const w = src.naturalWidth || src.width, h = src.naturalHeight || src.height; if (!w || !h) return null; const gl = this.gl;
+    if (!t) { this.flush(); t = { t: gl.createTexture(), w, h, u: this.frame, v: src.__glv, img: src instanceof HTMLImageElement }; this.texs.set(src, t); } else { this.flush(); t.w = w; t.h = h; t.v = src.__glv; }
+    gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, t.t); this.slots = [];
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    this.up++; this.upPx += w * h; try { gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, src); } catch (e) { return null; }
+    return t;
+  }
+  slot(t) { let i = this.slots.indexOf(t); if (i >= 0) return i; if (this.slots.length >= this.NT) this.flush(); i = this.slots.length; this.slots.push(t); return i; }
+  // ---- recorte retangular (scissor)
+  applyClip() { this.flush(); const gl = this.gl, c = this.s.clip; if (!c) { gl.disable(gl.SCISSOR_TEST); return; } gl.enable(gl.SCISSOR_TEST); const H = this.canvas.height; gl.scissor(Math.max(0, c[0]), Math.max(0, H - (c[1] + c[3])), Math.max(0, c[2]), Math.max(0, c[3])); }
+  // ---- vértices
+  v(x, y, u, w, r, g, b, a, ti) { if (this.nv >= this.MAXV) this.flush(); const o = this.nv++ * 9, B = this.vb; B[o] = x; B[o + 1] = y; B[o + 2] = u; B[o + 3] = w; B[o + 4] = r; B[o + 5] = g; B[o + 6] = b; B[o + 7] = a; B[o + 8] = ti; }
+  quad(x0, y0, x1, y1, x2, y2, x3, y3, u0, v0, u1, v1, r, g, b, a, ti) {
+    if (this.nv + 6 > this.MAXV) this.flush();
+    this.v(x0, y0, u0, v0, r, g, b, a, ti); this.v(x1, y1, u1, v0, r, g, b, a, ti); this.v(x2, y2, u1, v1, r, g, b, a, ti);
+    this.v(x0, y0, u0, v0, r, g, b, a, ti); this.v(x2, y2, u1, v1, r, g, b, a, ti); this.v(x3, y3, u0, v1, r, g, b, a, ti);
+  }
+  rectQ(x, y, w, h, r, g, b, a, ti, u0, v0, u1, v1) { const m = this.s.m;
+    if (m[1] === 0 && m[2] === 0) { const X0 = m[0] * x + m[4], Y0 = m[3] * y + m[5], X1 = X0 + m[0] * w, Y1 = Y0 + m[3] * h; this.quad(X0, Y0, X1, Y0, X1, Y1, X0, Y1, u0, v0, u1, v1, r, g, b, a, ti); return; }
+    const P = (px, py) => [m[0] * px + m[2] * py + m[4], m[1] * px + m[3] * py + m[5]], A = P(x, y), Bq = P(x + w, y), C = P(x + w, y + h), D = P(x, y + h);
+    this.quad(A[0], A[1], Bq[0], Bq[1], C[0], C[1], D[0], D[1], u0, v0, u1, v1, r, g, b, a, ti); }
+  // ---- API de desenho
+  drawImage(src, a1, a2, a3, a4, a5, a6, a7, a8) {
+    if (!src || this.lost) return; const t = this.tex(src); if (!t) return; let sx = 0, sy = 0, sw = t.w, sh = t.h, dx, dy, dw, dh;
+    if (a5 !== undefined) { sx = a1; sy = a2; sw = a3; sh = a4; dx = a5; dy = a6; dw = a7; dh = a8; } else if (a3 !== undefined) { dx = a1; dy = a2; dw = a3; dh = a4; } else { dx = a1; dy = a2; dw = t.w; dh = t.h; }
+    const ga = this.s.ga; if (ga <= 0) return; const ti = this.slot(t);
+    this.rectQ(dx, dy, dw, dh, ga, ga, ga, ga, ti, sx / t.w, sy / t.h, (sx + sw) / t.w, (sy + sh) / t.h);
+  }
+  fillRect(x, y, w, h) { const c = this.col(this.s.fs), a = c[3] * this.s.ga; if (a <= 0) return; this.rectQ(x, y, w, h, c[0] * a, c[1] * a, c[2] * a, a, -1, 0, 0, 0, 0); }
+  clearRect() {}
+  strokeRect(x, y, w, h) { const sp = this.sp, cur = this.cur; this.beginPath(); this.rect(x, y, w, h); this.stroke(); this.sp = sp; this.cur = cur; }
+  beginPath() { this.sp = []; this.cur = null; }
+  P(x, y) { const m = this.s.m; return [m[0] * x + m[2] * y + m[4], m[1] * x + m[3] * y + m[5]]; }
+  moveTo(x, y) { this.cur = [this.P(x, y)]; this.sp.push(this.cur); }
+  lineTo(x, y) { if (!this.cur) return this.moveTo(x, y); this.cur.push(this.P(x, y)); }
+  closePath() { if (this.cur && this.cur.length) { this.cur.closed = true; const f = this.cur[0]; this.cur = [f.slice()]; this.sp.push(this.cur); } }
+  rect(x, y, w, h) { const p = [this.P(x, y), this.P(x + w, y), this.P(x + w, y + h), this.P(x, y + h)]; p.closed = true; p.rect = [x, y, w, h]; this.sp.push(p); this.cur = [this.P(x, y)]; this.sp.push(this.cur); }
+  ellipse(x, y, rx, ry, rot, a0, a1, ccw) {
+    rx = Math.abs(rx); ry = Math.abs(ry); let sweep = a1 - a0; if (ccw) { if (sweep > 0) sweep -= Math.PI * 2; } else if (sweep < 0) sweep += Math.PI * 2; if (Math.abs(sweep) > Math.PI * 2) sweep = Math.sign(sweep) * Math.PI * 2;
+    const sc = Math.sqrt(Math.abs(this.s.m[0] * this.s.m[3] - this.s.m[1] * this.s.m[2])) || 1, n = Math.max(8, Math.min(48, Math.ceil(Math.max(rx, ry) * sc * Math.abs(sweep) / 3))), cr = Math.cos(rot || 0), sr = Math.sin(rot || 0);
+    if (!this.cur) { this.cur = []; this.sp.push(this.cur); }
+    for (let i = 0; i <= n; i++) { const a = a0 + sweep * i / n, ex = Math.cos(a) * rx, ey = Math.sin(a) * ry; this.cur.push(this.P(x + ex * cr - ey * sr, y + ex * sr + ey * cr)); }
+    if (Math.abs(sweep) >= Math.PI * 2 - 1e-6) this.cur.closed = true;
+  }
+  arc(x, y, r, a0, a1, ccw) { this.ellipse(x, y, r, r, 0, a0, a1, ccw); }
+  fill() { const c = this.col(this.s.fs), a = c[3] * this.s.ga; if (a <= 0) return; const r = c[0] * a, g = c[1] * a, b = c[2] * a;
+    for (const p of this.sp) { if (p.length < 3) continue; const x0 = p[0][0], y0 = p[0][1]; for (let i = 1; i < p.length - 1; i++) { if (this.nv + 3 > this.MAXV) this.flush(); this.v(x0, y0, 0, 0, r, g, b, a, -1); this.v(p[i][0], p[i][1], 0, 0, r, g, b, a, -1); this.v(p[i + 1][0], p[i + 1][1], 0, 0, r, g, b, a, -1); } } }
+  stroke() { const c = this.col(this.s.ss), a = c[3] * this.s.ga; if (a <= 0) return; const r = c[0] * a, g = c[1] * a, b = c[2] * a, m = this.s.m, hw = Math.max(.5, this.s.lw * (Math.sqrt(Math.abs(m[0] * m[3] - m[1] * m[2])) || 1) / 2), dash = this.s.dash;
+    const seg = (x0, y0, x1, y1) => { const dx = x1 - x0, dy = y1 - y0, L = Math.hypot(dx, dy); if (L < 1e-6) return; const nx = -dy / L * hw, ny = dx / L * hw;
+      if (!dash) { this.quad(x0 + nx, y0 + ny, x1 + nx, y1 + ny, x1 - nx, y1 - ny, x0 - nx, y0 - ny, 0, 0, 0, 0, r, g, b, a, -1); return; }
+      const ds = dash.map(d => d * (Math.sqrt(Math.abs(m[0] * m[3] - m[1] * m[2])) || 1)); let pos = 0, k = 0, on = true; while (pos < L) { const e = Math.min(L, pos + ds[k % ds.length]); if (on) { const ax = x0 + dx * pos / L, ay = y0 + dy * pos / L, bx = x0 + dx * e / L, by = y0 + dy * e / L; this.quad(ax + nx, ay + ny, bx + nx, by + ny, bx - nx, by - ny, ax - nx, ay - ny, 0, 0, 0, 0, r, g, b, a, -1); } pos = e; k++; on = !on; } };
+    for (const p of this.sp) { for (let i = 0; i < p.length - 1; i++) seg(p[i][0], p[i][1], p[i + 1][0], p[i + 1][1]); if (p.closed && p.length > 2) seg(p[p.length - 1][0], p[p.length - 1][1], p[0][0], p[0][1]); } }
+  clip() { const R = this.sp.filter(p => p.length >= 3); if (R.length !== 1 || R[0].length !== 4) return; const p = R[0], xs = p.map(q => q[0]), ys = p.map(q => q[1]);
+    let x0 = Math.min(...xs), y0 = Math.min(...ys), x1 = Math.max(...xs), y1 = Math.max(...ys); const c = this.s.clip; if (c) { x0 = Math.max(x0, c[0]); y0 = Math.max(y0, c[1]); x1 = Math.min(x1, c[0] + c[2]); y1 = Math.min(y1, c[1] + c[3]); }
+    this.s.clip = [Math.round(x0), Math.round(y0), Math.max(0, Math.round(x1 - x0)), Math.max(0, Math.round(y1 - y0))]; this.applyClip(); }
+  fillText(s, x, y) { s = String(s); const S = this.s, k = s + '|' + S.font + '|' + S.fs; let c = this.txtC.get(k);
+    if (!c) { const g0 = this.pg; g0.font = S.font; const w = Math.ceil(g0.measureText(s).width) + 4, px = +((S.font.match(/(\d+)px/) || [0, 12])[1]), h = Math.ceil(px * 1.5) + 4; c = document.createElement('canvas'); c.width = w; c.height = h; const g = c.getContext('2d'); g.font = S.font; g.fillStyle = S.fs; g.textBaseline = 'alphabetic'; g.fillText(s, 2, Math.ceil(px * 1.15) + 2); c.bl = Math.ceil(px * 1.15) + 2; c.px = px; if (this.txtC.size > 300) this.txtC.clear(); this.txtC.set(k, c); }
+    let dx = x - 2; if (S.ta === 'center') dx = x - c.width / 2; else if (S.ta === 'right' || S.ta === 'end') dx = x - c.width + 2;
+    let dy = y - c.bl; if (S.tb === 'middle') dy = y - c.bl + c.px * .35; else if (S.tb === 'top' || S.tb === 'hanging') dy = y - c.bl + c.px * .8; else if (S.tb === 'bottom') dy = y - c.bl - c.px * .2;
+    const ga = S.ga; S.ga = ga; this.drawImage(c, dx, dy); }
+  strokeText() {}
+  // ---- quadro
+  begin() { const gl = this.gl, cv = this.canvas; this.frame++; window.__glc = this.calls; this.calls = 0; gl.viewport(0, 0, cv.width, cv.height); gl.useProgram(this.pr); gl.uniform2f(this.uRes, cv.width, cv.height); this.s.clip = null; this.st.length = 0; gl.disable(gl.SCISSOR_TEST); gl.clearColor(0, 0, 0, 1); gl.clear(gl.COLOR_BUFFER_BIT); }
+  flush() { if (!this.nv) { this.slots = []; return; } const gl = this.gl; for (let i = 0; i < this.slots.length; i++) { gl.activeTexture(gl.TEXTURE0 + i); gl.bindTexture(gl.TEXTURE_2D, this.slots[i].t); }
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.buf); gl.bufferData(gl.ARRAY_BUFFER, this.vb.subarray(0, this.nv * 9), gl.STREAM_DRAW); gl.drawArrays(gl.TRIANGLES, 0, this.nv);   /* cada lote ganha memória nova (bufferData): a placa não precisa esperar o desenho anterior terminar (no Adreno o bufferSubData no mesmo lugar travava) */ this.nv = 0; this.slots = []; this.calls++; }
+  end() { this.flush(); if (this.frame % 120 === 0) for (const [src, t] of this.texs) if (!t.img && this.frame - t.u > 300) { this.gl.deleteTexture(t.t); this.texs.delete(src); } }
+}
+
 /* imagens do jogo ficam na pasta assets (ao lado deste index.html); ASSET_V muda a cada atualização de arte para o navegador baixar a versão nova */
 const ASSET_V = '2026111301';
 async function getJSON(u) { const r = await fetch(u + '?v=' + ASSET_V); if (!r.ok) throw new Error('Não achei ' + u + ' — suba a pasta assets junto com o index.html'); return r.json(); }
@@ -1236,7 +1359,7 @@ const Entities = (() => {
   function predatorNear(x, y, r) { const P = Player.p; if (Math.hypot(P.x - x, P.y - y) < r) return true; return animals.some(o => o.kind === 'wolf' && !o.dead && !o.far && !o.sleeping && Math.hypot(o.x - x, o.y - y) < r); }
   function nearest(a, pred, maxD) { let best = null, bd = maxD; for (const o of animals) { if (o === a || o.inDen > 0 || !pred(o)) continue; const d = Math.hypot(o.x - a.x, o.y - a.y); if (d < bd) { bd = d; best = o; } } return best; }
   // pegadas: a cada passo do bicho uma marca fica no chão; some sozinha (mais rápido na chuva)
-  const TRACK_LIFE = 90, TRACK_SIZE = { wolf: 3.2, deer: 3.4, fawn: 2.4, rabbit: 2.2, player: 2.6, bear: 5, boar: 3.6 }, TRACK_BY_GROUND = { 0: 140, 1: 420, 3: 700 }, TRACK_MAX = 1000;   // vida (s) da pegada: grama some logo, areia dura, terra/barro dura bastante
+  const TRACK_LIFE = 90, TRACK_SIZE = { wolf: 3.2, deer: 3.4, fawn: 2.4, rabbit: 2.2, player: 2.6, bear: 5, boar: 3.6 }, TRACK_BY_GROUND = { 0: 140, 1: 420, 3: 700 }, TRACK_MAX = 600;   // vida (s) da pegada: grama some logo, areia dura, terra/barro dura bastante
   const groundAt = (x, y) => { const l = World.lvlAt(Math.round(x / 64), Math.round(y / 64)); return l === 3 ? 3 : l === 1 ? 1 : l === 2 ? 0 : -1; };
   let tracks = [];
   let visStand = false, visSneak = false;   // configuração: mostrar a visão dos animais com o jogador em pé e/ou agachado
@@ -1245,20 +1368,40 @@ const Entities = (() => {
     a.side = !a.side; const vx = a.vx || 0, vy = a.vy || 0, vl = Math.hypot(vx, vy) || 1, o = a.side ? 3 : -3;
     const px = a.x - vy / vl * o, py = a.y + vx / vl * o, g = groundAt(px, py); if (g < 0) return; tracks.push({ x: px, y: py, k: a.kind, ang: Math.atan2(vy, vx), t: 0, g, life: TRACK_BY_GROUND[g] }); if (tracks.length > TRACK_MAX) tracks.splice(0, tracks.length - TRACK_MAX);
   }
-  function drawTracks(ctx, camX, camY, vw, vh) {   // agrupa por cor/transparência: um só fill por grupo (muito mais leve no celular)
-    const B = drawTracks.B || (drawTracks.B = new Map()); for (const l of B.values()) l.length = 0;
-    for (const tr of tracks) { if (tr.x < camX - 8 || tr.x > camX + vw + 8 || tr.y < camY - 8 || tr.y > camY + vh + 8) continue;
-      const life = tr.life || TRACK_LIFE, al = Math.max(0, 1 - tr.t / life) * (tr.g === 3 ? .8 : tr.g === 1 ? .6 : .35); if (al <= 0) continue;
-      const key = (tr.g === 3 ? 3 : tr.g === 1 ? 1 : 0) * 100 + Math.max(1, Math.round(al * 12)); let l = B.get(key); if (!l) B.set(key, l = []); l.push(tr); }
-    for (const [key, l] of B) { if (!l.length) continue; const g = (key / 100) | 0, al = (key % 100) / 12;
-      ctx.fillStyle = (g === 3 ? 'rgba(38,20,8,' : g === 1 ? 'rgba(110,85,45,' : 'rgba(18,48,14,') + al.toFixed(3) + ')'; ctx.beginPath();
-      for (const tr of l) { const sz = (TRACK_SIZE[tr.k] || 2.5) * (tr.k === 'player' ? 2.2 : 2.3), X = tr.x - camX, Y = tr.y - camY, ca = Math.cos(tr.ang), sa = Math.sin(tr.ang);
-        const dot = (ox, oy, rx, ry) => { const cx = X + ca * ox - sa * oy, cy = Y + sa * ox + ca * oy; ctx.moveTo(cx + rx * ca, cy + rx * sa); ctx.ellipse(cx, cy, rx, ry, tr.ang, 0, 6.283); };
-        if (tr.k === 'deer' || tr.k === 'fawn' || tr.k === 'boar') { dot(0, -sz * .38, sz * .62, sz * .26); dot(0, sz * .38, sz * .62, sz * .26); }
-        else if (tr.k === 'wolf' || tr.k === 'bear') { dot(-sz * .2, 0, sz * .55, sz * .5); for (const k of [-1.5, -.5, .5, 1.5]) dot(sz * .6, k * sz * .34, sz * .2, sz * .17); }
-        else if (tr.k === 'rabbit') { dot(-sz * .6, -sz * .45, sz * .6, sz * .3); dot(-sz * .6, sz * .45, sz * .6, sz * .3); dot(sz * .5, 0, sz * .22, sz * .22); }
-        else { dot(0, 0, sz * .75, sz * .5); if (tr.k === 'player') dot(-sz * 1.1, 0, sz * .4, sz * .32); } }
-      ctx.fill(); }
+  function trackSprite(kind, g, ang) {
+    const sz = (TRACK_SIZE[kind] || 2.5) * (kind === 'player' ? 2.2 : 2.3), R = Math.ceil(sz * 1.7) + 2, c = document.createElement('canvas'); c.width = c.height = R * 2; const x = c.getContext('2d');
+    x.fillStyle = g === 3 ? 'rgb(38,20,8)' : g === 1 ? 'rgb(110,85,45)' : 'rgb(18,48,14)'; x.beginPath(); const ca = Math.cos(ang), sa = Math.sin(ang), X = R, Y = R;
+    const dot = (ox, oy, rx, ry) => { const cx = X + ca * ox - sa * oy, cy = Y + sa * ox + ca * oy; x.moveTo(cx + rx * ca, cy + rx * sa); x.ellipse(cx, cy, rx, ry, ang, 0, 6.283); };
+    if (kind === 'deer' || kind === 'fawn' || kind === 'boar') { dot(0, -sz * .38, sz * .62, sz * .26); dot(0, sz * .38, sz * .62, sz * .26); }
+    else if (kind === 'wolf' || kind === 'bear') { dot(-sz * .2, 0, sz * .55, sz * .5); for (const k of [-1.5, -.5, .5, 1.5]) dot(sz * .6, k * sz * .34, sz * .2, sz * .17); }
+    else if (kind === 'rabbit') { dot(-sz * .6, -sz * .45, sz * .6, sz * .3); dot(-sz * .6, sz * .45, sz * .6, sz * .3); dot(sz * .5, 0, sz * .22, sz * .22); }
+    else { dot(0, 0, sz * .75, sz * .5); if (kind === 'player') dot(-sz * 1.1, 0, sz * .4, sz * .32); }
+    x.fill(); return c;
+  }
+  function trackCell(k, gr, ai) {   /* todas as pegadas prontas numa folha só (1 textura no WebGL) */
+    const A = trackCell.A || (trackCell.A = { c: null, g: null, m: new Map(), n: 0 }), ck = k + gr * 1000 + ai * 10; let e = A.m.get(ck); if (e) return e;
+    if (!A.c || A.n >= 441) { if (!A.c) { A.c = document.createElement('canvas'); A.c.width = A.c.height = 1024; A.g = A.c.getContext('2d'); } A.g.clearRect(0, 0, 1024, 1024); A.m.clear(); A.n = 0; }
+    const s = trackSprite(k, gr, ai * Math.PI / 8), cx = (A.n % 21) * 48, cy = Math.floor(A.n / 21) * 48; A.n++; A.g.drawImage(s, cx, cy);
+    e = { x: cx, y: cy, w: s.width, h: s.height }; A.m.set(ck, e); A.c.__glv = (A.c.__glv || 0) + 1; return e;
+  }
+  function trackEach(x0, y0, x1, y1, f) {
+    for (const tr of tracks) { if (tr.x < x0 || tr.x > x1 || tr.y < y0 || tr.y > y1) continue;
+      const life = tr.life || TRACK_LIFE, al = Math.max(0, 1 - tr.t / life) * (tr.g === 3 ? .8 : tr.g === 1 ? .6 : .35); if (al <= .02) continue; const gr = tr.g === 3 ? 3 : tr.g === 1 ? 1 : 0;
+      f(tr, al, trackCell(tr.k, gr, ((Math.round(tr.ang / (Math.PI / 8)) % 16) + 16) % 16)); }
+  }
+  function drawTracks(ctx, camX, camY, vw, vh) {
+    if (ctx.isGL) {   /* WebGL: desenha direto da folha (barato lá; evita reenviar uma camada grande pra placa de vídeo) */
+      const a0 = ctx.globalAlpha; trackEach(camX - 24, camY - 24, camX + vw + 24, camY + vh + 24, (tr, al, e) => { ctx.globalAlpha = a0 * al; ctx.drawImage(trackCell.A.c, e.x, e.y, e.w, e.h, Math.round(tr.x - camX - e.w / 2), Math.round(tr.y - camY - e.h / 2), e.w, e.h); }); ctx.globalAlpha = a0; return;
+    }
+    /* Normal: pegadas numa camada pronta (refeita ~2x por segundo ou quando a câmera sai dela); no quadro é 1 desenho só */
+    const L = drawTracks.L || (drawTracks.L = { c: null, g: null, x: 0, y: 0, t: -1e9 }), M = 192, now = performance.now();
+    if (!L.c || camX < L.x || camY < L.y || camX + vw > L.x + L.c.width || camY + vh > L.y + L.c.height || now - L.t > 600) {
+      const W = Math.ceil(vw + M * 2), H = Math.ceil(vh + M * 2); if (!L.c || L.c.width !== W || L.c.height !== H) { L.c = document.createElement('canvas'); L.c.width = W; L.c.height = H; L.g = L.c.getContext('2d'); L.g.imageSmoothingEnabled = false; }
+      L.x = Math.round(camX - M); L.y = Math.round(camY - M); L.t = now; const g = L.g; g.clearRect(0, 0, W, H);
+      trackEach(L.x - 24, L.y - 24, L.x + W + 24, L.y + H + 24, (tr, al, e) => { g.globalAlpha = al; g.drawImage(trackCell.A.c, e.x, e.y, e.w, e.h, Math.round(tr.x - L.x - e.w / 2), Math.round(tr.y - L.y - e.h / 2), e.w, e.h); });
+      g.globalAlpha = 1;
+    }
+    ctx.drawImage(L.c, L.x - Math.round(camX), L.y - Math.round(camY));
   }
   function step(a, dx, dy, sp, dt) { // anda tentando deslizar; devolve false se bateu
     if (a.exh) { sp *= .4; a.running = false; } if (a.slowT > 0) sp *= .5;   // exausto: só consegue andar devagar
@@ -2780,7 +2923,7 @@ const Entities = (() => {
   function drawFloors(ctx, camX, camY, vw, vh) { const B = bakeOf('floor'); if (B.c) { ctx.drawImage(B.c, Math.round(B.x - camX), Math.round(B.y - camY)); return; } for (const o of B.L) if (o.x > camX - 20 && o.x < camX + vw + 20 && o.y > camY - 20 && o.y < camY + vh + 20) drawPiece(ctx, 'floor', o.x - camX, o.y - camY); }
   function drawRoofs(ctx, camX, camY, vw, vh, player) {
     const B = bakeOf('roof'), pl = player.p, near = B.L.filter(o => Math.abs(o.x - pl.x) < 40 && Math.abs(o.y - pl.y) < 40);   /* telhado em cima de você fica transparente */
-    if (B.c) { if (near.length) { ctx.save(); ctx.beginPath(); ctx.rect(0, 0, vw, vh); for (const o of near) ctx.rect(Math.round(o.x - camX) - 16, Math.round(o.y - camY) - 56, 32, 32); ctx.clip('evenodd'); }
+    if (B.c && !(ctx.isGL && near.length)) { if (near.length) { ctx.save(); ctx.beginPath(); ctx.rect(0, 0, vw, vh); for (const o of near) ctx.rect(Math.round(o.x - camX) - 16, Math.round(o.y - camY) - 56, 32, 32); ctx.clip('evenodd'); }
       ctx.drawImage(B.c, Math.round(B.x - camX), Math.round(B.y - camY)); if (near.length) ctx.restore(); ctx.globalAlpha = .3; for (const o of near) drawPiece(ctx, 'roof', o.x - camX, o.y - camY); ctx.globalAlpha = 1; return; }
     for (const o of B.L) if (o.x > camX - 20 && o.x < camX + vw + 20 && o.y > camY - 20 && o.y < camY + vh + 100) { ctx.globalAlpha = Math.abs(o.x - pl.x) < 40 && Math.abs(o.y - pl.y) < 40 ? .3 : 1; drawPiece(ctx, 'roof', o.x - camX, o.y - camY); ctx.globalAlpha = 1; }
   }
@@ -4087,7 +4230,8 @@ const Title = (() => {
     try { if (sessionStorage.getItem('iv_autoplay')) { sessionStorage.removeItem('iv_autoplay'); setTimeout(() => { if (T.active) play(); }, 600); } } catch (e) {}
  go('tmulti', () => toast('🌐 Multiplayer em breve!')); go('tset', () => el('tpanel').classList.add('on')); go('tclose', () => { el('tpanel').classList.remove('on'); document.body.classList.remove('inset'); });
     { const g = el('gear'); let gt = 0; const gh = e => { e.preventDefault(); e.stopPropagation(); if (performance.now() - gt < 350) return; gt = performance.now(); if (T.active) return; document.body.classList.add('inset'); el('tpanel').classList.add('on'); fsShow(); }; g.addEventListener('touchstart', gh, { passive: false }); g.addEventListener('click', gh); }
-    go('tq', () => { el('qual').click(); sync(); });
+    go('tfps', () => { window.FPS30 = !window.FPS30; try { localStorage.setItem('iv_fps30', window.FPS30 ? '1' : '0'); } catch (e) {} sync(); });   /* 60 <-> 30 FPS, na hora */
+    go('tq', () => { try { localStorage.setItem('iv_gl', window.GLMODE ? '0' : '1'); } catch (e) {} el('tq').textContent = '...'; setTimeout(() => location.reload(), 150); });   /* troca o motor de desenho e recarrega */
     go('twx', () => { const st = Weather.state; Weather.set(st === 'rain' ? 'clear' : 'rain'); if (st !== 'rain') Weather.thunder(); el('twx').textContent = st === 'rain' ? 'Chuva agora' : 'Parar chuva'; });
     go('tfps', () => { setFps(!(localStorage.getItem('iv_fps') === '0')); });
     // duas opções independentes: em pé e/ou agachado
@@ -4126,7 +4270,7 @@ const Title = (() => {
   }
   function fsShow() { const b = el('tfs'); if (b) b.textContent = document.fullscreenElement ? 'Ligada' : 'Desligada'; }
   document.addEventListener('fullscreenchange', fsShow);
-  function sync() { el('tq').textContent = el('qual').textContent; }
+  function sync() { el('tq').textContent = window.GLMODE ? 'WebGL (teste)' : 'Normal'; el('tfps').textContent = window.FPS30 ? '30 (estável)' : '60'; }
   let tt = 0; function toast(m) { const t = el('ttoast'); t.textContent = m; t.style.opacity = 1; clearTimeout(tt); tt = setTimeout(() => t.style.opacity = 0, 1800); }
   function play() {
     try { if (localStorage.getItem('iv_fs') === '1') goFull(true); } catch (e) {}   // tela cheia (+ trava na horizontal)
@@ -4159,7 +4303,7 @@ const Title = (() => {
 })();
 
 (async function () {
-  const canvas = document.getElementById('game'), ctx = canvas.getContext('2d', { alpha: false }), fpsEl = document.getElementById('fps');
+  const canvas = document.getElementById('game'), ctx = (window.GLMODE && (() => { try { const tg = GL2D.make(document.createElement('canvas')); if (!tg) return null; try { const lx = tg.gl.getExtension('WEBGL_lose_context'); if (lx) lx.loseContext(); } catch (e) {} return GL2D.make(canvas); } catch (e) { console.warn(e); return null; } })()) || canvas.getContext('2d', { alpha: false }), fpsEl = document.getElementById('fps');
   let vw = 384, vh = CONFIG.VIEW_H;
   function resize() {
     // escala inteira: cada pixel do jogo vira N pixels reais, sem tremer ao andar
@@ -4197,7 +4341,7 @@ const Title = (() => {
   function frame(now) { try { frame0(now); } catch (e) { reportErr(e, 'frame'); requestAnimationFrame(frame); } }
   function frame0(now) {
     if (cap < 0) { if (prevT) ivs.push(now - prevT); prevT = now; if (ivs.length >= 45) { ivs.sort((a, b) => a - b); const med = ivs[22]; hz = Math.round(1000 / med); cap = med < 10.5 ? 15 : 0; } }
-    else if (cap && now - last < cap) { requestAnimationFrame(frame); return; }
+    else if ((window.FPS30 ? Math.max(cap, 30) : cap) && now - last < (window.FPS30 ? Math.max(cap, 30) : cap)) { requestAnimationFrame(frame); return; }
     if (window.TRAVEL_LOCK) { last = now; requestAnimationFrame(frame); return; }   /* saiu do local (mapa de viagem / carregando): o mapa atual fica desligado, sem atualizar nem desenhar */
     const dtRaw = (now - last) / 1000; last = now; const dt = Math.min(dtRaw, .05); Assets.tick(now);
     const a0 = pn(); const TT = Title.active; if (TT) Title.update(dt);
@@ -4205,13 +4349,13 @@ const Title = (() => {
     { const tz = (!TT && World.onPlat(Player.p.x, Player.p.y)) ? 1.35 : 1; if (VZc !== tz) { VZc += (tz - VZc) * Math.min(1, dt * 2.5); if (Math.abs(tz - VZc) < .01) VZc = tz; if (Math.abs(VZc - (window.VZ || 1)) >= .02 || VZc === tz) { window.VZ = VZc; resize(); } } }   // vista: sobe no planalto → a tela abre
     const cx0 = TT ? Title.cam.x - (vw > vh ? vw * .24 : 0) : Player.p.x, cy0 = TT ? Title.cam.y + (vw > vh ? 0 : vh * .1) : Player.p.y;   // na tela inicial o bicho fica fora do menu
     const camX = Math.min(Math.max(Math.round(cx0) - (vw >> 1), 0), World.size.w - vw), camY = Math.min(Math.max(Math.round(cy0) - (vh >> 1), 0), World.size.h - vh);
-    ctx.setTransform(window.RS || 1, 0, 0, window.RS || 1, 0, 0); ctx.fillStyle = '#1d5a7a'; ctx.fillRect(0, 0, vw, vh);
+    if (ctx.begin) ctx.begin(); ctx.setTransform(window.RS || 1, 0, 0, window.RS || 1, 0, 0); ctx.fillStyle = '#1d5a7a'; ctx.fillRect(0, 0, vw, vh);
     const b0 = pn(); World.draw(ctx, camX, camY, vw, vh); const b1 = pn();
     Sea.draw(ctx, camX, camY, vw, vh); Entities.draw(ctx, camX, camY, vw, vh, Player); const b2 = pn();
-    Weather.draw(ctx, vw, vh, camX, camY); const b3 = pn();
-    tU += a1 - a0; tW += b1 - b0; tE += b2 - b1; tC += b3 - b2; if (dtRaw > .026) spikes++;
+    Weather.draw(ctx, vw, vh, camX, camY); if (ctx.end) ctx.end(); const b3 = pn();
+    tU += a1 - a0; tW += b1 - b0; tE += b2 - b1; tC += b3 - b2; if (dtRaw > (window.FPS30 ? .045 : .026)) spikes++;
     frames++; fpsT += dtRaw; worst = Math.max(worst, dtRaw * 1000);
-    if (fpsT >= .5) { const f1 = x => (x / frames).toFixed(1); fpsEl.textContent = `${Math.round(frames / fpsT)} FPS · pior ${Math.round(worst)}\nlag ${spikes}${hz ? ' · ' + hz + 'Hz' + (cap ? '→60' : '') : ''}\nJS ${f1(tU)}+${f1(tW)}+${f1(tE)}+${f1(tC)} ms`; const fp = frames / fpsT; if (!TT && fp < 40 && !window.TRAVEL_LOCK && performance.now() > 15000) { goodT = 0; if (++lowFps >= 2) { lowFps = 0; if (performance.now() - restAt < 45000) noRest = true; const cur = window.PIXCAP || (vw * vh); if (!window.LOWFX) { window.LOWFX = 1; Save.flash('🌊 Menos efeitos para ganhar FPS'); } else if (fp < 28 && (window.MATOTHIN | 0) < 2) { window.MATOTHIN = (window.MATOTHIN | 0) + 1; Save.flash('🌿 Menos mato na tela para ganhar FPS'); } else if ((window.RS || 1) > .67) { window.RS = (window.RS || 1) > .8 ? .8 : .67; resize(); Save.flash('⚙️ Resolução reduzida para ganhar FPS (mesmo zoom)'); } else if (false && cur > 110000) { window.PIXCAP = Math.max(110000, Math.round(Math.min(cur, vw * vh) * .75)); resize(); Save.flash('⚙️ Qualidade reduzida para ganhar FPS'); } } } else { lowFps = 0; if (!TT && !noRest && fp >= 56 && (window.LOWFX || window.PIXCAP || window.MATOTHIN || (window.RS || 1) < 1)) { goodT += fpsT; if (goodT >= 20) { goodT = 0; restAt = performance.now(); if ((window.RS || 1) < 1) { window.RS = window.RS < .8 ? .8 : 1; resize(); if (window.RS === 1) Save.flash('✨ Qualidade de volta'); } else if (window.PIXCAP) { window.PIXCAP = 0; resize(); } else if (window.MATOTHIN) window.MATOTHIN--; else window.LOWFX = 0; } } else goodT = 0; }   /* FPS bom por 20 s: desfaz um passo; se cair de novo logo depois, para de alternar */
+    if (fpsT >= .5) { const f1 = x => (x / frames).toFixed(1); fpsEl.textContent = `${ctx.isGL ? 'GL · ' : ''}${Math.round(frames / fpsT)} FPS · pior ${Math.round(worst)}\nlag ${spikes}${hz ? ' · ' + hz + 'Hz' + (cap ? '→60' : '') : ''}\nJS ${f1(tU)}+${f1(tW)}+${f1(tE)}+${f1(tC)} ms${ctx.isGL ? '\n' + ctx.gpu + ' · lotes ' + (window.__glc | 0) + ' · envios ' + ctx.up + (ctx.up ? ' (' + Math.round(ctx.upPx / 1000) + 'k px)' : '') : ''}`; if (ctx.isGL) { ctx.up = 0; ctx.upPx = 0; } const fp = frames / fpsT; if (!TT && fp < (window.FPS30 ? 25 : 40) && !window.TRAVEL_LOCK && performance.now() > 15000) { goodT = 0; if (++lowFps >= 2) { lowFps = 0; if (performance.now() - restAt < 45000) noRest = true; const cur = window.PIXCAP || (vw * vh); if (!window.LOWFX) { window.LOWFX = 1; Save.flash('🌊 Menos efeitos para ganhar FPS'); } else if (fp < 28 && (window.MATOTHIN | 0) < 2) { window.MATOTHIN = (window.MATOTHIN | 0) + 1; Save.flash('🌿 Menos mato na tela para ganhar FPS'); } else if ((window.RS || 1) > .67) { window.RS = (window.RS || 1) > .8 ? .8 : .67; resize(); Save.flash('⚙️ Resolução reduzida para ganhar FPS (mesmo zoom)'); } else if (false && cur > 110000) { window.PIXCAP = Math.max(110000, Math.round(Math.min(cur, vw * vh) * .75)); resize(); Save.flash('⚙️ Qualidade reduzida para ganhar FPS'); } } } else { lowFps = 0; if (!TT && !noRest && fp >= (window.FPS30 ? 29 : 56) && (window.LOWFX || window.PIXCAP || window.MATOTHIN || (window.RS || 1) < 1)) { goodT += fpsT; if (goodT >= 20) { goodT = 0; restAt = performance.now(); if ((window.RS || 1) < 1) { window.RS = window.RS < .8 ? .8 : 1; resize(); if (window.RS === 1) Save.flash('✨ Qualidade de volta'); } else if (window.PIXCAP) { window.PIXCAP = 0; resize(); } else if (window.MATOTHIN) window.MATOTHIN--; else window.LOWFX = 0; } } else goodT = 0; }   /* FPS bom por 20 s: desfaz um passo; se cair de novo logo depois, para de alternar */
       tU = tW = tE = tC = 0; spikes = 0; frames = 0; fpsT = 0; worst = 0; }
     requestAnimationFrame(frame);
   }
