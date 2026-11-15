@@ -51,7 +51,8 @@ body.building #dropbtn{display:none!important}
 #bag .bd{margin-top:8px;background:#0004;border-radius:10px;padding:8px 10px;min-height:44px}#bag .bd small{opacity:.8}
 #bag .ba{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}#bag button{font:bold 13px system-ui;padding:8px 12px;border-radius:8px;border:0;background:#e8b04a;color:#3a2410}#bag button.g{background:#6b4a24;color:#fff}
 @media (max-height:560px){#bag{width:min(660px,94vw)}#bag .bg{grid-template-columns:repeat(10,1fr)}}
-#chest{width:min(380px,92vw)}#chest .bh,#bag .bh{display:flex}#chest .bh{align-items:center;margin-bottom:6px;font-size:16px}#cxx{margin-left:auto;font-size:20px;cursor:pointer;padding:0 6px}
+#chest{width:min(760px,96vw)}#chest .c2{display:flex;gap:10px}#chest .cp{flex:1;min-width:0;background:#0003;border:2px solid transparent;border-radius:10px;padding:6px}#chest .cp.hov{border-color:#9dff9d;background:#2f7a3a33}#chest .ct{display:flex;align-items:center;gap:6px;font-weight:bold;font-size:13px}#chest .ct span{opacity:.75;font-weight:normal}#chest .ct button{margin-left:auto;font:bold 11px system-ui;padding:5px 8px;border-radius:7px;border:0;background:#e8b04a;color:#3a2410}#chest .cg{max-height:min(46vh,300px);overflow-y:auto;gap:4px!important;margin:6px 0 2px!important}#chest .ci{width:46px!important;height:46px!important;touch-action:none;cursor:grab}#chest .ci.emp{opacity:.35}.ci.drag{position:fixed;z-index:99;width:54px;height:54px;pointer-events:none;background:#1d120add;border:2px solid #ffd24a;border-radius:8px;display:flex;align-items:center;justify-content:center}.ci.drag canvas{width:80%;height:80%;image-rendering:pixelated}.ci.drag em{position:absolute;right:4px;bottom:1px;font:bold 12px system-ui;color:#fff}
+@media (orientation:portrait){#chest .c2{flex-direction:column}#chest .cg{max-height:26vh}}#chest .bh,#bag .bh{display:flex}#chest .bh{align-items:center;margin-bottom:6px;font-size:16px}#cxx{margin-left:auto;font-size:20px;cursor:pointer;padding:0 6px}
 #chest .cg{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 10px;min-height:46px}#chest .ci{position:relative;width:54px;height:54px;background:#1d120a;border:2px solid #6b4a24;border-radius:8px;display:flex;align-items:center;justify-content:center}
 #chest .ci canvas{width:80%;height:80%;image-rendering:pixelated}#chest .ci em{position:absolute;right:4px;bottom:1px;font:bold 12px system-ui;font-style:normal;text-shadow:0 1px 2px #000}#chest small{opacity:.8}#chest .ce{align-self:center}
 #craft{max-height:88vh;overflow:auto}
@@ -65,7 +66,7 @@ body.building #hud,body.building #tools,body.building #wx,body.building #clk,bod
 #firemenu button{background:#6b4a24;color:#fff;border:2px solid #c58a3c;border-radius:8px;padding:7px 8px;font:inherit;font-weight:bold;touch-action:manipulation}#firemenu button:disabled{opacity:.4}#firemenu button.red{background:#7a2a22;border-color:#e0746a}#firemenu small{opacity:.8;display:block;font-weight:normal}
 #build{display:none;flex-wrap:wrap;justify-content:center;position:fixed;left:50%;bottom:8px;transform:translateX(-50%);gap:6px;background:#3b2614ee;border:3px solid #c58a3c;border-radius:14px;padding:6px 8px;color:#fff;font:12px system-ui,sans-serif;touch-action:manipulation;max-width:94vw;box-sizing:border-box}
 #build .bp,#build .bt{position:relative;width:52px;height:54px;background:#1d120a;border:2px solid #6b4a24;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:20px;line-height:1}
-#build .bp.on,#build .bt.on{border-color:#ffd24a;background:#4a3010}#build .bt.ok{background:#2f7a3a;border-color:#9dff9d}
+#build .bp.on,#build .bt.on{border-color:#ffd24a;background:#4a3010}#build .bf{width:100%;display:flex;gap:5px;justify-content:center;align-items:center;font-size:12px}#build .bf span{padding:5px 9px;border-radius:8px;background:#1d120a;border:2px solid #6b4a24;cursor:pointer}#build .bf span.on{border-color:#ff6a5a;background:#5a1a12}#build .bt.ok{background:#2f7a3a;border-color:#9dff9d}
 #build canvas{width:30px;height:30px;image-rendering:pixelated}#build small{font-size:10px;opacity:.85;margin-top:1px}#build em{position:absolute;right:3px;top:0;font:bold 11px system-ui;font-style:normal;text-shadow:0 1px 2px #000}
 
 #title{position:fixed;inset:0;z-index:50;display:none;flex-direction:column;align-items:center;justify-content:space-between;padding:6vh 16px 5vh;box-sizing:border-box;color:#fff;font-family:system-ui,sans-serif;background:radial-gradient(ellipse at center,#0000 40%,#000a 100%),linear-gradient(#0008,#0000 30%,#0000 60%,#0009)}
@@ -134,6 +135,7 @@ body.title #sta,body.crafting #sta,body.building #sta{display:none!important}
 #reset{display:none!important}   /* botão ⟲ removido (apagar progresso fica em Configurações) */
 #gear{position:fixed;right:10px;top:6px;width:36px;height:36px;border-radius:50%;background:#0007;border:2px solid #ffffff55;color:#fff;font-size:20px;display:flex;align-items:center;justify-content:center;z-index:30;touch-action:none}
 body.title #gear{display:none!important}
+body.crafting #gear,body.building #gear,body:has(#bag[style*="flex"]) #gear,body:has(#chest[style*="block"]) #gear,body:has(#firemenu[style*="block"]) #gear,body:has(#raftpanel[style*="block"]) #gear{display:none!important}   /* com mochila, criar, baú, fogueira, jangada ou construir aberto: some a engrenagem */
 body.inset #title{display:flex;background:#0008;z-index:60}body.inset #tlogo,body.inset #tmenu,body.inset #tver{display:none}
 #hud{right:52px}
 @media (orientation:landscape) and (max-height:520px){#hud{right:calc(max(10px,env(safe-area-inset-right)) + 44px)!important}#clk,#wx{right:calc(max(10px,env(safe-area-inset-right)) + 184px)!important}#gear{right:max(10px,env(safe-area-inset-right))}}
@@ -197,7 +199,12 @@ body.crafting #raftbtn,body.building #raftbtn,body.title #raftbtn{display:none!i
 #craftbtn{position:fixed;left:10px;bottom:300px;width:48px;height:48px;border-radius:50%;background:#5a3a1acc;border:3px solid #e8b04a;font-size:22px;display:flex;align-items:center;justify-content:center;touch-action:none;zoom:var(--cs)}
 body.crafting #craftbtn,body.building #craftbtn,body.title #craftbtn,body.crafting #rot{display:none!important}
 #craft .cnote{font-size:12px;opacity:.8;margin:2px 0 6px}
-#craft{width:min(420px,92vw)}
+#craft{width:min(420px,92vw);max-height:min(82vh,560px);display:none;flex-direction:column;overflow:hidden;padding:10px}
+#craft .clist{overflow-y:auto;flex:1;min-height:0;margin-top:4px;padding-right:2px;overscroll-behavior:contain}
+#craft .rec{gap:8px;margin-top:6px;padding:6px 8px}#craft .rec canvas{width:34px;height:34px}#craft .rec .rd{display:none;font-size:11px;opacity:.85}#craft .rec.open .rd{display:block}#craft .rec b{font-size:14px}#craft .rec .tt{cursor:pointer}#craft .rec .tt small{font-size:11px}
+#craft .rec .rb{width:auto;flex-direction:row;flex-wrap:wrap;justify-content:flex-end;max-width:112px}#craft .rec .rb button{padding:6px 8px;font-size:12px;min-width:34px}
+#tools .sl.us{box-shadow:inset 0 0 0 2px #7fd06a88;cursor:pointer}#tools .sl.us:active{transform:scale(.92)}
+#craft .cnote{font-size:11px;margin:0 0 2px;flex:none}#craft .ctabs,#craft .cq{flex:none}#craft .ctabs{margin:6px 0 0;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}#craft .ctabs::-webkit-scrollbar{display:none}#craft .ctabs span{padding:4px 7px;font-size:11px}#craft .cq{margin-top:6px;padding:4px 8px;max-height:96px;overflow-y:auto}
 #craft .ctabs{display:flex;flex-wrap:wrap;gap:4px;margin:8px 0 2px}#craft .ctabs span{font:bold 12px system-ui;padding:5px 8px;border-radius:8px;background:#0005;cursor:pointer;white-space:nowrap}#craft .ctabs span.on{background:#e8b04a;color:#3a2410}
 #craft .rec.need{opacity:.78}#craft .rec.lock{opacity:.45}#craft .rec.done{opacity:.4}
 #craft .rec small.st{color:#ffcf6a}#craft .cc{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}#craft .cc span{display:inline-flex;align-items:center;gap:2px;font:bold 12px system-ui;background:#0005;border-radius:6px;padding:1px 5px 1px 1px}#craft .cc span.ok{color:#8ef08a}#craft .cc span.no{color:#ff8a7a}#craft .cc canvas{width:18px;height:18px;image-rendering:pixelated}
@@ -206,6 +213,58 @@ body.crafting #craftbtn,body.building #craftbtn,body.title #craftbtn,body.crafti
 #cqchip{display:none;position:fixed;left:50%;top:86px;transform:translateX(-50%);background:#2b1d10dd;border:2px solid #e8b04a;border-radius:10px;color:#fff;font:bold 12px system-ui;padding:3px 8px;align-items:center;gap:6px;z-index:5;pointer-events:none}#cqchip s{display:inline-block;width:46px;height:6px;background:#0007;border-radius:3px;overflow:hidden}#cqchip u{display:block;height:100%;background:#f0c040;width:0}
 body.crafting #cqchip,body.title #cqchip{display:none!important}
 @media (orientation:landscape) and (max-height:520px){#craftbtn{left:max(10px,env(safe-area-inset-left))!important;bottom:70px!important}}
+/* ===== botões menores e sem borda laranja; mochila e criar grudados à esquerda da barra de itens; agachar acima do ataque ===== */
+body{--sl:clamp(26px,calc((100vw - 280px)/12),40px)}
+#craftbtn,#bagbtn,#sneak,#buildbtn,#fire,#band,#raftbtn{width:42px!important;height:42px!important;border:0!important;background:#000a!important;box-shadow:0 2px 6px #0006!important;font-size:20px!important;zoom:1!important}
+#sneak.on{background:#2f7a3ae6!important;box-shadow:0 0 10px #9dff9d!important}#buildbtn.on{background:#2f7a3ae6!important}#band{background:#c93b2ee6!important}#fire{background:#d96a1fe6!important}#raftbtn{background:#1f5a78e6!important}
+#atk{width:72px!important;height:72px!important;border:0!important;font-size:28px!important;box-shadow:0 3px 10px #0007}
+#use{height:40px!important;min-width:64px!important;border:0!important;font-size:13px!important;box-shadow:0 2px 8px #0007}
+#dropbtn{border:0!important;height:40px!important;background:#000a!important}
+#bagbtn,#craftbtn{left:auto!important;top:auto!important;bottom:calc(max(8px,env(safe-area-inset-bottom)) + 7px)!important}
+#bagbtn{right:calc(50% + (12 * var(--sl) + 53px) / 2 + 6px)!important}
+#craftbtn{right:calc(50% + (12 * var(--sl) + 53px) / 2 + 54px)!important}
+#sneak{left:auto!important;top:auto!important;right:calc(max(22px,env(safe-area-inset-right)) + 15px)!important;bottom:calc(max(54px,env(safe-area-inset-bottom) + 36px) + 84px)!important}
+@media (orientation:portrait){#bagbtn,#craftbtn{right:auto!important;bottom:calc(max(8px,env(safe-area-inset-bottom)) + 66px)!important}#bagbtn{left:10px!important}#craftbtn{left:58px!important}}
+/* ===== HUD NOVO (transparente, estilo da referência) ===== */
+#hud,#tools{display:none!important}
+#pcard{position:fixed;left:max(8px,env(safe-area-inset-left));top:6px;display:flex;align-items:center;gap:0;z-index:20;pointer-events:none;color:#fff;font:bold 15px system-ui,sans-serif;text-shadow:0 1px 3px #000c}
+#pface{width:58px;height:58px;border-radius:50%;background:radial-gradient(#3a4250,#141820);box-shadow:0 0 0 3px #5a3a8acc,0 2px 8px #0008;image-rendering:pixelated;position:relative;z-index:2}
+#pcard .pr{margin-left:-6px;display:flex;flex-direction:column;gap:3px}#pcard .pn{display:flex;align-items:baseline;gap:10px;padding-left:12px;width:min(240px,46vw)}#pcard .pn span:first-child{flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}#pcard .ph{font-size:15px;font-weight:600}#pcard .ph b{font-size:18px}
+#pcard .pb{position:relative;width:min(244px,48vw);height:12px;background:#0007;clip-path:polygon(0 0,calc(100% - 9px) 0,100% 50%,calc(100% - 9px) 100%,0 100%);box-shadow:inset 0 0 0 2px #000a}#pcard .pb u{position:absolute;left:2px;top:2px;bottom:2px;width:100%;background:linear-gradient(#7fd84a,#4ea024);clip-path:polygon(0 0,calc(100% - 7px) 0,100% 50%,calc(100% - 7px) 100%,0 100%);transition:width .25s}
+#pcard .pt{display:flex;gap:4px;padding-left:12px;align-items:flex-start}#pcard .tl{position:relative;width:34px;height:34px;background:#3c4a3c88;border-radius:5px}#pcard .tl i{position:absolute;inset:3px}#pcard .tl i canvas{width:100%;height:100%;image-rendering:pixelated;filter:drop-shadow(0 1px 1px #000a)}#pcard .tl b{position:absolute;right:-3px;bottom:-8px;font-size:15px}#pcard .tl.lo b{color:#ff8a6a}#pst{font-size:16px;padding:6px 0 0 6px}
+#qbar{position:fixed;left:50%;transform:translateX(-50%);bottom:max(6px,env(safe-area-inset-bottom));display:flex;gap:6px;padding:5px;border-radius:10px;background:#0002;z-index:6}
+#qbar .q{position:relative;width:58px;height:58px;border-radius:7px;background:#00000038;display:flex;align-items:center;justify-content:center;touch-action:none}#qbar .q canvas{width:78%;height:78%;image-rendering:pixelated;filter:drop-shadow(0 1px 2px #000a)}#qbar .q b{position:absolute;right:4px;bottom:1px;color:#fff;font:bold 15px system-ui;text-shadow:0 1px 2px #000}#qbar .q.eq{background:#2f6f8a66;box-shadow:inset 0 0 0 2px #7fd0ff99}#qbar .q:active{transform:scale(.93)}
+#bagbtn{background:transparent!important;box-shadow:none!important;font-size:30px!important;width:50px!important;height:50px!important;left:auto!important;top:auto!important;right:calc(50% + 172px)!important;bottom:calc(max(6px,env(safe-area-inset-bottom)) + 10px)!important;filter:grayscale(1) brightness(1.8) drop-shadow(0 1px 2px #000)}
+#stick{display:block!important;width:150px!important;height:150px!important;border:0!important;background:none!important;transform:none!important;opacity:.55;transition:opacity .15s;z-index:4}#stick.act{opacity:.85;transition:none}
+#stick::before{content:'';position:absolute;inset:14px;border-radius:50%;background:radial-gradient(#3a4a48cc 55%,#2a3634cc 56%,#1e2826cc);box-shadow:0 0 0 3px #2a3634aa}
+#stick::after{content:'';position:absolute;inset:0;background:conic-gradient(from 45deg,transparent 0 0);background-image:linear-gradient(45deg,transparent 46%,#3e4f4ccc 46% 54%,transparent 54%),linear-gradient(-45deg,transparent 46%,#3e4f4ccc 46% 54%,transparent 54%);-webkit-mask:radial-gradient(circle,transparent 58px,#000 59px,#000 74px,transparent 75px);mask:radial-gradient(circle,transparent 58px,#000 59px,#000 74px,transparent 75px)}
+#knob{left:43px!important;top:43px!important;width:64px!important;height:64px!important;background:radial-gradient(#3a4644 58%,#8aa09a 60%,#8aa09a 66%,#3a4644 68%)!important;box-shadow:0 2px 6px #0008;z-index:2}
+body{--cb:0px}@media (orientation:portrait){body{--cb:74px}}
+#atk{width:84px!important;height:84px!important;right:calc(max(24px,env(safe-area-inset-right)) + 6px)!important;bottom:calc(var(--cb) + 30px)!important;background:#1c242aa8!important;box-shadow:0 0 0 3px #0005!important;zoom:1!important;font-size:34px!important}#atk canvas{width:62%;height:62%;image-rendering:pixelated;filter:drop-shadow(0 2px 2px #000a)}#atk.on{background:#6a1e16c0!important;box-shadow:0 0 0 3px #ff5a3d88,0 0 16px 4px #ff5a3d77!important}
+.qs{position:fixed;width:60px;height:60px;border-radius:50%;background:#1c242a99;box-shadow:0 0 0 2px #0004;display:flex;align-items:center;justify-content:center;z-index:7;touch-action:none}.qs canvas{width:66%;height:66%;image-rendering:pixelated;filter:drop-shadow(0 1px 2px #000a)}.qs b{position:absolute;right:2px;bottom:-2px;color:#fff;font:bold 15px system-ui;text-shadow:0 1px 2px #000}.qs.emp::after{content:'+';color:#fff5;font:bold 24px system-ui}.qs.hov{box-shadow:0 0 0 3px #9dff9d}.qs.zero canvas{opacity:.35}.qs:active{transform:scale(.93)}
+.qs[data-i="0"]{right:calc(max(24px,env(safe-area-inset-right)) + 104px);bottom:calc(var(--cb) + 22px)}.qs[data-i="1"]{right:calc(max(24px,env(safe-area-inset-right)) + 90px);bottom:calc(var(--cb) + 98px)}.qs[data-i="2"]{right:calc(max(24px,env(safe-area-inset-right)) + 16px);bottom:calc(var(--cb) + 124px)}
+#sneak{width:38px!important;height:38px!important;right:max(4px,env(safe-area-inset-right))!important;left:auto!important;top:auto!important;bottom:calc(var(--cb) + 4px)!important;font-size:20px!important;background:#1c242acc!important}
+#use{right:calc(max(24px,env(safe-area-inset-right)) + 10px)!important;bottom:calc(var(--cb) + 196px)!important;background:#1c242acc!important;color:#fff!important;zoom:1!important}
+#band{right:calc(max(24px,env(safe-area-inset-right)) + 178px)!important;bottom:calc(var(--cb) + 120px)!important}#fire{right:calc(max(24px,env(safe-area-inset-right)) + 178px)!important;bottom:calc(var(--cb) + 66px)!important}#dropbtn{right:calc(max(24px,env(safe-area-inset-right)) + 178px)!important;bottom:calc(var(--cb) + 174px)!important}
+#swapb{position:fixed;display:none;right:max(4px,env(safe-area-inset-right));bottom:calc(var(--cb) + 118px);width:40px;height:40px;border-radius:50%;background:#1c242acc;box-shadow:0 0 0 2px #0004;align-items:center;justify-content:center;z-index:8;touch-action:none}#swapb canvas{width:62%;height:62%;image-rendering:pixelated}#swapb::after{content:'⇄';position:absolute;left:-6px;top:-6px;font:bold 13px system-ui;color:#fff;background:#2f6f8a;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center}#swapb:active{transform:scale(.9)}
+body.title #swapb,body.crafting #swapb,body.building #swapb,body:has(#bag[style*="flex"]) #swapb{display:none!important}
+#craftbtn,#buildbtn,#autob{left:max(12px,env(safe-area-inset-left))!important;right:auto!important;top:auto!important;width:44px!important;height:44px!important;background:transparent!important;box-shadow:none!important;font-size:26px!important;filter:drop-shadow(0 1px 2px #000c)}
+#craftbtn{bottom:calc(var(--cb) + 196px)!important}#buildbtn{bottom:calc(var(--cb) + 140px)!important}#autob{position:fixed;bottom:calc(var(--cb) + 76px);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;font:bold 24px/1 system-ui;z-index:8;opacity:.9}#autob small{font-size:13px}
+@media (orientation:portrait){#craftbtn{bottom:calc(var(--cb) + 236px)!important}#buildbtn{bottom:calc(var(--cb) + 182px)!important}#autob{bottom:calc(var(--cb) + 124px)}#qbar .q{width:52px;height:52px}#bagbtn{right:calc(50% + 152px)!important}}
+#fps{left:auto!important;right:max(8px,env(safe-area-inset-right))!important;top:64px!important;text-align:right}#rot{left:auto!important;right:max(8px,env(safe-area-inset-right))!important;top:120px!important;background:#0006!important;border:0!important}
+body.title #pcard,body.title #qbar,body.title .qs,body.title #autob,body.title #stick,body.title #swapb,body.title #sneak,body.crafting #pcard,body.crafting #qbar,body.crafting .qs,body.crafting #autob,body.crafting #stick,body.building #qbar,body.building .qs,body.building #autob,body.building #bagbtn{display:none!important}
+.hdrag{position:fixed;z-index:99;width:54px;height:54px;pointer-events:none;border-radius:50%;background:#1c242acc;display:flex;align-items:center;justify-content:center}.hdrag canvas{width:70%;height:70%;image-rendering:pixelated}
+#bag{width:min(880px,97vw)!important;max-height:94vh!important;overflow:hidden!important;display:none;flex-direction:column;z-index:45!important}
+body:has(#bag[style*="flex"]) :is(#pcard,#qbar,.qs,#autob,#stick,#clk,#wx,#use,#fps,#rot,#craftbtn,#buildbtn,#bagbtn,#atk,#sneak,#band,#fire,#dropbtn,#raftbtn,#cqchip,#bat){display:none!important}   /* inventário aberto: a tela fica limpa */
+#bag .bqs{display:flex;gap:8px;justify-content:center;align-items:center;font-size:11px;opacity:.95;padding:2px 0}#bag .bq{position:relative;width:44px;height:44px;border-radius:50%;background:#1c242acc;box-shadow:0 0 0 2px #4a6a7a88;display:flex;align-items:center;justify-content:center;touch-action:none}#bag .bq canvas{width:66%;height:66%;image-rendering:pixelated}#bag .bq.hov{box-shadow:0 0 0 3px #9dff9d}#bag .bq:empty::after{content:'+';opacity:.4;font:bold 18px system-ui}
+#bag .bw{display:flex;gap:10px;min-height:0;flex:1}#bag .bl{flex:1.05;min-width:0;display:flex;flex-direction:column;border-radius:10px;border:2px solid transparent}#bag .bl.hov{border-color:#9dff9d}
+#bag .bg{grid-template-columns:repeat(5,1fr)!important;overflow-y:auto;max-height:min(58vh,330px);padding:2px}#bag .bd{flex:none}
+#bag .br{flex:1;min-width:0;display:flex;flex-direction:column;background:radial-gradient(ellipse at 50% 60%,#3a5a6a55,#0000 70%);border-radius:10px;padding:4px}
+#bag .pv{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 10px;padding:0 6px}#bag .pv b{font-size:16px}#bag .pv span{font-size:12px;opacity:.9;margin-left:auto}#bag .pvb{width:100%;height:9px;background:#0007;border-radius:5px;overflow:hidden}#bag .pvb u{display:block;height:100%;background:linear-gradient(#7fd84a,#4ea024)}
+#bag .eqw{display:flex;align-items:center;justify-content:center;gap:4px;flex:1;min-height:0}#bag .pvc{width:min(160px,22vw);height:auto;aspect-ratio:4/5;image-rendering:pixelated}
+#bag .ec{display:flex;flex-direction:column;gap:5px}#bag .es{position:relative;width:54px;height:54px;border-radius:9px;background:#1d2a30bb;box-shadow:inset 0 0 0 2px #4a6a7a88;display:flex;align-items:center;justify-content:center;touch-action:none}#bag .es>span{font-size:24px;filter:grayscale(1);opacity:.4}#bag .es small{position:absolute;left:0;right:0;bottom:-1px;font-size:8px;text-align:center;opacity:.75}#bag .es canvas{width:78%;height:78%;image-rendering:pixelated}#bag .es.has{background:#2a4a3acc;box-shadow:inset 0 0 0 2px #7ad36aaa}#bag .es.on{box-shadow:inset 0 0 0 2px #ffd24a}#bag .es.hov{box-shadow:0 0 0 3px #9dff9d}#bag .es.bagi>span{filter:none;opacity:.9}
+@media (orientation:portrait){#bag .bw{flex-direction:column-reverse}#bag .bg{max-height:30vh}#bag .pvc{width:110px}#bag .es{width:46px;height:46px}}
+@media (max-height:440px){#bag .es{width:44px;height:44px}#bag .es small{display:none}#bag .ec{gap:3px}}
 </style></head><body>
 <div id="tload" style="display:flex;position:fixed;inset:0;z-index:100000;background:linear-gradient(#0b2a3a,#145a74);color:#fff;font-family:sans-serif;flex-direction:column;align-items:center;justify-content:center;gap:14px;transition:opacity .4s"><div id="tlic" style="font-size:44px">🌴</div><div id="tltx" style="font:bold 20px sans-serif;text-align:center;padding:0 16px">Carregando a ilha...</div><div style="width:min(70vw,320px);height:12px;border:2px solid #e8d29a;border-radius:8px;overflow:hidden;background:#0006"><div id="tlbar" style="height:100%;width:0;background:#e8d29a"></div></div><div id="tlpc" style="font:bold 13px sans-serif;opacity:.85">0%</div><div id="tltip" style="max-width:min(86vw,420px);text-align:center;font:14px sans-serif;opacity:.9;padding:0 16px;margin-top:6px"></div></div>
 <script>/* tela de carregamento: aparece já no começo de todo carregamento (abrir o jogo ou chegar de viagem); a barra anda conforme as imagens chegam */
@@ -225,7 +284,7 @@ try { var h = location.hash, tv = /viagem=|skip/.test(h) || sessionStorage.getIt
 <div id="tcbox"><input id="tce" type="email" placeholder="e-mail" autocomplete="username"><input id="tcp" type="password" placeholder="senha (mín. 6)" autocomplete="current-password"><div class="r2"><button id="tcin">Entrar</button><button id="tcup">Criar conta</button></div><div id="tcst"></div>
 <details><summary>Servidor (avançado)</summary><input id="tcu" placeholder="URL do projeto Supabase"><input id="tck" placeholder="chave anon public"><button id="tcs" class="g">Salvar servidor</button></details></div>
 <button id="twipe" class="red">Apagar progresso</button><button id="tclose" class="g">Voltar</button></div></div>
-<canvas id="dark"></canvas><div id="fps">…</div><div id="qual">HD</div><div id="hud"></div><div id="tools"></div><div id="craft"></div><div id="cqchip"></div><div id="wx"></div><div id="clk"><span id="dayp">Dia 1</span><canvas id="dial" width="64" height="64"></canvas><span id="dialt"></span></div><div id="fire">🔥</div><div id="firemenu"></div><div id="dropbtn">⬇ Soltar</div><div id="sneak">🥷</div><div id="raftbtn">⚓</div><div id="craftbtn">🛠</div><div id="death"><div class="dbox"><div class="dt">💀 Você morreu</div><div class="dc" id="dcause"></div><div class="dchips" id="dchips"></div><div class="dtip"><b>💡 Dica</b><span id="dtip"></span><button id="dnext">Outra dica ›</button></div><div class="dh">Conheça os perigos da ilha</div><div class="dcards" id="dcards"></div><button id="dres">Renascer na praia</button></div></div><div id="band">🩸<b>0</b></div><div id="toast"></div><div id="bagbtn">🎒</div><div id="buildbtn">🔨</div><div id="build"></div><div id="bag"></div><div id="chest"></div><div id="gear">⚙</div><div id="reset">⟲</div><div id="bat">⚔ BATALHA</div><div id="use"></div><div id="atk">⚔</div><div id="stick"><div id="knob"></div></div>
+<canvas id="dark"></canvas><div id="fps">…</div><div id="qual">HD</div><div id="hud"></div><div id="tools"></div><div id="craft"></div><div id="pcard"><canvas id="pface" width="64" height="64"></canvas><div class="pr"><div class="pn"><span id="pname">Sobrevivente</span><span class="ph">♥ <b id="php">100</b></span></div><div class="pb"><u id="pbar"></u></div><div class="pt"><span class="tl"><i id="ifood"></i><b id="pfood">100</b></span><span class="tl"><i id="iwat"></i><b id="pwat">100</b></span><span id="pst"></span></div></div></div><div id="qbar"></div><div class="qs" data-i="0"></div><div class="qs" data-i="1"></div><div class="qs" data-i="2"></div><div id="autob">⟳<small>Auto</small></div><div id="swapb" title="Trocar arma"></div><div id="cqchip"></div><div id="wx"></div><div id="clk"><span id="dayp">Dia 1</span><canvas id="dial" width="64" height="64"></canvas><span id="dialt"></span></div><div id="fire">🔥</div><div id="firemenu"></div><div id="dropbtn">⬇ Soltar</div><div id="sneak">🧍</div><div id="raftbtn">⚓</div><div id="craftbtn">🛠</div><div id="death"><div class="dbox"><div class="dt">💀 Você morreu</div><div class="dc" id="dcause"></div><div class="dchips" id="dchips"></div><div class="dtip"><b>💡 Dica</b><span id="dtip"></span><button id="dnext">Outra dica ›</button></div><div class="dh">Conheça os perigos da ilha</div><div class="dcards" id="dcards"></div><button id="dres">Renascer na praia</button></div></div><div id="band">🩸<b>0</b></div><div id="toast"></div><div id="bagbtn">🎒</div><div id="buildbtn">🔨</div><div id="build"></div><div id="bag"></div><div id="chest"></div><div id="gear">⚙</div><div id="reset">⟲</div><div id="bat">⚔ BATALHA</div><div id="use"></div><div id="atk">⚔</div><div id="stick"><div id="knob"></div></div>
 <script>
 // Ajustes gerais. Tudo em pixels do mundo (tile = 64px, igual ao tileset do PixelLab).
 const CONFIG = {
@@ -422,6 +481,7 @@ const Assets = {
     this.pg = this.meta.pages.map((p, i) => ({ i, file: p.file, size: p.size, img: null, g: null, tint: {} }));
     for (const n in this.meta.groups) { const G = this.meta.groups[n], g = this.grp[n] = { name: n, eager: G.eager, pages: G.pages.map(i => this.pg[i]), st: 0, use: 0, p: null }; for (const p of g.pages) p.g = g; }
     for (const n in this.meta.sprites) this.sg[n] = this.grp[this.meta.sprites[n].group];
+    try { const c = JSON.parse(localStorage.getItem('iv_char') || 'null'); if (c && (c.sexo === 'f' || c.sexo === 'm')) { const o = this.grp[c.sexo === 'f' ? 'hm' : 'hf']; if (o) o.eager = false; } } catch (e) {}   /* o outro personagem (~2 MB) só carrega se precisar: abre mais rápido e usa menos memória */
     this.now = performance.now();
     window.__ld = { n: 0, t: Object.values(this.grp).filter(g => g.eager).reduce((s, g) => s + g.pages.length, 0) + CONFIG.TILESETS.length + 9 };   /* total de imagens do começo: páginas que carregam já + tilesets */
     await Promise.all(Object.values(this.grp).filter(g => g.eager).map(g => this.need(g)));
@@ -802,8 +862,10 @@ const World = (() => {
     if (!gnoise) gnoise = noise(CONFIG.SEED + 555);
     const n = gnoise(tx / 13, ty / 13) * .7 + gnoise(tx / 5.5 + 40, ty / 5.5) * .3; return Math.max(-2, Math.min(2, Math.round((n - .5) * 7))); }
   let chunkMade = false;
+  let deepC = null; function deepCell() { if (deepC && deepC.l === lvl) return deepC.c; let c = [0, 0]; outer: for (let r = 0; r < Math.max(W, H); r++) for (const [x, y] of [[r, 1], [1, r], [W - 2, r], [r, H - 2]]) { if (x < 0 || y < 0 || x >= W - 1 || y >= H - 1) continue; if (L(x, y) === 0 && L(x + 1, y) === 0 && L(x, y + 1) === 0 && L(x + 1, y + 1) === 0) { c = [x, y]; break outer; } } deepC = { l: lvl, c }; return c; }
   function chunkRows(g, cx, cy, j0, j1) {
-    for (let j = j0; j < j1; j++) for (let i = 0; i < CH; i++) { const tx = cx * CH + i, ty = cy * CH + j; if (tx >= W || ty >= H) continue;
+    for (let j = j0; j < j1; j++) for (let i = 0; i < CH; i++) { let tx = cx * CH + i, ty = cy * CH + j;
+      if (tx < 0 || ty < 0 || tx >= W || ty >= H) { const d = deepCell(); tx = d[0]; ty = d[1]; }   /* fora do mapa: mar fundo, para a câmera poder seguir o personagem até a beirada */
       const [im, col, row, vr, fp] = pickTile(tx, ty);
         if (vr) {   // topo da montanha: espelha/gira por quadro e varia o tom para não parecer azulejo repetido
           const h = (Math.imul(tx, 73856093) ^ Math.imul(ty, 19349663)) >>> 0, rot = h % 4, fl = (h >> 3) & 1; g.drawImage(im, col * 64, row * 64, 64, 64, i * T, j * T, T, T);
@@ -999,10 +1061,10 @@ const World = (() => {
     scatter(); naturalBridges(); ensureRope(); actVer++;
   }
   function draw(ctx, camX, camY, vw, vh) {
-    const cs = CH * T, x0 = Math.max(0, Math.floor(camX / cs)), x1 = Math.min(Math.ceil(W / CH) - 1, Math.floor((camX + vw) / cs)), y0 = Math.max(0, Math.floor(camY / cs)), y1 = Math.min(Math.ceil(H / CH) - 1, Math.floor((camY + vh) / cs));
+    const cs = CH * T, NX = Math.ceil(W / CH), NY = Math.ceil(H / CH), x0 = Math.max(-3, Math.floor(camX / cs)), x1 = Math.min(NX + 2, Math.floor((camX + vw) / cs)), y0 = Math.max(-3, Math.floor(camY / cs)), y1 = Math.min(NY + 2, Math.floor((camY + vh) / cs));
     chunkMade = false; for (let cy = y0; cy <= y1; cy++) for (let cx = x0; cx <= x1; cx++) ctx.drawImage(chunkCanvas(cx, cy), Math.round(cx * cs - camX), Math.round(cy * cs - camY));
     if (!chunkMade) {   /* adianta 1 pedaço do chão que vai entrar na tela (até 256 px fora dela) por quadro: andando, o chão já está pronto e não engasga */
-      const M = 256, ax0 = Math.max(0, Math.floor((camX - M) / cs)), ax1 = Math.min(Math.ceil(W / CH) - 1, Math.floor((camX + vw + M) / cs)), ay0 = Math.max(0, Math.floor((camY - M) / cs)), ay1 = Math.min(Math.ceil(H / CH) - 1, Math.floor((camY + vh + M) / cs));
+      const M = 256, ax0 = Math.max(-3, Math.floor((camX - M) / cs)), ax1 = Math.min(NX + 2, Math.floor((camX + vw + M) / cs)), ay0 = Math.max(-3, Math.floor((camY - M) / cs)), ay1 = Math.min(NY + 2, Math.floor((camY + vh + M) / cs));
       if (pend) {   /* monta 2 linhas por quadro; no quadro seguinte só envia para a GPU: o custo fica espalhado e não dá queda */
         if (pend.j < CH) { chunkRows(pend.g, pend.cx, pend.cy, pend.j, pend.j + 2); pend.j += 2; }
         else { const q = pend; pend = null; if (!cache.has(q.id)) { chunkPut(q.id, q.c); if (ctx.tex) ctx.tex(q.c); } } }
@@ -1062,15 +1124,16 @@ const Input = (() => {
   addEventListener('keydown', e => keys.add(e.key.toLowerCase()));
   addEventListener('keyup', e => keys.delete(e.key.toLowerCase()));
   const base = document.getElementById('stick'), knob = document.getElementById('knob');
-  const R = 46;
+  const R = 50;
   function move(t) {
     let dx = t.clientX - stick.ox, dy = t.clientY - stick.oy; const d = Math.hypot(dx, dy) || 1, k = Math.min(1, d / (R * (window.CS || 1)));
     stick.x = dx / d * k; stick.y = dy / d * k;
     knob.style.transform = `translate(${stick.x * R}px,${stick.y * R}px)`;
   }
-  addEventListener('touchstart', e => { if (e.target.closest && e.target.closest('#title,#gear,#rot,#craft,#bag,#chest,#build,#buildbtn,#raftbtn,#craftbtn,#bagbtn,#atk,#use,#fire,#band,#sneak,#dropbtn,#firemenu,#tools,#hud')) return; for (const t of e.changedTouches) if (!stick.on && t.clientX < innerWidth * .5) { stick.on = true; stick.id = t.identifier; stick.ox = t.clientX; stick.oy = t.clientY; base.style.display = 'block'; base.style.left = t.clientX - 60 + 'px'; base.style.top = t.clientY - 60 + 'px'; move(t); } }, { passive: true });
+  addEventListener('touchstart', e => { if (e.target.closest && e.target.closest('#title,#gear,#rot,#craft,#bag,#chest,#build,#buildbtn,#raftbtn,#craftbtn,#bagbtn,#atk,#use,#fire,#band,#sneak,#dropbtn,#firemenu,#tools,#hud,#pcard,#qbar,.qs,#autob,#swapb')) return; for (const t of e.changedTouches) if (!stick.on && t.clientX < innerWidth * .45 && t.clientY > innerHeight * .35) { stick.on = true;   /* analógico: toque na parte de baixo à esquerda; ele vai até onde você tocou (sem passar da metade nem subir demais) */ stick.id = t.identifier; stick.ox = t.clientX; stick.oy = t.clientY; base.classList.add('act'); base.style.left = t.clientX - SB / 2 + 'px'; base.style.top = t.clientY - SB / 2 + 'px'; move(t); } }, { passive: true });
   addEventListener('touchmove', e => { for (const t of e.changedTouches) if (t.identifier === stick.id) move(t); }, { passive: true });
-  const end = e => { for (const t of e.changedTouches) if (t.identifier === stick.id) { stick.on = false; stick.x = stick.y = 0; base.style.display = 'none'; knob.style.transform = ''; } };
+  const end = e => { for (const t of e.changedTouches) if (t.identifier === stick.id) { stick.on = false; stick.x = stick.y = 0; base.classList.remove('act'); knob.style.transform = ''; rest(); } };
+  const SB = 150; function rest() { const L = innerWidth > innerHeight; base.style.left = (L ? 150 : 128) - SB / 2 + 'px'; base.style.top = innerHeight - (L ? 112 : 196) - SB / 2 + 'px'; } rest(); addEventListener('resize', () => { if (!stick.on) rest(); });   /* posição de descanso: sempre à mostra */
   addEventListener('touchend', end); addEventListener('touchcancel', end);
   return {
     axis() {
@@ -1190,10 +1253,13 @@ const Player = (() => {
   function dirName(dx, dy) { const k = (Math.round(Math.atan2(dy, dx) / (Math.PI / 4)) + 8) % 8; return DIRS[(k + 6) % 8]; }
   function longAct(kind, col, reps) { if (!p.act) return; if (reps) p.act.reps = reps; else p.act.loop = true; p.act.hitK = .97; p.act.bar = col; p.lastBar = kind; }   /* comer/beber demora, mostra a barrinha e o efeito vem no fim */
   function startAct(anim, face, onHit, set, dur, mobile) { if (p.act || p.dying !== undefined || p.getup !== undefined) return false; if (face) p.dir = dirName(face.x - p.x, face.y - p.y); p.act = { anim, set: set || 'player', t: 0, dur: dur || .55, hit: false, onHit, mobile: !!mobile, face: !!face }; return true; }
-  function setSneak(v) { if (v && p.carry) return; p.sneak = v; const b = document.getElementById('sneak'); if (b) b.classList.toggle('on', v); }
+  function setSneak(v) { if (v && p.carry) return; p.sneak = v; const b = document.getElementById('sneak'); if (b) { b.classList.toggle('on', v); b.textContent = v ? '🧎' : '🧍'; } }
   function hurt(n, scratch) { if (document.body.classList.contains('title') || window.TRAVEL_LOCK) return;   /* no menu inicial o mundo roda com o jogador parado: nada pode te ferir/sangrar ainda */
-    p.hp -= n; p.hurtT = .25; setSneak(false); if (scratch && !p.bleeding) { p.bleeding = true; Save.flash('🩸 Arranhado! Use bandagem'); } if (p.hp <= 0) { if (Death.active || p.dying !== undefined) { p.hp = 1; return; } const cause = Death.cause(); p.hp = 1; if (bodyAnimLen('die') > 0 && !p.swim && !p.raft) { p.dying = 0; p.dyCause = cause; p.act = null; p.getup = undefined; p.moving = p.run = false; setSneak(false); } else { p.dead = true; Death.show(cause); } } Entities.refresh(); }
+    p.hp -= n; p.hurtT = .25; if (n > 0) hurtFlash(n); setSneak(false); if (scratch && !p.bleeding) { p.bleeding = true; Save.flash('🩸 Arranhado! Use bandagem'); } if (p.hp <= 0) { if (Death.active || p.dying !== undefined) { p.hp = 1; return; } const cause = Death.cause(); p.hp = 1; if (bodyAnimLen('die') > 0 && !p.swim && !p.raft) { p.dying = 0; p.dyCause = cause; p.act = null; p.getup = undefined; p.moving = p.run = false; setSneak(false); } else { p.dead = true; Death.show(cause); } } Entities.refresh(); }
   /* duração (s) de uma animação do corpo inteiro do personagem (morrer/levantar); 0 se a arte não tem */
+  /* levou dano: as bordas da tela piscam em vermelho e somem devagar (mais forte quanto maior o dano) */
+  function hurtFlash(n) { let el = document.getElementById('hurtfx'); if (!el) { el = document.createElement('div'); el.id = 'hurtfx'; el.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:25;opacity:0;box-shadow:inset 0 0 min(16vh,110px) min(6vh,40px) rgba(205,0,0,.85)'; document.body.appendChild(el); }
+    el.style.transition = 'none'; el.style.opacity = String(Math.min(1, .45 + n / 25)); void el.offsetWidth; el.style.transition = 'opacity .7s ease-out'; el.style.opacity = '0'; }
   function bodyAnimLen(an) { const K = window.SKIN; if (!skinOk() || !Assets.hasAnim(K, an)) return 0; return Assets.frames(K, an, p.dir) / (Assets.fps(K, an) || 8); }
   function getUp() { p.dead = false; p.dying = undefined; p.getup = bodyAnimLen('getup') > 0 ? 0 : undefined; p.moving = p.run = false; }
   // Nadar: a água é gelada (dano que cresce com o tempo, pior à noite/na chuva) e, com a vida baixa, há chance de se afogar.
@@ -1290,13 +1356,13 @@ const Entities = (() => {
   function cocoGrow(o) { const p = Player.p; if (Math.hypot(o.x - p.x, o.y - p.y) < 300) { o.cgT = 60; return; } let n = 0; for (let _i7 = 0, q; _i7 < World.objs.length && (q = World.objs[_i7], true); _i7++) if (q.kind === 'cocochao' && !q.dead && Math.abs(q.x - o.x - 22) < 90 && Math.abs(q.y - o.y) < 70) n++; if (n >= 3) return;
     for (let k = 0; k < 8; k++) { const an = Math.random() * 6.283, rd = 30 + Math.random() * 24, x = o.x + 22 + Math.cos(an) * rd, y = o.y + 8 + Math.sin(an) * rd * .55; if (World.walkable(x, y) && !World.inWater(x, y)) { World.add({ kind: 'cocochao', x, y, ph: Math.random() * 9 }); return; } } }; // coqueiro novo em ~3 dias de jogo (1 dia = 600 s); cocos caem no chão a cada ~0,7 dia // coqueiro novo em ~3 dias de jogo (1 dia = 600 s); cocos voltam em ~0,7 dia
   let regrow = [];
-  let burnT = 0, drops = [], t = 0, hudT = 0, useT = 0; const useEl = document.getElementById('use'), atkEl = document.getElementById('atk'), batEl = document.getElementById('bat'); const invRaw = { plank: 0, canteen: false, dirty: 0, twig: 0, coconut: 0, straw: 0, skewer: 0, water: 0, bandage: 0, wood: 0, fiber: 0, stone: 0, meat: 0, apple: 0, axe: false, pickaxe: false, spear: false, machete: false, leather: 0, eq: null, cooked: 0, campfire: 0, fence: 0, shelter: 0, chest: 0, bench: 0, floor: 0, wall: 0, roof: 0, door: 0, carp: 0, rope: 0, bag: 0 };
+  let burnT = 0, drops = [], t = 0, hudT = 0, useT = 0; const useEl = document.getElementById('use'), atkEl = document.getElementById('atk'), batEl = document.getElementById('bat'); const invRaw = { plank: 0, canteen: false, dirty: 0, twig: 0, coconut: 0, straw: 0, skewer: 0, water: 0, bandage: 0, wood: 0, fiber: 0, stone: 0, meat: 0, apple: 0, axe: false, pickaxe: false, spear: false, machete: false, leather: 0, eq: null, eq2: null, arm: null, cooked: 0, campfire: 0, fence: 0, shelter: 0, chest: 0, bench: 0, floor: 0, wall: 0, roof: 0, door: 0, carp: 0, rope: 0, bag: 0 };
   /* MOCHILA EM ESPAÇOS: cada espaço guarda até 20 do mesmo item; ferramenta e cantil ocupam 1 espaço cada. Sem mochila 10 espaços, mochila nível 1 = 15, nível 2 = 20.
      Tudo que entra no inventário passa por aqui (Proxy): o que não couber cai no chão aos seus pés. */
-  const STACK = 20, CAPS = [10, 15, 20], NOSLOT = { eq: 1, dirty: 1, water: 1, bag: 1 }; let invLoading = false, fullT = 0;
+  const STACK = 20, CAPS = [10, 15, 20], NOSLOT = { eq: 1, eq2: 1, arm: 1, dirty: 1, water: 1, bag: 1 }; let invLoading = false, fullT = 0;
   const slotsOf = (k, v) => NOSLOT[k] ? 0 : typeof v === 'boolean' ? (v ? 1 : 0) : typeof v === 'number' && v > 0 ? Math.ceil(v / STACK) : 0;
   const bagCap = () => CAPS[invRaw.bag | 0] || 10;
-  function slotsUsed() { let n = 0; for (const k in invRaw) n += slotsOf(k, invRaw[k]); return n; }
+  function slotsUsed() { let n = 0; for (const k in invRaw) { if (k === invRaw.eq || k === invRaw.eq2) continue; n += slotsOf(k, invRaw[k]); } return n; }   /* o que está equipado (arma e secundária) não ocupa espaço na mochila */
   function room(k) { if (NOSLOT[k]) return 1e9; const v = invRaw[k], free = bagCap() - slotsUsed(); if (typeof v === 'boolean') return v ? 0 : free > 0 ? 1 : 0; const n = v | 0, part = n > 0 && n % STACK ? STACK - n % STACK : 0; return part + Math.max(0, free) * STACK; }
   const inv = new Proxy(invRaw, { set(o, k, v) { const old = o[k];
     if (!invLoading && typeof v === 'number' && typeof old === 'number' && v > old && !NOSLOT[k]) { const r = room(k); if (v - old > r) { const ex = v - old - r; v = old + r; if (typeof spawnDrop === 'function' && Player.p) spawnDrop(k, Player.p.x, Player.p.y + 14, ex, 1.5); if (performance.now() - fullT > 1500) { fullT = performance.now(); if (typeof Save !== 'undefined') Save.flash('🎒 Mochila cheia: o resto caiu no chão'); } } }
@@ -1341,6 +1407,7 @@ const Entities = (() => {
     else Assets.draw(g, name, 'rot', '_', 0, 16, 31); return c; }
   const costText = c => (c.leather ? `🟤 ${c.leather} couro  ` : '') + (c.rope ? `🪢 ${c.rope} corda  ` : '') + (c.plank ? `🟫 ${c.plank}  ` : '') + (c.wood ? `🪵 ${c.wood}  ` : '') + (c.fiber ? `🌿 ${c.fiber}  ` : '') + (c.straw ? `🌴 ${c.straw}  ` : '') + (c.stone ? `🪨 ${c.stone}  ` : '') + (c.twig ? `🥢 ${c.twig} galhos` : '');
   const fireBtn = document.getElementById('fire');
+  const USE_HB = { apple: 1, coconut: 1, meat: 1, cooked: 1, water: 1, bandage: 1 };
   const EASY = ['bench', 'axe', 'pickaxe', 'machete', 'bandage', 'campfire', 'skewer', 'canteen', 'bag1'];
   /* CRIAÇÃO: [categoria, onde se faz, segundos por unidade]. hand = à mão (no chão, o personagem trabalha e mexer cancela); bench/carp = na bancada (vai para a fila e trabalha sozinha enquanto você estiver por perto) */
   const RMETA = { bench: ['build', 'hand', 4], axe: ['tool', 'hand', 3], pickaxe: ['tool', 'hand', 3], spear: ['tool', 'bench', 3], machete: ['tool', 'hand', 3], campfire: ['surv', 'hand', 3], carp: ['build', 'bench', 4], plank: ['mat', 'carp', 1.2], floor: ['build', 'bench', 2], wall: ['build', 'bench', 2], door: ['build', 'bench', 2.5], roof: ['build', 'bench', 2], shelter: ['build', 'bench', 4], chest: ['build', 'bench', 4], skewer: ['surv', 'hand', 1.5], canteen: ['surv', 'hand', 3], bandage: ['surv', 'hand', 1.5], bag1: ['bag', 'hand', 4], rope: ['mat', 'bench', 1.5], bag2: ['bag', 'bench', 5] };
@@ -1363,11 +1430,11 @@ const Entities = (() => {
   function craftStart(id, n) {
     const S = rState(id); n = Math.max(1, Math.min(n, S.max)); if (S.s !== 'ok') return;
     if (craftMode === 'hand') { handQ = { id, n, run: false, hit: false }; closeCraft(); return; }
-    payCost(id, n); CQ.push({ id, n, t: 0, T: RMETA[id][2], st: craftMode === 'carp' ? 'carp' : 'bench' }); Save.save(true); renderCraft();
+    payCost(id, n); CQ.push({ id, n, t: 0, T: RMETA[id][2], st: craftMode === 'carp' ? 'carp' : 'bench' }); Save.soon(); renderCraft();
     { const p = Player.p, st = craftMode; let sb = null, sd = 200; for (const o of World.act) if (o.kind === st && !o.dead) { const d = Math.hypot(o.x - p.x, o.y - p.y); if (d < sd) { sd = d; sb = o; } }   /* trabalha 2 vezes na bancada; o resto do tempo a bancada termina sozinha */
       if (sb && !p.act && !p.sneak && Player.startAct('workbench', sb, () => {}, 'player', animLen('', 'workbench') * 2)) p.act.reps = 2; }
   }
-  function cancelQ(i) { const q = CQ[i]; if (!q) return; payCost(q.id, -q.n); CQ.splice(i, 1); Save.save(true); renderCraft(); showHud(); }
+  function cancelQ(i) { const q = CQ[i]; if (!q) return; payCost(q.id, -q.n); CQ.splice(i, 1); Save.soon(); renderCraft(); showHud(); }
   function handTick() {   /* criar à mão: o personagem trabalha no chão com a barrinha; mexer no analógico cancela (nada é gasto) */
     if (!handQ) return; const p = Player.p;
     if (handQ.run) { if (p.act) return; if (!handQ.hit) { handQ = null; return; } }
@@ -1376,7 +1443,7 @@ const Entities = (() => {
     if (SINGLE[id] && !bagLv(id) && room(id) <= 0) { Save.flash('🎒 Mochila cheia'); handQ = null; return; }
     handQ.run = true; handQ.hit = false;
     const lo = p.sneak, an = lo ? 'craft' : 'workbench', aL = animLen(lo ? '_c' : '', an), T2 = aL * 2;   /* agachado: cria no chão; em pé: mãos trabalhando na frente. Cada unidade = a animação 2 vezes */
-    if (Player.startAct(an, null, () => { payCost(id, 1); giveOut(id); handQ.hit = true; handQ.n--; showHud(); Save.save(true); if (handQ.n <= 0) Save.flash('✅ ' + RBY[id][1] + ' pronto'); }, lo ? 'player_c' : 'player', T2)) Player.longAct('craft', '#f0c040', 2);
+    if (Player.startAct(an, null, () => { payCost(id, 1); giveOut(id); handQ.hit = true; handQ.n--; showHud(); Save.soon(); if (handQ.n <= 0) Save.flash('✅ ' + RBY[id][1] + ' pronto'); }, lo ? 'player_c' : 'player', T2)) Player.longAct('craft', '#f0c040', 2);
     else handQ = null;
   }
   let cqT = 0; const chip = document.getElementById('cqchip');
@@ -1385,37 +1452,38 @@ const Entities = (() => {
     const q = CQ[0]; let sb = null, sd = 230; for (const o of World.act) if (o.kind === q.st && !o.dead) { const d = Math.hypot(o.x - p.x, o.y - p.y); if (d < sd) { sd = d; sb = o; } }
     q.pause = !sb; q.sb = sb;
     if (sb) { q.t += dt;
-      if (q.t >= q.T) { if (giveOut(q.id)) { q.t = 0; q.n--; q.full = false; if (q.n <= 0) { CQ.shift(); Save.flash('✅ ' + RBY[q.id][1] + ' pronto'); } Save.save(true); showHud(); if (craftEl.style.display === 'block') renderCraft(); } else { q.t = q.T; if (!q.full) { q.full = true; Save.flash('🎒 Mochila cheia: a bancada esperou'); } } } }
+      if (q.t >= q.T) { if (giveOut(q.id)) { q.t = 0; q.n--; q.full = false; if (q.n <= 0) { CQ.shift(); Save.flash('✅ ' + RBY[q.id][1] + ' pronto'); } Save.soon(); showHud(); if (craftEl.style.display === 'flex') renderCraft(); } else { q.t = q.T; if (!q.full) { q.full = true; Save.flash('🎒 Mochila cheia: a bancada esperou'); } } } }
     cqT -= dt; if (cqT > 0) return; cqT = .15;
     const k = Math.min(1, q.t / q.T) * 100;
-    if (craftEl.style.display === 'block') { const u = craftEl.querySelector('.cq .qb u'); if (u) u.style.width = k + '%'; const w = craftEl.querySelector('.cq .qw'); if (w) w.textContent = q.pause ? '⏸ Chegue perto da ' + STN[q.st] : q.full ? '🎒 Mochila cheia' : '⚒ Trabalhando...'; }
+    if (craftEl.style.display === 'flex') { const u = craftEl.querySelector('.cq .qb u'); if (u) u.style.width = k + '%'; const w = craftEl.querySelector('.cq .qw'); if (w) w.textContent = q.pause ? '⏸ Chegue perto da ' + STN[q.st] : q.full ? '🎒 Mochila cheia' : '⚒ Trabalhando...'; }
     const sig = q.id + q.n + (q.pause ? 'p' : '') + CQ.length; if (chip.dataset.sig !== sig) { chip.dataset.sig = sig; chip.innerHTML = ''; chip.appendChild(ic(q.id, 20)); chip.appendChild(document.createTextNode((q.pause ? '⏸ ' : '') + RBY[q.id][1] + ' ×' + q.n + (CQ.length > 1 ? ' (+' + (CQ.length - 1) + ')' : ''))); const sb2 = document.createElement('s'); sb2.appendChild(document.createElement('u')); chip.appendChild(sb2); }
     chip.style.display = 'flex'; const u2 = chip.querySelector('u'); if (u2) u2.style.width = k + '%';
   }   // à mão (botão 🛠); o resto só na bancada
   let craftMode = 'bench';
   function renderCraft() {
-    craftEl.innerHTML = '<b>' + (craftMode === 'hand' ? '🛠 Criar à mão' : craftMode === 'carp' ? '🪚 Bancada de carpinteiro' : '🪑 Bancada') + '</b><span id="cx">✕</span>' + (craftMode === 'hand' ? '<div class="cnote">Feito no chão: o personagem trabalha uns segundos (mexer cancela).</div>' : '<div class="cnote">Vai para a fila e fica pronto sozinho enquanto você estiver por perto.</div>');
+    craftEl.innerHTML = '<div style="flex:none"><b style="font-size:16px">' + (craftMode === 'hand' ? '🛠 Criar à mão' : craftMode === 'carp' ? '🪚 Bancada de carpinteiro' : '🪑 Bancada') + '</b><span id="cx">✕</span></div>' + (craftMode === 'hand' ? '<div class="cnote">Toque no nome para ver a descrição. Mexer cancela.</div>' : '<div class="cnote">Vai para a fila e fica pronto sozinho perto da bancada.</div>');
     if (craftMode !== 'hand' && CQ.length) { const box = document.createElement('div'); box.className = 'cq'; box.innerHTML = '<small class="qw">⚒ Trabalhando...</small>';
       CQ.forEach((q, i) => { const row = document.createElement('div'); row.className = 'qi'; row.appendChild(ic(q.id)); const tx = document.createElement('small'); tx.textContent = RBY[q.id][1] + ' ×' + q.n + (q.st !== craftMode ? ' (' + STN[q.st] + ')' : ''); row.appendChild(tx); if (i === 0) { const b = document.createElement('div'); b.className = 'qb'; b.innerHTML = '<u style="width:' + Math.min(100, q.t / q.T * 100) + '%"></u>'; row.appendChild(b); } else { const sp = document.createElement('div'); sp.style.flex = 1; row.appendChild(sp); } const x = document.createElement('span'); x.className = 'qx'; x.textContent = '✕'; x.title = 'Cancelar (devolve o material)'; x.onclick = () => cancelQ(i); row.appendChild(x); box.appendChild(row); });
       craftEl.appendChild(box); }
-    if (craftMode !== 'carp') { const tb = document.createElement('div'); tb.className = 'ctabs'; for (const [k, n] of CATS) { const sp = document.createElement('span'); sp.textContent = n; if (craftTab === k) sp.className = 'on'; sp.onclick = () => { craftTab = k; renderCraft(); }; tb.appendChild(sp); } craftEl.appendChild(tb); }
-    const ORDS = { ok: 0, need: 1, lock: 2, done: 3 }, list = [];
+    if (craftMode !== 'carp') { const tb = document.createElement('div'); tb.className = 'ctabs'; for (const [k, n] of CATS) { const sp = document.createElement('span'); sp.textContent = n; if (craftTab === k) sp.className = 'on'; sp.onclick = () => { craftTab = k; craftEl._sc = 0; renderCraft(); }; tb.appendChild(sp); } craftEl.appendChild(tb); }
+    const ORDS = { ok: 0, need: 1, lock: 2, done: 3 }, list = [], box = document.createElement('div'); box.className = 'clist';
     for (const r of RECIPES) { const id = r[0], S = rState(id); if (craftMode === 'carp' ? S.st !== 'carp' : (craftTab !== 'all' && S.cat !== craftTab)) continue; if (craftMode !== 'carp' && S.st === 'carp' && craftTab === 'all') continue; list.push([r, S]); }
     list.sort((a, b) => ORDS[a[1].s] - ORDS[b[1].s]);
     for (const [[id, nome, desc, cost, yld], S] of list) {
       const row = document.createElement('div'); row.className = 'rec ' + S.s; row.appendChild(ic(id)); const tx = document.createElement('div');
-      let h = `<b>${nome}</b><br><small>${desc}</small>`; if (S.s === 'lock') h += `<br><small class="st">🔒 Precisa da ${STN[S.st]}</small>`; else if (S.pre) h += '<br><small class="st">🔒 Precisa da mochila nível 1</small>'; else if (S.s === 'done') h += `<br><small class="st">${S.queued ? '⏳ Na fila' : '✔ Você já tem'}</small>`; else h += `<br><small>⏱ ${S.st === 'hand' && craftMode === 'hand' ? '~2' : RMETA[id][2]} s${yld > 1 ? ' · rende ' + yld : ''}</small>`;
-      tx.innerHTML = h; const cc = document.createElement('div'); cc.className = 'cc';
+      let h = `<b>${nome}</b> <small class="rd">${desc}</small>`; if (S.s === 'lock') h += `<br><small class="st">🔒 Precisa da ${STN[S.st]}</small>`; else if (S.pre) h += '<br><small class="st">🔒 Precisa da mochila nível 1</small>'; else if (S.s === 'done') h += `<br><small class="st">${S.queued ? '⏳ Na fila' : '✔ Você já tem'}</small>`; else h += ` <small>· ⏱ ${S.st === 'hand' && craftMode === 'hand' ? '~2' : RMETA[id][2]} s${yld > 1 ? ' · rende ' + yld : ''}</small>`;
+      tx.innerHTML = h; tx.className = 'tt'; tx.onclick = () => row.classList.toggle('open'); const cc = document.createElement('div'); cc.className = 'cc';
       for (const [k, v] of Object.entries(cost)) { const sp = document.createElement('span'); sp.className = (inv[k] | 0) >= v ? 'ok' : 'no'; sp.appendChild(ic(k)); sp.appendChild(document.createTextNode((inv[k] | 0) + '/' + v)); cc.appendChild(sp); }
       tx.appendChild(cc); row.appendChild(tx);
       const rb = document.createElement('div'); rb.className = 'rb';
       if (S.s === 'ok' || S.s === 'need') { const can = S.s === 'ok', mk = (lab, n, cls) => { const b = document.createElement('button'); b.textContent = lab; b.disabled = !can || S.max < n; if (cls) b.className = cls; b.onclick = () => craftStart(id, n); rb.appendChild(b); };
         if (SINGLE[id]) mk('Criar', 1); else { mk('×1', 1); if (S.max >= 2) { mk('×5', 5); mk('Máx ' + Math.min(S.max, 99), Math.min(S.max, 99), 'g'); } } }
-      row.appendChild(rb); craftEl.appendChild(row); }
-    if (!list.length) { const e = document.createElement('div'); e.className = 'cnote'; e.textContent = 'Nada nesta aba.'; craftEl.appendChild(e); }
+      row.appendChild(rb); box.appendChild(row); }
+    if (!list.length) { const e = document.createElement('div'); e.className = 'cnote'; e.textContent = 'Nada nesta aba.'; box.appendChild(e); }
+    craftEl.appendChild(box); if (craftEl._sc) { box.scrollTop = craftEl._sc; } box.onscroll = () => { craftEl._sc = box.scrollTop; };
     document.getElementById('cx').onclick = closeCraft;
   }
-  function openCraft(m) { craftMode = m || 'bench'; craftEl.style.display = 'block'; document.body.classList.add('crafting'); renderCraft(); }   // com a bancada aberta, só ela aparece (HUD e botões somem)
+  function openCraft(m) { craftMode = m || 'bench'; craftEl.style.display = 'flex'; document.body.classList.add('crafting'); renderCraft(); }   // com a bancada aberta, só ela aparece (HUD e botões somem)
   function closeCraft() { craftEl.style.display = 'none'; document.body.classList.remove('crafting'); }
   // tocar fora da lista (menos na engrenagem) fecha o craft, sem mover o personagem
   for (const ev of ['touchstart', 'mousedown']) addEventListener(ev, e => { if (!document.body.classList.contains('crafting')) return; if (e.target.closest && e.target.closest('#craft,#gear,#tpanel,#toast')) return; e.stopPropagation(); e.preventDefault(); closeCraft(); }, { capture: true, passive: false });
@@ -1423,18 +1491,18 @@ const Entities = (() => {
   const MAX = { leather: 999, bench: 999, plank: 999, straw: 999, coconut: 999, twig: 999, skewer: 999, water: 3, bandage: 999, wood: 999, fiber: 999, stone: 999, apple: 999, meat: 999, cooked: 999, rope: 999, floor: 999, wall: 999, roof: 999, door: 999, campfire: 999, chest: 999, shelter: 999, carp: 999 }, NAME = { rope: 'Corda', floor: 'Piso', wall: 'Parede', roof: 'Telhado', door: 'Porta', campfire: 'Fogueira', chest: 'Baú', shelter: 'Abrigo', carp: 'Bancada de carpinteiro', leather: 'Couro', bench: 'Bancada', plank: 'Tábua', straw: 'Palha', coconut: 'Coco', skewer: 'Espeto', twig: 'Galho', water: 'Água fervida', bandage: 'Bandagem', wood: 'Madeira', fiber: 'Fibra', stone: 'Pedra', apple: 'Maçã', meat: 'Carne crua', cooked: 'Carne cozida' };
   function showHud() {
     const P = Player.p, pc = v => Math.max(0, Math.min(100, Math.round(v === undefined ? 100 : v))); let ex = ''; if (P.warm < 35) ex += '🥶'; if (P.sick > 0) ex += '🤢'; if (P.bleeding) ex += '🩸'; if (wolfNear()) ex += '🐺';
-    const hs = pc(P.hp / (P.maxhp || 100) * 100) + '|' + pc(P.food) + '|' + pc(P.thirst) + '|' + ex; if (hud.dataset.sig !== hs) { hud.dataset.sig = hs; const bar = (ic, v, c, tt) => `<div class="vb" title="${tt} ${v}"><i>${ic}</i><s><u style="width:${v}%;background-color:${c}"></u></s></div>`; hud.innerHTML = bar('❤', pc(P.hp / (P.maxhp || 100) * 100), '#e0442e', 'Vida') + bar('🍗', pc(P.food), '#e8962e', 'Fome') + bar('💧', pc(P.thirst), '#3ea8e6', 'Sede') + (ex ? `<div class="st">${ex}</div>` : ''); } fireBtn.style.display = inv.campfire ? 'flex' : 'none'; dropBtn.style.display = P.carry ? 'flex' : 'none'; bandBtn.style.display = P.bleeding ? 'flex' : 'none'; bandBtn.firstChild.nodeValue = '🩸'; bandBtn.lastChild.textContent = inv.bandage || 0; if (typeof Bag !== 'undefined') Bag.refresh(); if (typeof Build !== 'undefined') Build.refresh();
+    const hs = pc(P.hp / (P.maxhp || 100) * 100) + '|' + pc(P.food) + '|' + pc(P.thirst) + '|' + ex; if (false) { const bar = (ic, v, c, tt) => `<div class="vb" title="${tt} ${v}"><i>${ic}</i><s><u style="width:${v}%;background-color:${c}"></u></s></div>`; hud.innerHTML = bar('❤', pc(P.hp / (P.maxhp || 100) * 100), '#e0442e', 'Vida') + bar('🍗', pc(P.food), '#e8962e', 'Fome') + bar('💧', pc(P.thirst), '#3ea8e6', 'Sede') + (ex ? `<div class="st">${ex}</div>` : ''); } fireBtn.style.display = inv.campfire ? 'flex' : 'none'; dropBtn.style.display = P.carry ? 'flex' : 'none'; bandBtn.style.display = P.bleeding ? 'flex' : 'none'; bandBtn.firstChild.nodeValue = '🩸'; bandBtn.lastChild.textContent = inv.bandage || 0; if (typeof Bag !== 'undefined') Bag.refresh(); if (typeof Build !== 'undefined') Build.refresh();
     if (!Assets.meta) return; const ORD = ['wood', 'plank', 'fiber', 'straw', 'twig', 'stone', 'coconut', 'apple', 'meat', 'cooked', 'skewer', 'water', 'bandage'], TOOLS = ['axe', 'pickaxe', 'spear', 'machete'];
-    const sig = TOOLS.map(n => inv[n] ? 1 : 0).join('') + inv.eq + ORD.map(n => inv[n] | 0).join(','); const sig2 = sig + (craftEl.style.display === 'block' ? '|c' + craftMode : ''); if (sig2 === toolsEl.dataset.sig) return; toolsEl.dataset.sig = sig2;   /* craft aberto: só refaz quando o inventário muda (antes refazia tudo a cada quadro = lag) */
+    const sig = TOOLS.map(n => inv[n] ? 1 : 0).join('') + inv.eq + ORD.map(n => inv[n] | 0).join(','); const sig2 = sig + (craftEl.style.display === 'flex' ? '|c' + craftMode : ''); if (sig2 === toolsEl.dataset.sig) return; toolsEl.dataset.sig = sig2; if (craftEl.style.display === 'flex') renderCraft(); return;   /* barra antiga escondida (HUD novo): só o craft aberto é refeito */   /* craft aberto: só refaz quando o inventário muda (antes refazia tudo a cada quadro = lag) */
     const slots = []; for (const n of TOOLS) if (inv[n]) slots.push({ n, tool: true }); for (const n of ORD) if (inv[n] > 0) slots.push({ n, c: inv[n] | 0 });
     /* barra de itens: os 12 espaços são criados uma vez e só o que mudou é trocado (antes apagava e recriava tudo, com ícones novos, a cada item pego: travadinha no celular) */
     if (!toolsEl._sl || toolsEl._sl[0].parentNode !== toolsEl) { toolsEl.innerHTML = ''; toolsEl._sl = []; for (let i = 0; i < 12; i++) { const d = document.createElement('div'); d.className = 'sl'; d._k = ''; toolsEl.appendChild(d); toolsEl._sl.push(d); } }
     const HB = showHud.ic || (showHud.ic = {});
     for (let i = 0; i < 12; i++) { const d = toolsEl._sl[i], it = slots[i], k = it ? it.n + (it.tool ? (inv.eq === it.n ? '#E' : '#T') : '') : '';
       if (d._k !== k) { d._k = k; d.textContent = ''; d.className = 'sl'; d.onclick = null; d._b = null;
-        if (it) { d.appendChild(HB[it.n] || (HB[it.n] = icon(it.n))); if (it.tool) { d.classList.add('tl'); if (inv.eq === it.n) d.classList.add('eq'); d.onclick = () => { inv.eq = inv.eq === it.n ? null : it.n; toolsEl.dataset.sig = ''; showHud(); }; } else { d._b = document.createElement('b'); d.appendChild(d._b); } } }
+        if (it) { d.appendChild(HB[it.n] || (HB[it.n] = icon(it.n))); if (it.tool) { d.classList.add('tl'); if (inv.eq === it.n) d.classList.add('eq'); d.onclick = () => { inv.eq = inv.eq === it.n ? null : it.n; toolsEl.dataset.sig = ''; showHud(); }; } else { d._b = document.createElement('b'); d.appendChild(d._b); const n = it.n; if (USE_HB[n]) { d.classList.add('us'); d.onclick = () => { if (n === 'bandage') { if (!Player.p.bleeding) { Save.flash('Você não está sangrando'); return; } useBandage(); } else eat(n); }; } } } }   /* tocar na comida/água/bandagem da barra usa na hora */
       if (d._b) { const t = String(it.c); if (d._b.textContent !== t) d._b.textContent = t; const mx = room(it.n) <= 0 ? 'mx' : ''; if (d._b.className !== mx) d._b.className = mx; } }
-    if (craftEl.style.display === 'block') renderCraft();
+    if (craftEl.style.display === 'flex') renderCraft();
   }
   // escala e animações de cada árvore (sway = balanço, fall = queda). Tamanho final = tamanho do sprite x s.
   // Ponte: peça de 64x64 centrada num vértice de água. A direção (leste-oeste ou norte-sul) vem dos vizinhos (terra ou outra ponte). Natural = troncos.
@@ -2977,7 +3045,7 @@ const Entities = (() => {
     if (World.act.some(o => o.dead)) { const a = World.objs; for (let i = a.length - 1; i >= 0; i--) if (a[i].dead) a.splice(i, 1); World.touch(); }
     for (let i = regrow.length - 1; i >= 0; i--) { const g = regrow[i]; g.t -= dt; if (g.t > 0) continue; if (Math.hypot(g.x - Player.p.x, g.y - Player.p.y) < 260) { g.t = 20; continue; }
       for (let _i50 = 0, s; _i50 < World.objs.length && (s = World.objs[_i50], true); _i50++) if (s.palmStump && Math.hypot(s.x - g.x, s.y - g.y) < 6) s.dead = true; World.add({ kind: 'palm', x: g.x, y: g.y, ph: Math.random() * 9, solid: true }); regrow.splice(i, 1); }
-    const p = Player.p; if ((craftMode === 'bench' || craftMode === 'carp') && craftEl.style.display === 'block' && !World.act.some(o => o.kind === craftMode && Math.hypot(o.x - p.x, o.y - p.y) < 160)) closeCraft();
+    const p = Player.p; if ((craftMode === 'bench' || craftMode === 'carp') && craftEl.style.display === 'flex' && !World.act.some(o => o.kind === craftMode && Math.hypot(o.x - p.x, o.y - p.y) < 160)) closeCraft();
     // fogueira: acesa queima quem chega perto; apagada é pisoteada até ficar danificada e sumir
     for (let _i51 = 0, o; _i51 < World.act.length && (o = World.act[_i51], true); _i51++) if (o.kind === 'fire' && !o.broken) {
       // cada pisão (no máximo 1 a cada .45 s por pessoa/animal): 5 apagam a fogueira acesa, 10 destroem a apagada
@@ -3042,7 +3110,7 @@ const Entities = (() => {
   const dropBtn = document.getElementById('dropbtn');
   function dropLog() {
     const p = Player.p; if (!p.carry) return; const v = { south: [0, 1], 'south-west': [-.7, .7], west: [-1, 0], 'north-west': [-.7, -.7], north: [0, -1], 'north-east': [.7, -.7], east: [1, 0], 'south-east': [.7, .7] }[p.dir] || [0, 1];
-    const x = p.x + v[0] * 30, y = p.y + v[1] * 24 + 6; World.add({ kind: p.carry === 'leaves' ? 'leaves' : 'log', palm: p.carry === 'palm' || undefined, x: World.land(x, y) ? x : p.x, y: World.land(x, y) ? y : p.y + 6, ph: 0 }); p.carry = false; showHud(); Save.save(true);
+    const x = p.x + v[0] * 30, y = p.y + v[1] * 24 + 6; World.add({ kind: p.carry === 'leaves' ? 'leaves' : 'log', palm: p.carry === 'palm' || undefined, x: World.land(x, y) ? x : p.x, y: World.land(x, y) ? y : p.y + 6, ph: 0 }); p.carry = false; showHud(); Save.soon();
   }
   function drop(k, n) { n = Math.min(n, inv[k]); if (n <= 0 || !MAX[k]) return; inv[k] -= n; const P = Player.p; spawnDrop(k, P.x, P.y + 14, n, 3); showHud(); }
   const STRUCT = { campfire: 'fire', fence: 'fence', shelter: 'shelter', chest: 'chest', bench: 'bench', carp: 'carp' };
@@ -3053,7 +3121,7 @@ const Entities = (() => {
     Player.startAct('pickup', { x, y }, () => {
       inv[k]--; const o = { kind: STRUCT[k], x, y, ph: Math.random() * 9 };
       if (k === 'campfire') o.hp = 150; if (k === 'fence') { o.solid = true; o.vert = vert; o.bw = vert ? 6 : 24; o.bh = vert ? 24 : 6; } if (k === 'chest') { o.solid = true; o.bw = 14; o.bh = 8; o.items = {}; } if (k === 'bench' || k === 'carp') o.solid = true;
-      World.add(o); showHud(); Save.save(true);
+      World.add(o); showHud(); Save.soon();
     }, 'player', .55);
   }
   const placeFire = () => placeItem('campfire');
@@ -3093,24 +3161,24 @@ const Entities = (() => {
   function use() {
     const f = findUse(), p = Player.p; if (!f || p.act) return; const best = f.o;
     if (best.kind === 'raft') { if (p.raft) Raft.dismount(); else Raft.open(best); return; }
-    if (best.kind === 'bench' || best.kind === 'carp') { craftEl.style.display === 'block' ? closeCraft() : openCraft(best.kind); return; }
+    if (best.kind === 'bench' || best.kind === 'carp') { craftEl.style.display === 'flex' ? closeCraft() : openCraft(best.kind); return; }
     if (best.kind === 'chest') { Chest.open(best); return; }
     if (best.kind === 'fire') { FireMenu.open(best); return; }
     const carrySet = p.carry === 'leaves' ? 'player_leaves' : p.carry === 'palm' ? 'player_palm' : 'player_log';
-    if (best.kind === 'sawlog') { Player.startAct('idle', null, () => { if (!p.carry || p.carry === 'leaves') return; const n = p.carry === 'palm' ? 3 : 4; p.carry = false; spawnDrop('wood', p.x, p.y + 14, n, .2); showHud(); Save.save(true); }, carrySet, .55); return; }
-    if (best.kind === 'shredleaves') { Player.startAct('idle', null, () => { if (p.carry !== 'leaves') return; p.carry = false; spawnDrop('fiber', p.x, p.y + 14, 6, .2); showHud(); Save.save(true); }, carrySet, .55); return; }
-    if (best.kind === 'leaves') { Player.startAct('pickup', best, () => { if (best.dead) return; best.dead = true; spawnDrop('twig', best.x, best.y + 6, 3, .2); Save.flash('+3 galhos'); showHud(); Save.save(true); }, 'player', .55); return; }   /* folhas viram fibra na hora (sem carregar) */
+    if (best.kind === 'sawlog') { Player.startAct('idle', null, () => { if (!p.carry || p.carry === 'leaves') return; const n = p.carry === 'palm' ? 3 : 4; p.carry = false; spawnDrop('wood', p.x, p.y + 14, n, .2); showHud(); Save.soon(); }, carrySet, .55); return; }
+    if (best.kind === 'shredleaves') { Player.startAct('idle', null, () => { if (p.carry !== 'leaves') return; p.carry = false; spawnDrop('fiber', p.x, p.y + 14, 6, .2); showHud(); Save.soon(); }, carrySet, .55); return; }
+    if (best.kind === 'leaves') { Player.startAct('pickup', best, () => { if (best.dead) return; best.dead = true; spawnDrop('twig', best.x, best.y + 6, 3, .2); Save.flash('+3 galhos'); showHud(); Save.soon(); }, 'player', .55); return; }   /* folhas viram fibra na hora (sem carregar) */
     if (best.kind === 'fallenpalm' || best.kind === 'palmcrown') { if (!(inv.axe && inv.eq === 'axe')) { Save.flash('Equipe o machado para cortar'); return; }
       Player.startAct('chop', best, () => { if (best.dead) return;
-        if (best.kind === 'fallenpalm') { best.dead = true; World.add({ kind: 'log', palm: true, x: best.x - 30, y: best.y + 2, ph: 0, ct: t }, { kind: 'palmcrown', x: best.x + 26, y: best.y + 4, ph: 0, ct: t }); Save.flash('Coqueiro dividido: tronco e copa'); Save.save(true); }
+        if (best.kind === 'fallenpalm') { best.dead = true; World.add({ kind: 'log', palm: true, x: best.x - 30, y: best.y + 2, ph: 0, ct: t }, { kind: 'palmcrown', x: best.x + 26, y: best.y + 4, ph: 0, ct: t }); Save.flash('Coqueiro dividido: tronco e copa'); Save.soon(); }
         else { best.cuts = (best.cuts || 0) + 1; best.hp = best.cuts; best.ct = t; if (best.cuts >= 2) { best.dead = true; spawnDrop('straw', best.x, best.y + 6, 6, .3); Save.flash('+6 palhas'); } } }, 'player_axe', .7); return; }
-    if (best.kind === 'log') { Player.startAct('pickup', best, () => { if (best.dead) return; best.dead = true; const n = best.palm ? 3 : 4; spawnDrop('wood', best.x, best.y + 6, n, .2); Save.flash('+' + n + ' madeira'); showHud(); Save.save(true); }, 'player', .55); return; }   /* tronco vira madeira na hora (sem carregar no ombro) */
-    if (best.kind === 'fence' && best.stage < 3 && (inv.wood | 0) >= 2) { Player.startAct('pickup', best, () => { if (best.stage >= 3 || (inv.wood | 0) < 2) return; best.stage++; inv.wood -= 2; if (best.stage >= 3) { best.solid = true; const bw = best.bw, bh = best.bh; if (Math.abs(p.x - best.x) < bw + 8 && Math.abs(p.y - best.y) < bh + 8) { if (best.vert) p.x += (p.x >= best.x ? 1 : -1) * (bw + 12 - Math.abs(p.x - best.x)); else p.y += (p.y >= best.y ? 1 : -1) * (bh + 12 - Math.abs(p.y - best.y)); } } showHud(); Save.save(true); }, 'player', .55); return; }
+    if (best.kind === 'log') { Player.startAct('pickup', best, () => { if (best.dead) return; best.dead = true; const n = best.palm ? 3 : 4; spawnDrop('wood', best.x, best.y + 6, n, .2); Save.flash('+' + n + ' madeira'); showHud(); Save.soon(); }, 'player', .55); return; }   /* tronco vira madeira na hora (sem carregar no ombro) */
+    if (best.kind === 'fence' && best.stage < 3 && (inv.wood | 0) >= 2) { Player.startAct('pickup', best, () => { if (best.stage >= 3 || (inv.wood | 0) < 2) return; best.stage++; inv.wood -= 2; if (best.stage >= 3) { best.solid = true; const bw = best.bw, bh = best.bh; if (Math.abs(p.x - best.x) < bw + 8 && Math.abs(p.y - best.y) < bh + 8) { if (best.vert) p.x += (p.x >= best.x ? 1 : -1) * (bw + 12 - Math.abs(p.x - best.x)); else p.y += (p.y >= best.y ? 1 : -1) * (bh + 12 - Math.abs(p.y - best.y)); } } showHud(); Save.soon(); }, 'player', .55); return; }
     if (best.kind === 'fence' || best.kind === 'shelter') { Player.startAct('pickup', best, () => { best.dead = true; if (best.kind === 'fence') { if (best.stage) spawnDrop('wood', best.x, best.y, best.stage * 2); } else { spawnDrop('wood', best.x, best.y, 4); spawnDrop('straw', best.x, best.y, 3); } }, 'player', .55); return; }
     if (best.kind === 'stash') { Player.startAct('pickup', best.st, () => { const i = dens.indexOf(best.st); if (i < 0) return; const k = best.st.item; if (!(room(k) > 0)) { Save.flash('🎒 Mochila cheia'); return; } dens.splice(i, 1); inv[k]++; showHud(); Save.flash('+1 ' + (k === 'meat' ? 'Carne crua' : k === 'cooked' ? 'Carne assada' : 'Maçã') + ' (desenterrada)'); }, 'player', .8); return; }
     if (best.kind === 'corpse') { Player.startAct('pickup', best.c, () => { const c = best.c; if (c.hide === undefined) c.hide = ({ deer: 2, boar: 2, wolf: 1, bear: 3, fox: 1, fawn: 1 })[c.kind] || 0; const got = Math.min(c.meat, MAX.meat - inv.meat), gh = Math.max(0, Math.min(c.hide, MAX.leather - inv.leather)); if (got <= 0 && gh <= 0) { Save.flash('Mochila cheia'); return; } inv.meat += got; c.meat -= got; inv.leather += gh; c.hide -= gh; showHud(); Save.flash((got > 0 ? '+' + got + ' Carne crua' : '') + (gh > 0 ? (got > 0 ? '  ' : '') + '+' + gh + ' Couro' : '')); }, 'player', .55); return; }
     if (best.kind === 'trilha') { Travel.go(best.to); return; }
-    if (best.kind === 'door') { if (best.open && Math.abs(p.x - best.x) < 36 && Math.abs(p.y - best.y) < 15) { Save.flash('Saia do vão para fechar a porta'); return; } best.open = !best.open; best.at = t; best.solid = !best.open; World.touch(); Save.save(true); return; }
+    if (best.kind === 'door') { if (best.open && Math.abs(p.x - best.x) < 36 && Math.abs(p.y - best.y) < 15) { Save.flash('Saia do vão para fechar a porta'); return; } best.open = !best.open; best.at = t; best.solid = !best.open; World.touch(); Save.soon(); return; }
     if (best.kind === 'poca') { const pz = best.p;
       if (canFill()) { Player.startAct('pickup', null, () => { inv.dirty = 3 - inv.water; pz.w = Math.max(0, pz.w - .35); showHud(); Save.flash('Cantil cheio (água de poça, suja: ferva antes de beber)'); }, 'player', .55); return; }
       Player.startAct('drink', null, () => { p.thirst = Math.min(100, p.thirst + 30); pz.w = Math.max(0, pz.w - .3); if (!(p.sick > 0) && Math.random() < .55) { p.sick = 60; Save.flash('🤢 Água de poça: você ficou doente. Beba água fervida'); } showHud(); }, 'player', 1.6) && Player.longAct('drink', '#4fb3f0', 2); return; }
@@ -3120,8 +3188,8 @@ const Entities = (() => {
     if (best.kind === 'cocochao') { Player.startAct('pickup', best, () => { if (best.dead) return; if (inv.coconut >= MAX.coconut) { Save.flash('Mochila cheia'); return; } best.dead = true; inv.coconut++; showHud(); Save.flash('+1 Coco'); }, 'player', .5); return; }
     if (best.kind === 'pedrinha') { Player.startAct('pickup', best, () => { if (best.dead) return; if (inv.stone >= MAX.stone) { Save.flash('Mochila cheia'); return; } best.dead = true; inv.stone++; showHud(); Save.flash('+1 Pedra'); }, 'player', .5); return; }
     if ((best.kind === 'rock' || best.kind === 'boulder') && !inv.pickaxe) { Save.flash('🪨 Precisa de uma picareta: crie uma no menu de criação (6 madeira + 4 fibra)'); return; }
-    if (best.kind === 'boulder') { emitNoise(Player.p.x, Player.p.y, 220, true); Player.startAct('mine', best, () => { if (best.hp === undefined) best.hp = 6; best.hp--; best.shake = .3; if (best.hp <= 0) { best.dead = true; spawnDrop('stone', best.x, best.y, 6); } }, 'player_pick', .65); return; }   /* rochedo (pedra grande com musgo): 6 golpes de picareta, dá 6 pedras */
-    if (best.kind === 'rock') { emitNoise(Player.p.x, Player.p.y, 200, true); Player.startAct('mine', best, () => { best.hp--; best.shake = .25; if (best.hp <= 0) { best.dead = true; spawnDrop('stone', best.x, best.y, 3); } }, 'player_pick', .65); return; }
+    if (best.kind === 'boulder') { emitNoise(Player.p.x, Player.p.y, 220, true); Player.startAct('mine', best, () => { if (!Number.isFinite(best.hp)) best.hp = 6; best.hp--; best.shake = .3; if (best.hp <= 0) { best.dead = true; spawnDrop('stone', best.x, best.y, 6); } }, 'player_pick', .65); return; }   /* rochedo (pedra grande com musgo): 6 golpes de picareta, dá 6 pedras */
+    if (best.kind === 'rock') { emitNoise(Player.p.x, Player.p.y, 200, true); Player.startAct('mine', best, () => { if (!Number.isFinite(best.hp)) best.hp = 3; best.hp--; best.shake = .25;   /* pedra sem vida definida (vinda do save) nunca quebrava: hp virava NaN */ if (best.hp <= 0) { best.dead = true; spawnDrop('stone', best.x, best.y, 3); } }, 'player_pick', .65); return; }
     const tree = !!TREES[best.kind], palm = best.kind === 'palm', axe = palm ? (inv.axe && inv.eq === 'axe') : inv.axe;
     if (tree) emitNoise(Player.p.x, Player.p.y, axe ? 190 : 130, true);
     Player.startAct(tree ? (axe ? 'chop' : 'punch') : 'pickup', best, () => {
@@ -3547,7 +3615,7 @@ const Entities = (() => {
     else if (Math.hypot(P.x - x, P.y - y) < 160) Save.flash('⚡ Raio muito perto!');
   }
   return { snap: snapAnimals, counts: () => { const c = {}; for (const a of animals) if (!a.dead && !a.script) c[a.kind] = (c[a.kind] || 0) + 1; return c; }, strike, bearMem: () => animals.filter(o => o.kind === 'bear').map((b, i) => (b.mem || bearMemSaved[i] || []).slice(-4).map(q => [Math.round(q.x), Math.round(q.y), q.s])), setBearMem: arr => { arr = Array.isArray(arr) ? arr : []; if (arr.length && Array.isArray(arr[0]) && typeof arr[0][0] === 'number') arr = [arr];   // save antigo: lista só do primeiro urso
-      bearMemSaved = arr.map(l => (Array.isArray(l) ? l : []).slice(-4).map(q => ({ x: q[0], y: q[1], s: q[2] || 3 }))); let i = 0; for (let _i71 = 0, b; _i71 < animals.length && (b = animals[_i71], true); _i71++) if (b.kind === 'bear') { b.mem = (bearMemSaved[i++] || []).map(q => ({ x: q.x, y: q.y, s: q.s })); } }, _dens: () => dens, _deerKick: deerKick, setVis: (st, sn) => { visStand = !!st; visSneak = !!sn; }, _tracks: () => tracks, _HAB: HAB, _noise: emitNoise, _dirOf: dirOf, _drops: () => drops, drawBridge, dropLog, useBandage, init, update, draw, bleed, icon, eat, drop, placeItem, room, slotsUsed, cqSave: () => CQ.map(q => [q.id, q.n, Math.round(q.t * 10) / 10, q.st]), cqLoad: a => { CQ = Array.isArray(a) ? a.filter(q => RBY[q[0]]).map(q => ({ id: q[0], n: q[1] | 0, t: +q[2] || 0, T: RMETA[q[0]][2], st: q[3] === 'carp' ? 'carp' : 'bench' })).filter(q => q.n > 0) : []; }, bagCap, STACK, loadInv: d => { invLoading = true; try { Object.assign(invRaw, d); } finally { invLoading = false; } }, toggleHand: () => { if (craftEl.style.display === 'block') closeCraft(); else openCraft('hand'); },  MAX, cam, drawPiece, _corpses: () => corpses, attack, use, placeFire, nearestAnimal, inv, eqSet: () => eqInfo().set, refresh: (force) => { if (force) toolsEl.dataset.sig = ''; showHud(); }, _animals: () => animals, regrow: () => regrow, setRegrow: a => { regrow = Array.isArray(a) ? a : []; },
+      bearMemSaved = arr.map(l => (Array.isArray(l) ? l : []).slice(-4).map(q => ({ x: q[0], y: q[1], s: q[2] || 3 }))); let i = 0; for (let _i71 = 0, b; _i71 < animals.length && (b = animals[_i71], true); _i71++) if (b.kind === 'bear') { b.mem = (bearMemSaved[i++] || []).map(q => ({ x: q.x, y: q.y, s: q.s })); } }, _dens: () => dens, _deerKick: deerKick, setVis: (st, sn) => { visStand = !!st; visSneak = !!sn; }, _tracks: () => tracks, _HAB: HAB, _noise: emitNoise, _dirOf: dirOf, _drops: () => drops, drawBridge, dropLog, useBandage, init, update, draw, bleed, icon, eat, drop, placeItem, room, slotsUsed, cqSave: () => CQ.map(q => [q.id, q.n, Math.round(q.t * 10) / 10, q.st]), cqLoad: a => { CQ = Array.isArray(a) ? a.filter(q => RBY[q[0]]).map(q => ({ id: q[0], n: q[1] | 0, t: +q[2] || 0, T: RMETA[q[0]][2], st: q[3] === 'carp' ? 'carp' : 'bench' })).filter(q => q.n > 0) : []; }, bagCap, STACK, loadInv: d => { invLoading = true; try { Object.assign(invRaw, d); } finally { invLoading = false; } }, toggleHand: () => { if (craftEl.style.display === 'flex') closeCraft(); else openCraft('hand'); },  MAX, cam, drawPiece, _corpses: () => corpses, attack, use, placeFire, nearestAnimal, inv, eqSet: () => eqInfo().set, refresh: (force) => { if (force) toolsEl.dataset.sig = ''; showHud(); }, _animals: () => animals, regrow: () => regrow, setRegrow: a => { regrow = Array.isArray(a) ? a : []; },
     tracksList: () => tracks.slice(-500).map(q => [Math.round(q.x), Math.round(q.y), q.k, +q.ang.toFixed(2), Math.round(q.t), q.g, q.life]),
     setTracks: l => { tracks = (Array.isArray(l) ? l : []).map(q => ({ x: q[0], y: q[1], k: q[2], ang: q[3], t: q[4], g: q[5], life: q[6] })); } };
 })();
@@ -3569,16 +3637,35 @@ const Bag = (() => {
   let sel = null, open = false;
   const have = k => (k === 'axe' || k === 'pickaxe' || k === 'spear' || k === 'machete') ? !!inv[k] : inv[k] > 0;
   let sig = '';
+  /* EQUIPAMENTOS: arma, secundária (ferramentas) e armadura (capacete, peito, calça, botas, luvas — itens de armadura ainda vão existir).
+     Arraste da mochila para o lugar para equipar; arraste de volta para a mochila para guardar. Comida, mato etc. não entram nesses lugares. */
+  const TOOLK = { axe: 1, pickaxe: 1, spear: 1, machete: 1 };
+  const SLOTS = [['eq', 'Arma', '🗡'], ['eq2', 'Secundária', '⚔'], ['head', 'Capacete', '⛑'], ['chest', 'Armadura', '🦺'], ['legs', 'Calça', '👖'], ['feet', 'Botas', '🥾'], ['hands', 'Luvas', '🧤']];
+  const armOf = s => (inv.arm || {})[s] || null, slotItem = s => s === 'eq' || s === 'eq2' ? (inv[s] && inv[inv[s]] ? inv[s] : null) : armOf(s);
+  function canGo(s, k) { if (s === 'eq' || s === 'eq2') return TOOLK[k] ? '' : 'Só armas e ferramentas aqui'; const A = typeof ARMOR !== 'undefined' && ARMOR[k]; return A && A.slot === s ? '' : 'Só ' + SLOTS.find(x => x[0] === s)[1].toLowerCase() + ' aqui'; }
+  function equip(s, k) { const why = canGo(s, k); if (why) { Save.flash(why); return false; }
+    if (s === 'eq' || s === 'eq2') { const o = s === 'eq' ? 'eq2' : 'eq'; if (inv[o] === k) inv[o] = inv[s] || null; inv[s] = k; }
+    else { inv.arm = Object.assign({}, inv.arm || {}); inv.arm[s] = k; }
+    Entities.refresh(true); Save.soon(); return true; }
+  function unequip(s) { if (s === 'eq' || s === 'eq2') { if (Entities.room(inv[s]) <= 0 && Entities.slotsUsed() >= Entities.bagCap()) { Save.flash('🎒 Mochila cheia'); return; } inv[s] = null; } else if (inv.arm) { inv.arm = Object.assign({}, inv.arm); inv.arm[s] = null; } Entities.refresh(true); Save.soon(); }
+  function bagSet(k) { const t = ITEMS.find(i => i[0] === k); return t; }
+  let pvRaf = 0, pvT0 = 0;
+  function preview() { const cv = el.querySelector('.pvc'); if (!cv || !open) { pvRaf = 0; return; } const g = cv.getContext('2d'), K = window.SKIN || 'hm', E = inv.eq, set = E === 'axe' && Assets.has(K + '_axe') ? K + '_axe' : E === 'machete' && Assets.has(K + '_mach') ? K + '_mach' : K;
+    const now = performance.now(), D = ['south', 'south-west', 'west', 'north-west', 'north', 'north-east', 'east', 'south-east'], dir = D[Math.floor((now - pvT0) / 2600) % 8], n = Assets.frames(set, 'idle', dir) || 1, fi = Math.floor(now / 1000 * (Assets.fps(set, 'idle') || 6)) % n;
+    g.setTransform(1, 0, 0, 1, 0, 0); g.clearRect(0, 0, cv.width, cv.height); g.imageSmoothingEnabled = false; const sc = Math.floor(cv.height / 92);
+    g.fillStyle = '#00000040'; g.beginPath(); g.ellipse(cv.width / 2, cv.height - 18, 34, 9, 0, 0, 6.283); g.fill();
+    Assets.draw(g, set, 'idle', dir, fi, cv.width / 2, cv.height - 16, sc); pvRaf = requestAnimationFrame(preview); }
   function render() {
     sig = JSON.stringify(inv) + sel;
-    const S = Entities.STACK, CAP = Entities.bagCap(), list = [];   /* cada pilha de até 20 ocupa um espaço */
-    for (const it of ITEMS) { if (it[0] === 'water' || !have(it[0])) continue; if (it[3] === 'tool' || it[3] === 'misc') { list.push([it, 0]); continue; } let n = inv[it[0]] | 0; while (n > 0) { list.push([it, Math.min(S, n)]); n -= S; } }
-    const used = Entities.slotsUsed(), LV = ['Sem mochila', 'Mochila', 'Mochila reforçada'][inv.bag | 0];
-    let h = `<div class="bh"><b>🎒 ${LV}</b><span class="bc">${used}/${CAP}</span><span id="bx">✕</span></div><div class="bg">`;
-    for (let n = 0; n < Math.max(CAP, list.length); n++) { const e = list[n], it = e && e[0]; h += it ? `<div class="bs${sel === it[0] ? ' on' : ''}${inv.eq === it[0] ? ' eqd' : ''}${e[1] >= S ? ' fullst' : ''}" data-k="${it[0]}"><i></i>${it[3] === 'tool' || it[3] === 'misc' ? '' : `<em>${e[1]}</em>`}</div>` : '<div class="bs empty"></div>'; }
+    const S = Entities.STACK, CAP = Entities.bagCap(), list = [];   /* cada pilha de até 20 ocupa um espaço; o equipado fica fora */
+    for (const it of ITEMS) { if (it[0] === 'water' || !have(it[0]) || it[0] === inv.eq || it[0] === inv.eq2) continue; if (it[3] === 'tool' || it[3] === 'misc') { list.push([it, 0]); continue; } let n = inv[it[0]] | 0; while (n > 0) { list.push([it, Math.min(S, n)]); n -= S; } }
+    const used = Entities.slotsUsed(), LV = ['Sem mochila', 'Mochila', 'Mochila reforçada'][inv.bag | 0], P = Player.p;
+    const nm = (() => { try { return (JSON.parse(localStorage.getItem('iv_char') || '{}').nome || '').trim(); } catch (e) { return ''; } })() || 'Sobrevivente';
+    let h = `<div class="bh"><b>🎒 Inventário</b><span class="bc">${LV} · ${used}/${CAP}</span><span id="bx">✕</span></div><div class="bw"><div class="bl"><div class="bg">`;
+    for (let n = 0; n < Math.max(CAP, list.length); n++) { const e = list[n], it = e && e[0]; h += it ? `<div class="bs${sel === it[0] ? ' on' : ''}${e[1] >= S ? ' fullst' : ''}" data-k="${it[0]}"><i></i>${it[3] === 'tool' || it[3] === 'misc' ? '' : `<em>${e[1]}</em>`}</div>` : '<div class="bs empty"></div>'; }
     h += '</div>'; const it = ITEMS.find(i => i[0] === sel && have(i[0]));
-    if (it) { const [k, name, desc, type] = it; h += `<div class="bd"><b>${name}</b>${type !== 'tool' && type !== 'misc' ? ` · ${inv[k]}` : ''}<br><small>${desc}${k === 'canteen' ? ` <br>Suja: ${inv.dirty} · Fervida: ${inv.water}` : ''}</small><div class="ba">`;
-      if (type === 'tool') h += `<button data-a="eq">${inv.eq === k ? 'Guardar' : 'Equipar'}</button>`;
+    if (it) { const [k, name, desc, type] = it; const eqd = k === inv.eq ? 'eq' : k === inv.eq2 ? 'eq2' : null; h += `<div class="bd"><b>${name}</b>${type !== 'tool' && type !== 'misc' ? ` · ${inv[k]}` : ''}${eqd ? ' · <i>equipado</i>' : ''}<br><small>${desc}${k === 'canteen' ? ` <br>Suja: ${inv.dirty} · Fervida: ${inv.water}` : ''}</small><div class="ba">`;
+      if (type === 'tool') h += eqd ? `<button data-a="uneq">Guardar</button>` : `<button data-a="eq">Equipar</button><button data-a="eq2" class="g">Secundária</button>`;
       if (type === 'place') h += '<button data-a="place">Montar</button>';
       if (type === 'build') h += '<button data-a="build">Construir</button>';
       if (type === 'food') h += '<button data-a="eat">Comer</button>';
@@ -3586,15 +3673,30 @@ const Bag = (() => {
       if (type === 'drink') h += '<button data-a="eat">Beber</button>';
       if (type === 'heal') h += '<button data-a="band">Usar</button>';
       if (type === 'res' || type === 'food' || type === 'heal' || type === 'drink') h += '<button data-a="d1" class="g">Soltar 1</button><button data-a="dall" class="g">Soltar tudo</button>';
-      h += '</div></div>'; } else h += '<div class="bd"><small>Toque num item para ver detalhes.</small></div>';
+      h += '</div></div>'; } else h += '<div class="bd"><small>Toque num item para ver detalhes. Arraste para os lugares do personagem para equipar.</small></div>';
+    const sl = s => { const k = slotItem(s[0]); return `<div class="es${k ? ' has' : ''}${sel && sel === k ? ' on' : ''}" data-s="${s[0]}" title="${s[1]}">${k ? '<i></i>' : `<span>${s[2]}</span>`}<small>${s[1]}</small></div>`; };
+    h += `</div><div class="br"><div class="pv"><b>${nm}</b><span>🍏 ${Math.round(P.food ?? 100)} · 💧 ${Math.round(P.thirst)} · ♥ ${Math.round(P.hp)}</span><div class="pvb"><u style="width:${Math.max(0, Math.min(100, P.hp / (P.maxhp || 100) * 100))}%"></u></div></div>
+      <div class="eqw"><div class="ec">${sl(SLOTS[0])}${sl(SLOTS[1])}<div class="es bagi" title="Mochila"><span>🎒</span><small>Nível ${inv.bag | 0}</small></div></div><canvas class="pvc" width="160" height="200"></canvas><div class="ec">${SLOTS.slice(2).map(sl).join('')}</div></div><div class="bqs">Atalhos do ataque:<div class="bq" data-i="0"></div><div class="bq" data-i="1"></div><div class="bq" data-i="2"></div></div></div></div>`;
     el.innerHTML = h;
-    el.querySelectorAll('.bs[data-k]').forEach(s => { s.firstChild.replaceWith(Entities.icon(s.dataset.k)); s.onclick = () => { sel = sel === s.dataset.k ? null : s.dataset.k; render(); }; });
+    el.querySelectorAll('.bs[data-k]').forEach(s => { s.firstChild.replaceWith(Entities.icon(s.dataset.k)); s.onclick = () => { if (s._dragged) { s._dragged = false; return; } sel = sel === s.dataset.k ? null : s.dataset.k; render(); }; drag(s, s.dataset.k, null); });
+    el.querySelectorAll('.es[data-s].has').forEach(s => { const k = slotItem(s.dataset.s); s.firstChild.replaceWith(Entities.icon(k)); s.onclick = () => { if (s._dragged) { s._dragged = false; return; } sel = sel === k ? null : k; render(); }; drag(s, k, s.dataset.s); });
     document.getElementById('bx').onclick = close;
     el.querySelectorAll('button[data-a]').forEach(b => b.onclick = () => act(b.dataset.a));
+    if (typeof HUD2 !== 'undefined') el.querySelectorAll('.bq').forEach(q => { const k = HUD2.slots()[+q.dataset.i]; if (k) q.appendChild(Entities.icon(k)); q.onclick = () => { if (k) { HUD2.assign(+q.dataset.i, null); render(); } }; });
+    if (!pvRaf) { pvT0 = performance.now(); pvRaf = requestAnimationFrame(preview); }
   }
+  /* arrastar: da mochila para um lugar do personagem (equipa), de um lugar para a mochila (guarda), ou para os atalhos em volta do ataque */
+  function drag(src, k, fromSlot) {
+    src.addEventListener('pointerdown', e => { const x0 = e.clientX, y0 = e.clientY; let gh = null, hv = null;
+      const tgt = ev => { const t = document.elementFromPoint(ev.clientX, ev.clientY); return t && t.closest ? (t.closest('.es[data-s]') || t.closest('.bq') || t.closest('#bag .bl')) : null; };
+      const mv = ev => { if (!gh && Math.hypot(ev.clientX - x0, ev.clientY - y0) > 12) { gh = document.createElement('div'); gh.className = 'hdrag'; gh.appendChild(Entities.icon(k)); document.body.appendChild(gh); src._dragged = true; src.style.opacity = .35; } if (gh) { gh.style.left = ev.clientX - 27 + 'px'; gh.style.top = ev.clientY - 27 + 'px'; const T = tgt(ev); if (T !== hv) { if (hv) hv.classList.remove('hov'); if (T) T.classList.add('hov'); hv = T; } } };
+      const up = ev => { removeEventListener('pointermove', mv); removeEventListener('pointerup', up); removeEventListener('pointercancel', up); if (!gh) return; gh.remove(); src.style.opacity = ''; document.querySelectorAll('.hov').forEach(q => q.classList.remove('hov'));
+        const T = tgt(ev); if (T) { if (T.classList.contains('es')) { if (T.dataset.s !== fromSlot && equip(T.dataset.s, k) && fromSlot && fromSlot !== 'eq' && fromSlot !== 'eq2') unequip(fromSlot); } else if (T.classList.contains('bq')) { if (typeof HUD2 !== 'undefined') HUD2.assign(+T.dataset.i, k); } else if (fromSlot) unequip(fromSlot); }
+        setTimeout(() => { src._dragged = false; }, 60); render(); };
+      addEventListener('pointermove', mv); addEventListener('pointerup', up); addEventListener('pointercancel', up); }); }
   function act(a) {
     if (!sel) return;
-    if (a === 'eq') { inv.eq = inv.eq === sel ? null : sel; Entities.refresh(true); }
+    if (a === 'eq') equip('eq', sel); else if (a === 'eq2') equip('eq2', sel); else if (a === 'uneq') { unequip(sel === inv.eq ? 'eq' : 'eq2'); }
     else if (a === 'drinkw') Entities.eat('water');
     else if (a === 'band') { Entities.useBandage(); }
     else if (a === 'place') { close(); Entities.placeItem(sel); }
@@ -3604,13 +3706,70 @@ const Bag = (() => {
     else if (a === 'dall') Entities.drop(sel, inv[sel]);
     render();
   }
-  function show() { open = true; el.style.display = 'block'; render(); }
-  function close() { open = false; el.style.display = 'none'; }
+  function show() { open = true; el.style.display = 'flex'; render(); }
+  function close() { open = false; el.style.display = 'none'; if (pvRaf) { cancelAnimationFrame(pvRaf); pvRaf = 0; } }
   function toggle() { open ? close() : show(); }
   const go = e => { e.preventDefault(); e.stopPropagation(); toggle(); };
   btn.addEventListener('touchstart', go, { passive: false }); btn.addEventListener('mousedown', go);
   addEventListener('keydown', e => { if (!e.repeat && (e.key === 'b' || e.key === 'i')) toggle(); });
-  return { refresh: () => { if (open) { const s = JSON.stringify(inv) + sel; if (s !== sig) render(); } }, toggle, get open() { return open; } };
+  function stacks() { const S = Entities.STACK, L = []; for (const it of ITEMS) { if (it[0] === 'water' || !have(it[0]) || it[0] === inv.eq || it[0] === inv.eq2) continue; if (it[3] === 'tool' || it[3] === 'misc') { L.push([it[0], 0, it[3]]); continue; } let n = inv[it[0]] | 0; while (n > 0) { L.push([it[0], Math.min(S, n), it[3]]); n -= S; } } return L; }
+  const typeOf = k => { const it = ITEMS.find(i => i[0] === k); return it ? it[3] : ''; };
+  return { refresh: () => { if (open) { const s = JSON.stringify(inv) + sel; if (s !== sig) render(); } }, toggle, stacks, typeOf, get open() { return open; } };
+})();
+
+
+// ===== HUD NOVO: cartão do personagem, barra de 5 itens, atalhos em volta do ataque (arrastar da mochila), botão Auto =====
+const HUD2 = (() => {
+  const inv = Entities.inv, bar = document.getElementById('qbar'), qs = [...document.querySelectorAll('.qs')], atk = document.getElementById('atk');
+  let Q = [null, null, null]; try { const v = JSON.parse(localStorage.getItem('iv_qs') || 'null'); if (Array.isArray(v)) Q = v.slice(0, 3); } catch (e) {}
+  const saveQ = () => { try { localStorage.setItem('iv_qs', JSON.stringify(Q)); } catch (e) {} };
+  const TOOLS = { axe: 1, pickaxe: 1, spear: 1, machete: 1 }, FOOD = { apple: 1, coconut: 1, meat: 1, cooked: 1, water: 1 }, PLACE = { campfire: 1, chest: 1, bench: 1, carp: 1, shelter: 1 }, BUILD = { floor: 1, wall: 1, roof: 1, door: 1 };
+  const icC = {}; function ic(k) { const src = icC[k] || (icC[k] = Entities.icon(k)), c = document.createElement('canvas'); c.width = c.height = 32; c.getContext('2d').drawImage(src, 0, 0); return c; }
+  const has = k => TOOLS[k] || k === 'canteen' ? !!inv[k] : (inv[k] | 0) > 0;
+  function useItem(k) {
+    if (!k) return; if (!has(k)) { Save.flash('Você não tem mais isso'); return; }
+    if (TOOLS[k]) { inv.eq = inv.eq === k ? null : k; Entities.refresh(true); }
+    else if (k === 'bandage') { if (!Player.p.bleeding) { Save.flash('Você não está sangrando'); return; } Entities.useBandage(); }
+    else if (k === 'canteen') { if ((inv.water | 0) > 0) Entities.eat('water'); else Save.flash('Cantil vazio: encha na água'); }
+    else if (FOOD[k]) Entities.eat(k);
+    else if (PLACE[k]) Entities.placeItem(k);
+    else if (BUILD[k]) Build.open(k);
+    else Save.flash('Use na criação 🛠 ou no baú');
+    sig = ''; }
+  /* arrastar um item (da mochila ou da barra) até um atalho em volta do ataque */
+  function dragSrc(el, k) {
+    el.addEventListener('pointerdown', e => { const x0 = e.clientX, y0 = e.clientY; let gh = null;
+      const mv = ev => { if (!gh && Math.hypot(ev.clientX - x0, ev.clientY - y0) > 12) { gh = document.createElement('div'); gh.className = 'hdrag'; gh.appendChild(ic(k)); document.body.appendChild(gh); el._dragged = true; } if (gh) { gh.style.left = ev.clientX - 27 + 'px'; gh.style.top = ev.clientY - 27 + 'px'; const t = document.elementFromPoint(ev.clientX, ev.clientY), q = t && t.closest && t.closest('.qs'); qs.forEach(z => z.classList.toggle('hov', z === q)); } };
+      const up = ev => { removeEventListener('pointermove', mv); removeEventListener('pointerup', up); removeEventListener('pointercancel', up); if (!gh) return; gh.remove(); qs.forEach(z => z.classList.remove('hov')); gh.style.display = 'none'; const t = document.elementFromPoint(ev.clientX, ev.clientY), q = t && t.closest && t.closest('.qs'); if (q) { const i = +q.dataset.i; for (let j = 0; j < 3; j++) if (Q[j] === k) Q[j] = null; Q[i] = k; saveQ(); sig = ''; Save.flash('Atalho: ' + (Bag.typeOf(k) ? '' : '') + 'pronto'); } setTimeout(() => { el._dragged = false; }, 50); };
+      addEventListener('pointermove', mv); addEventListener('pointerup', up); addEventListener('pointercancel', up); }); }
+  /* atalho: toque usa; arrastar para fora tira o atalho */
+  qs.forEach(q => { q.addEventListener('pointerdown', e => { e.stopPropagation(); const x0 = e.clientX, y0 = e.clientY, i = +q.dataset.i; let moved = false;
+    const mv = ev => { if (Math.hypot(ev.clientX - x0, ev.clientY - y0) > 30) moved = true; };
+    const up = ev => { removeEventListener('pointermove', mv); removeEventListener('pointerup', up); if (moved) { const t = document.elementFromPoint(ev.clientX, ev.clientY); if (!(t && t.closest && t.closest('.qs'))) { Q[i] = null; saveQ(); sig = ''; Save.flash('Atalho removido'); } return; } if (Q[i]) useItem(Q[i]); else Save.flash('Arraste um item da mochila 🎒 ou da barra para cá'); };
+    addEventListener('pointermove', mv); addEventListener('pointerup', up); }); });
+  document.getElementById('autob').onclick = () => Save.flash('Auto: em breve');
+  const swapb = document.getElementById('swapb'); swapb.addEventListener('pointerdown', e => { e.stopPropagation(); e.preventDefault(); const a = inv.eq, b = inv.eq2; if (!b || !inv[b]) return; inv.eq = b; inv.eq2 = a && inv[a] ? a : null; Entities.refresh(true); sig = ''; Save.flash('⇄ ' + ({ axe: 'Machado', pickaxe: 'Picareta', spear: 'Lança', machete: 'Facão' })[b]); });   /* troca rápida: arma <-> secundária (ex.: picareta e machado, facão e lança) */
+  let sig = '', psig = '', faceK = '';
+  function face() { const K = window.SKIN || 'hm', cv = document.getElementById('pface'); if (!cv || !Assets.meta) return; const f = Assets.meta.frames[K + '/stand/south/0']; if (!f) return; const pg = Assets.pg[f[6]]; if (!pg || !pg.img) return; if (faceK === K) return; faceK = K;
+    const g = cv.getContext('2d'); g.clearRect(0, 0, 64, 64); g.imageSmoothingEnabled = false; const hw = Math.round(f[2] * .62), hh = Math.round(f[3] * .42), sx = f[0] + Math.round((f[2] - hw) / 2), sc = 64 / Math.max(hw, hh) * 1.05; g.drawImage(pg.img, sx, f[1], hw, hh, 32 - hw * sc / 2, 6, hw * sc, hh * sc); }
+  function update() {
+    if (!Assets.meta || typeof Player === 'undefined') return; const P = Player.p;
+    face();
+    const nm = (() => { try { return (JSON.parse(localStorage.getItem('iv_char') || '{}').nome || '').trim(); } catch (e) { return ''; } })() || 'Sobrevivente';
+    const hp = Math.max(0, Math.round(P.hp)), fo = Math.max(0, Math.round(P.food ?? 100)), th = Math.max(0, Math.round(P.thirst)); let ex = ''; if (P.warm < 35) ex += '🥶'; if (P.sick > 0) ex += '🤢'; if (P.bleeding) ex += '🩸';
+    const ps = nm + hp + '|' + fo + '|' + th + ex; if (ps !== psig) { psig = ps; document.getElementById('pname').textContent = nm; document.getElementById('php').textContent = hp; document.getElementById('pbar').style.width = 'calc(' + Math.min(100, hp / (P.maxhp || 100) * 100) + '% - 4px)'; document.getElementById('pfood').textContent = fo; document.getElementById('pwat').textContent = th; document.getElementById('pst').textContent = ex;
+      document.getElementById('pfood').parentNode.classList.toggle('lo', fo < 25); document.getElementById('pwat').parentNode.classList.toggle('lo', th < 25);
+      const i1 = document.getElementById('ifood'), i2 = document.getElementById('iwat'); if (!i1.firstChild && Assets.has('apple')) i1.appendChild(ic('apple')); if (!i2.firstChild && Assets.has('apple')) i2.appendChild(ic('water')); if (!i1.firstChild) psig = ''; }
+    const L = Bag.stacks().slice(0, 5), s2 = JSON.stringify(L) + inv.eq + inv.eq2 + JSON.stringify(Q) + Q.map(k => k ? (inv[k] | 0) + '' + !!inv[k] : '').join();
+    if (s2 !== sig) { sig = s2; bar.innerHTML = '';
+      for (let i = 0; i < 5; i++) { const e = L[i], d = document.createElement('div'); d.className = 'q'; if (e) { d.appendChild(ic(e[0])); if (e[1]) { const b = document.createElement('b'); b.textContent = e[1]; d.appendChild(b); } if (inv.eq === e[0]) d.classList.add('eq'); const k = e[0]; d.onclick = () => { if (d._dragged) return; useItem(k); }; dragSrc(d, k); } bar.appendChild(d); }
+      qs.forEach((q, i) => { q.innerHTML = ''; const k = Q[i]; q.className = 'qs' + (k ? '' : ' emp'); if (k) { q.appendChild(ic(k)); if (!has(k)) q.classList.add('zero'); if (!TOOLS[k] && k !== 'canteen') { const b = document.createElement('b'); b.textContent = inv[k] | 0; q.appendChild(b); } else if (inv.eq === k) q.style.boxShadow = '0 0 0 3px #7fd0ffaa'; else q.style.boxShadow = ''; } });
+      { const k2 = inv.eq2 && inv[inv.eq2] ? inv.eq2 : ''; if (swapb._k !== k2) { swapb._k = k2; swapb.innerHTML = ''; if (k2) swapb.appendChild(ic(k2)); swapb.style.display = k2 ? 'flex' : 'none'; } }
+      const ek = inv.eq && inv[inv.eq] ? inv.eq : ''; if (atk._k !== ek) { atk._k = ek; atk.innerHTML = ''; if (ek) atk.appendChild(ic(ek)); else atk.textContent = '✊'; } }
+  }
+  setInterval(() => { try { update(); } catch (e) {} }, 120);
+  function assign(i, k) { if (k) for (let j = 0; j < 3; j++) if (Q[j] === k) Q[j] = null; Q[i] = k; saveQ(); sig = ''; Save.flash(k ? 'Atalho pronto' : 'Atalho removido'); }
+  return { dragSrc, useItem, update, assign, slots: () => Q };
 })();
 
 // Baú: guarda recursos e comida. Toque num item do baú para pegar, ou da mochila para guardar.
@@ -3631,11 +3790,11 @@ const Raft = (() => {
   function mount(o) { const p = Player.p; if (p.carry) { Save.flash('Largue o que está carregando'); return; } p.raft = o; p.raftDeck = false; p.x = o.x; p.y = o.y; p.swim = false; p.swimT = 0; Save.flash('⛵ Embarcou na ' + NAMES[o.hp | 0].toLowerCase()); close(); }
   function dismount() {
     const p = Player.p, o = p.raft; if (!o) return;
-    for (let r = 50; r <= 150; r += 20) for (let a = 0; a < 16; a++) { const an = a * .3927, x = o.x + Math.cos(an) * r, y = o.y + Math.sin(an) * r; if (!World.inWater(x, y) && World.walkable(x, y) && World.land(x, y)) { p.raft = null; p.raftDeck = false; p.x = x; p.y = y; Save.flash('Desembarcou'); Save.save(true); return; } }
+    for (let r = 50; r <= 150; r += 20) for (let a = 0; a < 16; a++) { const an = a * .3927, x = o.x + Math.cos(an) * r, y = o.y + Math.sin(an) * r; if (!World.inWater(x, y) && World.walkable(x, y) && World.land(x, y)) { p.raft = null; p.raftDeck = false; p.x = x; p.y = y; Save.flash('Desembarcou'); Save.soon(); return; } }
     Save.flash('Chegue perto da areia para desembarcar');
   }
   function need(c) { const i = inv(); return Object.entries(c).every(([k, v]) => (i[k] | 0) >= v); }
-  function upgrade(o) { const lv = o.hp | 0, c = COST[lv]; if (!c || !need(c)) return; for (const [k, v] of Object.entries(c)) inv()[k] -= v; o.hp = lv + 1; Entities.refresh(); Save.flash('✨ ' + NAMES[o.hp] + ' pronta!'); Save.save(true); render(o); }
+  function upgrade(o) { const lv = o.hp | 0, c = COST[lv]; if (!c || !need(c)) return; for (const [k, v] of Object.entries(c)) inv()[k] -= v; o.hp = lv + 1; Entities.refresh(); Save.flash('✨ ' + NAMES[o.hp] + ' pronta!'); Save.soon(); render(o); }
   function close() { if (panel) panel.style.display = 'none'; }
   function render(o) {
     const lv = o.hp | 0, c = COST[lv], p = Player.p;
@@ -3650,7 +3809,7 @@ const Raft = (() => {
     btn('Embarcar', () => mount(o)); btn('🧭 Ir embora', () => { close(); Travel.leave(o); }); btn('Fechar', close); panel.appendChild(row);
   }
   function open(o) {
-    if (!panel) { panel = document.createElement('div'); panel.style.cssText = 'position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:60;background:#2a1c10ee;color:#fff;border:3px solid #c9a23c;border-radius:12px;padding:12px;min-width:260px;max-width:90vw;font-family:sans-serif'; document.body.appendChild(panel); }
+    if (!panel) { panel = document.createElement('div'); panel.id = 'raftpanel'; panel.style.cssText = 'position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:60;background:#2a1c10ee;color:#fff;border:3px solid #c9a23c;border-radius:12px;padding:12px;min-width:260px;max-width:90vw;font-family:sans-serif'; document.body.appendChild(panel); }
     panel.style.display = 'block'; render(o);
   }
   function tick() { const p = Player.p, r = p.raft; if (!r) { p.raftDeck = false; return; } if (!p.raftDeck) { r.x = p.x; r.y = p.y; } if (r.dead) { p.raft = null; p.raftDeck = false; } }
@@ -3661,24 +3820,38 @@ const Raft = (() => {
   return { auto, ok, open, mount, dismount, close, tick, toggle, NAMES };
 })();
 const Chest = (() => {
-  const el = document.getElementById('chest'), inv = Entities.inv, CAP = 100, TYPES = ['wood', 'fiber', 'stone', 'apple', 'meat', 'cooked'];
-  let cur = null;
+  /* BAÚ: 30 espaços de até 20 itens (antes 100 no total, só 6 tipos). Abre lado a lado com a mochila:
+     tocar numa pilha passa ela para o outro lado; também dá para arrastar a pilha de um lado para o outro. */
+  const el = document.getElementById('chest'), inv = Entities.inv, SL = 30, S = () => Entities.STACK;
+  const NOK = { eq: 1, dirty: 1, water: 1, bag: 1, canteen: 1, axe: 1, pickaxe: 1, spear: 1, machete: 1 };
+  const ok = k => !NOK[k] && typeof inv[k] === 'number';
+  let cur = null, drag = null;
+  const cUsed = () => { let n = 0; for (const k in cur.items) if (cur.items[k] > 0) n += Math.ceil(cur.items[k] / S()); return n; };
+  const cRoom = k => { const n = cur.items[k] | 0, part = n > 0 && n % S() ? S() - n % S() : 0; return part + Math.max(0, SL - cUsed()) * S(); };
+  function stacks(src) { const L = []; for (const k in src) { if (!ok(k) && src !== cur.items) continue; let n = src[k] | 0; while (n > 0) { L.push([k, Math.min(S(), n)]); n -= S(); } } return L; }
+  function grid(src, cap, side) { const L = stacks(src); let h = '<div class="cg">'; for (let i = 0; i < Math.max(cap, L.length); i++) { const e = L[i]; h += e ? `<div class="ci" data-t="${e[0]}" data-n="${e[1]}" data-w="${side}"><i></i><em>${e[1]}</em></div>` : '<div class="ci emp"></div>'; } return h + '</div>'; }
   function render() {
     if (!cur) return; cur.items = cur.items || {};
-    let h = '<div class="bh"><b>📦 Baú</b><span id="cxx">✕</span></div><small>No baú · toque para pegar</small><div class="cg">', n = 0;
-    for (const t of TYPES) if (cur.items[t] > 0) { h += `<div class="ci" data-t="${t}" data-w="c"><i></i><em>${cur.items[t]}</em></div>`; n++; }
-    if (!n) h += '<small class="ce">vazio</small>';
-    h += '</div><small>Na mochila · toque para guardar</small><div class="cg">'; n = 0;
-    for (const t of TYPES) if (inv[t] > 0) { h += `<div class="ci" data-t="${t}" data-w="b"><i></i><em>${inv[t]}</em></div>`; n++; }
-    if (!n) h += '<small class="ce">nada para guardar</small>';
-    el.innerHTML = h + '</div>';
-    el.querySelectorAll('.ci').forEach(c => { c.firstChild.replaceWith(Entities.icon(c.dataset.t)); c.onclick = () => move(c.dataset.t, c.dataset.w); });
+    const bu = Entities.slotsUsed(), bc = Entities.bagCap();
+    el.innerHTML = `<div class="bh"><b>📦 Baú</b><span id="cxx">✕</span></div><div class="c2"><div class="cp" data-w="b"><div class="ct">🎒 Mochila <span>${bu}/${bc}</span><button data-a="all-b">Guardar tudo ➜</button></div>${grid(inv, bc, 'b')}</div><div class="cp" data-w="c"><div class="ct">📦 Baú <span>${cUsed()}/${SL}</span><button data-a="all-c">⬅ Pegar tudo</button></div>${grid(cur.items, SL, 'c')}</div></div><small>Toque numa pilha para passar para o outro lado, ou arraste.</small>`;
+    el.querySelectorAll('.ci[data-t]').forEach(c => { c.firstChild.replaceWith(Entities.icon(c.dataset.t)); c.addEventListener('pointerdown', e => startDrag(e, c)); });
+    el.querySelectorAll('button[data-a]').forEach(b => b.onclick = () => moveAll(b.dataset.a === 'all-b' ? 'b' : 'c'));
     document.getElementById('cxx').onclick = close;
   }
-  function move(t, from) {
-    if (from === 'c') { const q = Math.min(cur.items[t] || 0, Entities.room(t)); if (q <= 0) { Save.flash('Mochila cheia'); return; } cur.items[t] -= q; inv[t] += q; }
-    else { const q = Math.min(inv[t], CAP - (cur.items[t] || 0)); if (q <= 0) { Save.flash('Baú cheio'); return; } inv[t] -= q; cur.items[t] = (cur.items[t] || 0) + q; }
-    Entities.refresh(); render();
+  function move(t, from, n) {
+    if (from === 'c') { const q = Math.min(n || cur.items[t] || 0, cur.items[t] || 0, Entities.room(t)); if (q <= 0) { Save.flash('🎒 Mochila cheia'); return false; } cur.items[t] -= q; if (cur.items[t] <= 0) delete cur.items[t]; inv[t] += q; }
+    else { const q = Math.min(n || inv[t], inv[t], cRoom(t)); if (q <= 0) { Save.flash('📦 Baú cheio'); return false; } inv[t] -= q; cur.items[t] = (cur.items[t] || 0) + q; }
+    return true;
+  }
+  function moveAll(from) { const src = from === 'c' ? Object.assign({}, cur.items) : inv; for (const k of Object.keys(src)) { if (from === 'b' && !ok(k)) continue; if ((src[k] | 0) > 0 && !move(k, from)) break; } Entities.refresh(); Save.soon(); render(); }
+  function startDrag(e, c) {
+    e.preventDefault(); const t = c.dataset.t, n = +c.dataset.n, w = c.dataset.w, x0 = e.clientX, y0 = e.clientY; let gh = null;
+    const mv = ev => { if (!gh && Math.hypot(ev.clientX - x0, ev.clientY - y0) > 10) { gh = c.cloneNode(true); gh.className = 'ci drag'; document.body.appendChild(gh); c.style.opacity = .35; } if (gh) { gh.style.left = ev.clientX - 27 + 'px'; gh.style.top = ev.clientY - 27 + 'px'; const pn = document.elementFromPoint(ev.clientX, ev.clientY), cp = pn && pn.closest && pn.closest('.cp'); el.querySelectorAll('.cp').forEach(q => q.classList.toggle('hov', q === cp && q.dataset.w !== w)); } };
+    const up = ev => { removeEventListener('pointermove', mv); removeEventListener('pointerup', up); removeEventListener('pointercancel', up);
+      if (!gh) { if (move(t, w, n)) { Entities.refresh(); Save.soon(); } render(); return; }   /* toque: passa a pilha */
+      gh.remove(); c.style.opacity = ''; const pn = document.elementFromPoint(ev.clientX, ev.clientY), cp = pn && pn.closest && pn.closest('.cp');
+      if (cp && cp.dataset.w !== w && move(t, w, n)) { Entities.refresh(); Save.soon(); } render(); };
+    addEventListener('pointermove', mv); addEventListener('pointerup', up); addEventListener('pointercancel', up);
   }
   function open(c) { cur = c; el.style.display = 'block'; render(); }
   function close() { cur = null; el.style.display = 'none'; }
@@ -3693,7 +3866,7 @@ const FireMenu = (() => {
   const lit = () => f && !f.out && !f.broken;
   const fmt = s => Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStart(2, '0');
   const state = () => [lit(), (f.cook || []).map(c => c === null || c === undefined ? 'e' : c > 0 ? 'c' : 'r').join(''), f.boilT > 0 ? 1 : 0, f.waterReady || 0, inv.dirty, inv.canteen, inv.meat, inv.skewer, inv.twig, inv.wood, inv.water, Player.p.carry].join();
-  function addBurn(sec) { if (f.out) { f.out = false; f.hp = 0; f.dmg = 0; } f.hp = Math.min(CAP, f.hp + sec); Entities.refresh(); Save.save(true); }
+  function addBurn(sec) { if (f.out) { f.out = false; f.hp = 0; f.dmg = 0; } f.hp = Math.min(CAP, f.hp + sec); Entities.refresh(); Save.soon(); }
   function render() {
     f.cook = f.cook || [null, null, null]; sig = state(); const L = lit(), p = Player.p;
     let h = `<div class="fh"><span>🔥 Fogueira</span><span class="fx" id="fx">✕</span></div><div id="ft" style="margin-top:4px"></div><div class="fbar"><i id="fb"></i></div>`;
@@ -3732,7 +3905,7 @@ const FireMenu = (() => {
     else if (a === 'water' && f.waterReady > 0) { const n = Math.min(f.waterReady, 3 - inv.water - inv.dirty); if (n <= 0) { Save.flash('Mochila cheia'); return; } inv.water += n; f.waterReady -= n; Entities.refresh(); }
     else if (a === 'drink') Entities.eat('water');
     else if (a === 'f') { const k = b.dataset.k; if (k === 'log') { if (!p.carry) return; const lv = p.carry === 'leaves'; p.carry = false; addBurn(lv ? 50 : 240); } else if (inv[k] > 0) { inv[k]--; addBurn(k === 'twig' ? 30 : 90); } }
-    else if (a === 'out' && lit()) { f.out = true; f.hp = 0; f.outT = 0; f.smell = 0; Entities.refresh(); Save.save(true); }
+    else if (a === 'out' && lit()) { f.out = true; f.hp = 0; f.outT = 0; f.smell = 0; Entities.refresh(); Save.soon(); }
     render();
   }
   function open(fire) { f = fire; f.cook = f.cook || [null, null, null]; el.style.display = 'block'; render(); }
@@ -3750,7 +3923,7 @@ const Build = (() => {
   const GS = k => k === 'fence' ? 32 : 64 /* construção em grade de 64; a cerca continua na de 32 */, inv = Entities.inv, bar = document.getElementById('build'), btn = document.getElementById('buildbtn');
   const PIECES = { floor: ['Piso', 'cell'], wall: ['Parede', 'edge'], door: ['Porta', 'edge'], fence: ['Cerca', 'edge'], roof: ['Telhado', 'cell'], bridge: ['Ponte', 'vertex'] };
   const ORDER = ['floor', 'wall', 'door', 'roof', 'fence', 'bridge'], TL = CONFIG.TILE, BPLANKS = 2, cnt = k => k === 'bridge' ? Math.floor(inv.plank / BPLANKS) : inv[k];   // ponte: 2 tábuas cada
-  let on = false, piece = 'floor', vert = false, remove = false, turn = false, upg = false, gx = 0, gy = 0, ok = false, why = '';
+  let on = false, piece = 'floor', vert = false, remove = false, turn = false, upg = false, gx = 0, gy = 0, ok = false, why = '', remF = 'all', target = null;
   const UPC = 2, DUR = [0, 60, 180];   /* reforçar parede/porta: 2 tábuas; durabilidade nível 1 = 60, nível 2 = 180 (3x) */
   const REACH = 300;
   function snapFor(kind, v, wx, wy) { const G = GS(kind); return v ? [Math.round(wx / G) * G, (Math.floor(wy / G) + .5) * G] : [(Math.floor(wx / G) + .5) * G, Math.round(wy / G) * G]; }
@@ -3762,9 +3935,9 @@ const Build = (() => {
   function solidBox(kind, v) { return kind === 'wall' || kind === 'door' ? (v ? [5, 32] : [32, 6]) : kind === 'fence' ? (v ? [6, 24] : [24, 6]) : null; }
   function check() {
     const P = Player.p; ok = false;
-    if (upg) { const f = findAt(gx, gy), w = f && (f.kind === 'wall' || f.kind === 'door'); ok = !!w && f.lv !== 2 && inv.plank >= UPC; why = !w ? 'Toque numa parede ou porta para reforçar' : f.lv === 2 ? 'Já está no nível 2' : ok ? '' : 'Precisa de ' + UPC + ' tábuas (bancada de carpinteiro)'; return; }
-    if (remove) { const f = findAt(gx, gy); ok = !!f && !f.nat; why = !f ? 'Nada para remover aqui' : f.nat ? 'Essa ponte natural não sai' : ''; return; }
-    if (turn) { const t = findAt(gx, gy); ok = !!(t && (t.kind === 'wall' || t.kind === 'fence')); why = ok ? '' : 'Toque numa parede ou cerca para girar'; return; }
+    if (upg) { const f = findAt(gx, gy, RF.wall), w = f && (f.kind === 'wall' || f.kind === 'door'); ok = !!w && f.lv !== 2 && inv.plank >= UPC; why = !w ? 'Toque numa parede ou porta para reforçar' : f.lv === 2 ? 'Já está no nível 2' : ok ? '' : 'Precisa de ' + UPC + ' tábuas (bancada de carpinteiro)'; return; }
+    if (remove) { const f = findAt(gx, gy); target = f; ok = !!f && !f.nat; why = !f ? 'Toque na peça que quer tirar' : f.nat ? 'Essa ponte natural não sai' : ''; return; }
+    if (turn) { const t = findAt(gx, gy, RF.wall); ok = !!(t && (t.kind === 'wall' || t.kind === 'fence')); why = ok ? '' : 'Toque numa parede ou cerca para girar'; return; }
     if (piece === 'bridge') {
       if (inv.plank < BPLANKS) { why = 'Precisa de ' + BPLANKS + ' tábuas'; return; }
       if (Math.hypot(gx - P.x, gy - P.y) > REACH) { why = 'Longe demais'; return; }
@@ -3776,29 +3949,53 @@ const Build = (() => {
     if (!World.land(gx, gy)) { why = 'Não dá para construir na água'; return; }
     { const ex = same(piece, gx, gy, vert); if (ex) { if (piece === 'wall' && (ex.h || 1) < 2) { /* parede em cima de parede/porta: vira parede dupla */ } else { why = piece === 'wall' ? 'Já tem 2 de altura aqui' : 'Já tem uma peça aqui'; return; } } }
     const sb = solidBox(piece, vert); if (sb && Math.abs(P.x - gx) < sb[0] + 12 && Math.abs(P.y - gy) < sb[1] + 12) { why = 'Você está no caminho'; return; }
+    { const b = blockerAt(piece, gx, gy, vert); if (b) { why = b; return; } }
     ok = true; why = '';
   }
+  /* o que impede construir: árvore (inclusive coqueiro), pedra, arbusto, toco, tronco, fogueira, bancada, baú, abrigo, cerca.
+     Mato alto, tufo e flor não impedem: somem quando a peça é colocada (antes o mato ficava por cima do piso) */
+  const TREEK = { fir: 1, pine: 1, oak: 1, palm: 1, dead: 1, appletree: 1 }, SOFT = { mato: 1, tuft: 1, flower: 1, pedrinha: 1, cocochao: 1 };
+  function pieceBox(k, x, y, v) { if (k === 'wall' || k === 'door') return v ? [x - 8, y - 32, x + 8, y + 32] : [x - 32, y - 10, x + 32, y + 6]; return [x - 32, y - 32, x + 32, y + 32]; }
+  function blockerAt(k, x, y, v) { const [x0, y0, x1, y1] = pieceBox(k, x, y, v);
+    for (const o of World.objs) { if (o.dead || o.fall !== undefined || SOFT[o.kind] || o.kind in PIECES || o.kind === 'campdirt') continue;
+      const tree = TREEK[o.kind], hard = tree || o.solid || o.kind.startsWith('bush') || o.kind.startsWith('stump') || o.kind === 'log' || o.kind === 'fire' || o.kind === 'shelter' || o.kind === 'bench' || o.kind === 'carp' || o.kind === 'chest' || o.kind === 'leaves'; if (!hard) continue;
+      const ox = o.x + (o.kind === 'palm' ? 22 : 0), r = tree ? 14 : o.kind === 'boulder' ? 30 : o.kind === 'rock' ? 22 : 14;
+      if (ox + r > x0 && ox - r < x1 && o.y + 8 > y0 && o.y - 8 < y1) return tree ? 'Tem uma árvore aqui (corte primeiro)' : o.kind === 'rock' || o.kind === 'boulder' ? 'Tem uma pedra aqui' : 'Tem algo no caminho'; }
+    return ''; }
+  function clearSoft(k, x, y, v) { const [x0, y0, x1, y1] = pieceBox(k, x, y, v); let n = 0; for (const o of World.objs) if (SOFT[o.kind] && !o.dead && o.x > x0 - 6 && o.x < x1 + 6 && o.y > y0 - 6 && o.y < y1 + 6) { if (o.kind === 'pedrinha') { inv.stone = (inv.stone | 0) + 1; } o.dead = true; n++; } return n; }
   function same(k, x, y, v) { const W = k === 'wall' || k === 'door'; for (let i = 0; i < World.objs.length; i++) { const o = World.objs[i]; if (o.dead || !(W ? (o.kind === 'wall' || o.kind === 'door') : o.kind === k)) continue; if (Math.abs(o.x - x) < 3 && Math.abs(o.y - y) < 3 && !!o.vert === (PIECES[k][1] === 'edge' ? v : false)) return o; } return null; }
-  function findAt(x, y) { let b = null, bd = 44; for (let _i73 = 0, o; _i73 < World.objs.length && (o = World.objs[_i73], true); _i73++) if (o.kind in PIECES) { const d = Math.hypot(o.x - x, o.y - y); if (d < bd) { bd = d; b = o; } } return b; }
+  /* área da peça como aparece na tela (o telhado e a parede ficam desenhados mais para cima do ponto da grade) */
+  function pieceRect(o) { const x = o.x, y = o.y, h = o.h || 1, WHh = 48;
+    if (o.kind === 'roof') { const b = y + 32 - WHh * (o.lv === 2 ? 2 : 1); return [x - 32, b - 64, x + 32, b]; }
+    if (o.kind === 'floor' || o.kind === 'bridge') return [x - 32, y - 32, x + 32, y + 32];
+    if (o.kind === 'wall' && o.vert) return [x - 11, y + 33 - 66 - WHh * h, x + 11, y + 33];
+    if (o.kind === 'wall' || o.kind === 'door') return [x - 32, y + 4 - 57 - (h > 1 ? WHh : 0), x + 32, y + 8];
+    return [x - 22, y - 30, x + 22, y + 8]; }
+  const PRI = { roof: 0, wall: 1, door: 1, fence: 2, bridge: 3, floor: 4 }, RF = { all: null, roof: { roof: 1 }, wall: { wall: 1, door: 1, fence: 1 }, floor: { floor: 1, bridge: 1 } };
+  function findAt(x, y, K) { let b = null, bp = 9, bd = 1e9; const F = K || (remove ? RF[remF] : null);
+    for (const o of World.objs) { if (o.dead || !(o.kind in PIECES) || (F && !F[o.kind])) continue; const r = pieceRect(o); if (x < r[0] - 6 || x > r[2] + 6 || y < r[1] - 6 || y > r[3] + 6) continue;
+      const p = PRI[o.kind] ?? 5, d = Math.hypot((r[0] + r[2]) / 2 - x, (r[1] + r[3]) / 2 - y); if (p < bp || (p === bp && d < bd)) { bp = p; bd = d; b = o; } }
+    return b; }
   function tap(cx, cy) {
     if (!on) return; const c = Entities.cam, wx = c.x + cx / window.VK, wy = c.y + cy / window.VK;
-    if (remove || turn || upg) { gx = wx; gy = wy; } else [gx, gy] = snap(wx, wy);
+    if (remove) { const prev = target, f = findAt(wx, wy); if (f && f === prev) { confirm(); return; } gx = wx; gy = wy; check(); if (ok) Save.flash('Toque de novo para tirar: ' + PIECES[f.kind][0].toLowerCase() + ((f.h || 1) > 1 ? ' (parte de cima)' : '')); else if (why) Save.flash(why); return; }   /* remover: 1º toque marca a peça (fica vermelha), 2º toque na mesma peça tira */
+    if (turn || upg) { gx = wx; gy = wy; } else [gx, gy] = snap(wx, wy);
     check(); if (!ok && why) Save.flash(why);
   }
   function confirm() {
     check(); if (!ok) { if (why) Save.flash(why); return; }
-    if (upg) { const o = findAt(gx, gy); o.lv = 2; inv.plank -= UPC; Entities.refresh(); Save.save(true); Save.flash('🪚 Reforçada: nível 2 (durabilidade ' + DUR[2] + ')'); render(); check(); return; }
-    if (remove) { const o = findAt(gx, gy); if (o && o.lv === 2 && !((o.h || 1) > 1)) inv.plank += UPC; if (o && (o.kind === 'wall' || o.kind === 'door') && (o.h || 1) > 1) { o.h = 1; inv.wall++; Entities.refresh(); Save.save(true); render(); return; } if (o) { o.dead = true; if (o.kind === 'bridge') inv.plank++; else if (o.kind === 'fence') { for (let i = 0; i < (o.stage || 0); i++) World.add({ kind: 'log', x: o.x + (i - 1) * 14, y: o.y + 10 + i * 6, ph: 0 }); } else inv[o.kind]++; Entities.refresh(); render(); } return; }
+    if (upg) { const o = findAt(gx, gy, RF.wall); o.lv = 2; inv.plank -= UPC; Entities.refresh(); Save.soon(); Save.flash('🪚 Reforçada: nível 2 (durabilidade ' + DUR[2] + ')'); render(); check(); return; }
+    if (remove) { const o = target || findAt(gx, gy); target = null; if (o && o.lv === 2 && !((o.h || 1) > 1)) inv.plank += UPC; if (o && (o.kind === 'wall' || o.kind === 'door') && (o.h || 1) > 1) { o.h = 1; inv.wall++; Entities.refresh(); Save.soon(); render(); return; } if (o) { o.dead = true; if (o.kind === 'bridge') inv.plank++; else if (o.kind === 'fence') { for (let i = 0; i < (o.stage || 0); i++) World.add({ kind: 'log', x: o.x + (i - 1) * 14, y: o.y + 10 + i * 6, ph: 0 }); } else inv[o.kind]++; Entities.refresh(); render(); } return; }
     if (turn) {
-      const o = findAt(gx, gy), P = Player.p, nv = !o.vert, [nx, ny] = snapFor(o.kind, nv, o.x, o.y), sb = solidBox(o.kind, nv);
+      const o = findAt(gx, gy, RF.wall), P = Player.p, nv = !o.vert, [nx, ny] = snapFor(o.kind, nv, o.x, o.y), sb = solidBox(o.kind, nv);
       if (Math.abs(P.x - nx) < sb[0] + 12 && Math.abs(P.y - ny) < sb[1] + 12) { Save.flash('Você está no caminho'); return; }
       for (let _i74 = 0, q; _i74 < World.objs.length && (q = World.objs[_i74], true); _i74++) if (q !== o && q.kind === o.kind && Math.abs(q.x - nx) < 3 && Math.abs(q.y - ny) < 3 && !!q.vert === nv) { Save.flash('Já tem uma peça lá'); return; }
-      o.vert = nv; o.x = nx; o.y = ny; o.bw = sb[0]; o.bh = sb[1]; gx = nx; gy = ny; Save.save(true); Save.flash(nv ? '↕ Girada' : '↔ Girada'); return;
+      o.vert = nv; o.x = nx; o.y = ny; o.bw = sb[0]; o.bh = sb[1]; gx = nx; gy = ny; Save.soon(); Save.flash(nv ? '↕ Girada' : '↔ Girada'); return;
     }
-    { const ex = piece === 'wall' ? same('wall', gx, gy, vert) : null; if (ex) { ex.h = 2; inv.wall--; Entities.refresh(); Save.save(true); Save.flash('Parede dupla'); render(); check(); return; } }
+    { const ex = piece === 'wall' ? same('wall', gx, gy, vert) : null; if (ex) { ex.h = 2; inv.wall--; Entities.refresh(); Save.soon(); Save.flash('Parede dupla'); render(); check(); return; } }
     const o = { kind: piece, x: gx, y: gy, ph: 0 }; const sb = solidBox(piece, vert);
     if (sb) { o.solid = piece !== 'fence'; o.vert = vert; o.bw = sb[0]; o.bh = sb[1]; if (piece === 'fence') o.stage = 0; }
-    World.add(o); if (piece === 'bridge') inv.plank -= BPLANKS; else if (piece !== 'fence') inv[piece]--; Entities.refresh(); Save.save(true); render(); check();
+    if (piece !== 'bridge' && piece !== 'roof') clearSoft(piece, gx, gy, vert); World.add(o); if (piece === 'bridge') inv.plank -= BPLANKS; else if (piece !== 'fence') inv[piece]--; Entities.refresh(); Save.soon(); render(); check();
   }
   function rotate() { vert = piece === 'door' ? false : !vert; [gx, gy] = snap(gx, gy); check(); render(); }
   function open(p) {
@@ -3810,19 +4007,22 @@ const Build = (() => {
   function toggle() { on ? close() : open(); }
   let sig = '';
   function render() {
-    sig = ORDER.map(cnt).join() + piece + remove + turn + vert + upg + inv.plank;
+    sig = ORDER.map(cnt).join() + piece + remove + turn + vert + upg + inv.plank + remF;
     let h = '';
     for (const k of ORDER) h += `<div class="bp${!remove && !turn && !upg && piece === k ? ' on' : ''}" data-k="${k}"><i></i><em>${k === 'fence' ? '🪵' : cnt(k)}</em><small>${PIECES[k][0]}</small></div>`;
     h += `<div class="bt" data-a="rot">${vert ? '↕' : '↔'}<small>Girar</small></div><div class="bt${turn ? ' on' : ''}" data-a="turn">↻<small>Girar peça</small></div><div class="bt${upg ? ' on' : ''}" data-a="up">🪚<small>Melhorar</small></div><div class="bt${remove ? ' on' : ''}" data-a="rem">🗑<small>Remover</small></div><div class="bt ok" data-a="ok">✔<small>Colocar</small></div><div class="bt" data-a="x">✕<small>Sair</small></div>`;
+    if (remove) h += '<div class="bf">Tirar só: ' + [['all', 'Tudo'], ['roof', '🏠 Telhado'], ['wall', '🧱 Parede/porta'], ['floor', '🟫 Piso']].map(([k, n]) => `<span data-f="${k}" class="${remF === k ? 'on' : ''}">${n}</span>`).join('') + '</div>';
     bar.innerHTML = h;
+    bar.querySelectorAll('.bf span').forEach(sp => sp.onclick = e => { e.stopPropagation(); remF = sp.dataset.f; target = null; check(); render(); });
     bar.querySelectorAll('.bp').forEach(b => { b.firstChild.replaceWith(Entities.icon(b.dataset.k)); b.onclick = e => { e.stopPropagation(); piece = b.dataset.k; remove = false; turn = false; upg = false; [gx, gy] = snap(gx, gy); check(); render(); }; });
-    bar.querySelectorAll('.bt').forEach(b => b.onclick = e => { e.stopPropagation(); const a = b.dataset.a; if (a === 'rot') rotate(); else if (a === 'rem') { remove = !remove; turn = false; upg = false; check(); render(); } else if (a === 'up') { upg = !upg; remove = false; turn = false; check(); render(); } else if (a === 'turn') { turn = !turn; remove = false; upg = false; check(); render(); } else if (a === 'ok') confirm(); else close(); });
+    bar.querySelectorAll('.bt').forEach(b => b.onclick = e => { e.stopPropagation(); const a = b.dataset.a; if (a === 'rot') rotate(); else if (a === 'rem') { remove = !remove; turn = false; upg = false; target = null; check(); render(); } else if (a === 'up') { upg = !upg; remove = false; turn = false; check(); render(); } else if (a === 'turn') { turn = !turn; remove = false; upg = false; check(); render(); } else if (a === 'ok') confirm(); else close(); });
   }
   function draw(ctx, camX, camY) {
     if (!on) return; const x = gx - camX, y = gy - camY, col = ok ? '#4dff6a' : '#ff4d4d';
     // grade ao redor para ajudar a alinhar
     { const G = GS(piece), nx = G === 32 ? 12 : 8, ny = G === 32 ? 8 : 6, cx0 = Math.floor(gx / G) - nx / 2, cy0 = Math.floor(gy / G) - ny / 2; ctx.strokeStyle = 'rgba(255,255,255,.16)'; ctx.lineWidth = 1; ctx.beginPath(); for (let i = 0; i <= nx; i++) { const gxl = Math.round((cx0 + i) * G - camX) + .5; ctx.moveTo(gxl, Math.round(cy0 * G - camY)); ctx.lineTo(gxl, Math.round((cy0 + ny) * G - camY)); } for (let j = 0; j <= ny; j++) { const gyl = Math.round((cy0 + j) * G - camY) + .5; ctx.moveTo(Math.round(cx0 * G - camX), gyl); ctx.lineTo(Math.round((cx0 + nx) * G - camX), gyl); } ctx.stroke(); }
-    if (remove || turn || upg) { ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(Math.round(x), Math.round(y), 16, 0, 6.283); ctx.stroke(); return; }
+    if (remove) { if (target && !target.dead) { const r = pieceRect(target), a = ctx.globalAlpha; ctx.globalAlpha = .35 + .15 * Math.sin(performance.now() / 120); ctx.fillStyle = '#ff3a2a'; ctx.fillRect(Math.round(r[0] - camX), Math.round(r[1] - camY), r[2] - r[0], r[3] - r[1]); ctx.globalAlpha = a; ctx.strokeStyle = '#ff6a5a'; ctx.lineWidth = 2; ctx.strokeRect(Math.round(r[0] - camX) + 1, Math.round(r[1] - camY) + 1, r[2] - r[0] - 2, r[3] - r[1] - 2); } return; }
+    if (turn || upg) { ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(Math.round(x), Math.round(y), 16, 0, 6.283); ctx.stroke(); return; }
     ctx.globalAlpha = .6; if (piece === 'bridge') Entities.drawBridge(ctx, x, y, gx, gy, false); else Entities.drawPiece(ctx, piece, x, y, vert, true); ctx.globalAlpha = 1;
     const sb = piece === 'bridge' ? [32, 32] : piece === 'floor' || piece === 'roof' ? [32, 32] : solidBox(piece, vert); ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.strokeRect(Math.round(x - sb[0]) + 1, Math.round(y - sb[1]) + 1, sb[0] * 2 - 2, sb[1] * 2 - 2);
   }
@@ -3982,7 +4182,8 @@ const Save = (() => {
       objs: World.objs.filter(o => o.fall === undefined && !o.dead && !o.broken).map(o => [o.kind, Math.round(o.x), Math.round(o.y), o.kind === 'mato' ? Math.round(o.cutT || 0) : o.kind.startsWith('sap') ? Math.round(o.g || 0) : o.kind === 'bridge' ? (o.nat ? 1 : 0) : (o.kind === 'fence' || o.kind === 'wall') ? (o.vert ? 1 : 0) : o.palmStump || o.palm ? 1 : (o.hp === undefined ? null : o.hp), o.kind === 'fence' ? o.stage : (o.kind === 'wall' || o.kind === 'door') ? { h: o.h || 1, op: o.open ? 1 : 0, lv: o.lv === 2 ? 2 : 1 } : o.kind === 'palm' ? o.co : o.kind === 'fire' ? { d: o.dmg || 0, c: o.cook || null, b: o.boilT || 0, n: o.boilN || 0, w: o.waterReady || 0 } : (o.ap || o.items || null), o.coT ? o.coT.map(v => Math.round(v)) : o.apT ? o.apT.map(v => Math.round(v)) : null]), rg: Entities.regrow().map(g => [Math.round(g.x), Math.round(g.y), Math.round(g.t)]) };
   }
   let wiped = false, saveWarned = false;
-  function save(quiet) {
+  let soonT = 0; function soon() { clearTimeout(soonT); soonT = setTimeout(() => { soonT = 0; save(true); }, 1200); }   /* ações do jogo (equipar, pegar, baú, construir): salva 1x logo depois, não a cada toque (salvar trava ~20 ms no celular) */
+  function save(quiet) { if (soonT) { clearTimeout(soonT); soonT = 0; }
     if (wiped || (typeof Title !== 'undefined' && Title.active)) return false;   // na tela inicial a posição é do 'fantasma' da câmera: não salva
     try { localStorage.setItem(KEY, JSON.stringify(pack())); if (typeof Cloud !== 'undefined') Cloud.markDirty(); if (!quiet) flash('💾 Salvo'); return true; } catch (e) { if (!saveWarned) { saveWarned = true; flash('⚠ Não deu para salvar (' + (e && e.name || 'erro') + ')'); } return false; }
   }
@@ -4032,7 +4233,7 @@ const Save = (() => {
     const go = e => { e.preventDefault(); e.stopPropagation(); if (rb.dataset.armed) { wiped = true; try { for (const l in LOCS) localStorage.removeItem(LOCKEY(l)); localStorage.removeItem('iv_loc'); localStorage.removeItem('iv_travel'); } catch (_) {} location.reload(); } else { rb.dataset.armed = 1; rb.textContent = 'Apagar?'; resetT = 3; } };
     rb.addEventListener('touchstart', go, { passive: false }); rb.addEventListener('mousedown', go);
   }
-  return { load, save, update, init, flash };
+  return { load, save, soon, update, init, flash };
 })();
 
 // Viagem entre locais: salva o local atual, guarda o que vai junto (mochila, vida, fome, sede, frio, hora) e recarrega no outro local, chegando na trilha.
@@ -4746,6 +4947,9 @@ const Title = (() => {
     errBox.style.display = 'block'; errBox.textContent = '⚠ Erro (toque para fechar e me mande foto):\n' + window.__errs.slice(-3).join('\n\n'); } catch (_) {} }
   let slD = 0, slW = '', pkW = '', pkD = 0, pkT = 0;   /* qual parte deixou o pior quadro lento (aparece no FPS como 'pico') */
   const sf = (where, f) => { const t0 = pn(); try { f(); } catch (e) { reportErr(e, where); } const d = pn() - t0; if (d > slD) { slD = d; slW = where; } };
+  /* placa de vídeo: as páginas do SEU personagem (sem nada, com machado/facão...) sobem antes de precisar, 1 por vez.
+     Antes a página da ferramenta só subia na 1ª troca rápida ou ao equipar = travada de ~40 ms no celular naquele toque. */
+  let warmF = 0; function warmChar() { try { const g = Assets.grp && Assets.grp[window.SKIN || 'hm']; if (!g || g.st !== 2) return; for (const p of g.pages) { const im = p.img; if (!im) continue; im.__keep = 1; if (!ctx.texs.has(im)) { ctx.tex(im); return; } } } catch (e) {} }
   function frame(now) { try { frame0(now); } catch (e) { reportErr(e, 'frame'); requestAnimationFrame(frame); } }
   function frame0(now) {
     /* taxa da tela medida o tempo todo (antes era só nos primeiros quadros, durante o carregamento, e errava: celular de 120 Hz aparecia como 45 e ficava sem limite) */
@@ -4758,11 +4962,12 @@ const Title = (() => {
     if (!Death.active && !window.TRAVEL_LOCK) { sf('mundo', () => World.tick(dt, Player.p.x, Player.p.y)); if (!TT) { sf('ataque', () => { if (window.__atkHeld && window.__atkHeld()) Entities.attack(); }); sf('jogador', () => Player.update(dt, Input.axis())); } sf('bichos', () => Entities.update(dt)); sf('mar', () => Sea.update(dt)); sf('clima', () => Weather.update(dt, vw, vh)); sf('som', () => Sfx.update(dt)); sf('rede', () => Net.update(dt)); if (!TT) sf('save', () => Save.update(dt)); } const a1 = pn();
     { const PP = Player.p, tz = (!TT && (PP.dying !== undefined || PP.dead || PP.getup !== undefined)) ? .85 : (!TT && World.onPlat(PP.x, PP.y)) ? 1.35 : 1;   /* morrendo/levantando: zoom pequeno no personagem */ if (VZc !== tz) { VZc += (tz - VZc) * Math.min(1, dt * 2.5); if (Math.abs(tz - VZc) < .01) VZc = tz; if (Math.abs(VZc - (window.VZ || 1)) >= .02 || VZc === tz) { window.VZ = VZc; resize(); } } }   // vista: sobe no planalto → a tela abre
     const cx0 = TT ? Title.cam.x - (vw > vh ? vw * .24 : 0) : Player.p.x, cy0 = TT ? Title.cam.y + (vw > vh ? 0 : vh * .1) : Player.p.y;   // na tela inicial o bicho fica fora do menu
-    const camX = Math.min(Math.max(Math.round(cx0) - (vw >> 1), 0), World.size.w - vw), camY = Math.min(Math.max(Math.round(cy0) - (vh >> 1), 0), World.size.h - vh);
+    const camX = Math.round(cx0) - (vw >> 1), camY = Math.round(cy0) - (vh >> 1);   /* câmera sempre centrada no personagem, também nas beiradas do mapa (fora do mapa aparece o mar) */
     if (ctx.begin) ctx.begin(); ctx.setTransform(window.RS || 1, 0, 0, window.RS || 1, 0, 0); ctx.fillStyle = '#1d5a7a'; ctx.fillRect(0, 0, vw, vh);
     const b0 = pn(); World.draw(ctx, camX, camY, vw, vh); const b1 = pn();
     Sea.draw(ctx, camX, camY, vw, vh); Entities.draw(ctx, camX, camY, vw, vh, Player); const b2 = pn();
     Weather.draw(ctx, vw, vh, camX, camY); if (ctx.end) ctx.end(); const b3 = pn();
+    if (ctx.isGL && (++warmF % 20) === 0) warmChar();
     tU += a1 - a0; tW += b1 - b0; tE += b2 - b1; tC += b3 - b2; if (dtRaw > (window.FPS30 ? .045 : .026)) spikes++;
     frames++; fpsT += dtRaw; if (dtRaw * 1000 > worst) { worst = dtRaw * 1000; if (worst > 22) { let w = slW, d = slD; if (b1 - b0 > d) { d = b1 - b0; w = 'chão'; } if (b2 - b1 > d) { d = b2 - b1; w = 'desenho'; } if (b3 - b2 > d) { d = b3 - b2; w = 'envio GPU'; } if (d < 6) { w = 'fora do JS'; d = worst; } if (d > pkD || now - pkT > 3000) { pkW = w; pkD = d; pkT = now; } } }
     if (fpsT >= .5) { const f1 = x => (x / frames).toFixed(1); fpsEl.textContent = `${ctx.isGL ? 'GL · ' : ''}${Math.round(frames / fpsT)} FPS · pior ${Math.round(worst)}\nlag ${spikes}${hz ? ' · ' + hz + 'Hz' + (cap ? '→60' : '') : ''}\nJS ${f1(tU)}+${f1(tW)}+${f1(tE)}+${f1(tC)} ms${pkW && now - pkT < 3000 ? ' · pico: ' + pkW + ' ' + Math.round(pkD) : ''}${ctx.isGL ? '\n' + ctx.gpu + ' · lotes ' + (window.__glc | 0) + ' · envios ' + ctx.up + (ctx.up ? ' (' + Math.round(ctx.upPx / 1000) + 'k px)' : '') : ''}`; if (ctx.isGL) { ctx.up = 0; ctx.upPx = 0; } const fp = frames / fpsT;
