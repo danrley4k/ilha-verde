@@ -52,7 +52,7 @@ body.building #dropbtn{display:none!important}
 #bag .ba{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}#bag button{font:bold 13px system-ui;padding:8px 12px;border-radius:8px;border:0;background:#e8b04a;color:#3a2410}#bag button.g{background:#6b4a24;color:#fff}
 @media (max-height:560px){#bag{width:min(660px,94vw)}#bag .bg{grid-template-columns:repeat(10,1fr)}}
 #chest{width:min(760px,96vw)}#chest .c2{display:flex;gap:10px}#chest .cp{flex:1;min-width:0;background:#0003;border:2px solid transparent;border-radius:10px;padding:6px}#chest .cp.hov{border-color:#9dff9d;background:#2f7a3a33}#chest .ct{display:flex;align-items:center;gap:6px;font-weight:bold;font-size:13px}#chest .ct span{opacity:.75;font-weight:normal}#chest .ct button{margin-left:auto;font:bold 11px system-ui;padding:5px 8px;border-radius:7px;border:0;background:#e8b04a;color:#3a2410}#chest .cg{max-height:min(46vh,300px);overflow-y:auto;gap:4px!important;margin:6px 0 2px!important}#chest .ci{width:46px!important;height:46px!important;touch-action:none;cursor:grab}#chest .ci.emp{opacity:.35}.ci.drag{position:fixed;z-index:99;width:54px;height:54px;pointer-events:none;background:#1d120add;border:2px solid #ffd24a;border-radius:8px;display:flex;align-items:center;justify-content:center}.ci.drag canvas{width:80%;height:80%;image-rendering:pixelated}.ci.drag em{position:absolute;right:4px;bottom:1px;font:bold 12px system-ui;color:#fff}
-@media (orientation:portrait){#chest .c2{flex-direction:column}#chest .cg{max-height:26vh}}#chest .bh,#bag .bh{display:flex}#chest .bh{align-items:center;margin-bottom:6px;font-size:16px}#cxx{margin-left:auto;font-size:20px;cursor:pointer;padding:0 6px}
+@media (orientation:portrait){#chest .c2{flex-direction:column}#chest .cg{max-height:26vh}}#chest .bh,#bag .bh{display:flex}#chest .bh{align-items:center;margin-bottom:6px;font-size:16px}#cxx{margin-left:auto;font-size:20px;cursor:pointer;padding:0 6px}#chest .cbt{margin-left:10px;background:#2b3a2bcc;color:#fff;border:0;border-radius:14px;padding:5px 10px;font:bold 12px system-ui}#chest .cbt.off{opacity:.45}#chestput{display:none;position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom) + 92px);z-index:30;background:#1c242add;color:#fff;font:bold 15px system-ui;padding:10px 18px;border-radius:22px;box-shadow:0 2px 8px #0007;align-items:center;touch-action:none}body.title #chestput,body.crafting #chestput,body.building #chestput{display:none!important}
 #chest .cg{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 10px;min-height:46px}#chest .ci{position:relative;width:54px;height:54px;background:#1d120a;border:2px solid #6b4a24;border-radius:8px;display:flex;align-items:center;justify-content:center}
 #chest .ci canvas{width:80%;height:80%;image-rendering:pixelated}#chest .ci em{position:absolute;right:4px;bottom:1px;font:bold 12px system-ui;font-style:normal;text-shadow:0 1px 2px #000}#chest small{opacity:.8}#chest .ce{align-self:center}
 #craft{max-height:88vh;overflow:auto}
@@ -255,7 +255,7 @@ body.title #swapb,body.crafting #swapb,body.building #swapb,body:has(#bag[style*
 body.title #pcard,body.title #qbar,body.title .qs,body.title #autob,body.title #stick,body.title #swapb,body.title #sneak,body.crafting #pcard,body.crafting #qbar,body.crafting .qs,body.crafting #autob,body.crafting #stick,body.building #qbar,body.building .qs,body.building #autob,body.building #bagbtn{display:none!important}
 .hdrag{position:fixed;z-index:99;width:54px;height:54px;pointer-events:none;border-radius:50%;background:#1c242acc;display:flex;align-items:center;justify-content:center}.hdrag canvas{width:70%;height:70%;image-rendering:pixelated}
 #bag{width:min(880px,97vw)!important;max-height:94vh!important;overflow:hidden!important;display:none;flex-direction:column;z-index:45!important}
-body:has(#bag[style*="flex"]) :is(#pcard,#qbar,.qs,#autob,#stick,#clk,#wx,#use,#fps,#rot,#craftbtn,#buildbtn,#bagbtn,#atk,#sneak,#band,#fire,#dropbtn,#raftbtn,#cqchip,#bat){display:none!important}   /* inventário aberto: a tela fica limpa */
+body:has(#chest[style*="block"]) :is(#pcard,#qbar,.qs,#autob,#stick,#knob,#clk,#wx,#use,#fps,#rot,#craftbtn,#buildbtn,#bagbtn,#atk,#sneak,#band,#fire,#dropbtn,#raftbtn,#cqchip,#bat,#swapb,#gear),body:has(#bag[style*="flex"]) :is(#pcard,#qbar,.qs,#autob,#stick,#clk,#wx,#use,#fps,#rot,#craftbtn,#buildbtn,#bagbtn,#atk,#sneak,#band,#fire,#dropbtn,#raftbtn,#cqchip,#bat){display:none!important}   /* inventário aberto: a tela fica limpa */
 #bag .bqs{display:flex;gap:8px;justify-content:center;align-items:center;font-size:11px;opacity:.95;padding:2px 0}#bag .bq{position:relative;width:44px;height:44px;border-radius:50%;background:#1c242acc;box-shadow:0 0 0 2px #4a6a7a88;display:flex;align-items:center;justify-content:center;touch-action:none}#bag .bq canvas{width:66%;height:66%;image-rendering:pixelated}#bag .bq.hov{box-shadow:0 0 0 3px #9dff9d}#bag .bq:empty::after{content:'+';opacity:.4;font:bold 18px system-ui}
 #bag .bw{display:flex;gap:10px;min-height:0;flex:1}#bag .bl{flex:1.05;min-width:0;display:flex;flex-direction:column;border-radius:10px;border:2px solid transparent}#bag .bl.hov{border-color:#9dff9d}
 #bag .bg{grid-template-columns:repeat(5,1fr)!important;overflow-y:auto;max-height:min(58vh,330px);padding:2px}#bag .bd{flex:none}
@@ -577,21 +577,25 @@ const World = (() => {
   }
   // mudas: nascem pelo pica-pau (maçã) ou sozinhas perto de árvores adultas, crescem em GROW segundos e viram árvore
   const GROW = 600; let natT = 30;
+  const BUILT = { floor: 1, roof: 1, wall: 1, door: 1, fence: 1, chest: 1, carp: 1, bench: 1, campfire: 1, fire: 1, shelter: 1, bridge: 1 };
+  const nearBuilt = (x, y) => { for (let i = 0; i < objs.length; i++) { const o = objs[i]; if (BUILT[o.kind] && !o.dead && Math.abs(o.x - x) < 56 && Math.abs(o.y - y) < 48) return true; } return false; };   /* muda não nasce em cima/perto de piso, parede, baú... (antes virava árvore dentro da casa) */
   function plant(x, y, kind) {
+    if (LOCS[LOC].fixed) return false;   /* Casa: nada nasce sozinho (nem muda do pica-pau) */
     const vx = Math.floor(x / T), vy = Math.floor(y / T);
     if (!okL(x, y, 2, 2) || nearPath(vx, vy) || nearPath(vx - 1, vy) || nearPath(vx + 1, vy) || nearPath(vx, vy - 1) || nearPath(vx, vy + 1)) return false;
     if (Math.hypot(x - spawnPt.x, y - spawnPt.y) < 150 || (raftPos && Math.hypot(x - raftPos.x, y - raftPos.y) < 150)) return false;
     let n = 0; for (let _i1 = 0, o; _i1 < objs.length && (o = objs[_i1], true); _i1++) { if (o.kind.startsWith('sap')) n++; if (Math.abs(o.x - x) < 30 && Math.abs(o.y - y) < 22 && (o.solid || o.kind.startsWith('sap') || o.kind === 'bench' || o.kind === 'fire')) return false; }
-    if (n >= 40) return false;
+    if (n >= 40 || nearBuilt(x, y)) return false;
     objs.push({ kind, x, y, ph: Math.random() * 9, g: 0 }); actVer++; return true;
   }
-  function natural(px, py) { for (let i = 0; i < 14; i++) { const o = objs[Math.floor(Math.random() * objs.length)]; if (o.kind !== 'pine' && o.kind !== 'oak') continue; const x = o.x + (Math.random() - .5) * 260, y = o.y + (Math.random() - .5) * 200; if (Math.hypot(x - px, y - py) < 220) continue; if (plant(x, y, o.kind === 'pine' ? 'sappine' : 'sapoak')) return; } }
+  function natural(px, py) { if (LOCS[LOC].fixed) return; for (let i = 0; i < 14; i++) { const o = objs[Math.floor(Math.random() * objs.length)]; if (o.kind !== 'pine' && o.kind !== 'oak') continue; const x = o.x + (Math.random() - .5) * 260, y = o.y + (Math.random() - .5) * 200; if (Math.hypot(x - px, y - py) < 220) continue; if (plant(x, y, o.kind === 'pine' ? 'sappine' : 'sapoak')) return; } }
   let matoL = [], matoSrc = null, matoN = -1;   /* lista só do mato alto perto (refeita quando a lista de objetos ativos muda): era percorrida inteira para cada bicho, a cada quadro */
   function inMato(x, y, r) { if (matoSrc !== act || matoN !== act.length) { matoSrc = act; matoN = act.length; matoL = act.filter(o => o.kind === 'mato'); } for (let i = 0; i < matoL.length; i++) { const o = matoL[i]; if (!(o.cutT > 0) && Math.abs(o.x - x) < r && Math.abs(o.y - y) < r * .7) return true; } return false; }
   function cutMato(x, y, r, each) { let n = 0; for (let i = 0; i < act.length; i++) { const o = act[i]; if (o.kind === 'mato' && !(o.cutT > 0) && Math.hypot(o.x - x, (o.y - y) * 1.3) < r) { o.cutT = 420; n++; if (each) each(o); } } return n; }
   function tick(dt, px, py) {
     if ((natT -= dt) <= 0) { natT = 25 + Math.random() * 20; natural(px, py); }
-    for (let i = 0; i < act.length; i++) { const o = act[i]; if (o.kind === 'mato' && o.cutT > 0) { if (!LOCS[LOC].fixed) o.cutT -= dt; if (o.cutT <= 0) o.cutT = 0; } else if (o.g !== undefined && o.kind.startsWith('sap')) { o.g += dt; if (o.g >= GROW && !o.dead && Math.hypot(o.x - px, o.y - py) > 50) { o.dead = true; const k = o.kind === 'sappine' ? 'pine' : o.kind === 'sapoak' ? 'oak' : 'appletree'; add(Object.assign({ kind: k, x: o.x, y: o.y, ph: Math.random() * 9, solid: true }, k === 'appletree' ? { ap: [0, 0, 0, 0], apT: [30, 40, 50, 60] } : {})); } } }
+    for (let i = 0; i < act.length; i++) { const o = act[i]; if (o.kind === 'mato' && o.cutT > 0) { if (!LOCS[LOC].fixed) o.cutT -= dt; if (o.cutT <= 0) o.cutT = 0; } else if (o.g !== undefined && o.kind.startsWith('sap')) { if (LOCS[LOC].fixed && !o.dead) { o.dead = true; actVer++; continue; }   /* Casa: mudas que nasceram antes desta correção somem */
+      o.g += dt; if (o.g >= GROW && !o.dead && Math.hypot(o.x - px, o.y - py) > 50) { if (nearBuilt(o.x, o.y)) { o.dead = true; actVer++; continue; }   /* muda que ficou em cima da construção não vira árvore */ o.dead = true; const k = o.kind === 'sappine' ? 'pine' : o.kind === 'sapoak' ? 'oak' : 'appletree'; add(Object.assign({ kind: k, x: o.x, y: o.y, ph: Math.random() * 9, solid: true }, k === 'appletree' ? { ap: [0, 0, 0, 0], apT: [30, 40, 50, 60] } : {})); } } }
     clock += dt; actT -= dt; const cx = (px / 200) | 0, cy = (py / 200) | 0;
     if (actVer !== lastVer || objs.length !== lastLen || cx !== lastCx || cy !== lastCy || actT <= 0) { lastCx = cx; lastCy = cy; rebuildAct(px, py); }
     rebuildSolids();
@@ -1004,6 +1008,7 @@ const World = (() => {
       if (ok) c++;
     }
     for (let i = objs.length - 1; i >= 0; i--) { const o = objs[i]; if ((o.kind === 'camptree' || o.kind === 'fir' || o.kind === 'pine' || o.kind === 'oak' || o.kind === 'appletree') && nearPath(Math.floor(o.x / T), Math.floor(o.y / T))) objs.splice(i, 1); }
+    { const TK = { pine: 1, oak: 1, fir: 1, appletree: 1, palm: 1, boulder: 1, rock: 1, dead: 1 }, keep = []; for (let i = 0; i < objs.length; i++) { const o = objs[i]; if (!TK[o.kind]) continue; if (keep.some(q => Math.abs(q.x - o.x) < 14 && Math.abs(q.y - o.y) < 10)) { objs.splice(i, 1); i--; } else keep.push(o); } }   /* mapa novo: tira árvore/pedra nascida em cima de outra */
     if (raftPos) objs.push({ kind: 'raft', x: raftPos.x, y: raftPos.y, hp: 1, ph: 0 });
   }
   // Acampamento: clareira de terra, tenda, fogueira de pedras, mesa, varal, baú e árvores escuras (mais perto do início, em grama plana)
@@ -1130,7 +1135,7 @@ const Input = (() => {
     stick.x = dx / d * k; stick.y = dy / d * k;
     knob.style.transform = `translate(${stick.x * R}px,${stick.y * R}px)`;
   }
-  addEventListener('touchstart', e => { if (e.target.closest && e.target.closest('#title,#gear,#rot,#craft,#bag,#chest,#build,#buildbtn,#raftbtn,#craftbtn,#bagbtn,#atk,#use,#fire,#band,#sneak,#dropbtn,#firemenu,#tools,#hud,#pcard,#qbar,.qs,#autob,#swapb')) return; for (const t of e.changedTouches) if (!stick.on && t.clientX < innerWidth * .45 && t.clientY > innerHeight * .35) { stick.on = true;   /* analógico: toque na parte de baixo à esquerda; ele vai até onde você tocou (sem passar da metade nem subir demais) */ stick.id = t.identifier; stick.ox = t.clientX; stick.oy = t.clientY; base.classList.add('act'); base.style.left = t.clientX - SB / 2 + 'px'; base.style.top = t.clientY - SB / 2 + 'px'; move(t); } }, { passive: true });
+  addEventListener('touchstart', e => { if (e.target.closest && e.target.closest('#title,#gear,#rot,#craft,#bag,#chest,#build,#buildbtn,#raftbtn,#craftbtn,#bagbtn,#atk,#use,#fire,#band,#sneak,#dropbtn,#firemenu,#tools,#hud,#pcard,#qbar,.qs,#autob,#swapb,#chestput')) return; for (const t of e.changedTouches) if (!stick.on && t.clientX < innerWidth * .45 && t.clientY > innerHeight * .35) { stick.on = true;   /* analógico: toque na parte de baixo à esquerda; ele vai até onde você tocou (sem passar da metade nem subir demais) */ stick.id = t.identifier; stick.ox = t.clientX; stick.oy = t.clientY; base.classList.add('act'); base.style.left = t.clientX - SB / 2 + 'px'; base.style.top = t.clientY - SB / 2 + 'px'; move(t); } }, { passive: true });
   addEventListener('touchmove', e => { for (const t of e.changedTouches) if (t.identifier === stick.id) move(t); }, { passive: true });
   const end = e => { for (const t of e.changedTouches) if (t.identifier === stick.id) { stick.on = false; stick.x = stick.y = 0; base.classList.remove('act'); knob.style.transform = ''; rest(); } };
   const SB = 150; function rest() { const L = innerWidth > innerHeight; base.style.left = (L ? 150 : 128) - SB / 2 + 'px'; base.style.top = innerHeight - (L ? 112 : 196) - SB / 2 + 'px'; } rest(); addEventListener('resize', () => { if (!stick.on) rest(); });   /* posição de descanso: sempre à mostra */
@@ -1155,7 +1160,7 @@ const Input = (() => {
   const bind = (id, fn) => { const b = document.getElementById(id); const go = e => { e.preventDefault(); e.stopPropagation(); fn(); }; b.addEventListener('touchstart', go, { passive: false }); b.addEventListener('mousedown', go); };
   { const ab = document.getElementById('atk'); let held = false; window.__atkHeld = () => held; const dn = () => { held = true; }, up = () => { held = false; }; ab.addEventListener('touchstart', dn, { passive: true }); ab.addEventListener('mousedown', dn); addEventListener('touchend', up); addEventListener('touchcancel', up); addEventListener('mouseup', up); }
   bind('atk', () => Entities.attack()); bind('fire', () => Entities.placeFire()); bind('dropbtn', () => Entities.dropLog()); bind('sneak', () => Player.setSneak(!Player.p.sneak)); bind('band', () => Entities.useBandage()); bind('use', () => Entities.use()); bind('craftbtn', () => Entities.toggleHand());
-  addEventListener('keydown', e => { const k = e.key.toLowerCase(); if (e.repeat) return; if (k === ' ' || k === 'j') Entities.attack(); if (k === 'e') Entities.use(); if (k === 'f') Entities.placeFire(); });
+  addEventListener('keydown', e => { const k = e.key.toLowerCase(); if (e.repeat) return; if (k === ' ' || k === 'j') Entities.mainPress(); if (k === 'e') Entities.use(); if (k === 'f') Entities.placeFire(); });
 })();
 
 (function () { // toque curto no mapa = posicionar o fantasma no modo construção
@@ -1612,7 +1617,7 @@ const Entities = (() => {
     }   // caverna do urso visível, com clareira em volta
     if (LOCS[LOC].safe) for (let i = dens.length - 1; i >= 0; i--) if (dens[i].kind === 'cave_bear') dens.splice(i, 1);   /* Home: sem caverna de urso */
     if (LOCS[LOC].safe) { const CAP = { deer: 5, rabbit: 8, fawn: 2, woodpecker: 3, urubu: 1, crab: 6, gull: 4, wolf: 3 }, cnt = {}; for (let i = 0; i < animals.length; i++) { const a = animals[i], c = CAP[a.kind]; if (c === undefined) continue; cnt[a.kind] = (cnt[a.kind] || 0) + 1; if (cnt[a.kind] > c) { animals.splice(i, 1); i--; } } }   /* Home é menor: menos bichos */
-    if (LOCS[LOC].fixed && window.__homeAC) { const AC = window.__homeAC, cnt = {}; for (let i = 0; i < animals.length; i++) { const k = animals[i].kind; cnt[k] = (cnt[k] || 0) + 1; if (cnt[k] > (AC[k] | 0)) { animals.splice(i, 1); i--; } } }   /* Casa: quem morreu não volta */
+    if (LOCS[LOC].fixed && window.__homeAC) { const AC = window.__homeAC, cnt = {}; { let dn = animals.filter(a => a.kind === 'deer').length; for (const a of animals) if (a.kind === 'fawn' && dn < (AC.deer | 0) && animals.filter(b => b.kind === 'fawn').length > (AC.fawn | 0)) { a.kind = 'deer'; a.hp = KINDS.deer.hp; a.mom = null; a.grow = 0; dn++; } }   /* filhote que já cresceu (virou cervo) continua cervo ao carregar */ for (let i = 0; i < animals.length; i++) { const k = animals[i].kind; cnt[k] = (cnt[k] || 0) + 1; if (cnt[k] > (AC[k] | 0)) { animals.splice(i, 1); i--; } } }   /* Casa: quem morreu não volta */
     { const live = new Set(); for (const a of animals) if (a.kind === 'crab' && a.den) live.add(a.den); for (let i = dens.length - 1; i >= 0; i--) if (dens[i].kind === 'buraco' && !live.has(dens[i])) dens.splice(i, 1); }   /* buraco sem dono some */
     for (let _i8 = 0, d; _i8 < dens.length && (d = dens[_i8], true); _i8++) if (d.kind === 'cave_bear') animals.push({ kind: 'bear', x: d.x + 10, y: d.y + 50, dir: 'south', vx: 0, vy: 0, wait: 2, t: Math.random() * 9, moving: false, running: false, hp: KINDS.bear.hp, hunger: 0, eat: 0, cd: 0, angry: 0, home: { x: d.x + 10, y: d.y + 70 } });
   }
@@ -1936,7 +1941,7 @@ const Entities = (() => {
   }
   // ---------- barulho ----------
   // Galho estalando, arbusto balançando, correr, bater em árvore/pedra ou lutar fazem barulho. Quem dorme dentro do alcance (cervo e coelho ouvem mais) fica em ALERTA por uns
-  // 5 s virado para o som. Se o jogador está perto: lobo acorda e ataca, presa acorda e foge. Se está longe: volta a dormir. Agachado, o barulho cai para 40%.
+  // 5 s virado para o som. Se o jogador está perto: lobo acorda e ataca, presa acorda e foge. Se está longe: volta a dormir. Agachado andando: sem barulho nenhum.
   function alertUp(a, x, y) { a.sleeping = false; a.alert = 5 + Math.random() * 2; a.alx = x; a.aly = y; a.nap = 0; }
   // work = barulho de trabalho (machado, picareta): bichos acordados vão devagar até o lugar para investigar
   function emitNoise(x, y, R, work, src) {
@@ -1955,6 +1960,7 @@ const Entities = (() => {
   function noiseTick(dt) {
     const P = Player.p; noiseT -= dt; if (noiseT > 0) return; noiseT = .2; crackT -= .2;
     if (!P.moving || P.swim) return;
+    if (P.sneak && !P.run) return;   /* agachado andando: não faz barulho nenhum (nem galho nem arbusto) */
     let R = P.run ? 110 : 50;
     if (crackT <= 0) {
       for (let _i24 = 0, d; _i24 < drops.length && (d = drops[_i24], true); _i24++) if (d.type === 'twig' && Math.abs(d.x - P.x) < 26 && Math.abs(d.y - P.y) < 26) { R = 150; crackT = 1; break; }   // pisou num galho
@@ -2054,7 +2060,7 @@ const Entities = (() => {
       if (World.walkable(nx, ny) && World.firm(nx, ny)) { if (o) { a.bsd = Math.sign(o) * sd; a.bsT = 0; } return step(a, c, s2, sp, dt); } }
     return step(a, Math.cos(base), Math.sin(base), sp, dt); }
   // comida que o urso sente: fogueira assando, baú com comida, comida solta no chão (baú e chão só quando o jogador não está por perto)
-  const hasFood = c => !!(c.items && ((c.items.meat | 0) + (c.items.cooked | 0) + (c.items.apple | 0)) > 0), FOODS = { meat: 1, cooked: 1, apple: 1 };
+  const hasFood = c => !c.carried && !!(c.items && ((c.items.meat | 0) + (c.items.cooked | 0) + (c.items.apple | 0)) > 0), FOODS = { meat: 1, cooked: 1, apple: 1 };
   function bearFood(a, r, away) {
     let b = null, bd = r; const sm = nearestSmell(a.x, a.y, r); if (sm) { bd = Math.hypot(sm.x - a.x, sm.y - a.y); b = { x: sm.x, y: sm.y, k: 'fire', ref: sm }; }
     if (away) {
@@ -3062,7 +3068,7 @@ const Entities = (() => {
     for (let i = corpses.length - 1; i >= 0; i--) { corpses[i].age += dt; if (corpses[i].bearT > 0) corpses[i].bearT -= dt; if (corpses[i].age > CORPSE_TIME) { const c = corpses[i]; if (c.kind !== 'fish' && c.kind !== 'shark') dens.push({ kind: 'osso' + (1 + Math.floor(Math.random() * 4)), x: c.x, y: c.y + 4, ph: 0, bone: true, age: 0, sc: ({ rabbit: .6, fawn: .65, woodpecker: .5, deer: .95, boar: 1, wolf: .9, bear: 1.3, urubu: .6, crab: .4 })[c.kind] || .9 }); corpses.splice(i, 1); } }
     for (let i = dens.length - 1; i >= 0; i--) { const b = dens[i]; if (b.bone && (b.age += dt) > BONE_TIME) dens.splice(i, 1); }   // ossos ficam um tempo onde o corpo estava
     if (typeof Chest !== 'undefined') Chest.tick();
-    if (!window.NET_GUEST) updateAnimals(dt); useT -= dt; if (useT <= 0) { useT = .15; const f = findUse(); if (f && !p.act) { useEl.style.display = 'flex'; if (useEl.textContent !== f.label) useEl.textContent = f.label; } else useEl.style.display = 'none'; const ai = ({ spear: '🗡️', machete: '🗡️', axe: '🪓', pickaxe: '⛏️' })[inv.eq && inv[inv.eq] ? inv.eq : ''] || '👊'; if (atkEl.dataset.i !== ai) { atkEl.dataset.i = ai; atkEl.textContent = ai; } }   // botão vermelho: soco (ou a arma/ferramenta na mão); a ação do que está perto fica no botão ao lado
+    if (!window.NET_GUEST) updateAnimals(dt); useT -= dt; if (useT <= 0) { useT = .15; const f = findUse(); if (f && !p.act) { useEl.style.display = 'flex'; if (useEl.textContent !== f.label) useEl.textContent = f.label; } else useEl.style.display = 'none'; if (f && !p.act && mainCtx()) useEl.style.display = 'none';   /* a ação já está no botão principal */ }   // botão vermelho: soco (ou a arma/ferramenta na mão); a ação do que está perto fica no botão ao lado
     atkEl.classList.toggle('on', p.battle > 0); batEl.style.display = p.battle > 0 ? 'block' : 'none';
     hudT += dt; if (hudT > .4) { hudT = 0; showHud(); }
   }
@@ -3073,14 +3079,16 @@ const Entities = (() => {
   function attack() {
     if (Player.p.carry) { Save.flash('Solte o tronco para lutar'); return; }
     if (Player.p.swim) return;
-    Player.setSneak(false);
-    const p = Player.p; if (p.act) return; p.battle = 7; emitNoise(p.x, p.y, 180);
-    const E = eqInfo(), tgt = window.NET_GUEST ? null : nearestAnimal(p, E.reach);   /* convidado: combate com bichos entra na próxima etapa */
+    const p = Player.p; if (p.act) return; const sn0 = !!p.sneak; Player.setSneak(false);
+    const E = eqInfo(), tgt = window.NET_GUEST ? null : nearestAnimal(p, E.reach);
+    /* ATAQUE FURTIVO: agachado, por trás (fora do cone de visão) e o bicho ainda não te percebeu -> o golpe dá o dobro (igual ao bicho dormindo) */
+    const furt = sn0 && tgt && !tgt.sleeping && !(tgt.aware > World.clock) && !tgt.fleeing && !(tgt.angry > 0) && !(tgt.spooked > 0) && !(tgt.rage > 0) && !(tgt.pursue > 0) && (() => { let d = Math.atan2(p.y - tgt.y, p.x - tgt.x) - (DANG[tgt.dir] || 0); d = Math.abs(Math.atan2(Math.sin(d), Math.cos(d))); return d >= 1.15; })();
+    p.battle = 7; emitNoise(p.x, p.y, 180);   /* convidado: combate com bichos entra na próxima etapa */
     Player.startAct(E.atk, tgt, () => {
       if (inv.eq === 'machete') { const d = DIRV[p.dir] || [0, 1]; if (World.cutMato(p.x + d[0] * 22, p.y + d[1] * 22, 70, m => { if (Math.random() < .2) spawnDrop('fiber', m.x, m.y + 4, 1, .3); })) Save.flash('🌿 Mato cortado!'); }   /* fibra agora só vem do mato cortado: 20% de chance por moita */
       if (!tgt || tgt.dead || Math.hypot(tgt.x - p.x, tgt.y - p.y) > E.reach + 6) return;
       if (tgt.kind === 'deer' || tgt.kind === 'fawn') { const D = defenderFor(tgt); if (D) { if (Math.hypot(D.x - p.x, D.y - p.y) <= 90) { if (deerKick(D, p, true)) Save.flash('🦌 Coice!'); } else if (!(D.kcd > 0) && !D.dead && !(D.avg > 0)) { if (D.sleeping) wakeUp(D); D.avg = 10; Save.flash('🦌 A mãe está vindo!'); } } }
-      let dm = E.dmg; if (tgt.sleeping) { dm *= 2; wakeUp(tgt); Save.flash('🗡️ Golpe furtivo!'); }   // dormindo: o 1º golpe dá o dobro
+      let dm = E.dmg; if (tgt.sleeping) { dm *= 2; wakeUp(tgt); Save.flash('🗡️ Golpe furtivo!'); } else if (furt) { dm *= 2; Save.flash('🗡️ Ataque furtivo! Dano dobrado'); }   // dormindo ou pego de surpresa por trás: o 1º golpe dá o dobro
       tgt.hp -= dm; tgt.hitAt = World.clock; bleed(tgt.x, tgt.y, tgt.kind === 'rabbit'); if (tgt.kind === 'wolf') tgt.angry = 10; if (tgt.kind === 'bear') { tgt.rage = 14; tgt.mode = tgt.mode === 'atk' ? 'atk' : 'warn'; tgt.mt = 0; } if (tgt.hp <= 0) killAnimal(tgt); showHud();
     }, E.set, E.dur, true);
   }
@@ -3131,6 +3139,17 @@ const Entities = (() => {
   const nearestFire = (x, y, r) => { let b = null, bd = r; for (const o of fires()) if (!o.out && !o.broken) { const d = Math.hypot(o.x - x, o.y - y); if (d < bd) { bd = d; b = o; } } return b; };
   // USAR: botão que só aparece perto de algo (árvore, arbusto, macieira, pedra, bancada, água)
   const canFill = () => inv.canteen && inv.dirty + inv.water < 3 && Player.p.thirst > 70, waterLabel = () => canFill() ? 'Encher cantil' : 'Beber';
+  /* BOTÃO PRINCIPAL CONTEXTUAL: perto de árvore mostra o machado, de pedra a picareta, de água/fruta/coisa no chão uma mão; com bicho no alcance ou sem nada perto, é o ataque
+     (arma equipada ou murro). Apertar faz a ação certa. Bancada, baú, jangada etc. continuam no botão de usar. */
+  const HANDK = { water: 1, poca: 1, pedrinha: 1, cocochao: 1, appletree: 1, log: 1, leaves: 1, corpse: 1, tuft: 1 };
+  function mainCtx() { const p = Player.p; if (p.swim || p.raft || p.carry || window.NET_GUEST) return null; if (nearestAnimal(p, eqInfo().reach)) return null;
+    const f = findUse(); if (!f) return null; const k = f.o.kind;
+    if (k === 'palm') return { ic: inv.axe && inv.eq === 'axe' ? 'axe' : 'hand', f };
+    if (k === 'rock' || k === 'boulder') return inv.pickaxe ? { ic: 'pickaxe', f } : null;
+    if (TREES[k]) return { ic: inv.axe ? 'axe' : 'fist', f };
+    if (HANDK[k]) return { ic: k === 'water' || k === 'poca' ? 'drink' : 'hand', f };
+    return null; }
+  function mainPress() { if (Player.p.act) return; if (mainCtx()) use(); else attack(); }
   function findUse() {
     const p = Player.p; let best = null, bd = 70, label = ''; if (p.swim) return null;
     { const tr = World.trail(); if (tr && !p.carry && Math.hypot(tr.x - p.x, tr.y - p.y) < 75) return { o: { kind: 'trilha', to: tr.to }, label: '🧭 Ir para ' + LOCS[tr.to].name }; }   /* perto da placa da trilha: viajar tem prioridade */
@@ -3150,7 +3169,7 @@ const Entities = (() => {
     { let cb = null, cd = 42; for (let _i59 = 0, o; _i59 < World.near.length && (o = World.near[_i59], true); _i59++) if (o.kind === 'cocochao' && !o.dead) { const d = Math.hypot(o.x - p.x, o.y - p.y); if (d < cd) { cd = d; cb = o; } } if (cb) return { o: cb, label: '🥥 Pegar coco' }; }
     { let sb = null, sd = 60; for (let _i60 = 0, o; _i60 < dens.length && (o = dens[_i60], true); _i60++) if (o.kind === 'stash') { const d = Math.hypot(o.x - p.x, o.y - p.y); if (d < sd) { sd = d; sb = o; } } if (sb) return { o: { kind: 'stash', st: sb }, label: '⛏ Desenterrar comida' }; }
     const cc = nearestCorpse(p.x, p.y, 48); if (cc) return { o: { kind: 'corpse', c: cc }, label: 'Coletar carne' };
-    for (let _i61 = 0, o; _i61 < World.near.length && (o = World.near[_i61], true); _i61++) { const T = TREES[o.kind], bush = false /* arbusto/tufo não dão mais fibra */, rock = o.kind === 'rock' || o.kind === 'boulder', pb = o.kind === 'pedrinha', st = o.kind === 'fence' || o.kind === 'shelter' || o.kind === 'chest'; if (!(T || bush || rock || pb || st) || o.fall !== undefined) continue; if (o.kind === 'palm' && !(inv.axe && inv.eq === 'axe')) continue;   // coco agora fica no chão: sem sacudir if (o.kind === 'appletree' && !o.ap.some(v => v)) continue;
+    for (let _i61 = 0, o; _i61 < World.near.length && (o = World.near[_i61], true); _i61++) { const T = TREES[o.kind], bush = false /* arbusto/tufo não dão mais fibra */, rock = o.kind === 'rock' || o.kind === 'boulder', pb = o.kind === 'pedrinha', st = o.kind === 'fence' || o.kind === 'shelter' || o.kind === 'chest'; if (!(T || bush || rock || pb || st) || o.fall !== undefined || o.carried) continue; if (o.kind === 'palm' && !(inv.axe && inv.eq === 'axe')) continue;   // coco agora fica no chão: sem sacudir if (o.kind === 'appletree' && !o.ap.some(v => v)) continue;
       const MR = pb ? 40 : T ? (o.kind === 'appletree' ? 56 : 52) : bush ? 48 : o.kind === 'rock' ? 56 : o.kind === 'boulder' ? 66 : 70, d0 = Math.hypot(o.x - p.x, o.y - p.y); if (d0 > MR) continue;   /* alcance por tipo: tem que chegar perto (antes pegava/cortava de longe) */
       const d = d0 * (o.kind === 'rock' ? .8 : o.kind === 'boulder' ? .7 : 1); if (d < bd) { bd = d; best = o; label = pb ? 'Pegar pedra' : o.kind === 'chest' ? 'Abrir baú' : st ? 'Desmontar' : o.kind === 'appletree' ? 'Colher maçã' : o.kind === 'palm' ? (inv.axe && inv.eq === 'axe' ? 'Cortar' : 'Sacudir coqueiro') : rock ? (inv.pickaxe ? 'Minerar' : 'Pedra (precisa de picareta)') : bush ? 'Colher' : 'Cortar'; } }
     if (!best) { let dr = null, dd = 62; for (let i = 0; i < wallsN.length; i++) { const o = wallsN[i]; if (o.kind !== 'door' || o.dead) continue; const d = Math.hypot(o.x - p.x, o.y - 14 - p.y); if (d < dd) { dd = d; dr = o; } } if (dr) return { o: dr, label: dr.open ? 'Fechar porta' : 'Abrir porta' }; }
@@ -3398,7 +3417,7 @@ const Entities = (() => {
     else if (o.kind === 'log') drawLog(ctx, sx, sy, o);
     else if (o.kind === 'wall' || o.kind === 'door' || o.kind === 'post') { const P = Player.p, a0 = ctx.globalAlpha, fr = INSIDE && Math.abs(o.x - P.x) < 300 && Math.abs(o.y - P.y) < 300 && (o.vert ? Math.abs(o.x - P.x) < 44 && o.y + 32 > P.y - 40 : o.y > P.y - 6);   /* dentro de casa: o que está na frente de você fica transparente */
       if (fr) ctx.globalAlpha = a0 * .38; drawPiece(ctx, o.kind, sx, sy, o.vert, false, o); ctx.globalAlpha = a0; }
-    else if (o.kind === 'chest') drawChest(ctx, sx, sy);
+    else if (o.kind === 'chest') { if (!o.carried) drawChest(ctx, sx, sy); }
     else if (o.kind === 'shelter') drawShelterBase(ctx, sx, sy);
     else if (o.kind === 'flower') Assets.draw(ctx, NM('flor', o.v || 1), 'rot', '_', 0, sx, sy, 1.2);
     else if (o.kind === 'boulder') Assets.draw(ctx, NM('boulder', 1 + Math.abs(Math.floor(o.x * 3 + o.y)) % 3), 'rot', '_', 0, sx, sy, .85);
@@ -3616,7 +3635,7 @@ const Entities = (() => {
     if (!P.swim && Math.hypot(P.x - x, P.y - y) < 60) { P.hp -= 40; P.hurtT = .4; Save.flash('⚡ Você foi atingido por um raio!'); if (P.hp <= 0) Player.hurt(0); }
     else if (Math.hypot(P.x - x, P.y - y) < 160) Save.flash('⚡ Raio muito perto!');
   }
-  return { snap: snapAnimals, counts: () => { const c = {}; for (const a of animals) if (!a.dead && !a.script) c[a.kind] = (c[a.kind] || 0) + 1; return c; }, strike, bearMem: () => animals.filter(o => o.kind === 'bear').map((b, i) => (b.mem || bearMemSaved[i] || []).slice(-4).map(q => [Math.round(q.x), Math.round(q.y), q.s])), setBearMem: arr => { arr = Array.isArray(arr) ? arr : []; if (arr.length && Array.isArray(arr[0]) && typeof arr[0][0] === 'number') arr = [arr];   // save antigo: lista só do primeiro urso
+  return { mainCtx, mainPress, snap: snapAnimals, counts: () => { const c = {}; for (const a of animals) if (!a.dead && !a.script) c[a.kind] = (c[a.kind] || 0) + 1; return c; }, strike, bearMem: () => animals.filter(o => o.kind === 'bear').map((b, i) => (b.mem || bearMemSaved[i] || []).slice(-4).map(q => [Math.round(q.x), Math.round(q.y), q.s])), setBearMem: arr => { arr = Array.isArray(arr) ? arr : []; if (arr.length && Array.isArray(arr[0]) && typeof arr[0][0] === 'number') arr = [arr];   // save antigo: lista só do primeiro urso
       bearMemSaved = arr.map(l => (Array.isArray(l) ? l : []).slice(-4).map(q => ({ x: q[0], y: q[1], s: q[2] || 3 }))); let i = 0; for (let _i71 = 0, b; _i71 < animals.length && (b = animals[_i71], true); _i71++) if (b.kind === 'bear') { b.mem = (bearMemSaved[i++] || []).map(q => ({ x: q.x, y: q.y, s: q.s })); } }, _dens: () => dens, _deerKick: deerKick, setVis: (st, sn) => { visStand = !!st; visSneak = !!sn; }, _tracks: () => tracks, _HAB: HAB, _noise: emitNoise, _dirOf: dirOf, _drops: () => drops, drawBridge, dropLog, useBandage, init, update, draw, bleed, icon, eat, drop, placeItem, room, slotsUsed, cqSave: () => CQ.map(q => [q.id, q.n, Math.round(q.t * 10) / 10, q.st]), cqLoad: a => { CQ = Array.isArray(a) ? a.filter(q => RBY[q[0]]).map(q => ({ id: q[0], n: q[1] | 0, t: +q[2] || 0, T: RMETA[q[0]][2], st: q[3] === 'carp' ? 'carp' : 'bench' })).filter(q => q.n > 0) : []; }, bagCap, STACK, loadInv: d => { invLoading = true; try { Object.assign(invRaw, d); } finally { invLoading = false; } }, toggleHand: () => { if (craftEl.style.display === 'flex') closeCraft(); else openCraft('hand'); },  MAX, cam, drawPiece, _corpses: () => corpses, attack, use, placeFire, nearestAnimal, inv, eqSet: () => eqInfo().set, refresh: (force) => { if (force) toolsEl.dataset.sig = ''; showHud(); }, _animals: () => animals, regrow: () => regrow, setRegrow: a => { regrow = Array.isArray(a) ? a : []; },
     tracksList: () => tracks.slice(-500).map(q => [Math.round(q.x), Math.round(q.y), q.k, +q.ang.toFixed(2), Math.round(q.t), q.g, q.life]),
     setTracks: l => { tracks = (Array.isArray(l) ? l : []).map(q => ({ x: q[0], y: q[1], k: q[2], ang: q[3], t: q[4], g: q[5], life: q[6] })); } };
@@ -3742,7 +3761,9 @@ const Bag = (() => {
   addEventListener('keydown', e => { if (!e.repeat && (e.key === 'b' || e.key === 'i')) toggle(); });
   function stacks() { return arrange().map(e => e ? [e[0][0], e[1], e[0][3]] : null); }   /* mesma ordem da mochila (os 5 primeiros = barra rápida) */
   const typeOf = k => { const it = ITEMS.find(i => i[0] === k); return it ? it[3] : ''; };
-  return { refresh: () => { if (open) { const s = JSON.stringify(inv) + sel; if (s !== sig) render(); } }, toggle, stacks, typeOf, get open() { return open; } };
+  let vsig = '';
+  function vitalsLive() { const P = Player.p, sp = el.querySelector('.pv span'), u = el.querySelector('.pvb u'); if (!sp) return; const t = `🍏 ${Math.round(P.food ?? 100)} · 💧 ${Math.round(P.thirst)} · ♥ ${Math.round(P.hp)}`; if (t === vsig && sp.textContent === t) return; vsig = t; sp.textContent = t; if (u) u.style.width = Math.max(0, Math.min(100, P.hp / (P.maxhp || 100) * 100)) + '%'; }   /* com a mochila aberta, vida/fome/sede continuam mudando na tela */
+  return { refresh: () => { if (open) { const s = JSON.stringify(inv) + sel; if (s !== sig) render(); else vitalsLive(); } }, toggle, stacks, typeOf, get open() { return open; } };
 })();
 
 
@@ -3793,7 +3814,9 @@ const HUD2 = (() => {
       for (let i = 0; i < 5; i++) { const e = L[i], d = document.createElement('div'); d.className = 'q'; if (e) { d.appendChild(ic(e[0])); if (e[1]) { const b = document.createElement('b'); b.textContent = e[1]; d.appendChild(b); } if (inv.eq === e[0]) d.classList.add('eq'); const k = e[0]; d.onclick = () => { if (d._dragged) return; useItem(k); }; dragSrc(d, k); } bar.appendChild(d); }
       qs.forEach((q, i) => { q.innerHTML = ''; const k = Q[i]; q.className = 'qs' + (k ? '' : ' emp'); if (k) { q.appendChild(ic(k)); if (!has(k)) q.classList.add('zero'); if (!TOOLS[k] && k !== 'canteen') { const b = document.createElement('b'); b.textContent = inv[k] | 0; q.appendChild(b); } else if (inv.eq === k) q.style.boxShadow = '0 0 0 3px #7fd0ffaa'; else q.style.boxShadow = ''; } });
       { const k2 = inv.eq2 && inv[inv.eq2] ? inv.eq2 : ''; if (swapb._k !== k2) { swapb._k = k2; swapb.innerHTML = ''; if (k2) swapb.appendChild(ic(k2)); swapb.style.display = k2 ? 'flex' : 'none'; } }
-      const ek = inv.eq && inv[inv.eq] ? inv.eq : ''; if (atk._k !== ek) { atk._k = ek; atk.innerHTML = ''; if (ek) atk.appendChild(ic(ek)); else atk.textContent = '✊'; } }
+    }
+    { let c = null; try { c = Entities.mainCtx(); } catch (e) {} const eqk = inv.eq && inv[inv.eq] ? inv.eq : '', ek = c ? c.ic : eqk || 'fist';
+      if (atk._k !== ek) { atk._k = ek; atk.innerHTML = ''; atk.classList.toggle('ctx', !!c); if (ek === 'fist') atk.textContent = '👊'; else if (ek === 'hand') atk.textContent = '✋'; else if (ek === 'drink') atk.textContent = '💧'; else atk.appendChild(ic(ek)); } }   /* ícone do botão principal muda conforme o que está perto */
   }
   setInterval(() => { try { update(); } catch (e) {} }, 120);
   function assign(i, k) { if (k) for (let j = 0; j < 3; j++) if (Q[j] === k) Q[j] = null; Q[i] = k; saveQ(); sig = ''; Save.flash(k ? 'Atalho pronto' : 'Atalho removido'); }
@@ -3861,11 +3884,21 @@ const Chest = (() => {
   function render() {
     if (!cur) return; cur.items = cur.items || {};
     const bu = Entities.slotsUsed(), bc = Entities.bagCap();
-    el.innerHTML = `<div class="bh"><b>📦 Baú</b><span id="cxx">✕</span></div><div class="c2"><div class="cp" data-w="b"><div class="ct">🎒 Mochila <span>${bu}/${bc}</span><button data-a="all-b">Guardar tudo ➜</button></div>${grid(inv, bc, 'b')}</div><div class="cp" data-w="c"><div class="ct">📦 Baú <span>${cUsed()}/${SL}</span><button data-a="all-c">⬅ Pegar tudo</button></div>${grid(cur.items, SL, 'c')}</div></div><small>Toque numa pilha para passar para o outro lado, ou arraste.</small>`;
+    el.innerHTML = `<div class="bh"><b>📦 Baú</b><button class="cbt" data-x="mv">✋ Mover</button><button class="cbt${cUsed() ? ' off' : ''}" data-x="up">🎒 Recolher</button><span id="cxx">✕</span></div><div class="c2"><div class="cp" data-w="b"><div class="ct">🎒 Mochila <span>${bu}/${bc}</span><button data-a="all-b">Guardar tudo ➜</button></div>${grid(inv, bc, 'b')}</div><div class="cp" data-w="c"><div class="ct">📦 Baú <span>${cUsed()}/${SL}</span><button data-a="all-c">⬅ Pegar tudo</button></div>${grid(cur.items, SL, 'c')}</div></div><small>Toque numa pilha para passar para o outro lado, ou arraste.</small>`;
     el.querySelectorAll('.ci[data-t]').forEach(c => { c.firstChild.replaceWith(Entities.icon(c.dataset.t)); c.addEventListener('pointerdown', e => startDrag(e, c)); });
     el.querySelectorAll('button[data-a]').forEach(b => b.onclick = () => moveAll(b.dataset.a === 'all-b' ? 'b' : 'c'));
     document.getElementById('cxx').onclick = close;
+    el.querySelectorAll('.cbt').forEach(b => b.onclick = () => b.dataset.x === 'mv' ? startCarry() : pickUp());
   }
+  /* RECOLHER: baú vazio volta para a mochila (sem destruir). MOVER: o baú vai com você (com tudo dentro) e você coloca em outro lugar. */
+  function pickUp() { const c = cur; if (!c) return; if (cUsed() > 0) { Save.flash('📦 Esvazie o baú para recolher'); return; } if (!(Entities.room('chest') > 0)) { Save.flash('🎒 Mochila cheia'); return; }
+    close(); c.dead = true; inv.chest = (inv.chest | 0) + 1; World.touch(); Entities.refresh(true); Save.soon(); Save.flash('🎒 Baú guardado na mochila'); }
+  let carry = null; const cbtn = document.createElement('div'); cbtn.id = 'chestput'; cbtn.innerHTML = '📦 Colocar aqui'; document.body.appendChild(cbtn);
+  function startCarry() { const c = cur; if (!c) return; close(); carry = c; c.carried = true; c.solid = false; World.touch(); cbtn.style.display = 'flex'; Save.flash('📦 Ande até o lugar novo e toque em "Colocar aqui"'); }
+  function putDown() { const c = carry, p = Player.p; if (!c || p.act) return; const v = ({ south: [0, 1], north: [0, -1], east: [1, 0], west: [-1, 0], 'south-east': [.7, .7], 'south-west': [-.7, .7], 'north-east': [.7, -.7], 'north-west': [-.7, -.7] })[p.dir] || [0, 1];
+    let x = p.x + v[0] * 46, y = p.y + v[1] * 46; if (!World.walkable(x, y) || World.inWater(x, y)) { x = p.x; y = p.y + 40; } if (!World.walkable(x, y) || World.inWater(x, y)) { Save.flash('Aqui não dá para colocar o baú'); return; }
+    c.x = x; c.y = y; c.carried = false; c.solid = true; carry = null; cbtn.style.display = 'none'; World.touch(); Save.soon(); Save.flash('📦 Baú no lugar novo'); }
+  cbtn.addEventListener('pointerdown', e => { e.preventDefault(); e.stopPropagation(); putDown(); });
   function move(t, from, n) {
     if (from === 'c') { const q = Math.min(n || cur.items[t] || 0, cur.items[t] || 0, Entities.room(t)); if (q <= 0) { Save.flash('🎒 Mochila cheia'); return false; } cur.items[t] -= q; if (cur.items[t] <= 0) delete cur.items[t]; inv[t] += q; }
     else { const q = Math.min(n || inv[t], inv[t], cRoom(t)); if (q <= 0) { Save.flash('📦 Baú cheio'); return false; } inv[t] -= q; cur.items[t] = (cur.items[t] || 0) + q; }
@@ -3881,7 +3914,7 @@ const Chest = (() => {
       if (cp && cp.dataset.w !== w && move(t, w, n)) { Entities.refresh(); Save.soon(); } render(); };
     addEventListener('pointermove', mv); addEventListener('pointerup', up); addEventListener('pointercancel', up);
   }
-  function open(c) { cur = c; el.style.display = 'block'; render(); }
+  function open(c) { if (c.carried) return; cur = c; el.style.display = 'block'; render(); }
   function close() { cur = null; el.style.display = 'none'; }
   function tick() { if (cur) { const p = Player.p; if (Math.hypot(cur.x - p.x, cur.y - p.y) > 150 || !World.objs.includes(cur)) close(); } }
   return { open, close, tick, render: () => cur && render(), get isOpen() { return !!cur; } };
@@ -4081,9 +4114,9 @@ const Weather = (() => {
   // fome e frio: a fome cai devagar e a comida devolve; o frio vem de noite e de chuva, e some perto de fogueira acesa (ou dentro de abrigo)
   let vT = 0;
   function vitals(dt, P, sheltered) {
-    P.food = Math.max(0, Math.min(100, (P.food === undefined ? 100 : P.food) - .1 * dt));
+    P.food = Math.max(0, Math.min(100, (P.food === undefined ? 100 : P.food) - .07 * dt));   /* fome: ~24 min de cheio a zero (antes ~17) */
     let w = P.warm === undefined ? 100 : P.warm;
-    const fire = World.objs.some(o => o.kind === 'fire' && !o.out && !o.dead && Math.hypot(o.x - P.x, o.y - P.y) < 110);
+    const fire = World.near.some(o => o.kind === 'fire' && !o.out && !o.dead && Math.hypot(o.x - P.x, o.y - P.y) < 110);
     if (fire) w += 14 * dt; else if (sheltered) w += (night() > .3 ? 0 : 1) * dt; else { const loss = .2 * night() + .25 * rain + .05; w -= loss * dt; if (!night() && rain < .05) w += 1.5 * dt; }
     P.warm = Math.max(0, Math.min(100, w));
     if (P.food <= 0) P.hp -= .5 * dt; if (P.warm <= 0) P.hp -= .6 * dt;
@@ -4132,7 +4165,7 @@ const Weather = (() => {
     const k = Math.min(1, dt * .5); rain += ((state === 'rain' ? 1 : 0) - rain) * k; heat += ((state === 'hot' ? 1 : 0) - heat) * k; World.pocaTick(dt, rain, heat);
     const P = Player.p; shT -= dt; if (shT <= 0) { shT = .25; shelteredNow = sheltered(P); }
     // sede: cai devagar, mais rápido no calor ao sol; chuva molha e mata a sede
-    let d = .3; if (heat > .05) d *= shelteredNow ? .8 : 1 + 1.8 * heat;
+    let d = .2; if (heat > .05)   /* sede: ~8 min de cheio a zero (antes ~5,5) */ d *= shelteredNow ? .8 : 1 + 1.8 * heat;
     P.thirst = Math.max(0, Math.min(100, P.thirst - d * dt + (rain > .3 && !shelteredNow ? 1.2 * rain * dt : 0)));
     if (P.thirst <= 0) { P.hp -= 1.5 * dt; if (P.hp <= 0) Player.hurt(0); }
     vitals(dt, P, shelteredNow);
@@ -4988,7 +5021,7 @@ const Title = (() => {
     if (window.TRAVEL_LOCK) { last = now; requestAnimationFrame(frame); return; }   /* saiu do local (mapa de viagem / carregando): o mapa atual fica desligado, sem atualizar nem desenhar */
     const dtRaw = (now - last) / 1000; last = now; const dt = Math.min(dtRaw, .05); Assets.tick(now);
     slD = 0; slW = ''; const a0 = pn(); const TT = Title.active; if (TT) Title.update(dt);
-    if (!Death.active && !window.TRAVEL_LOCK) { sf('mundo', () => World.tick(dt, Player.p.x, Player.p.y)); if (!TT) { sf('ataque', () => { if (window.__atkHeld && window.__atkHeld()) Entities.attack(); }); sf('jogador', () => Player.update(dt, Input.axis())); } sf('bichos', () => Entities.update(dt)); sf('mar', () => Sea.update(dt)); sf('clima', () => Weather.update(dt, vw, vh)); sf('som', () => Sfx.update(dt)); sf('rede', () => Net.update(dt)); if (!TT) sf('save', () => Save.update(dt)); } const a1 = pn();
+    if (!Death.active && !window.TRAVEL_LOCK) { sf('mundo', () => World.tick(dt, Player.p.x, Player.p.y)); if (!TT) { sf('ataque', () => { if (window.__atkHeld && window.__atkHeld()) Entities.mainPress(); }); sf('jogador', () => Player.update(dt, Input.axis())); } sf('bichos', () => Entities.update(dt)); sf('mar', () => Sea.update(dt)); sf('clima', () => Weather.update(dt, vw, vh)); sf('som', () => Sfx.update(dt)); sf('rede', () => Net.update(dt)); if (!TT) sf('save', () => Save.update(dt)); } const a1 = pn();
     { const PP = Player.p, tz = (!TT && (PP.dying !== undefined || PP.dead || PP.getup !== undefined)) ? .85 : (!TT && World.onPlat(PP.x, PP.y)) ? 1.35 : 1;   /* morrendo/levantando: zoom pequeno no personagem */ if (VZc !== tz) { VZc += (tz - VZc) * Math.min(1, dt * 2.5); if (Math.abs(tz - VZc) < .01) VZc = tz; if (Math.abs(VZc - (window.VZ || 1)) >= .02 || VZc === tz) { window.VZ = VZc; resize(); } } }   // vista: sobe no planalto → a tela abre
     const cx0 = TT ? Title.cam.x - (vw > vh ? vw * .24 : 0) : Player.p.x, cy0 = TT ? Title.cam.y + (vw > vh ? 0 : vh * .1) : Player.p.y;   // na tela inicial o bicho fica fora do menu
     const camX = Math.round(cx0) - (vw >> 1), camY = Math.round(cy0) - (vh >> 1);   /* câmera sempre centrada no personagem, também nas beiradas do mapa (fora do mapa aparece o mar) */
