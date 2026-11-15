@@ -46,7 +46,7 @@ body.building #dropbtn{display:none!important}
 #bag .bh{display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:16px}#bag .bc{margin-left:auto;opacity:.7;font-size:13px}#bx{font-size:20px;cursor:pointer;padding:0 6px}
 #bag .bg{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
 #bag .bs{position:relative;aspect-ratio:1;background:#1d120a;border:2px solid #6b4a24;border-radius:8px;display:flex;align-items:center;justify-content:center}
-#bag .bs.on{border-color:#ffd24a;background:#4a3010}#bag .bs.eqd{box-shadow:inset 0 0 0 2px #7ad36a}#bag .bs.empty{opacity:.45}
+#bag .bs{touch-action:none;user-select:none;-webkit-user-select:none}#bag .bs.empty{touch-action:pan-y}#bag .bs.hov{border-color:#9dff9d;background:#2f5a2a}#bag .bs.on{border-color:#ffd24a;background:#4a3010}#bag .bs.eqd{box-shadow:inset 0 0 0 2px #7ad36a}#bag .bs.empty{opacity:.45}
 #bag .bs canvas{width:80%;height:80%;image-rendering:pixelated}#bag .bs em{position:absolute;right:4px;bottom:1px;font:bold 12px system-ui;font-style:normal;text-shadow:0 1px 2px #000}
 #bag .bd{margin-top:8px;background:#0004;border-radius:10px;padding:8px 10px;min-height:44px}#bag .bd small{opacity:.8}
 #bag .ba{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}#bag button{font:bold 13px system-ui;padding:8px 12px;border-radius:8px;border:0;background:#e8b04a;color:#3a2410}#bag button.g{background:#6b4a24;color:#fff}
@@ -3234,10 +3234,12 @@ const Entities = (() => {
     postsN = []; for (const e of V.values()) if (e.f === 3) postsN.push({ kind: 'post', x: e.x, y: e.y, h: e.h });
     BAK.roof.src = null;   /* a altura do telhado depende das paredes */
   }
-  const roofLv = o => { for (let i = 0; i < wallsN.length; i++) { const w = wallsN[i]; if ((w.h || 1) > 1 && Math.abs(w.x - o.x) < 330 && Math.abs(w.y - o.y) < 330) return 2; } return 1; };
   function bakeOf(kind) {
     const B = BAK[kind], N = World.near; if (B.src === N) return B; B.src = N;
-    const L = []; let s = 0; for (let i = 0; i < N.length; i++) { const o = N[i]; if (o.kind === kind && !o.dead) { L.push(o); if (kind === 'roof') o.lv = roofLv(o); s = (s + o.x * 7 + o.y * 13 + (o.lv || 0) * 31) % 1e9; } }
+    /* a imagem pronta usa TODAS as peças do mapa (não só as de perto): andar em volta da casa não refaz nem reenvia a imagem para a placa de vídeo.
+       Antes, peças entrando/saindo da área de perto refaziam o piso e o telhado (~30 vezes em poucos segundos rodeando a casa). */
+    const A = World.objs, L = [], W2 = []; let s = 0; for (let i = 0; i < A.length; i++) { const o = A[i]; if (o.dead) continue; if (o.kind === kind) L.push(o); else if (kind === 'roof' && (o.kind === 'wall' || o.kind === 'door') && (o.h || 1) > 1) W2.push(o); }
+    for (const o of L) { if (kind === 'roof') { o.lv = 1; for (let j = 0; j < W2.length; j++) { const w = W2[j]; if (Math.abs(w.x - o.x) < 330 && Math.abs(w.y - o.y) < 330) { o.lv = 2; break; } } } s = (s + o.x * 7 + o.y * 13 + (o.lv || 0) * 31) % 1e9; }
     const sig = L.length + ':' + s; B.L = L; if (sig === B.sig) return B; B.sig = sig; B.c = null; if (!L.length) return B;
     let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9; for (const o of L) { x0 = Math.min(x0, o.x); y0 = Math.min(y0, o.y); x1 = Math.max(x1, o.x); y1 = Math.max(y1, o.y); }
     const top = kind === 'roof' ? 32 + WH * 2 : 32; x0 = Math.round(x0) - 32; y0 = Math.round(y0) - top; const w = Math.round(x1) + 32 - x0, h = Math.round(y1) + 32 - y0;
@@ -3649,6 +3651,23 @@ const Bag = (() => {
     Entities.refresh(true); Save.soon(); return true; }
   function unequip(s) { if (s === 'eq' || s === 'eq2') { if (Entities.room(inv[s]) <= 0 && Entities.slotsUsed() >= Entities.bagCap()) { Save.flash('🎒 Mochila cheia'); return; } inv[s] = null; } else if (inv.arm) { inv.arm = Object.assign({}, inv.arm); inv.arm[s] = null; } Entities.refresh(true); Save.soon(); }
   function bagSet(k) { const t = ITEMS.find(i => i[0] === k); return t; }
+  /* ORGANIZAR: cada espaço da mochila lembra que item mora nele (iv_bagl). Arrastar um item para outro espaço troca os dois de lugar.
+     Item novo entra no 1º espaço livre; os 5 primeiros espaços são a barra rápida da tela. */
+  let LAY = (() => { try { const a = JSON.parse(localStorage.getItem('iv_bagl') || '[]'); return Array.isArray(a) ? a : []; } catch (e) { return []; } })();
+  const saveLay = () => { try { localStorage.setItem('iv_bagl', JSON.stringify(LAY)); } catch (e) {} };
+  const one = it => it[3] === 'tool' || it[3] === 'misc';
+  function arrange() {
+    const S = Entities.STACK, need = {}, amt = {}, order = [];
+    for (const it of ITEMS) { const k = it[0]; if (k === 'water' || !have(k) || k === inv.eq || k === inv.eq2) continue; need[k] = one(it) ? 1 : Math.ceil((inv[k] | 0) / S); amt[k] = inv[k] | 0; order.push(it); }
+    let tot = 0; for (const it of order) tot += need[it[0]]; const N = Math.max(Entities.bagCap(), tot), R = new Array(N).fill(null);
+    for (let i = 0; i < N && i < LAY.length; i++) { const k = LAY[i]; if (k && need[k] > 0) { R[i] = k; need[k]--; } }
+    for (const it of order) while (need[it[0]] > 0) { const j = R.indexOf(null); if (j < 0) break; R[j] = it[0]; need[it[0]]--; }
+    const L2 = R.map((k, i) => k || (LAY[i] && !(LAY[i] in need) ? LAY[i] : null));   /* item que acabou (ou save ainda carregando) guarda o lugar até outro ocupar */
+    for (let i = N; i < LAY.length; i++) L2.push(LAY[i] && !(LAY[i] in need) ? LAY[i] : null);
+    if (L2.length !== LAY.length || L2.some((k, i) => k !== LAY[i])) { LAY = L2; saveLay(); }
+    return R.map(k => { if (!k) return null; const it = ITEMS.find(x => x[0] === k); if (one(it)) return [it, 0]; const n = Math.min(S, amt[k]); amt[k] -= n; return [it, n]; });
+  }
+  function swapLay(i, j) { if (i === j || i < 0 || j < 0) return; while (LAY.length <= Math.max(i, j)) LAY.push(null); const a = LAY[i]; LAY[i] = LAY[j]; LAY[j] = a; saveLay(); }
   let pvRaf = 0, pvT0 = 0;
   function preview() { const cv = el.querySelector('.pvc'); if (!cv || !open) { pvRaf = 0; return; } const g = cv.getContext('2d'), K = window.SKIN || 'hm', E = inv.eq, set = E === 'axe' && Assets.has(K + '_axe') ? K + '_axe' : E === 'machete' && Assets.has(K + '_mach') ? K + '_mach' : K;
     const now = performance.now(), D = ['south', 'south-west', 'west', 'north-west', 'north', 'north-east', 'east', 'south-east'], dir = D[Math.floor((now - pvT0) / 2600) % 8], n = Assets.frames(set, 'idle', dir) || 1, fi = Math.floor(now / 1000 * (Assets.fps(set, 'idle') || 6)) % n;
@@ -3657,12 +3676,11 @@ const Bag = (() => {
     Assets.draw(g, set, 'idle', dir, fi, cv.width / 2, cv.height - 16, sc); pvRaf = requestAnimationFrame(preview); }
   function render() {
     sig = JSON.stringify(inv) + sel;
-    const S = Entities.STACK, CAP = Entities.bagCap(), list = [];   /* cada pilha de até 20 ocupa um espaço; o equipado fica fora */
-    for (const it of ITEMS) { if (it[0] === 'water' || !have(it[0]) || it[0] === inv.eq || it[0] === inv.eq2) continue; if (it[3] === 'tool' || it[3] === 'misc') { list.push([it, 0]); continue; } let n = inv[it[0]] | 0; while (n > 0) { list.push([it, Math.min(S, n)]); n -= S; } }
+    const S = Entities.STACK, CAP = Entities.bagCap(), list = arrange();   /* cada pilha de até 20 ocupa um espaço, na posição que o jogador escolheu; o equipado fica fora */
     const used = Entities.slotsUsed(), LV = ['Sem mochila', 'Mochila', 'Mochila reforçada'][inv.bag | 0], P = Player.p;
     const nm = (() => { try { return (JSON.parse(localStorage.getItem('iv_char') || '{}').nome || '').trim(); } catch (e) { return ''; } })() || 'Sobrevivente';
     let h = `<div class="bh"><b>🎒 Inventário</b><span class="bc">${LV} · ${used}/${CAP}</span><span id="bx">✕</span></div><div class="bw"><div class="bl"><div class="bg">`;
-    for (let n = 0; n < Math.max(CAP, list.length); n++) { const e = list[n], it = e && e[0]; h += it ? `<div class="bs${sel === it[0] ? ' on' : ''}${e[1] >= S ? ' fullst' : ''}" data-k="${it[0]}"><i></i>${it[3] === 'tool' || it[3] === 'misc' ? '' : `<em>${e[1]}</em>`}</div>` : '<div class="bs empty"></div>'; }
+    for (let n = 0; n < Math.max(CAP, list.length); n++) { const e = list[n], it = e && e[0]; h += it ? `<div class="bs${sel === it[0] ? ' on' : ''}${e[1] >= S ? ' fullst' : ''}" data-k="${it[0]}" data-i="${n}"><i></i>${it[3] === 'tool' || it[3] === 'misc' ? '' : `<em>${e[1]}</em>`}</div>` : `<div class="bs empty" data-i="${n}"></div>`; }
     h += '</div>'; const it = ITEMS.find(i => i[0] === sel && have(i[0]));
     if (it) { const [k, name, desc, type] = it; const eqd = k === inv.eq ? 'eq' : k === inv.eq2 ? 'eq2' : null; h += `<div class="bd"><b>${name}</b>${type !== 'tool' && type !== 'misc' ? ` · ${inv[k]}` : ''}${eqd ? ' · <i>equipado</i>' : ''}<br><small>${desc}${k === 'canteen' ? ` <br>Suja: ${inv.dirty} · Fervida: ${inv.water}` : ''}</small><div class="ba">`;
       if (type === 'tool') h += eqd ? `<button data-a="uneq">Guardar</button>` : `<button data-a="eq">Equipar</button><button data-a="eq2" class="g">Secundária</button>`;
@@ -3673,12 +3691,12 @@ const Bag = (() => {
       if (type === 'drink') h += '<button data-a="eat">Beber</button>';
       if (type === 'heal') h += '<button data-a="band">Usar</button>';
       if (type === 'res' || type === 'food' || type === 'heal' || type === 'drink') h += '<button data-a="d1" class="g">Soltar 1</button><button data-a="dall" class="g">Soltar tudo</button>';
-      h += '</div></div>'; } else h += '<div class="bd"><small>Toque num item para ver detalhes. Arraste para os lugares do personagem para equipar.</small></div>';
+      h += '</div></div>'; } else h += '<div class="bd"><small>Toque num item para ver detalhes. Segure e arraste para trocar de lugar na mochila ou para equipar. Os 5 primeiros espaços aparecem na barra da tela.</small></div>';
     const sl = s => { const k = slotItem(s[0]); return `<div class="es${k ? ' has' : ''}${sel && sel === k ? ' on' : ''}" data-s="${s[0]}" title="${s[1]}">${k ? '<i></i>' : `<span>${s[2]}</span>`}<small>${s[1]}</small></div>`; };
     h += `</div><div class="br"><div class="pv"><b>${nm}</b><span>🍏 ${Math.round(P.food ?? 100)} · 💧 ${Math.round(P.thirst)} · ♥ ${Math.round(P.hp)}</span><div class="pvb"><u style="width:${Math.max(0, Math.min(100, P.hp / (P.maxhp || 100) * 100))}%"></u></div></div>
       <div class="eqw"><div class="ec">${sl(SLOTS[0])}${sl(SLOTS[1])}<div class="es bagi" title="Mochila"><span>🎒</span><small>Nível ${inv.bag | 0}</small></div></div><canvas class="pvc" width="160" height="200"></canvas><div class="ec">${SLOTS.slice(2).map(sl).join('')}</div></div><div class="bqs">Atalhos do ataque:<div class="bq" data-i="0"></div><div class="bq" data-i="1"></div><div class="bq" data-i="2"></div></div></div></div>`;
     el.innerHTML = h;
-    el.querySelectorAll('.bs[data-k]').forEach(s => { s.firstChild.replaceWith(Entities.icon(s.dataset.k)); s.onclick = () => { if (s._dragged) { s._dragged = false; return; } sel = sel === s.dataset.k ? null : s.dataset.k; render(); }; drag(s, s.dataset.k, null); });
+    el.querySelectorAll('.bs[data-k]').forEach(s => { s.firstChild.replaceWith(Entities.icon(s.dataset.k)); s.onclick = () => { if (s._dragged) { s._dragged = false; return; } sel = sel === s.dataset.k ? null : s.dataset.k; render(); }; drag(s, s.dataset.k, null, +s.dataset.i); });
     el.querySelectorAll('.es[data-s].has').forEach(s => { const k = slotItem(s.dataset.s); s.firstChild.replaceWith(Entities.icon(k)); s.onclick = () => { if (s._dragged) { s._dragged = false; return; } sel = sel === k ? null : k; render(); }; drag(s, k, s.dataset.s); });
     document.getElementById('bx').onclick = close;
     el.querySelectorAll('button[data-a]').forEach(b => b.onclick = () => act(b.dataset.a));
@@ -3686,12 +3704,22 @@ const Bag = (() => {
     if (!pvRaf) { pvT0 = performance.now(); pvRaf = requestAnimationFrame(preview); }
   }
   /* arrastar: da mochila para um lugar do personagem (equipa), de um lugar para a mochila (guarda), ou para os atalhos em volta do ataque */
-  function drag(src, k, fromSlot) {
-    src.addEventListener('pointerdown', e => { const x0 = e.clientX, y0 = e.clientY; let gh = null, hv = null;
-      const tgt = ev => { const t = document.elementFromPoint(ev.clientX, ev.clientY); return t && t.closest ? (t.closest('.es[data-s]') || t.closest('.bq') || t.closest('#bag .bl')) : null; };
-      const mv = ev => { if (!gh && Math.hypot(ev.clientX - x0, ev.clientY - y0) > 12) { gh = document.createElement('div'); gh.className = 'hdrag'; gh.appendChild(Entities.icon(k)); document.body.appendChild(gh); src._dragged = true; src.style.opacity = .35; } if (gh) { gh.style.left = ev.clientX - 27 + 'px'; gh.style.top = ev.clientY - 27 + 'px'; const T = tgt(ev); if (T !== hv) { if (hv) hv.classList.remove('hov'); if (T) T.classList.add('hov'); hv = T; } } };
-      const up = ev => { removeEventListener('pointermove', mv); removeEventListener('pointerup', up); removeEventListener('pointercancel', up); if (!gh) return; gh.remove(); src.style.opacity = ''; document.querySelectorAll('.hov').forEach(q => q.classList.remove('hov'));
-        const T = tgt(ev); if (T) { if (T.classList.contains('es')) { if (T.dataset.s !== fromSlot && equip(T.dataset.s, k) && fromSlot && fromSlot !== 'eq' && fromSlot !== 'eq2') unequip(fromSlot); } else if (T.classList.contains('bq')) { if (typeof HUD2 !== 'undefined') HUD2.assign(+T.dataset.i, k); } else if (fromSlot) unequip(fromSlot); }
+  function drag(src, k, fromSlot, fromI) {
+    /* item da mochila: segurar um instante (ou arrastar de lado) pega o item; deslizar rápido pra cima/baixo rola a grade */
+    src.addEventListener('pointerdown', e => { const x0 = e.clientX, y0 = e.clientY, t0 = performance.now(), grid = fromSlot ? null : el.querySelector('.bg'), sc0 = grid ? grid.scrollTop : 0; let gh = null, hv = null, mode = '', lp = 0;
+      const tgt = ev => { const t = document.elementFromPoint(ev.clientX, ev.clientY); return t && t.closest ? (t.closest('.es[data-s]') || t.closest('.bq') || t.closest('#bag .bs[data-i]') || t.closest('#bag .bl')) : null; };
+      const pick = (cx, cy) => { mode = 'drag'; clearTimeout(lp); gh = document.createElement('div'); gh.className = 'hdrag'; gh.appendChild(Entities.icon(k)); document.body.appendChild(gh); gh.style.left = cx - 27 + 'px'; gh.style.top = cy - 27 + 'px'; src._dragged = true; src.style.opacity = .35; try { navigator.vibrate && navigator.vibrate(15); } catch (er) {} };
+      if (grid) lp = setTimeout(() => { if (!mode) pick(x0, y0); }, 280);
+      const mv = ev => { const dx = ev.clientX - x0, dy = ev.clientY - y0;
+        if (!mode && Math.hypot(dx, dy) > 10) { if (!grid || performance.now() - t0 > 200 || Math.abs(dx) > Math.abs(dy) * 1.2) pick(ev.clientX, ev.clientY); else { mode = 'scroll'; clearTimeout(lp); src._dragged = true; } }
+        if (mode === 'scroll') { grid.scrollTop = sc0 - dy; return; }
+        if (gh) { gh.style.left = ev.clientX - 27 + 'px'; gh.style.top = ev.clientY - 27 + 'px'; const T = tgt(ev); if (T !== hv) { if (hv) hv.classList.remove('hov'); if (T) T.classList.add('hov'); hv = T; } } };
+      const up = ev => { clearTimeout(lp); removeEventListener('pointermove', mv); removeEventListener('pointerup', up); removeEventListener('pointercancel', up); if (mode === 'scroll') { setTimeout(() => { src._dragged = false; }, 60); return; } if (!gh) return; gh.remove(); src.style.opacity = ''; document.querySelectorAll('.hov').forEach(q => q.classList.remove('hov'));
+        const T = ev.type === 'pointercancel' ? null : tgt(ev);
+        if (T) { if (T.classList.contains('es')) { if (T.dataset.s !== fromSlot && equip(T.dataset.s, k) && fromSlot && fromSlot !== 'eq' && fromSlot !== 'eq2') unequip(fromSlot); }
+          else if (T.classList.contains('bq')) { if (typeof HUD2 !== 'undefined') HUD2.assign(+T.dataset.i, k); }
+          else if (T.classList.contains('bs')) { const j = +T.dataset.i; if (fromSlot) { if (T.classList.contains('empty')) { for (let q = 0; q < LAY.length; q++) if (LAY[q] === k) LAY[q] = null; while (LAY.length <= j) LAY.push(null); LAY[j] = k; saveLay(); } unequip(fromSlot); } else swapLay(fromI, j); }   /* troca de lugar dentro da mochila */
+          else if (fromSlot) unequip(fromSlot); }
         setTimeout(() => { src._dragged = false; }, 60); render(); };
       addEventListener('pointermove', mv); addEventListener('pointerup', up); addEventListener('pointercancel', up); }); }
   function act(a) {
@@ -3712,7 +3740,7 @@ const Bag = (() => {
   const go = e => { e.preventDefault(); e.stopPropagation(); toggle(); };
   btn.addEventListener('touchstart', go, { passive: false }); btn.addEventListener('mousedown', go);
   addEventListener('keydown', e => { if (!e.repeat && (e.key === 'b' || e.key === 'i')) toggle(); });
-  function stacks() { const S = Entities.STACK, L = []; for (const it of ITEMS) { if (it[0] === 'water' || !have(it[0]) || it[0] === inv.eq || it[0] === inv.eq2) continue; if (it[3] === 'tool' || it[3] === 'misc') { L.push([it[0], 0, it[3]]); continue; } let n = inv[it[0]] | 0; while (n > 0) { L.push([it[0], Math.min(S, n), it[3]]); n -= S; } } return L; }
+  function stacks() { return arrange().map(e => e ? [e[0][0], e[1], e[0][3]] : null); }   /* mesma ordem da mochila (os 5 primeiros = barra rápida) */
   const typeOf = k => { const it = ITEMS.find(i => i[0] === k); return it ? it[3] : ''; };
   return { refresh: () => { if (open) { const s = JSON.stringify(inv) + sel; if (s !== sig) render(); } }, toggle, stacks, typeOf, get open() { return open; } };
 })();
@@ -4006,8 +4034,9 @@ const Build = (() => {
   function close() { on = false; document.body.classList.remove('building'); bar.style.display = 'none'; btn.classList.remove('on'); }
   function toggle() { on ? close() : open(); }
   let sig = '';
+  const sigOf = () => ORDER.map(cnt).join() + piece + remove + turn + vert + upg + inv.plank + remF;
   function render() {
-    sig = ORDER.map(cnt).join() + piece + remove + turn + vert + upg + inv.plank + remF;
+    sig = sigOf();
     let h = '';
     for (const k of ORDER) h += `<div class="bp${!remove && !turn && !upg && piece === k ? ' on' : ''}" data-k="${k}"><i></i><em>${k === 'fence' ? '🪵' : cnt(k)}</em><small>${PIECES[k][0]}</small></div>`;
     h += `<div class="bt" data-a="rot">${vert ? '↕' : '↔'}<small>Girar</small></div><div class="bt${turn ? ' on' : ''}" data-a="turn">↻<small>Girar peça</small></div><div class="bt${upg ? ' on' : ''}" data-a="up">🪚<small>Melhorar</small></div><div class="bt${remove ? ' on' : ''}" data-a="rem">🗑<small>Remover</small></div><div class="bt ok" data-a="ok">✔<small>Colocar</small></div><div class="bt" data-a="x">✕<small>Sair</small></div>`;
@@ -4029,7 +4058,7 @@ const Build = (() => {
   const go = e => { e.preventDefault(); e.stopPropagation(); toggle(); };
   btn.addEventListener('touchstart', go, { passive: false }); btn.addEventListener('mousedown', go);
   addEventListener('keydown', e => { if (e.repeat) return; const k = e.key.toLowerCase(); if (k === 'c') toggle(); if (on && k === 'r') rotate(); if (on && k === 'enter') confirm(); });
-  return { open, close, tap, draw, refresh: () => { if (on) { const s = ORDER.map(cnt).join() + piece + remove + turn + vert; if (s !== sig) render(); } }, get on() { return on; } };
+  return { open, close, tap, draw, refresh: () => { if (on && sigOf() !== sig) render(); }   /* antes a assinatura daqui era diferente da do render: o painel era refeito a cada atualização */, get on() { return on; } };
 })();
 
 // Clima: sol/calor e chuva alternando com tempo limpo. Chuva = gotas do PixelLab + respingos; calor = tom quente, suor e sede.
