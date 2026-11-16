@@ -536,7 +536,7 @@ class GL2D {
 const ASSET_V = '2026111413';
 async function getJSON(u) { (window.__pend = window.__pend || {})[u] = 1; let r; try { r = await fetch(u + '?v=' + ASSET_V); } catch (e) { window.__fail = (window.__fail || 0) + 1; const t = document.getElementById('tltip'); if (t) t.textContent = '⚠ Falhou: ' + u + ' (' + (e && e.message) + ')'; throw e; } if (!r.ok) { const t = document.getElementById('tltip'); if (t) t.textContent = '⚠ Falhou: ' + u + ' (HTTP ' + r.status + ')'; } if (!r.ok) throw new Error('Não achei ' + u + ' — suba a pasta assets junto com o index.html'); return r.json(); }
 const Assets = {
-  meta: null, tiles: {}, tilesets: null, pg: [], grp: {}, sg: {}, now: 0, TTL: 90000,
+  meta: null, tiles: {}, tilesets: null, pg: [], grp: {}, sg: {}, now: 0, TTL: 300000,
   loadImg(src) { return new Promise((res, rej) => { const im = new Image(); im.onload = () => { const L = window.__ld; if (L && !L.done) { L.n++; const k = Math.min(1, L.n / L.t), b = document.getElementById('tlbar'), pc = document.getElementById('tlpc'); if (b) { b.style.transition = 'width .2s'; b.style.width = Math.round(95 * k) + '%'; } if (pc) pc.textContent = Math.round(95 * k) + '%'; } res(im); }; (window.__pend = window.__pend || {})[src] = 1; im.onerror = () => { try { window.__fail = (window.__fail || 0) + 1; const t = document.getElementById('tltip'); if (t && document.getElementById('tload').style.display !== 'none') t.textContent = '⚠ Falhou: ' + src.split('?')[0] + ' (' + (window.__fail) + ' erro(s))'; } catch (e) {} rej(new Error('falhou ' + src)); }; const _ol = im.onload; im.onload = function () { try { delete window.__pend[src]; } catch (e) {} return _ol.apply(this, arguments); }; im.src = src; }); },
   async load() {
     const E = typeof EMBED !== 'undefined' ? EMBED : null; this.E = E;
@@ -549,6 +549,7 @@ const Assets = {
     this.now = performance.now();
     window.__ld = { n: 0, t: Object.values(this.grp).filter(g => g.eager).reduce((s, g) => s + g.pages.length, 0) + CONFIG.TILESETS.length + 9 };   /* total de imagens do começo: páginas que carregam já + tilesets */
     await Promise.all(Object.values(this.grp).filter(g => g.eager).map(g => this.need(g)));
+    this.lazyOK = true;
     for (const [n] of CONFIG.TILESETS) this.tiles[n] = await this.loadImg(E ? E.tiles[n] : `assets/tile_${n}.png?v=${ASSET_V}`);
     for (const n of ['sand_shallow', 'shallow_deep', 'sandg_water', 'sandg_grass', 'mud_water', 'mud_grass', 'grass_plat', 'dirt_grass2', 'dirt_grass3']) this.tiles[n] = await this.loadImg(E ? E.tiles[n] : `assets/tile_${n}.png?v=${ASSET_V}`);
   },
@@ -567,8 +568,10 @@ const Assets = {
     if (typeof g === 'string') g = this.grp[g]; if (!g) return Promise.resolve();
     g.use = this.now; if (g.st) return g.p || Promise.resolve();
     g.st = 1; (window.__ev = window.__ev || []).push([performance.now(), 'carrega ' + g.name]); if (window.__ev.length > 40) window.__ev.shift();
+    if (!g.eager && this.lazyOK && !g.__go) { g.p = new Promise(res => { (this.q = this.q || []).push([g, res]); this.pump(); }); return g.p; } g.__go = 0;   /* bicho/grupo sob demanda entra numa fila: 1 por vez, com pausa (carregar 13 de uma vez travava o jogo ~1,4 s) */
     return g.p = Promise.all(g.pages.map(p => this.loadImg(this.E ? this.E.pages[p.i] : 'assets/' + p.file + '?v=' + ASSET_V).then(im => { this.chkSize(im, p); return im; }).then(im => this.ready(im, p.file, g.eager)).then(im => { p.img = im; }))).then(() => { g.st = 2; g.p = null; }).catch(e => { g.st = 0; g.p = null; console.warn(e.message); const m = /assets\/([^?]+)/.exec(e.message || ''); if (m) (window.__assetBad = window.__assetBad || []).push(m[1] + ' (faltando)'); });
   },
+  pump() { if (this.pumping) return; this.pumping = true; const next = () => { const it = (this.q || []).shift(); if (!it) { this.pumping = false; return; } const g = it[0]; g.st = 0; g.__go = 1; this.need(g).then(() => { it[1](); setTimeout(next, 350); }); }; next(); },
   // avisa que o sprite vai ser usado em breve (bichos acordados): mantém o grupo vivo e começa a carregar se preciso
   // 'perto' = o bicho está a uns 600 px: carrega também as animações RARAS da espécie (grupo '<espécie>_x'); longe, só as básicas
   touch(name, perto) {
@@ -1252,6 +1255,7 @@ const Input = (() => {
   addEventListener('touchend', end); addEventListener('touchcancel', end);
   return {
     axis() {
+      if (window.BENCH_AX) return window.BENCH_AX;   /* teste de FPS: o personagem anda sozinho */
       let x = (keys.has('d') || keys.has('arrowright') ? 1 : 0) - (keys.has('a') || keys.has('arrowleft') ? 1 : 0);
       let y = (keys.has('s') || keys.has('arrowdown') ? 1 : 0) - (keys.has('w') || keys.has('arrowup') ? 1 : 0);
       const now = performance.now(), dt = Math.min(.1, (now - (this.t || now)) / 1000); this.t = now;
@@ -1460,7 +1464,7 @@ const Player = (() => {
     if (window.CRAFT_WORK && an === 'idle' && !p.sneak && !p.carry) { const b = window.CRAFT_WORK; p.dir = Entities._dirOf(b.x - p.x, b.y - p.y); an = 'workbench'; }   /* perto da bancada com a fila andando: fica trabalhando nela (usa a animação 'workbench' quando existir) */
     { const k = skinSet(set, an); set = k[0]; an = k[1]; sc *= k[2]; }
     const n = Assets.frames(set, an, p.dir); let f = Math.floor(p.t * Assets.fps(set, an) * (an === 'walk' ? 1.45 : an === 'run' ? 1.15 : 1)) % n;
-    if (!p.swim && !p.wade && !p.raft) { ctx.fillStyle = 'rgba(10,20,8,.40)'; ctx.beginPath(); ctx.ellipse(Math.round(p.x - camX), Math.round(p.y - camY) + 1, 12, 4.4, 0, 0, 6.283); ctx.fill(); }   /* sombra no chão: o personagem não parece flutuar */
+    if (!p.swim && !p.wade && !p.raft && !(window.NOL && window.NOL.shadow)) { ctx.fillStyle = 'rgba(10,20,8,.40)'; ctx.beginPath(); ctx.ellipse(Math.round(p.x - camX), Math.round(p.y - camY) + 1, 12, 4.4, 0, 0, 6.283); ctx.fill(); }   /* sombra no chão: o personagem não parece flutuar */
     Assets.draw(ctx, set, an, p.dir, f, p.x - camX, p.y - camY + dy + (an === 'run' ? gDy(set, an, p.dir, f) * sc : 0), sc);
   }
   /* correndo sem flutuar: nos quadros da corrida o corpo sobe uns pixels; aqui ele desce de volta para os pés ficarem na altura do chão (referência = o ponto mais baixo de andar/correr naquela direção) */
@@ -3831,7 +3835,7 @@ const Entities = (() => {
       if (w.kind === 'wolf' && w.stalk && w.moving && !w.running && Assets.hasAnim('wolf', 'sneak')) { sp = 'wolf'; an2 = 'sneak'; fr2 = Math.floor(w.t * 9) % Assets.frames('wolf', 'sneak', w.dir); }   // lobo furtivo: andando agachado
       { const o = pose(w, K, sp, an2, fr2); sp = o[0]; an2 = o[1]; fr2 = o[2]; }
       if (w.alt > 3) { ctx.fillStyle = 'rgba(0,0,0,.2)'; ctx.beginPath(); ctx.ellipse(Math.round(w.x - camX), Math.round(w.y - camY + 3), Math.max(6, 16 - w.alt * .15), 5, 0, 0, 6.283); ctx.fill(); }   // sombra de quem voa
-      if (!(w.alt > 3) && w.kind !== 'fish' && w.kind !== 'shark' && !w.inDen) { const SR = { wolf: 15, deer: 16, fawn: 10, boar: 15, bear: 21, fox: 10, rabbit: 7, crab: 6, gull: 6, woodpecker: 4, urubu: 9 }[w.kind]; if (SR && !World.inWater(w.x, w.y)) { ctx.fillStyle = 'rgba(10,20,8,.32)'; ctx.beginPath(); ctx.ellipse(Math.round(w.x - camX), Math.round(w.y - camY) - 3, SR, SR * .34, 0, 0, 6.283); ctx.fill(); } }   /* sombra no chão */
+      if (!(w.alt > 3) && w.kind !== 'fish' && w.kind !== 'shark' && !w.inDen && !(window.NOL && window.NOL.shadow)) { const SR = { wolf: 15, deer: 16, fawn: 10, boar: 15, bear: 21, fox: 10, rabbit: 7, crab: 6, gull: 6, woodpecker: 4, urubu: 9 }[w.kind]; if (SR && !World.inWater(w.x, w.y)) { ctx.fillStyle = 'rgba(10,20,8,.32)'; ctx.beginPath(); ctx.ellipse(Math.round(w.x - camX), Math.round(w.y - camY) - 3, SR, SR * .34, 0, 0, 6.283); ctx.fill(); } }   /* sombra no chão */
       Assets.draw(ctx, sp, an2, w.dir, fr2, w.x - camX, w.y - camY - (w.alt || 0) + (an2 === 'run' && !(w.alt > 3) && GDY[w.kind] ? groundDy(sp, an2, w.dir, fr2) * (K.scale || 1) * GDY[w.kind] : 0), K.scale, K.tint); if (w.kind === 'fox' && w.loot) { const v = DIRV[w.dir] || [0, 1], vl = Math.hypot(v[0], v[1]) || 1; Assets.draw(ctx, w.loot === 'apple' ? 'apple' : w.loot === 'cooked' ? 'cooked1' : 'meat1', 'rot', '_', 0, Math.round(w.x - camX + v[0] / vl * 15), Math.round(w.y - camY - 9 + v[1] / vl * 6), .4); } drawBars(ctx, w, K, camX, camY); if (w.nap > 0 && !w.moving && !w.sleeping && w.kind !== 'rabbit' && !(w.kind === 'rabbit' && an2 === 'groom') && an2 !== 'lie' && an2 !== 'rest' && an2 !== 'sit') { const zz = (w.t * 1.2) % 1; ctx.globalAlpha = 1 - zz; txt(ctx, 'z', 'bold 14px sans-serif', '#cfe8ff', w.x - camX + 10 + zz * 6, w.y - camY - 40 * K.scale - zz * 12); ctx.globalAlpha = 1; }
       if (w.sleeping) { const zz = (w.t * .8) % 1; ctx.globalAlpha = 1 - zz; txt(ctx, 'z', 'bold 14px sans-serif', '#cfe8ff', w.x - camX + 10 + zz * 6, w.y - camY - 36 * K.scale - zz * 12); ctx.globalAlpha = 1; }
       if ((w.tired || w.exh) && !w.moving) txt(ctx, '💦', '18px sans-serif', '#fff', w.x - camX, w.y - camY - 58);
@@ -3848,8 +3852,8 @@ const Entities = (() => {
     for (let _i62 = 0, o; _i62 < World.near.length && (o = World.near[_i62], true); _i62++) if (false) { }
       else if (o.kind === 'bridge' && !World.isRope(Math.round(o.x / CONFIG.TILE), Math.round(o.y / CONFIG.TILE)) && o.x > camX - 40 && o.x < camX + vw + 40 && o.y > camY - 40 && o.y < camY + vh + 40) drawBridge(ctx, o.x - camX, o.y - camY, o.x, o.y, o.nat);
     drawTracks(ctx, camX, camY, vw, vh);
-    { const OA = World.near; for (let i = 0; i < OA.length; i++) { const o = OA[i], Tr = TREES[o.kind]; if (!Tr || o.dead || (o.fall !== undefined && o.fall > .5) || !inView(o, camX, camY, vw, vh, m)) continue; add(-1e9 + 2, 6, o); } }   // sombra no chão, como no jogo de referência
-    World.setViewR(Math.max(vw, vh) / 2 + 450); const O = World.near, MT = window.MATOTHIN | 0, KP = MATOKEEP.v; let mc = 0; for (let i = 0; i < O.length; i++) { const o = O[i]; if (o.kind === 'mato') { if (!inView(o, camX, camY, vw, vh, m)) continue; mc++; if (KP < 100 && Math.abs(Math.round(o.x * 7 + o.y * 13)) % 100 >= KP && Math.abs(o.x - Player.p.x) + Math.abs(o.y - Player.p.y) > 90) continue; }   /* limite de mato por tela: acima do teto, some parte (sempre as mesmas moitas, só as longe de você) */
+    { const OA = World.near; for (let i = 0; i < OA.length; i++) { const o = OA[i], Tr = TREES[o.kind]; if (!Tr || o.dead || (o.fall !== undefined && o.fall > .5) || !inView(o, camX, camY, vw, vh, m) || (window.NOL && (window.NOL.shadow || window.NOL.trees))) continue; add(-1e9 + 2, 6, o); } }   // sombra no chão, como no jogo de referência
+    World.setViewR(Math.max(vw, vh) / 2 + 450); const O = World.near, MT = window.MATOTHIN | 0, KP = MATOKEEP.v; let mc = 0; for (let i = 0; i < O.length; i++) { const o = O[i]; if (window.NOL && ((window.NOL.mato && o.kind === 'mato') || (window.NOL.trees && TREES[o.kind]))) continue; if (o.kind === 'mato') { if (!inView(o, camX, camY, vw, vh, m)) continue; mc++; if (KP < 100 && Math.abs(Math.round(o.x * 7 + o.y * 13)) % 100 >= KP && Math.abs(o.x - Player.p.x) + Math.abs(o.y - Player.p.y) > 90) continue; }   /* limite de mato por tela: acima do teto, some parte (sempre as mesmas moitas, só as longe de você) */
       if (MT && o.kind === 'mato') { const h = Math.abs(Math.round(o.x * 13 + o.y * 7)) % 6; if (h < (MT === 1 ? 2 : 3) && Math.abs(o.x - Player.p.x) + Math.abs(o.y - Player.p.y) > 90) continue; }   // FPS baixo: desenha menos mato (só o que está longe de você)
       if (o.kind === 'campdirt' ? (Math.abs(o.x - camX - vw / 2) < vw / 2 + 400 && Math.abs(o.y - camY - vh / 2) < vh / 2 + 330) : inView(o, camX, camY, vw, vh, m)) add(o.kind === 'campdirt' ? -1e8 : o.kind === 'raft' ? o.y - 40 : (o.kind === 'mato' && o.cutT > 0) ? o.y - 60 : (o.kind === 'wall' && o.vert) ? o.y + 20 : o.y, 0, o); }
     MATOKEEP.v = mc > MATOCAP ? Math.max(50, Math.floor(MATOCAP / mc * 100)) : Math.min(100, MATOKEEP.v + 2);
@@ -3876,7 +3880,7 @@ const Entities = (() => {
       ctx.translate(w.x - camX, w.y - camY + 4); ctx.rotate(Math.atan2(dy, dx)); ctx.scale(1, .62);
       ctx.fillStyle = 'rgba(220,40,30,' + pulse + ')'; ctx.fillRect(0, -W, L, W * 2);
       ctx.strokeStyle = 'rgba(255,90,70,' + Math.min(.9, pulse + .3) + ')'; ctx.lineWidth = 2; ctx.strokeRect(0, -W, L, W * 2); ctx.setTransform(window.RS || 1, 0, 0, window.RS || 1, 0, 0); ctx.lineWidth = 1; });
-    if (!window.NET_GUEST) for (let _i66 = 0, w; _i66 < animals.length && (w = animals[_i66], true); _i66++) if (w.x > camX - m && w.x < camX + vw + m && w.y > camY - 30 && w.y < camY + vh + m) if (!(w.inDen > 0)) add(w.y + (w.alt > 8 ? 400 : 0), 3, w);
+    if (!window.NET_GUEST) for (let _i66 = 0, w; _i66 < animals.length && (w = animals[_i66], true); _i66++) if (w.x > camX - m && w.x < camX + vw + m && w.y > camY - 30 && w.y < camY + vh + m) if (!(w.inDen > 0) && !(window.NOL && window.NOL.animals)) add(w.y + (w.alt > 8 ? 400 : 0), 3, w);
     if (window.NET_GUEST && window.Net) for (const r of window.Net.remoteAnimals().values()) if (r.x > camX - m && r.x < camX + vw + m && r.y > camY - 30 && r.y < camY + vh + m) add(r.y + (r.alt > 8 ? 400 : 0), 4, r);   /* bichos do dono do mundo */
     if (!(typeof Title !== "undefined" && Title.active)) add(player.p.y, 4, player);
     if (window.Net && window.Net.active) for (const r of window.Net.list().values()) if (r.x > camX - m && r.x < camX + vw + m && r.y > camY - 30 && r.y < camY + vh + m) add(r.y, 4, r);   /* outros jogadores (multiplayer) */   /* tela inicial: jogador-fantasma não aparece */
@@ -5408,7 +5412,7 @@ const Title = (() => {
   const qb = document.getElementById('qual'), qshow = () => { if (qb) qb.textContent = ['HD', 'SD', 'HD+'][window.QUAL]; };
   if (qb) qb.style.display = 'none';
   if (false) { qshow(); const tg = e => { e.preventDefault(); e.stopPropagation(); window.QUAL = (window.QUAL + 1) % 3; window.PIXCAP = 0; window.MATOTHIN = 0; window.LOWFX = 0; try { localStorage.setItem('iv_q2', String(window.QUAL)); } catch (_) {} qshow(); resize(); }; /* escolha manual: tira o limite automático de FPS */ qb.addEventListener('touchstart', tg, { passive: false }); qb.addEventListener('click', tg); }
-  window.__step = 'ctx ok'; addEventListener('resize', resize); resize(); window.__step = 'resize ok';
+  window.__step = 'ctx ok'; addEventListener('resize', resize); resize(); window.__resize = resize; window.__step = 'resize ok';
   // a nuvem e as imagens carregam juntas
   const cloudP = Cloud.boot(); window.__step = 'cloud ok';   // se a nuvem tem um save mais novo, grava no aparelho e recarrega (1x)
   window.__step = 'assets.load'; try { await Assets.load(); } catch (e) { const tx = document.getElementById('tltx'), ic = document.getElementById('tlic'); if (ic) ic.textContent = '⚠️'; if (tx) { tx.style.fontSize = '16px'; tx.textContent = 'Não deu para carregar as imagens do jogo. Confira se a pasta assets está ao lado do index.html. (' + (e && e.message || e) + ')'; } throw e; }
@@ -5536,22 +5540,41 @@ body.title #chat,body.title #chatp,body:has(#bag[style*="flex"]) :is(#chat,#chat
   pan.querySelectorAll('.ct b').forEach(b => b.addEventListener('click', () => { tab = b.dataset.t; paintP(); cb.scrollTop = cb.scrollHeight; }));
   pan.querySelector('[data-a=copy]').addEventListener('click', () => { const TK = { logs: ['item', 'build', 'info'], err: ['err', 'warn'], ani: ['ani'] }[tab] || []; const txt = E.filter(e => TK.includes(e.k)).map(e => hm(e.t) + ' [' + e.k + '] ' + e.m + (e.xy ? ' @' + e.xy : '')).join('\n'); try { navigator.clipboard.writeText(txt); log('info', 'Logs copiados'); } catch (er) { log('warn', 'Não foi possível copiar'); } });
 
-  /* TESTE DE FPS: desliga uma camada por vez (mar, árvores/bichos, clima, interface...) e mede quanto o celular ganha; mostra onde está o peso */
-  { const st = document.createElement('style'); st.textContent = 'body.nohud>*:not(#game):not(#dark):not(#chatp):not(#fps):not(#ttoast){visibility:hidden!important}'; document.head.appendChild(st); }
+  /* TESTE DE FPS: o personagem anda sozinho; cada etapa desliga uma camada (mar, árvores, mato, bichos, sombras, clima, interface) ou baixa a resolução, e o jogo diz o que mais pesa */
+  { const st = document.createElement('style'); st.textContent = 'body.nohud>*:not(#game):not(#dark):not(#chatp):not(#fps):not(#ttoast):not(#benchres){visibility:hidden!important}'; document.head.appendChild(st); }
   let benchOn = false;
   async function bench() {
     if (benchOn) return; benchOn = true; setOpen(false); window.BENCH = 1;
-    try { Save.flash('⏱️ Teste de FPS: fique parado, leva ~30 s'); } catch (e) {}
-    const steps = [['tudo ligado', {}, 0], ['sem brilho/espuma do mar', { sea: 1 }, 0], ['sem árvores, bichos e objetos', { ents: 1 }, 0], ['sem clima/noite', { wx: 1 }, 0], ['sem interface (botões)', {}, 1], ['só o chão', { sea: 1, ents: 1, wx: 1 }, 1], ['tela vazia', { sea: 1, ents: 1, wx: 1, ground: 1 }, 1]];
-    const wait = ms => new Promise(r => setTimeout(r, ms)), out = [];
-    try { for (const [nm, fl, hud] of steps) {
-      window.NOL = fl; document.body.classList.toggle('nohud', !!hud); await wait(1200);
-      const r = await new Promise(res => { let n = 0, w = 0, t0 = performance.now(), l = t0; const f = t => { const d = t - l; l = t; if (n++ > 0 && d > w) w = d; if (t - t0 < 3000) requestAnimationFrame(f); else res({ fps: Math.round(n / ((t - t0) / 1000)), w: Math.round(w) }); }; requestAnimationFrame(f); });
-      out.push(nm + ': ' + r.fps + ' FPS (pior quadro ' + r.w + ' ms)'); }
-    } catch (e) { out.push('erro no teste: ' + e); }
-    window.NOL = null; window.BENCH = 0; document.body.classList.remove('nohud'); benchOn = false;
-    log('warn', 'TESTE DE FPS em ' + pos() + ' — ' + (document.getElementById('fps') || {}).textContent.split('\n')[0].replace(/^GL · /, '') + ' || ' + out.join(' | '), true);
-    tab = 'err'; setOpen(true);
+    const fpsTx = (document.getElementById('fps') || {}).textContent || '', RS0 = window.RS, info = {};
+    info.gpu = ((fpsTx.split('\n')[3] || '').split(' · ')[0] || '?'); { const m = fpsTx.match(/(\d+)Hz/); info.hz = m ? m[1] : '?'; }
+    info.cap = window.FPS30 ? '30 (escolhido)' : window.AUTO30 ? '30 (automático)' : window.AUTO45 ? '45 (automático)' : '60'; info.lite = [window.LOWFX ? 'efeitos reduzidos' : '', (window.MATOTHIN | 0) ? 'menos mato' : '', (RS0 || 1) < 1 ? 'resolução ' + Math.round((RS0 || 1) * 100) + '%' : ''].filter(Boolean).join(', ') || 'nenhum';
+    info.mem = performance.memory ? Math.round(performance.memory.usedJSHeapSize / 1048576) + ' MB' : '?'; info.chg = '?'; try { if (navigator.getBattery) { const bt = await navigator.getBattery(); info.chg = (bt.charging ? 'sim' : 'não') + ' (' + Math.round(bt.level * 100) + '%)'; } } catch (e) {}
+    const cvs = document.getElementById('game'); info.px = (cvs ? cvs.width + 'x' + cvs.height : '?') + ' · tela ' + innerWidth + 'x' + innerHeight + ' ×' + (window.devicePixelRatio || 1);
+    try { Save.flash('⏱️ Teste de FPS: o personagem anda sozinho por ~1 min. Fique em local seguro.'); } catch (e) {}
+    const steps = [['tudo ligado', {}, 0, 1], ['sem mar (brilho/espuma)', { sea: 1 }, 0, 1], ['sem árvores', { trees: 1 }, 0, 1], ['sem mato', { mato: 1 }, 0, 1], ['sem bichos', { animals: 1 }, 0, 1], ['sem sombras', { shadow: 1 }, 0, 1], ['sem clima/noite', { wx: 1 }, 0, 1], ['sem interface', {}, 1, 1], ['só o chão', { sea: 1, ents: 1, wx: 1 }, 1, 1], ['tela vazia', { sea: 1, ents: 1, wx: 1, ground: 1 }, 1, 1], ['resolução 75%', {}, 0, .75], ['resolução 50%', {}, 0, .5], ['tudo ligado (repete)', {}, 0, 1]];
+    const wait = ms => new Promise(r => setTimeout(r, ms)), rows = []; const T0 = performance.now();
+    window.BENCH_AX = { x: 0, y: 0, sprint: false }; const walk = setInterval(() => { const k = Math.floor((performance.now() - T0) / 2000) % 2; window.BENCH_AX = { x: k ? -.9 : .9, y: 0, sprint: false }; }, 100);
+    try { for (let i = 0; i < steps.length; i++) { const [nm, fl, hud, rs] = steps[i];
+      window.NOL = fl; document.body.classList.toggle('nohud', !!hud); if ((window.RS || 1) !== rs) { window.RS = rs; if (window.__resize) window.__resize(); }
+      try { Save.flash('⏱️ ' + (i + 1) + '/' + steps.length + ' · ' + nm); } catch (e) {}
+      await wait(900);
+      const r = await new Promise(res => { const d = []; let t0 = performance.now(), l = t0; const f = t => { d.push(t - l); l = t; if (t - t0 < 4000) requestAnimationFrame(f); else res(d.slice(1)); }; requestAnimationFrame(f); });
+      const sorted = r.slice().sort((x, y) => x - y), n = r.length, tot = r.reduce((x, y) => x + y, 0), p99 = sorted[Math.min(n - 1, Math.floor(n * .99))] || 1;
+      rows.push({ nm, fps: Math.round(n / (tot / 1000)), low: Math.round(1000 / p99), slow: Math.round(r.filter(x => x > 25).length / n * 100), worst: Math.round(sorted[n - 1] || 0) }); }
+    } catch (e) { rows.push({ nm: 'erro: ' + e, fps: 0, low: 0, slow: 0, worst: 0 }); }
+    clearInterval(walk); window.BENCH_AX = null; window.NOL = null; window.BENCH = 0; document.body.classList.remove('nohud'); if ((window.RS || 1) !== (RS0 || 1)) { window.RS = RS0; if (window.__resize) window.__resize(); } benchOn = false;
+    /* relatório */
+    const base = rows[0], rep = rows[rows.length - 1], d = (v, b) => (v - b >= 0 ? '+' : '') + (v - b), pad = (t, n) => String(t).padEnd(n).slice(0, n);
+    const L = []; const hmN = new Date(); L.push('TESTE DE FPS ' + hm(hmN.getTime()) + ' em ' + pos());
+    L.push('Aparelho: ' + info.gpu + ' · tela ' + info.hz + ' Hz'); L.push('Jogo: ' + info.px); L.push('Limite: ' + info.cap + ' FPS · modo leve: ' + info.lite); L.push('Memória JS: ' + info.mem + ' · carregando: ' + info.chg); L.push('');
+    L.push(pad('etapa (andando 4 s)', 25) + 'FPS  ganho 1%pior lentos'); for (let i = 0; i < rows.length; i++) { const r = rows[i]; L.push(pad(r.nm, 25) + pad(r.fps, 5) + pad(i && i < rows.length - 1 ? d(r.fps, base.fps) : '', 6) + pad(r.low, 7) + r.slow + '%'); }
+    L.push(''); const lay = rows.slice(1, 8).map(r => ({ nm: r.nm, sc: (r.fps - base.fps) + .5 * (r.low - base.low) })).sort((x, y) => y.sc - x.sc), noise = Math.abs(rep.fps - base.fps);
+    if (base.slow <= 2 && base.fps >= (parseInt(info.hz) || 60) - 3) L.push('Este aparelho roda tudo a ' + base.fps + ' FPS estáveis (' + base.slow + '% de quadros lentos). Nada a corrigir aqui.'); else if (lay[0].sc >= 2) L.push('MAIS PESA: ' + lay[0].nm + (lay[1].sc >= 2 ? ' e ' + lay[1].nm : '') + '.'); else L.push('Nenhuma camada pesa sozinha: o limite é a placa de vídeo (tela vazia: ' + rows[9].fps + ' FPS).');
+    L.push('Resolução 75%: ' + d(rows[10].fps, base.fps) + ' FPS · 50%: ' + d(rows[11].fps, base.fps) + ' FPS.'); if (noise >= 3) L.push('Atenção: a repetição variou ' + noise + ' FPS; diferenças menores que isso são ruído.');
+    try { const pv = JSON.parse(localStorage.getItem('iv_bench') || 'null'); if (pv && pv.rows && pv.rows[0]) L.push('Anterior (' + hm(pv.t) + '): tudo ligado ' + pv.rows[0].fps + ' → ' + base.fps + ' FPS (' + d(base.fps, pv.rows[0].fps) + '), 1% pior ' + pv.rows[0].low + ' → ' + base.low + '.'); localStorage.setItem('iv_bench', JSON.stringify({ t: Date.now(), rows })); } catch (e) {}
+    const txt = L.join('\n'); log('warn', 'TESTE DE FPS — ' + rows.map(r => r.nm + ' ' + r.fps + '/' + r.low).join(' | '), true);
+    let m = document.getElementById('benchres'); if (!m) { m = document.createElement('div'); m.id = 'benchres'; m.style.cssText = 'position:fixed;left:3%;right:3%;top:6%;bottom:6%;z-index:99999;background:#0d1712f2;color:#d4ecc9;border:2px solid #4a6a44;border-radius:12px;display:flex;flex-direction:column;font:11px/1.45 ui-monospace,monospace'; m.innerHTML = '<pre style="margin:0;padding:10px;flex:1;overflow:auto;white-space:pre-wrap;user-select:text"></pre><div style="display:flex;gap:8px;padding:8px"><button data-r="c" style="flex:1;padding:10px;border:0;border-radius:8px;background:#e8b04a;color:#2a1a08;font:800 14px system-ui">Copiar relatório</button><button data-r="x" style="flex:1;padding:10px;border:0;border-radius:8px;background:#35503a;color:#fff;font:800 14px system-ui">Fechar</button></div>'; document.body.appendChild(m); for (const t of ['touchstart', 'mousedown']) m.addEventListener(t, e => e.stopPropagation(), { passive: true }); m.querySelector('[data-r=x]').addEventListener('click', () => { m.style.display = 'none'; }); m.querySelector('[data-r=c]').addEventListener('click', () => { try { navigator.clipboard.writeText(m.querySelector('pre').textContent); m.querySelector('[data-r=c]').textContent = 'Copiado ✓'; } catch (er) { m.querySelector('[data-r=c]').textContent = 'Não deu para copiar'; } }); }
+    m.querySelector('pre').textContent = txt; m.querySelector('[data-r=c]').textContent = 'Copiar relatório'; m.style.display = 'flex';
   }
   pan.querySelector('[data-a=bench]').addEventListener('click', bench);
   const send = () => { const v = inp.value.trim(); if (!v) return; inp.value = ''; const e = { t: Date.now(), k: 'chat', n: nome(), m: v }; E.push(e); if (E.length > MAX) E.shift(); dirty = true; paint(); };
