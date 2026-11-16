@@ -340,7 +340,7 @@ try { var h = location.hash, tv = /viagem=|skip/.test(h) || sessionStorage.getIt
 <div id="rot">↻</div><canvas id="game"></canvas><div id="tfade"></div><div id="ttoast"></div>
 <div id="title"><div id="tlogo"><h1>ILHA VERDE</h1><p>SOBREVIVÊNCIA</p></div>
 <div id="tmenu"><button id="tcont" style="display:none">▶ Continuar<small>retomar a aventura salva</small></button><button id="tsolo">✦ Nova aventura</button><button id="tmulti" class="dim">🌐 Multiplayer<i>EM BREVE</i></button><button id="tset">⚙ Configurações</button></div>
-<div id="tver">Versão 174 · 17/11 01:10</div>
+<div id="tver">Versão 175 · 17/11 01:30</div>
 <div id="tchar"><div class="bx"><canvas class="pv" id="tcpv" width="150" height="150"></canvas><div class="cl"><h3>Seu personagem</h3><input id="tcname" maxlength="14" placeholder="Nome" autocomplete="off"><div class="sx"><button id="tcm" class="on">♂ Masculino</button><button id="tcf">♀ Feminino</button></div><button class="go" id="tcgo">Começar ▶</button></div></div></div>
 <div id="tpanel"><h3>⚙ Configurações</h3><div class="r">Música<button id="tmus">Ligada</button></div><div class="r">Efeitos sonoros<button id="tsnd">Ligado</button></div><div class="r">Gráficos<button id="tq">HD</button></div><div class="r" id="tmpr" style="display:none">Multiplayer (teste)<button id="tmp">Desligado</button></div><div class="r">FPS<button id="tfps">60</button></div><div class="r">Clima (teste)<button id="twx">Chuva agora</button></div><div class="r">Tela horizontal<button id="trot">Girar</button></div><div class="r">Tela cheia<button id="tfs">Desligada</button></div><div class="r">Tamanho dos controles<button id="tcs2">Médio</button></div><div class="r">Mostrar FPS<button id="tfps">Ligado</button></div><pre id="tperf">…</pre><div class="r">Ver visão dos animais<button id="tvis">Desligado</button></div><div id="tvisopts" style="display:none;gap:6px;margin:-2px 0 8px"><button id="tvis1" style="flex:1;font-size:13px;padding:7px 4px;margin:0">Em pé</button><button id="tvis2" style="flex:1;font-size:13px;padding:7px 4px;margin:0">Agachado</button></div><div class="r">Nuvem<button id="tcl">☁ Entrar</button></div><div id="tcmsg"></div>
 <div id="tcbox"><input id="tce" type="email" placeholder="e-mail" autocomplete="username"><input id="tcp" type="password" placeholder="senha (mín. 6)" autocomplete="current-password"><div class="r2"><button id="tcin">Entrar</button><button id="tcup">Criar conta</button></div><div id="tcst"></div>
@@ -622,8 +622,8 @@ const Assets = {
   },
   hasAnim(name, anim) { const sp = this.meta.sprites[name]; return !!(sp && sp.anims[anim]); },
   has(name) { return !!(this.meta && this.meta.sprites[name]); },
-  frames(name, anim, dir) { return this.meta.sprites[name].anims[anim].dirs[dir]; },
-  fps(name, anim) { return this.meta.sprites[name].anims[anim].fps; },
+  frames(name, anim, dir) { const sp = this.meta && this.meta.sprites[name], an = sp && sp.anims[anim]; return an ? an.dirs[dir] : 0; },   /* sprite que falta no atlas (arquivo antigo no site) não derruba o jogo */
+  fps(name, anim) { const sp = this.meta && this.meta.sprites[name], an = sp && sp.anims[anim]; return an ? an.fps : 8; },
   stats() { let mb = 0; const on = []; for (const n in this.grp) { const g = this.grp[n]; if (g.st === 2) { on.push(n); for (const p of g.pages) mb += p.size[0] * p.size[1] * 4 / 1048576; } } return { grupos: on, MB: Math.round(mb * 10) / 10 }; }
 };
 
