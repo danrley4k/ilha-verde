@@ -3246,6 +3246,24 @@ const Entities = (() => {
       if (d < (AUTO.fight === a ? 520 : 300) && hot && d < bd) { bd = d; b = a; } }
     return b;
   }
+  /* AUTO cuida da fome e da sede: come o que tem na mochila (começa com fome ≤ 40, para em 70), bebe água do cantil (limpa com sede ≤ 45; suja só com sede ≤ 25 e nunca enjoado, ≤ 12) e, sem água, anda até o mar/poça para encher o cantil */
+  function autoCare(p, dt) {
+    const STOP = { x: 0, y: 0, sprint: false }; AUTO.cd = (AUTO.cd || 0) - dt; AUTO.fT = (AUTO.fT || 0) - dt; if (AUTO.cd > 0 || p.act || p.swim) return null;
+    const th = p.thirst, fo = p.food ?? 100, wl = (inv.water | 0) > 0, dl = (inv.dirty | 0) > 0, say = m => { if (AUTO.fT <= 0) { AUTO.fT = 6; Save.flash(m); } };
+    if (wl || (dl && th <= (p.sick > 0 ? 12 : 25))) { if (th <= (wl ? 45 : 25)) { AUTO.cd = 1.2; say('💧 Auto: bebendo'); eat(wl ? 'water' : 'dirty'); return STOP; } }
+    if (AUTO.eating ? fo < 70 : fo <= 40 || (p.hp < 50 && fo < 90)) {
+      const def = 100 - fo, opts = [['cooked', 40], ['meat', 25], ['apple', 12], ['coconut', 8]].filter(o => inv[o[0]] > 0).sort((a, b) => b[1] - a[1]);
+      if (opts.length) { AUTO.eating = true; const pk = opts.find(o => o[1] <= def + 5) || opts[opts.length - 1]; AUTO.cd = 1.2; say('🍖 Auto: comendo'); eat(pk[0]); return STOP; } AUTO.eating = false;
+    } else AUTO.eating = false;
+    if (inv.canteen && canFill() && th <= 70 && fillCanteen()) { AUTO.cd = 1.2; return STOP; }   /* passou perto da água: aproveita e enche */
+    if (inv.canteen && canFill() && th <= 35 && !wl && !dl && !(AUTO.seekOff > performance.now())) {   /* sem água e com sede: vai até a água */
+      const pz = World.nearestPool(p.x, p.y, 700), pt = pz ? { x: pz.x, y: pz.y } : World.waterPt(p.x, p.y, 700);
+      if (pt) { AUTO.seekT = (AUTO.seekT || 0) + dt; if (AUTO.seekT > 25) { AUTO.seekT = 0; AUTO.seekOff = performance.now() + 90000; say('Auto: não achei caminho até a água'); return null; }
+        say('💧 Auto: indo encher o cantil'); AUTO.tgt = null; return autoSteer(p, pt.x, pt.y); }
+      say('Auto: sem água por perto para encher o cantil'); AUTO.seekOff = performance.now() + 60000;
+    } else AUTO.seekT = 0;
+    return null;
+  }
   function autoStep(dt, inp) {
     const p = Player.p, STOP = { x: 0, y: 0, sprint: false };
     if (GOTO) { const G = GOTO; G.t += dt; const dx = G.tx - p.x, dy = G.ty - p.y, d = Math.hypot(dx, dy);
@@ -3274,6 +3292,7 @@ const Entities = (() => {
     if (p.hp < 25) { autoToggle(false); Save.flash('⚠️ Auto desligado: vida baixa'); return inp; }
     if (p.act) return STOP;
     if (p.bleeding && inv.bandage > 0) { useBandage(); return STOP; }   /* sangrando e com bandagem: enfaixa antes de continuar */
+    { const cr = autoCare(p, dt); if (cr) return cr; }   /* fome, sede e cantil */
     /* 2) COLETAR */
     if (!autoValid(AUTO.tgt)) { AUTO.tgt = autoPick(p); AUTO.stuck = 0; AUTO.lx = p.x; AUTO.ly = p.y; AUTO.sT = 0; }
     const t = AUTO.tgt;
@@ -5541,7 +5560,7 @@ body.title #chat,body.title #chatp,body:has(#bag[style*="flex"]) :is(#chat,#chat
   pan.querySelector('[data-a=copy]').addEventListener('click', () => { const TK = { logs: ['item', 'build', 'info'], err: ['err', 'warn'], ani: ['ani'] }[tab] || []; const txt = E.filter(e => TK.includes(e.k)).map(e => hm(e.t) + ' [' + e.k + '] ' + e.m + (e.xy ? ' @' + e.xy : '')).join('\n'); try { navigator.clipboard.writeText(txt); log('info', 'Logs copiados'); } catch (er) { log('warn', 'Não foi possível copiar'); } });
 
   /* TESTE DE FPS: o personagem anda sozinho; cada etapa desliga uma camada (mar, árvores, mato, bichos, sombras, clima, interface) ou baixa a resolução, e o jogo diz o que mais pesa */
-  { const st = document.createElement('style'); st.textContent = 'body.nohud>*:not(#game):not(#dark):not(#chatp):not(#fps):not(#ttoast):not(#benchres){visibility:hidden!important}'; document.head.appendChild(st); }
+  { const st = document.createElement('style'); st.textContent = 'body.nohud>*:not(#game):not(#dark):not(#chatp):not(#fps):not(#ttoast):not(#benchres){visibility:hidden!important}body.h-card :is(#pcard,#clk,#gear),body.h-btn :is(#atk,#swapb,#sk0,#sk1,.qs,#autob,#craftbtn,#buildbtn,#bagbtn,#sneak,#ctxb,#use,#band),body.h-qbar #qbar,body.h-stick :is(#stick,#chat){visibility:hidden!important}'; document.head.appendChild(st); }
   let benchOn = false;
   async function bench() {
     if (benchOn) return; benchOn = true; setOpen(false); window.BENCH = 1;
@@ -5551,26 +5570,29 @@ body.title #chat,body.title #chatp,body:has(#bag[style*="flex"]) :is(#chat,#chat
     info.mem = performance.memory ? Math.round(performance.memory.usedJSHeapSize / 1048576) + ' MB' : '?'; info.chg = '?'; try { if (navigator.getBattery) { const bt = await navigator.getBattery(); info.chg = (bt.charging ? 'sim' : 'não') + ' (' + Math.round(bt.level * 100) + '%)'; } } catch (e) {}
     const cvs = document.getElementById('game'); info.px = (cvs ? cvs.width + 'x' + cvs.height : '?') + ' · tela ' + innerWidth + 'x' + innerHeight + ' ×' + (window.devicePixelRatio || 1);
     try { Save.flash('⏱️ Teste de FPS: o personagem anda sozinho por ~1 min. Fique em local seguro.'); } catch (e) {}
-    const steps = [['tudo ligado', {}, 0, 1], ['sem mar (brilho/espuma)', { sea: 1 }, 0, 1], ['sem árvores', { trees: 1 }, 0, 1], ['sem mato', { mato: 1 }, 0, 1], ['sem bichos', { animals: 1 }, 0, 1], ['sem sombras', { shadow: 1 }, 0, 1], ['sem clima/noite', { wx: 1 }, 0, 1], ['sem interface', {}, 1, 1], ['só o chão', { sea: 1, ents: 1, wx: 1 }, 1, 1], ['tela vazia', { sea: 1, ents: 1, wx: 1, ground: 1 }, 1, 1], ['resolução 75%', {}, 0, .75], ['resolução 50%', {}, 0, .5], ['tudo ligado (repete)', {}, 0, 1]];
+    const steps = [['aquecimento', {}, '', 1], ['tudo ligado', {}, '', 1], ['sem mar (brilho/espuma)', { sea: 1 }, '', 1], ['sem árvores', { trees: 1 }, '', 1], ['sem mato', { mato: 1 }, '', 1], ['sem bichos', { animals: 1 }, '', 1], ['sem sombras', { shadow: 1 }, '', 1], ['sem clima/noite', { wx: 1 }, '', 1], ['sem cartão e relógio', {}, 'h-card', 1], ['sem botões de ação', {}, 'h-btn', 1], ['sem barra rápida', {}, 'h-qbar', 1], ['sem joystick e chat', {}, 'h-stick', 1], ['sem interface (tudo)', {}, 'nohud', 1], ['só o chão', { sea: 1, ents: 1, wx: 1 }, 'nohud', 1], ['tela vazia', { sea: 1, ents: 1, wx: 1, ground: 1 }, 'nohud', 1], ['resolução 75%', {}, '', .75], ['resolução 50%', {}, '', .5], ['tudo ligado (repete)', {}, '', 1]];
     const wait = ms => new Promise(r => setTimeout(r, ms)), rows = []; const T0 = performance.now();
     window.BENCH_AX = { x: 0, y: 0, sprint: false }; const walk = setInterval(() => { const k = Math.floor((performance.now() - T0) / 2000) % 2; window.BENCH_AX = { x: k ? -.9 : .9, y: 0, sprint: false }; }, 100);
     try { for (let i = 0; i < steps.length; i++) { const [nm, fl, hud, rs] = steps[i];
-      window.NOL = fl; document.body.classList.toggle('nohud', !!hud); if ((window.RS || 1) !== rs) { window.RS = rs; if (window.__resize) window.__resize(); }
+      window.NOL = fl; for (const c of ['nohud', 'h-card', 'h-btn', 'h-qbar', 'h-stick']) document.body.classList.toggle(c, c === hud); if ((window.RS || 1) !== rs) { window.RS = rs; if (window.__resize) window.__resize(); }
       try { Save.flash('⏱️ ' + (i + 1) + '/' + steps.length + ' · ' + nm); } catch (e) {}
       await wait(900);
-      const r = await new Promise(res => { const d = []; let t0 = performance.now(), l = t0; const f = t => { d.push(t - l); l = t; if (t - t0 < 4000) requestAnimationFrame(f); else res(d.slice(1)); }; requestAnimationFrame(f); });
+      const r = await new Promise(res => { const d = []; let t0 = performance.now(), l = t0; const f = t => { d.push(t - l); l = t; if (t - t0 < 5000) requestAnimationFrame(f); else res(d.slice(1)); }; requestAnimationFrame(f); });
       const sorted = r.slice().sort((x, y) => x - y), n = r.length, tot = r.reduce((x, y) => x + y, 0), p99 = sorted[Math.min(n - 1, Math.floor(n * .99))] || 1;
-      rows.push({ nm, fps: Math.round(n / (tot / 1000)), low: Math.round(1000 / p99), slow: Math.round(r.filter(x => x > 25).length / n * 100), worst: Math.round(sorted[n - 1] || 0) }); }
+      if (i > 0) rows.push({ nm, fps: Math.round(n / (tot / 1000)), low: Math.round(1000 / p99), slow: Math.round(r.filter(x => x > 25).length / n * 100), worst: Math.round(sorted[n - 1] || 0) }); }
     } catch (e) { rows.push({ nm: 'erro: ' + e, fps: 0, low: 0, slow: 0, worst: 0 }); }
-    clearInterval(walk); window.BENCH_AX = null; window.NOL = null; window.BENCH = 0; document.body.classList.remove('nohud'); if ((window.RS || 1) !== (RS0 || 1)) { window.RS = RS0; if (window.__resize) window.__resize(); } benchOn = false;
+    clearInterval(walk); window.BENCH_AX = null; window.NOL = null; window.BENCH = 0; for (const c of ['nohud', 'h-card', 'h-btn', 'h-qbar', 'h-stick']) document.body.classList.remove(c); if ((window.RS || 1) !== (RS0 || 1)) { window.RS = RS0; if (window.__resize) window.__resize(); } benchOn = false;
     /* relatório */
-    const base = rows[0], rep = rows[rows.length - 1], d = (v, b) => (v - b >= 0 ? '+' : '') + (v - b), pad = (t, n) => String(t).padEnd(n).slice(0, n);
+    const R = n => rows.find(r => r.nm === n) || { fps: 0, low: 0, slow: 0 }, first = rows[0], rep = rows[rows.length - 1], base = { fps: Math.round((first.fps + rep.fps) / 2), low: Math.round((first.low + rep.low) / 2), slow: Math.round((first.slow + rep.slow) / 2) }, d = (v, b) => (v - b >= 0 ? '+' : '') + (v - b), pad = (t, n) => String(t).padEnd(n).slice(0, n);
     const L = []; const hmN = new Date(); L.push('TESTE DE FPS ' + hm(hmN.getTime()) + ' em ' + pos());
     L.push('Aparelho: ' + info.gpu + ' · tela ' + info.hz + ' Hz'); L.push('Jogo: ' + info.px); L.push('Limite: ' + info.cap + ' FPS · modo leve: ' + info.lite); L.push('Memória JS: ' + info.mem + ' · carregando: ' + info.chg); L.push('');
-    L.push(pad('etapa (andando 4 s)', 25) + 'FPS  ganho 1%pior lentos'); for (let i = 0; i < rows.length; i++) { const r = rows[i]; L.push(pad(r.nm, 25) + pad(r.fps, 5) + pad(i && i < rows.length - 1 ? d(r.fps, base.fps) : '', 6) + pad(r.low, 7) + r.slow + '%'); }
-    L.push(''); const lay = rows.slice(1, 8).map(r => ({ nm: r.nm, sc: (r.fps - base.fps) + .5 * (r.low - base.low) })).sort((x, y) => y.sc - x.sc), noise = Math.abs(rep.fps - base.fps);
-    if (base.slow <= 2 && base.fps >= (parseInt(info.hz) || 60) - 3) L.push('Este aparelho roda tudo a ' + base.fps + ' FPS estáveis (' + base.slow + '% de quadros lentos). Nada a corrigir aqui.'); else if (lay[0].sc >= 2) L.push('MAIS PESA: ' + lay[0].nm + (lay[1].sc >= 2 ? ' e ' + lay[1].nm : '') + '.'); else L.push('Nenhuma camada pesa sozinha: o limite é a placa de vídeo (tela vazia: ' + rows[9].fps + ' FPS).');
-    L.push('Resolução 75%: ' + d(rows[10].fps, base.fps) + ' FPS · 50%: ' + d(rows[11].fps, base.fps) + ' FPS.'); if (noise >= 3) L.push('Atenção: a repetição variou ' + noise + ' FPS; diferenças menores que isso são ruído.');
+    L.push(pad('etapa (andando 5 s)', 25) + 'FPS  ganho 1%pior lentos'); for (let i = 0; i < rows.length; i++) { const r = rows[i], ref = i > 0 && i < rows.length - 1; L.push(pad(r.nm, 25) + pad(r.fps, 5) + pad(ref ? d(r.fps, base.fps) : '', 6) + pad(r.low, 7) + r.slow + '%'); }
+    L.push('Base (média das 2 "tudo ligado"): ' + base.fps + ' FPS · 1% pior ' + base.low); L.push('');
+    const lay = rows.slice(1, 11).map(r => ({ nm: r.nm, sc: (r.fps - base.fps) + .5 * (r.low - base.low) })).sort((x, y) => y.sc - x.sc), noise = Math.abs(rep.fps - first.fps);
+    if (noise >= 8) L.push('RESULTADO INSTÁVEL: o FPS da 1ª e da última "tudo ligado" diferiu ' + noise + '. O celular oscilou (calor, outro app, carregando). Feche outros apps, espere esfriar e rode de novo.');
+    else if (base.slow <= 2 && base.fps >= (parseInt(info.hz) || 60) - 3) L.push('Este aparelho roda tudo a ' + base.fps + ' FPS estáveis (' + base.slow + '% de quadros lentos). Nada a corrigir aqui.');
+    else if (lay[0].sc >= 3) L.push('MAIS PESA: ' + lay[0].nm + (lay[1].sc >= 3 ? ' e ' + lay[1].nm : '') + (lay[2].sc >= 3 ? ' e ' + lay[2].nm : '') + '.'); else L.push('Nenhuma camada pesa sozinha; tela vazia: ' + R('tela vazia').fps + ' FPS.');
+    L.push('Resolução 75%: ' + d(R('resolução 75%').fps, base.fps) + ' FPS · 50%: ' + d(R('resolução 50%').fps, base.fps) + ' FPS.'); if (noise < 8 && noise >= 4) L.push('Atenção: variação de ' + noise + ' FPS entre a 1ª e a última; diferenças menores são ruído.');
     try { const pv = JSON.parse(localStorage.getItem('iv_bench') || 'null'); if (pv && pv.rows && pv.rows[0]) L.push('Anterior (' + hm(pv.t) + '): tudo ligado ' + pv.rows[0].fps + ' → ' + base.fps + ' FPS (' + d(base.fps, pv.rows[0].fps) + '), 1% pior ' + pv.rows[0].low + ' → ' + base.low + '.'); localStorage.setItem('iv_bench', JSON.stringify({ t: Date.now(), rows })); } catch (e) {}
     const txt = L.join('\n'); log('warn', 'TESTE DE FPS — ' + rows.map(r => r.nm + ' ' + r.fps + '/' + r.low).join(' | '), true);
     let m = document.getElementById('benchres'); if (!m) { m = document.createElement('div'); m.id = 'benchres'; m.style.cssText = 'position:fixed;left:3%;right:3%;top:6%;bottom:6%;z-index:99999;background:#0d1712f2;color:#d4ecc9;border:2px solid #4a6a44;border-radius:12px;display:flex;flex-direction:column;font:11px/1.45 ui-monospace,monospace'; m.innerHTML = '<pre style="margin:0;padding:10px;flex:1;overflow:auto;white-space:pre-wrap;user-select:text"></pre><div style="display:flex;gap:8px;padding:8px"><button data-r="c" style="flex:1;padding:10px;border:0;border-radius:8px;background:#e8b04a;color:#2a1a08;font:800 14px system-ui">Copiar relatório</button><button data-r="x" style="flex:1;padding:10px;border:0;border-radius:8px;background:#35503a;color:#fff;font:800 14px system-ui">Fechar</button></div>'; document.body.appendChild(m); for (const t of ['touchstart', 'mousedown']) m.addEventListener(t, e => e.stopPropagation(), { passive: true }); m.querySelector('[data-r=x]').addEventListener('click', () => { m.style.display = 'none'; }); m.querySelector('[data-r=c]').addEventListener('click', () => { try { navigator.clipboard.writeText(m.querySelector('pre').textContent); m.querySelector('[data-r=c]').textContent = 'Copiado ✓'; } catch (er) { m.querySelector('[data-r=c]').textContent = 'Não deu para copiar'; } }); }
